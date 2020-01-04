@@ -1,0 +1,5 @@
+include versioneer.py
+include distfit/_version.py
+
+include distfit/data/*.zip
+include distfit/data/*.txt
