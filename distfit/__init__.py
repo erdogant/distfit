@@ -19,7 +19,7 @@ __email__ = 'erdogant@gmail.com'
 
 # module level doc-string
 __doc__ = """
-distfit - Python package for probability distribution fitting and hypothesis testing.
+distfit - Python package for probability density function fitting and hypothesis testing.
 =====================================================================
 
 **distfit** 

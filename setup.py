@@ -13,7 +13,7 @@ setuptools.setup(
 #     cmdclass=versioneer.get_cmdclass(),  # VERSION CONTROL
      author="Erdogan Taskesen",
      author_email="erdogant@gmail.com",
-     description="Python package for probability distribution fitting and hypothesis testing.",
+     description="Python package for probability density function fitting and hypothesis testing.",
      long_description=long_description,
      long_description_content_type="text/markdown",
      url="https://github.com/erdogant/distfit",
