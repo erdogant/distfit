@@ -7,6 +7,19 @@
 * Python package for probability density fitting and hypothesis testing.
 * Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. distfit scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
+## Four functions are available:
+```python
+# To make the distribution fit with the input data
+.fit()
+# Compute probabilities using the fitted distribution
+.proba_parametric()
+# Compute probabilities in an emperical manner
+.proba_emperical()
+# Plot results
+.plot()
+
+See below for the exact working of the functions
+```
 
 ## Contents
 - [Installation](#-installation)
@@ -90,8 +103,6 @@ If you dont understand why, do some homework first ;)
 expdata=[-20,-12,-8,0,1,2,3,5,10,20,30,35]
 # Use fitted model
 model_P = dist.proba_parametric(expdata, data, model=model)
-# Automatically do the distribution fit first:
-model_P = dist.proba_parametric(expdata, data)
 # Make plot
 dist.plot(model)
 ```
@@ -99,6 +110,11 @@ dist.plot(model)
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2a.png" width="200" />
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="400" />
 </p>
+
+```python
+# Its also possible to do the distribution fit in the proba_ function:
+model_P = dist.proba_parametric(expdata, data)
+```
 
 
 ## Citation
