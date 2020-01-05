@@ -74,6 +74,8 @@ dist.plot(model)
 [DISTFIT] Checking for [beta] [SSE:0.000152]
 [DISTFIT] Checking for [uniform] [SSE:0.015671] 
 [DISTFIT] Estimated distribution: t [loc:5.239912, scale:7.871518]
+
+note that the best fit should be [normal], as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. In this case, the t-distribution scored slightly better then normal. The normal distribution scored similar to gamma and beta which is not strange to see. If you dont understand why, do some homework first ;)
 ```
 <p align="center">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="600" />
