@@ -82,7 +82,7 @@ scored similar to gamma and beta which is not strange to see.
 If you dont understand why, do some homework first ;)
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="300" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="400" />
 </p>
 
 ## Example Compute probability whether values are of interest compared 95%CII of the data distribution:
@@ -96,8 +96,8 @@ model_P = dist.proba_parametric(expdata, data)
 dist.plot(model)
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2a.png" width="150" />
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="300" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2a.png" width="200" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="400" />
 </p>
 
 
