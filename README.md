@@ -7,7 +7,7 @@
 * Python package for probability density fitting and hypothesis testing.
 * Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. distfit scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
-## Four functions are available:
+## The following functions are available:
 ```python
 # To make the distribution fit with the input data
 .fit()
