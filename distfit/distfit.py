@@ -1,9 +1,9 @@
 """ This function checks 89 different distributions and computes which one fits best to your emperical distribution based on Mean Square error (MSE) estimates.
 
-    import distfit as distfit
+    import distfit as dist
 
-    out    = distfit.parametric(data, <optional>)
-    fig,ax = distfit.plot(out, <optional>)
+    out    = dist.fit(data, <optional>)
+    fig,ax = dist.plot(out, <optional>)
 
 
  INPUT:
@@ -53,20 +53,20 @@
 
    #=============== Find best fit distribution ==============================
    data=np.random.beta(5, 8, 10000)
-   out = distfit.parametric(data)
-   distfit.plot(out)
+   out = dist.fit(data)
+   dist.plot(out)
 
    data=np.random.normal(5, 8, 10000)
-   out = distfit.parametric(data, bins=50, distribution='auto_full')
-   distfit.plot(out)
+   out = dist.fit(data, bins=50, distribution='auto_full')
+   dist.plot(out)
 
    data=np.random.normal(5, 8, [100,100])
-   out = distfit.parametric(data, distribution='auto_small')
-   distfit.plot(out)
+   out = dist.fit(data, distribution='auto_small')
+   dist.plot(out)
 
    data=np.random.normal(5, 8, [100,100])
-   out = distfit.parametric(data, distribution='norm')
-   distfit.plot(out)
+   out = dist.fit(data, distribution='norm')
+   dist.plot(out)
 
    
  SEE ALSO: hypotesting
@@ -85,11 +85,46 @@
 import warnings
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import scipy.stats as st
 import matplotlib.pyplot as plt
 from distfit.helpers.hist import hist
-import seaborn as sns
 #from scipy.optimize import curve_fit
+
+#%% Main
+def fit(data, bins=50, distribution='auto_small', alpha=None, bound='both', verbose=3): 
+	# DECLARATIONS
+    Param    = {}
+    Param['verbose']      = verbose
+    Param['bins']         = bins
+    Param['distribution'] = distribution
+    Param['alpha']        = alpha
+    Param['bound']        = bound
+
+    assert len(data)>0, print('[DISTFIT] Data vector is empty')
+
+    # Format the data
+    data = format_data(data)
+
+    # Get list of distributions to check
+    DISTRIBUTIONS = get_distributions(Param['distribution'])
+
+    # Get histogram of original data
+    [y_obs, X] = get_hist_params(data, Param['bins'])
+    
+    # Compute best distribution fit on the emperical data
+    out_summary, model = compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=Param['verbose'])
+    
+    # Determine confidence intervals on the best fitting distribution
+    model = compute_cii(model, alpha=Param['alpha'], bound=Param['bound'])
+    
+    # Return
+    out=dict()
+    out['Param']=Param
+    out['data']=data
+    out['model']=model
+    out['summary']=out_summary
+    return(out)
 
 #%%
 def format_data(data):
@@ -241,41 +276,6 @@ def compute_cii(out_dist, alpha=None, bound='both'):
     out_dist['CII_max_alpha']=CIIdown
     
     return(out_dist)
-
-#%% Main
-def parametric(data, bins=50, distribution='auto_small', alpha=None, bound='both', verbose=3): 
-	# DECLARATIONS
-    Param    = {}
-    Param['verbose']      = verbose
-    Param['bins']         = bins
-    Param['distribution'] = distribution
-    Param['alpha']        = alpha
-    Param['bound']        = bound
-
-    assert len(data)>0, print('[DISTFIT] Data vector is empty')
-
-    # Format the data
-    data = format_data(data)
-
-    # Get list of distributions to check
-    DISTRIBUTIONS = get_distributions(Param['distribution'])
-
-    # Get histogram of original data
-    [y_obs, X] = get_hist_params(data, Param['bins'])
-    
-    # Compute best distribution fit on the emperical data
-    out_summary, model = compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=Param['verbose'])
-    
-    # Determine confidence intervals on the best fitting distribution
-    model = compute_cii(model, alpha=Param['alpha'], bound=Param['bound'])
-    
-    # Return
-    out=dict()
-    out['Param']=Param
-    out['data']=data
-    out['model']=model
-    out['summary']=out_summary
-    return(out)
 
 #%% Plot
 def plot(out, title='', width=8,  height=8, xlim=[], ylim=[], showfig=2, alpha=None, verbose=3):

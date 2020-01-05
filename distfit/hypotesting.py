@@ -62,18 +62,18 @@
 
 
  EXAMPLE
-   import distfit as distfit
+   import distfit as dist
 
    dataNull=np.random.normal(0, 2, 1000)
    data=[-8,-6,0,1,2,3,4,5,6,7,8,9,10]
 
-   Pout = distfit.proba_parametric(data,dataNull)
-   Pout = distfit.proba_parametric(data,dataNull, bound='down')
-   Pout = distfit.proba_parametric(data,dataNull, bound='up')
-   Pout = distfit.proba_parametric(data)
+   Pout = dist.proba_parametric(data,dataNull)
+   Pout = dist.proba_parametric(data,dataNull, bound='down')
+   Pout = dist.proba_parametric(data,dataNull, bound='up')
+   Pout = dist.proba_parametric(data)
 
-   Pout = distfit.proba_emperical(data,dataNull)
-   Pout = distfit.proba_emperical(data)
+   Pout = dist.proba_emperical(data,dataNull)
+   Pout = dist.proba_emperical(data)
 
 
    # In jupyter notebooks, its recommended to use showfig=2
@@ -93,7 +93,7 @@
 #%% Libraries
 import numpy as np
 import statsmodels.stats.multitest as multitest
-import distfit as distfit
+import distfit as dist
 import matplotlib.pyplot as plt
 
 #%% Emperical test
@@ -189,13 +189,13 @@ def proba_parametric(data, dataNull=[], distribution='auto_small', bound='both',
         dataNull=np.array(data.copy())
 
     # Compute null-distribution parameters
-    # [outdist, distname]  = distfit.parametric(dataNull, bins=50, distribution='norm', showfig=Param['showfig'], verbose=Param['verbose'])
+    # [outdist, distname]  = dist.parametric(dataNull, bins=50, distribution='norm', showfig=Param['showfig'], verbose=Param['verbose'])
     if len(outdist)==0:
-        model  = distfit.parametric(dataNull, bins=Param['bins'], distribution=Param['distribution'], alpha=Param['alpha'], bound=Param['bound'], verbose=Param['verbose'])
+        model  = dist.fit(dataNull, bins=Param['bins'], distribution=Param['distribution'], alpha=Param['alpha'], bound=Param['bound'], verbose=Param['verbose'])
         outdist = model['model']
         # distresults = model['model']
         # Plot
-        distfit.plot(model, showfig=Param['showfig'])
+        dist.plot(model, showfig=Param['showfig'])
     else:
         if Param['verbose']>=3: print('[HYPOTHESIS TESTING] Using existing fit.')
 
