@@ -24,7 +24,7 @@
    bound=          String: Set whether you want returned a P-value for the lower/upper bounds or both
                    'both': Both (default)
                    'up':   Upperbounds
-                   'down': Lowerbounds
+                   'low': Lowerbounds
 
    alpha=          Double : [0..1] Significance alpha
                    [0.05]: Default
@@ -68,33 +68,28 @@
    data=[-8,-6,0,1,2,3,4,5,6,7,8,9,10]
 
    Pout = dist.proba_parametric(data,dataNull)
-   Pout = dist.proba_parametric(data,dataNull, bound='down')
+   Pout = dist.proba_parametric(data,dataNull, bound='low')
    Pout = dist.proba_parametric(data,dataNull, bound='up')
    Pout = dist.proba_parametric(data)
 
    Pout = dist.proba_emperical(data,dataNull)
    Pout = dist.proba_emperical(data)
-
-
-   # In jupyter notebooks, its recommended to use showfig=2
-   Pout = hypotesting(data,dataNull,showfig=2)
-
    
 """
 #print(__doc__)
-#https://people.duke.edu/~ccc14/sta-663/ResamplingAndMonteCarloSimulations.html
 
 # Name        : hypotesting.py
 # Author      : E.Taskesen
 # Contact     : erdogant@gmail.com
 # Date        : Oct. 2017
-# Last edit   : April 2019
+# Last edit   : Jan 2020
 
 #%% Libraries
 import numpy as np
 import statsmodels.stats.multitest as multitest
 import distfit as dist
 import matplotlib.pyplot as plt
+import pandas as pd
 
 #%% Emperical test
 def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', multtest='fdr_bh', showfig=True, verbose=3):
@@ -148,7 +143,7 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
     # Set bounds
     getbound = np.repeat('none',len(data))
     getbound[teststat>=cii_high]='up'
-    getbound[teststat<=cii_low]='down'
+    getbound[teststat<=cii_low]='low'
 
     Padj = do_multtest(Praw, args['multtest'], verbose=args['verbose'])
     makefig(samples, teststat, Padj, cii_low, cii_high, args['alpha'], args['showfig'])
@@ -159,21 +154,19 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
     out['bound']=getbound
     out['cii_low']=cii_low
     out['cii_high']=cii_high
-    
+
     return(out)
-    
+
 #%% Parametric tests
-def proba_parametric(data, dataNull=[], distribution='auto_small', bound='both', alpha=0.05, multtest='fdr_bh', showfig=2, outdist=[], bins=50, verbose=3):
+def proba_parametric(data, dataNull=[], model=[], distribution='auto_small', bound='both', alpha=0.05, multtest='fdr_bh', bins=50, verbose=3):
 	# DECLARATIONS
     if 'list' in str(type(data)): data=np.array(data)
     if 'float' in str(type(data)): data=np.array([data])
     assert 'numpy.ndarray' in str(type(data)), 'data should be of type np.array or list'
+    # if alpha==None: alpha=1
     
-    Praw = []
-    Padj = []
     Param =dict()
     Param['verbose']      = verbose
-    Param['showfig']      = showfig
     Param['distribution'] = distribution
     Param['bound']        = bound
     Param['alpha']        = alpha
@@ -181,68 +174,85 @@ def proba_parametric(data, dataNull=[], distribution='auto_small', bound='both',
     Param['bins']         = bins
         
     # Check which distribution fits best to the data
-    if Param['verbose']>=3: print('[HYPOTHESIS TESTING] Analyzing underlying data distribution...')
+    if Param['verbose']>=3: print('[DISTFIT_proba] Analyzing underlying data distribution...')
     
     #
-    if dataNull==[] and len(outdist)==0:
-        if Param['verbose']>=3: print('[HYPOTHESIS TESTING] WARNING: Background distribution was absent, input data is used instead!')
+    if dataNull==[] and len(model)==0:
+        if Param['verbose']>=3: print('[DISTFIT_proba] WARNING: Background distribution was absent, input data is used instead!')
         dataNull=np.array(data.copy())
 
     # Compute null-distribution parameters
-    # [outdist, distname]  = dist.parametric(dataNull, bins=50, distribution='norm', showfig=Param['showfig'], verbose=Param['verbose'])
-    if len(outdist)==0:
-        model  = dist.fit(dataNull, bins=Param['bins'], distribution=Param['distribution'], alpha=Param['alpha'], bound=Param['bound'], verbose=Param['verbose'])
-        outdist = model['model']
-        # distresults = model['model']
-        # Plot
-        dist.plot(model, showfig=Param['showfig'])
+    if len(model)==0 or model['Param']['alpha']!=Param['alpha']:
+        model = dist.fit(dataNull, bins=Param['bins'], distribution=Param['distribution'], alpha=Param['alpha'], bound=Param['bound'], verbose=Param['verbose'])
     else:
-        if Param['verbose']>=3: print('[HYPOTHESIS TESTING] Using existing fit.')
+        if Param['verbose']>=3: print('[DISTFIT_proba] Using existing fit.')
 
     # Get distribution and the parameters
-    #dist  = getattr(st, outdist['name'])
-    dist  = outdist['distribution']
-    arg   = outdist['params'][:-2]
-    loc   = outdist['params'][-2]
-    scale = outdist['params'][-1]
+    #dist  = getattr(st, model['model']['name'])
+    getdist  = model['model']['distribution']
+    arg   = model['model']['params'][:-2]
+    loc   = model['model']['params'][-2]
+    scale = model['model']['params'][-1]
 
     # Compute P-value for data based on null-distribution
-    getP = dist.cdf(data, *arg, loc, scale) if arg else dist.pdf(data, loc, scale)
-    #P = dist.pdf(data, *arg, loc, scale) if arg else dist.pdf(data, loc, scale)
+    getP = getdist.cdf(data, *arg, loc, scale) if arg else getdist.pdf(data, loc, scale)
 
     # Determine P based on upper/lower/no bounds
-    if Param['bound']=='up':
+    if Param['bound']=='up' or Param['bound']=='right':
         Praw  = 1-getP
-    elif Param['bound']=='down':
+    elif Param['bound']=='low' or Param['bound']=='left':
         Praw = getP
     elif Param['bound']=='both':
         Praw = np.min([1-getP,getP], axis=0)
     else:
-        if Param['verbose']>=3: print('[HYPOTHESIS TESTING] WARNING: "bounds" is not set correctly! Options are: up/down/both.')
+        if Param['verbose']>=3: print('[DISTFIT_proba] WARNING: "bounds" is not set correctly! Options are: up/down/both.')
         Praw=[]
-
-    getbound = np.repeat('none',len(data))
-    if not isinstance(outdist['CII_max_alpha'], type(None)):
-        getbound[data>=outdist['CII_max_alpha']]='up'
-    if not isinstance(outdist['CII_min_alpha'], type(None)):
-        getbound[data<=outdist['CII_min_alpha']]='down'
 
     # Set all values in range[0..1]
     Praw = np.clip(Praw,0,1)
-
     # Multiple test correction
     Padj = do_multtest(Praw, Param['multtest'], verbose=Param['verbose'])
+    # up/down based on threshold
+    getbound = np.repeat('none',len(data))
+    if Param['alpha']==None: Param['alpha']=1
+    if not isinstance(model['model']['CII_max_alpha'], type(None)):
+        getbound[data>=model['model']['CII_max_alpha']]='up'
+    if not isinstance(model['model']['CII_min_alpha'], type(None)):
+        getbound[data<=model['model']['CII_min_alpha']]='low'
+    
+    # Make structured output
+    df=pd.DataFrame()
+    df['data']=data
+    df['P']=Praw
+    df['Padj']=Padj
+    df['bound']=getbound
+    
+    # Return
+    out=model
+    out['tests']=df
+    return(out)
+
 
     # Add significant hits as line into the plot
-    if Param['showfig']>0:
-        if Param['verbose']>=3: print('[HYPOTHESIS TESTING] Making figure.')
-        ax=outdist['ax']
-        if not isinstance(ax, type(None)):
-        # Plot only significant hits
-            idx=np.where(Padj<=Param['alpha'])[0]
-            for i in range(0,len(idx)):
-                ax.axvline(x=data[idx[i]], ymin=0, ymax=1, linewidth=2, color='g', linestyle='--', alpha=0.8)
+    # if not out.get('P_adj', None)==None:
+    #     # Plot
+    #     fig, ax = dist.plot(model)
 
+    #     if Param['verbose']>=3: print('[DISTFIT_proba] Making figure.')
+    #     # Plot only significant hits
+    #     if Param['alpha']==None: alpha=1
+    #     idx=np.where(Padj<=alpha)[0]
+    #     for i in range(0,len(idx)):
+    #         ax.axvline(x=data[idx[i]], ymin=0, ymax=1, linewidth=2, color='g', linestyle='--', alpha=0.8)
+
+
+    # out['P']=Praw
+    # out['P_adj']=Padj
+    # out['bound']=getbound
+    # out['cii_low']=model['model']['CII_min_alpha']
+    # out['cii_high']=model['model']['CII_max_alpha']
+    
+    
     # Make QQ-plot
     #http://www.statsmodels.org/dev/generated/statsmodels.graphics.gofplots.qqplot.html
     
@@ -250,10 +260,10 @@ def proba_parametric(data, dataNull=[], distribution='auto_small', bound='both',
 #    from matplotlib import pyplot
 #    import probscale
 #
-#    getdist = dist(*outdist['params'])
+#    getdist = getdist(*outdist['params'])
 #    
-#    get_params = dist.fit(data, floc=0)
-#    get_params_dist = dist(*get_params)
+#    get_params = getdist.fit(data, floc=0)
+#    get_params_dist = getdist(*get_params)
 #    [fig, ax] = pyplot.subplots(figsize=(5, 5))
 #    ax.set_aspect('equal')
 #    common_opts = dict(plottype='qq', probax='x', problabel='Theoretical Quantiles', datalabel='Emperical Quantiles', scatter_kws=dict(label='Values') )
@@ -298,17 +308,8 @@ def proba_parametric(data, dataNull=[], distribution='auto_small', bound='both',
 #    P=stats.norm.cdf([9,10,11,12,14],loc, scale)
     
     #
-    out=dict()
-    out['Praw']=Praw
-    out['Padj']=Padj
-    out['bound']=getbound
-    out['cii_low']=outdist['CII_min_alpha']
-    out['cii_high']=outdist['CII_max_alpha']
 
-#    outdist['CII_min_alpha']
-#    outdist['CII_max_alpha']
 
-    return(out)
 
 #%%
 def makefig(samples, teststat, Padj, cii_low, cii_high, alpha, showfig):
@@ -323,10 +324,9 @@ def makefig(samples, teststat, Padj, cii_low, cii_high, alpha, showfig):
     
 #%%
 def do_multtest(Praw, multtest='fdr_bh', verbose=3):
-    if verbose>=3: print("[HYPOTHESIS TESTING] Multiple test correction..[%s]" %multtest)
     if not isinstance(multtest, type(None)):
-        Padj = multitest.multipletests(Praw, method=multtest)
-        Padj = Padj[1]
+        if verbose>=3: print("[DISTFIT_proba] Multiple test correction..[%s]" %multtest)
+        Padj = multitest.multipletests(Praw, method=multtest)[1]
     else:
         Padj=Praw
     

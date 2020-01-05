@@ -21,7 +21,7 @@
    bound=          String: Set whether you want returned a P-value for the lower/upper bounds or both
                    'both': Both (default)
                    'up':   Upperbounds
-                   'down': Lowerbounds
+                   'low': Lowerbounds
 
    distribution=   String: Set the distribution to use
                    'auto_small': A smaller set of distributions: [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm] (default) 
@@ -74,7 +74,6 @@
 
 #--------------------------------------------------------------------------
 # Name        : distfit.py
-# Version     : 1.0
 # Author      : E.Taskesen
 # Contact     : erdogant@gmail.com
 # Date        : Sep. 2017
@@ -85,14 +84,11 @@
 import warnings
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import scipy.stats as st
 import matplotlib.pyplot as plt
-from distfit.helpers.hist import hist
-#from scipy.optimize import curve_fit
 
 #%% Main
-def fit(data, bins=50, distribution='auto_small', alpha=None, bound='both', verbose=3): 
+def fit(data, bins=50, distribution='auto_small', alpha=0.05, bound='both', verbose=3): 
 	# DECLARATIONS
     Param    = {}
     Param['verbose']      = verbose
@@ -120,10 +116,11 @@ def fit(data, bins=50, distribution='auto_small', alpha=None, bound='both', verb
     
     # Return
     out=dict()
-    out['Param']=Param
-    out['data']=data
     out['model']=model
     out['summary']=out_summary
+    out['histdata']=(y_obs, X)
+    out['size']=len(data)
+    out['Param']=Param
     return(out)
 
 #%%
@@ -266,34 +263,27 @@ def compute_cii(out_dist, alpha=None, bound='both'):
     if alpha!=None:
         if bound=='up' or bound=='both' or bound=='right':
             CIIdown = dist.ppf(1-alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1-alpha, loc=loc, scale=scale)
-        if bound=='down' or bound=='both' or bound=='left':
+        if bound=='low' or bound=='both' or bound=='left':
             CIIup = dist.ppf(alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(alpha, loc=loc, scale=scale)
     
     # Store
-#    out_dist['CII_min_'+str(alpha)]=CIIup
-#    out_dist['CII_max_'+str(alpha)]=CIIdown
     out_dist['CII_min_alpha']=CIIup
     out_dist['CII_max_alpha']=CIIdown
     
     return(out_dist)
 
 #%% Plot
-def plot(out, title='', width=8,  height=8, xlim=[], ylim=[], showfig=2, alpha=None, verbose=3):
-    out_dist = out['summary']
-    out_dist = out['model']
-    data = out['data']
+def plot(model, title='', width=8, height=8, xlim=[], ylim=[], verbose=3):
+    out_dist = model['summary']
+    out_dist = model['model']
     
-    Param = out['Param']
-    Param['showfig'] = showfig
+    Param = model['Param']
     Param['title'] = title
     Param['width'] = width
     Param['height'] = height
     Param['xlim'] = xlim
     Param['ylim'] = ylim
     
-    if not alpha==None:
-        Param['alpha'] = alpha
-
     # Make figure
     best_dist = out_dist['distribution']
     best_fit_name = out_dist['name']
@@ -302,75 +292,80 @@ def plot(out, title='', width=8,  height=8, xlim=[], ylim=[], showfig=2, alpha=N
     loc   = out_dist['params'][-2]
     scale = out_dist['params'][-1]
     dist   = getattr(st, out_dist['name'])
-    size  = len(data)
-
-    out_dist['ax']=None
-    if Param['showfig']==1:
-        # Plot line
-        getmin = dist.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.0000001, loc=loc, scale=scale)
-        getmax = dist.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.9999999, loc=loc, scale=scale)
-
-        # Build PDF and turn into pandas Series
-        x   = np.linspace(getmin, getmax, size)
-        y   = dist.pdf(x, loc=loc, scale=scale, *arg)
-
-        # plt.figure(figsize=(6,4))
-        [fig, ax]=hist(data,bins=Param['bins'],xlabel='Values',ylabel='Frequency', grid=True, normed=1, verbose=Param['verbose']>=1, width=Param['width'],height=Param['height'])
-        plt.plot(x, y, 'b-', linewidth=2)
-        legendname=[best_fit_name,'Emperical distribution']
     
-        # Plot vertical line To stress the cut-off point
-        if not Param['alpha']==None:
-            if Param['bound']=='down' or Param['bound']=='both':
-                ax.axvline(x=out_dist['CII_min_alpha'], ymin=0, ymax=1, linewidth=2, color='r', linestyle='dashed')
-                legendname=[best_fit_name,'CII low '+'('+str(Param['alpha'])+')', 'Emperical distribution']
+    # Plot line
+    getmin = dist.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.0000001, loc=loc, scale=scale)
+    getmax = dist.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.9999999, loc=loc, scale=scale)
 
-            if Param['bound']=='up' or Param['bound']=='both':
-                ax.axvline(x=out_dist['CII_max_alpha'], ymin=0, ymax=1, linewidth=2, color='r', linestyle='dashed')
-                legendname=[best_fit_name,'CII high '+'('+str(Param['alpha'])+')', 'Emperical distribution']
+    # Build PDF and turn into pandas Series
+    x   = np.linspace(getmin, getmax, model['size'])
+    y   = dist.pdf(x, loc=loc, scale=scale, *arg)
+    # ymax=max(model['histdata'][0])
 
-            if Param['bound']=='both':
-                legendname=[best_fit_name,'CII low '+'('+str(Param['alpha'])+')','CII high '+'('+str(Param['alpha'])+')','Emperical distribution']
-        
-        plt.legend(legendname)
-        # Make text for plot
-        param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
-        param_str   = ', '.join(['{}={:0.2f}'.format(k,v) for k,v in zip(param_names, best_fit_param)])
-        dist_str    = '{}({})'.format(best_fit_name, param_str)
-        ax.set_title(Param['title']+'\nBest fit distribution\n' + dist_str)
-        ax.set_xlabel('Values')
-        ax.set_ylabel('Frequency')    
+    # plt.figure(figsize=(6,4))
+    fig, ax=plt.subplots(figsize=(width,height))
+    ax.plot(model['histdata'][1],model['histdata'][0], color='k', label='Emperical distribution',  linewidth=1)
+    # [fig, ax]=hist(data,bins=Param['bins'],xlabel='Values',ylabel='Frequency', grid=True, normed=1, verbose=Param['verbose']>=1, width=Param['width'],height=Param['height'])
+    ax.plot(x, y, 'b-', linewidth=1, label=best_fit_name)
 
-        #% Limit axis
-        if Param['xlim']!=[]:
-            plt.xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
-        if Param['ylim']!=[]:
-            plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
+    # Plot vertical line To stress the cut-off point
+    if not model['model']['CII_min_alpha']==None:
+        label= 'CII low '+'('+str(Param['alpha'])+')'
+        ax.axvline(x=out_dist['CII_min_alpha'], ymin=0, ymax=1, linewidth=1, color='r', linestyle='dashed', label=label)
 
-        #Store axis information
-        out_dist['ax']=ax
+    if not model['model']['CII_max_alpha']==None:
+        label='CII high '+'('+str(Param['alpha'])+')'
+        ax.axvline(x=out_dist['CII_max_alpha'], ymin=0, ymax=1, linewidth=1, color='r', linestyle='dashed', label=label)
+
+        # if Param['bound']=='both':
+        #     legendname=[best_fit_name,'CII low '+'('+str(Param['alpha'])+')','CII high '+'('+str(Param['alpha'])+')','Emperical distribution']
+    
+    # Make text for plot
+    param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
+    param_str   = ', '.join(['{}={:0.2f}'.format(k,v) for k,v in zip(param_names, best_fit_param)])
+    ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
+    ax.set_xlabel('Values')
+    ax.set_ylabel('Frequency')    
+
+    #% Limit axis
+    if Param['xlim']!=[]:
+        plt.xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
+    if Param['ylim']!=[]:
+        plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
+
+    ax.legend()
+    ax.grid(True)
+
+
+    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+    if not isinstance(model.get('tests', None), type(None)):
+        # Plot only significant hits
+        if Param['alpha']==None: Param['alpha']=1
+        idx=np.where(model['tests']['Padj'].values<=Param['alpha'])[0]
+        for i in idx:
+            ax.axvline(x=model['tests']['data'].values[i], ymin=0, ymax=1, linewidth=2, color='g', linestyle='--', alpha=0.8)
+
     
     # Make figure
-    if Param['showfig']==2:
-        [fig,ax]=plt.subplots(figsize=(Param['width'],Param['height']))
-        sns.distplot(data, bins=Param['bins'], hist=True, kde=True, rug=False, color = 'darkblue', kde_kws={'linewidth': 3}, rug_kws={'color': 'black'}, label='Bins')
-        # Make text for plot
-        param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
-        param_str   = ', '.join(['{}={:0.2f}'.format(k,v) for k,v in zip(param_names, best_fit_param)])
-        dist_str    = '{}({})'.format(best_fit_name, param_str)
-        plt.title(Param['title']+'\nBest fit distribution\n' + dist_str)
-        plt.xlabel('Values')
-        plt.ylabel('Frequency') 
-        plt.grid()
+    # if Param['showfig']==2:
+    #     [fig,ax]=plt.subplots(figsize=(Param['width'],Param['height']))
+    #     sns.distplot(data, bins=Param['bins'], hist=True, kde=True, rug=False, color = 'darkblue', kde_kws={'linewidth': 3}, rug_kws={'color': 'black'}, label='Bins')
+    #     # Make text for plot
+    #     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
+    #     param_str   = ', '.join(['{}={:0.2f}'.format(k,v) for k,v in zip(param_names, best_fit_param)])
+    #     dist_str    = '{}({})'.format(best_fit_name, param_str)
+    #     plt.title(Param['title']+'\nBest fit distribution\n' + dist_str)
+    #     plt.xlabel('Values')
+    #     plt.ylabel('Frequency') 
+    #     plt.grid()
 
-        #% Limit axis
-        if Param['xlim']!=[]:
-            plt.xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
-        if Param['ylim']!=[]:
-            plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
+    #     #% Limit axis
+    #     if Param['xlim']!=[]:
+    #         plt.xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
+    #     if Param['ylim']!=[]:
+    #         plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
         
-    if Param['verbose']>=1:
+    if Param['verbose']>=3:
         print("[DISTRIBUTION FIT] Estimated distribution: %s [loc:%f, scale:%f]" %(out_dist['name'],out_dist['params'][-2],out_dist['params'][-1]))
         
     return (fig, ax)
-    #return (out_dist, best_dist.name, best_params, out)
