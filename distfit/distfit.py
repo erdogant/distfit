@@ -209,11 +209,12 @@ def compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
                 # with a standard deviation of sd
                 # Calculate the predicted values from the initial parameter guesses
 #                yPred = params[0] + params[1]*X
-                try:
-                    logLik = -np.sum( dist.logpdf(y_obs, loc=loc, scale=scale) )
-                except Exception:
-                    logLik = float('NaN')
-                    pass
+                
+                # try:
+                #     logLik = -np.sum( dist.logpdf(y_obs, loc=loc, scale=scale) )
+                # except Exception:
+                logLik = np.nan
+                #     pass
 #                if len(params)>2:
 #                    logLik = -np.sum( dist.logpdf(y_obs, arg=arg, loc=loc, scale=scale) )
 #                else:
@@ -239,7 +240,7 @@ def compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
                     out_dist['arg']          = arg
 
             if verbose>=3:
-                print("[DISTFIT] Checking for [%s] [SSE:%f] [logLik:%f]" %(dist.name,sse,logLik))
+                print("[DISTFIT] Checking for [%s] [SSE:%f]" %(dist.name,sse))
             
         except Exception:
             pass    
@@ -343,7 +344,7 @@ def plot(model, title='', width=8, height=8, xlim=[], ylim=[], verbose=3):
         if Param['alpha']==None: Param['alpha']=1
         idx=np.where(model['tests']['Padj'].values<=Param['alpha'])[0]
         for i in idx:
-            ax.axvline(x=model['tests']['data'].values[i], ymin=0, ymax=1, linewidth=2, color='g', linestyle='--', alpha=0.8)
+            ax.axvline(x=model['tests']['data'].values[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
 
     
     # Make figure
@@ -366,6 +367,6 @@ def plot(model, title='', width=8, height=8, xlim=[], ylim=[], verbose=3):
     #         plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
         
     if Param['verbose']>=3:
-        print("[DISTRIBUTION FIT] Estimated distribution: %s [loc:%f, scale:%f]" %(out_dist['name'],out_dist['params'][-2],out_dist['params'][-1]))
+        print("[DISTFIT] Estimated distribution: %s [loc:%f, scale:%f]" %(out_dist['name'],out_dist['params'][-2],out_dist['params'][-1]))
         
     return (fig, ax)
