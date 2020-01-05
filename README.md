@@ -75,10 +75,14 @@ dist.plot(model)
 [DISTFIT] Checking for [uniform] [SSE:0.015671] 
 [DISTFIT] Estimated distribution: t [loc:5.239912, scale:7.871518]
 
-note that the best fit should be [normal], as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. In this case, the t-distribution scored slightly better then normal. The normal distribution scored similar to gamma and beta which is not strange to see. If you dont understand why, do some homework first ;)
+note that the best fit should be [normal], as this was also the input data. 
+However, many other distributions can be very similar with specific loc/scale parameters. 
+In this case, the t-distribution scored slightly better then normal. The normal distribution 
+scored similar to gamma and beta which is not strange to see. 
+If you dont understand why, do some homework first ;)
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="600" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="300" />
 </p>
 
 ## Example Compute probability whether values are of interest compared 95%CII of the data distribution:
@@ -92,8 +96,8 @@ model_P = dist.proba_parametric(expdata, data)
 dist.plot(model)
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2a.png" width="300" />
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="600" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2a.png" width="150" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="300" />
 </p>
 
 
