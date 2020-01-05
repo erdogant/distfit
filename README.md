@@ -37,7 +37,6 @@ git clone https://github.com/erdogant/distfit.git
 cd distfit
 python setup.py install
 ```  
-
 ## Import distfit package
 ```python
 import distfit as dist
@@ -46,6 +45,16 @@ import distfit as dist
 ```python
 import numpy as np
 data=np.random.normal(5, 8, [1000])
+```
+#### data looks like this:
+```
+array([[-12.65284521,  -3.81514715,  -4.53613236],
+       [ 11.5865475 ,   2.42547023,   6.6395518 ],
+       [  3.82076163,   6.65765319,   9.95795751],
+       ...,
+       [  3.65728268,   7.298237  ,  -4.25641318],
+       [  7.51820943,  16.26147929,  -0.60033084],
+       [  2.49165326,   3.97880574,   7.98986818]])
 ```
 ## Example fitting best scoring distribution to input-data:
 ```python
@@ -84,18 +93,6 @@ dist.plot(model)
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2a.png" width="300" />
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="600" />
 </p>
-
-
-#### data looks like this:
-```
-array([[-12.65284521,  -3.81514715,  -4.53613236],
-       [ 11.5865475 ,   2.42547023,   6.6395518 ],
-       [  3.82076163,   6.65765319,   9.95795751],
-       ...,
-       [  3.65728268,   7.298237  ,  -4.25641318],
-       [  7.51820943,  16.26147929,  -0.60033084],
-       [  2.49165326,   3.97880574,   7.98986818]])
-```
 
 
 ## Citation
