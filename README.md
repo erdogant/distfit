@@ -58,9 +58,9 @@ import distfit as dist
 ```python
 import numpy as np
 X=np.random.normal(5, 8, [1000])
-```
-#### X looks like this:
-```
+
+# Print to screen
+print(X)
 array([[-12.65284521,  -3.81514715,  -4.53613236],
        [ 11.5865475 ,   2.42547023,   6.6395518 ],
        [  3.82076163,   6.65765319,   9.95795751],
