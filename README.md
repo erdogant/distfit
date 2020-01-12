@@ -57,9 +57,9 @@ import distfit as dist
 #### Generate some random data:
 ```python
 import numpy as np
-data=np.random.normal(5, 8, [1000])
+X=np.random.normal(5, 8, [1000])
 ```
-#### data looks like this:
+#### X looks like this:
 ```
 array([[-12.65284521,  -3.81514715,  -4.53613236],
        [ 11.5865475 ,   2.42547023,   6.6395518 ],
@@ -71,7 +71,7 @@ array([[-12.65284521,  -3.81514715,  -4.53613236],
 ```
 #### Example fitting best scoring distribution to input-data:
 ```python
-model = dist.fit(data)
+model = dist.fit(X)
 dist.plot(model)
 ```
 #### Output looks like this:
@@ -92,7 +92,6 @@ note that the best fit should be [normal], as this was also the input data.
 However, many other distributions can be very similar with specific loc/scale parameters. 
 In this case, the t-distribution scored slightly better then normal. The normal distribution 
 scored similar to gamma and beta which is not strange to see. 
-If you dont understand why, do some homework first ;)
 ```
 <p align="center">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="400" />
@@ -102,7 +101,7 @@ If you dont understand why, do some homework first ;)
 ```python
 expdata=[-20,-12,-8,0,1,2,3,5,10,20,30,35]
 # Use fitted model
-model_P = dist.proba_parametric(expdata, data, model=model)
+model_P = dist.proba_parametric(expdata, X, model=model)
 # Make plot
 dist.plot(model)
 ```
@@ -113,7 +112,7 @@ dist.plot(model)
 
 ```python
 # Its also possible to do the distribution fit in the proba_ function:
-model_P = dist.proba_parametric(expdata, data)
+model_P = dist.proba_parametric(expdata, X)
 ```
 
 
