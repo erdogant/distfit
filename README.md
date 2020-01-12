@@ -18,7 +18,7 @@
 # Plot results
 .plot()
 
-See below for the exact working of the functions
+See below for the exact working of the functions.
 ```
 
 ## Contents
@@ -50,11 +50,11 @@ git clone https://github.com/erdogant/distfit.git
 cd distfit
 python setup.py install
 ```  
-## Import distfit package
+#### Import distfit package
 ```python
 import distfit as dist
 ```
-### Generate some random data:
+#### Generate some random data:
 ```python
 import numpy as np
 data=np.random.normal(5, 8, [1000])
@@ -69,7 +69,7 @@ array([[-12.65284521,  -3.81514715,  -4.53613236],
        [  7.51820943,  16.26147929,  -0.60033084],
        [  2.49165326,   3.97880574,   7.98986818]])
 ```
-## Example fitting best scoring distribution to input-data:
+#### Example fitting best scoring distribution to input-data:
 ```python
 model = dist.fit(data)
 dist.plot(model)
@@ -98,7 +98,7 @@ If you dont understand why, do some homework first ;)
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="400" />
 </p>
 
-## Example Compute probability whether values are of interest compared 95%CII of the data distribution:
+#### Example Compute probability whether values are of interest compared 95%CII of the data distribution:
 ```python
 expdata=[-20,-12,-8,0,1,2,3,5,10,20,30,35]
 # Use fitted model
@@ -117,7 +117,7 @@ model_P = dist.proba_parametric(expdata, data)
 ```
 
 
-## Citation
+### Citation
 Please cite distfit in your publications if this is useful for your research. Here is an example BibTeX entry:
 ```BibTeX
 @misc{erdogant2019distfit,
@@ -128,11 +128,11 @@ Please cite distfit in your publications if this is useful for your research. He
 }
 ```
 
-## Maintainers
+### Maintainers
 * Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
 
-## Contribute
+### Contribute
 * Contributions are welcome.
 
-## © Copyright
+### © Copyright
 See [LICENSE](LICENSE) for details.
