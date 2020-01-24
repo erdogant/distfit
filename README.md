@@ -112,7 +112,7 @@ dist.plot(model)
 </p>
 
 ```python
-# Its also possible to do the distribution fit in the proba_ function:
+# Its also possible to do the distribution fit in the proba_ function. Note that this if not practical in a loop with fixed background. 
 model_P = dist.proba_parametric(expdata, X)
 ```
 
