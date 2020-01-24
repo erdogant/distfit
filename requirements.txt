@@ -1,4 +1,7 @@
 #conda create -n env_distfit python=3.6
 #conda activate env_distfit
-pip install matplotlib numpy pandas tqdm
-#conda install spyder
+matplotlib
+numpy
+pandas
+tqdm
+statsmodels

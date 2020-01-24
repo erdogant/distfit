@@ -1,7 +1,7 @@
 echo "Cleaning previous builds first.."
 rm -rf dist
 rm -rf build
-rm -rf hnet.egg-info
+rm -rf distfit.egg-info
 
 echo "Making new build.."
 echo ""
@@ -12,7 +12,7 @@ echo ""
 python setup.py sdist
 echo ""
 
-pip install -U dist/distfit-0.1.0-py3-none-any.whl
+pip install -U dist/distfit-0.1.1-py3-none-any.whl
 echo ""
 
 read -p ">twine upload dist/* TO UPLOAD TO PYPI..."
