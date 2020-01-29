@@ -257,7 +257,7 @@ def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multt
 
     # Make structured output
     df=pd.DataFrame()
-    df['data']=data
+    # df['data']=data
     df['P']=Praw
     df['Padj']=Padj
     df['bound']=getbound
