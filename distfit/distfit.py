@@ -134,23 +134,23 @@ def plot(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
 
 
 # %% Plot
-def _plot_emperical(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
-    samples = model['samples']
-    teststat = model['teststat']
-    Padj = model['Padj']
-    cii_low = model['cii_low']
-    cii_high = model['cii_high']
-    alpha = model['alpha']
+def _plot_emperical(model, title='', figsize=(15,8), xlim=None, ylim=None, verbose=3):
+    fig, ax = plt.subplots(figsize=figsize)
+    plt.hist(model['samples'], 25, histtype='step', label='Emperical distribution')
+    ax.axvline(model['cii_low'], linestyle='--', c='r', label='cii low')
+    ax.axvline(model['cii_high'], linestyle='--', c='r', label='cii high')
+    for i in range(0,len(model['teststat'])):
+        if model['Padj'][i]<=model['alpha']:
+            ax.axvline(model['teststat'][i], c='g')
 
-    fig, ax = plt.subplots(figsize=(25,8))
-    plt.hist(samples, 25, histtype='step', label='Emperical distribution')
-    ax.axvline(cii_low, linestyle='--', c='r', label='cii low')
-    ax.axvline(cii_high, linestyle='--', c='r', label='cii high')
-    for i in range(0,len(teststat)):
-        if Padj[i]<=alpha:
-            ax.axvline(teststat[i], c='g')
+    # Limit axis
+    if xlim is not None:
+        plt.xlim(xmin=xlim[0], xmax=xlim[1])
+    if ylim is not None:
+        plt.ylim(ymin=ylim[0], ymax=ylim[1])
 
     ax.grid(True)
+    ax.set_title(title)
     ax.legend()
     return fig, ax
 
