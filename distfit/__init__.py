@@ -14,10 +14,27 @@ __version__ = '0.1.2'
 
 # module level doc-string
 __doc__ = """
-distfit - Python package for probability density function fitting and hypothesis testing.
+distfit
 =====================================================================
 
-**distfit** 
-See README.md file for more information.
+Description
+-----------
+    Probability density function fitting and hypothesis testing.
+    Computes best fit to the input emperical distribution for 89 theoretical
+    distributions using the Sum of Squared errors (SSE) estimates.
+
+Example
+-------
+    import distfit as dist
+
+    model = dist.fit(X)
+
+    fig,ax = dist.plot(model)
+
+References
+----------
+    https://github.com/erdogant/distfit
+
+    See README.md file for more information.
 
 """
