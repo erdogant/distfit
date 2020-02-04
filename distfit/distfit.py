@@ -1,10 +1,4 @@
-"""Compute best fit to your emperical distribution for 89 different theoretical distributions using the Sum of Squared errors (SSE) estimates.
-
-    import distfit as dist
-
-    model  = dist.fit(X)
-    fig,ax = dist.plot(model)
-"""
+"""Compute best fit to your emperical distribution for 89 different theoretical distributions using the Sum of Squared errors (SSE) estimates."""
 
 # ---------------------------------
 # Name        : distfit.py
@@ -57,6 +51,13 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     Returns
     -------
     dict.
+    
+    Example
+    -------
+    dataNull=np.random.normal(0, 2, 1000)
+    data=[-8,-6,0,1,2,3,4,5,6,7,8,9,10]
+    model = dist.proba_parametric(data)
+    dist.plot(model)
 
     """
     Param = {}
