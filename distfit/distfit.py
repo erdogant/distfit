@@ -83,13 +83,13 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     model = _compute_cii(model, alpha=Param['alpha'], bound=Param['bound'])
 
     # Return
-    out=dict()
-    out['method']='parametric'
-    out['model']=model
-    out['summary']=out_summary
-    out['histdata']=(y_obs, X)
-    out['size']=len(X)
-    out['Param']=Param
+    out = {}
+    out['method'] = 'parametric'
+    out['model'] = model
+    out['summary'] = out_summary
+    out['histdata'] = (y_obs, X)
+    out['size'] = len(X)
+    out['Param'] = Param
     return(out)
 
 
@@ -189,11 +189,11 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
     ax.plot(x, y, 'b-', linewidth=1, label=best_fit_name)
 
     # Plot vertical line To stress the cut-off point
-    if not model['model']['CII_min_alpha'] is None:
+    if model['model']['CII_min_alpha'] is not None:
         label = 'CII low ' + '(' + str(Param['alpha']) + ')'
         ax.axvline(x=out_dist['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
 
-    if not model['model']['CII_max_alpha'] is None:
+    if model['model']['CII_max_alpha'] is not None:
         label = 'CII high ' + '(' + str(Param['alpha']) + ')'
         ax.axvline(x=out_dist['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
 
@@ -205,9 +205,9 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
     ax.set_ylabel('Frequency')
 
     # Limit axis
-    if not Param['xlim'] is None:
+    if Param['xlim'] is not None:
         plt.xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
-    if not Param['ylim'] is None:
+    if Param['ylim'] is not None:
         plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
