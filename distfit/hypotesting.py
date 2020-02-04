@@ -256,16 +256,16 @@ def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multt
         getbound[data<=model['model']['CII_min_alpha']]='low'
 
     # Make structured output
-    df=pd.DataFrame()
-    # df['data']=data
-    df['P']=Praw
-    df['Padj']=Padj
-    df['bound']=getbound
+    df = pd.DataFrame()
+    df['data'] = data
+    df['P'] = Praw
+    df['Padj'] = Padj
+    df['bound'] = getbound
 
     # Return
-    out=model
-    out['method']='parametric'
-    out['tests']=df
+    out = model
+    out['method'] = 'parametric'
+    out['proba'] = df
     return(out)
 
 
