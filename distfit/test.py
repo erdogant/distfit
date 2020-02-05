@@ -3,22 +3,33 @@ import distfit as dist
 print(dist.__version__)
 
 # %% Find best fit distribution 
-dataNull=np.random.normal(0, 2, 1000)
-data=[-8,-6,0,1,2,3,4,5,6,7,8,9,10]
+data_random = np.random.normal(0, 2, 1000)
+data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
 
-model = dist.proba_parametric(data)
+model = dist.proba_parametric(data_random)
 dist.plot(model)
 
-model = dist.proba_parametric(data,dataNull)
+# %%
+model = dist.fit(data_random)
+out = dist.proba_parametric(data, data_random, model=model)
+dist.plot(out)
+
+# %%
+out = dist.proba_parametric(data, data_random)
+dist.plot(out)
+
+# %%
+
+model = dist.proba_parametric(data, data_random)
 dist.plot(model)
 
-model = dist.proba_parametric(data,dataNull, bound='up')
+model = dist.proba_parametric(data, data_random, bound='up')
 dist.plot(model)
 
-model = dist.proba_parametric(data,dataNull, bound='low')
+model = dist.proba_parametric(data, data_random, bound='low')
 dist.plot(model)
 
-model = dist.proba_emperical(data,dataNull)
+model = dist.proba_emperical(data, data_random)
 dist.plot(model)
 
 model = dist.proba_emperical(data)
