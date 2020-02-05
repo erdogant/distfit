@@ -223,13 +223,13 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
     # Check which distribution fits best to the data
     if Param['verbose']>=3: print('[DISTFIT.proba] Analyzing underlying data distribution...')
 
-    if dataNull==[] and model is None:
+    if X==[] and model is None:
         if Param['verbose']>=3: print('[DISTFIT.proba] WARNING: Background distribution was absent, input data is used instead!')
-        dataNull=np.array(data.copy())
+        X=np.array(data.copy())
 
     # Compute null-distribution parameters
     if (model is None) or model['Param']['alpha']!=Param['alpha']:
-        model = dist.fit(dataNull, bins=Param['bins'], distribution=Param['distribution'], alpha=Param['alpha'], bound=Param['bound'], verbose=Param['verbose'])
+        model = dist.fit(X, bins=Param['bins'], distribution=Param['distribution'], alpha=Param['alpha'], bound=Param['bound'], verbose=Param['verbose'])
     else:
         if Param['verbose']>=3: print('[DISTFIT.proba] Using existing fit.')
 
@@ -246,6 +246,7 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
     # Determine P based on upper/lower/no bounds
     if Param['bound']=='up' or Param['bound']=='right' or Param['bound']=='high':
         Praw = 1 - getP
+        # Praw = getP
     elif Param['bound']=='down' or Param['bound']=='left' or Param['bound']=='low':
         Praw = getP
     elif Param['bound']=='both':

@@ -252,7 +252,6 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
     if model['model']['CII_min_alpha'] is not None:
         label = 'CII low ' + '(' + str(Param['alpha']) + ')'
         ax.axvline(x=out_dist['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
-
     if model['model']['CII_max_alpha'] is not None:
         label = 'CII high ' + '(' + str(Param['alpha']) + ')'
         ax.axvline(x=out_dist['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
@@ -275,14 +274,20 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
         # Plot significant hits
         if Param['alpha'] is None:
             Param['alpha']=1
+
         idxIN=np.where(model['proba']['Padj'].values<=Param['alpha'])[0]
         if verbose>=3: print("[DISTFIT.plot] Number of significant regions detected: %d" %(len(idxIN)))
         for i in idxIN:
-            ax.axvline(x=model['proba']['data'].values[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
+            ax.axvline(x=model['proba']['data'].iloc[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
 
-        # Plot the samples that are not signifcant after multiple test
-        idxOUT=np.where(model['proba']['Padj'].values>Param['alpha'])[0]
-        ax.scatter(model['proba']['data'].values[idxOUT], np.zeros(len(idxOUT)), color='red', marker='x', alpha=0.8, linewidth=1, label='Not significant')
+        # Plot the samples that are not signifcant after multiple test.
+        if np.any(idxIN):
+            ax.scatter(model['proba']['data'].iloc[idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+
+        # Plot the samples that are not signifcant after multiple test.
+        idxOUT = np.where(model['proba']['Padj'].values>Param['alpha'])[0]
+        if np.any(idxOUT):
+            ax.scatter(model['proba']['data'].values[idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     ax.legend()
     ax.grid(True)
@@ -392,7 +397,7 @@ def _compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
                     out_dist['arg'] = arg
 
             if verbose>=3:
-                print("[DISTFIT] Checking for [%s] [SSE:%f]" %(dist.name,sse))
+                print("[DISTFIT.fit] Checking for [%s] [SSE:%f]" %(dist.name,sse))
 
         except Exception:
             pass
