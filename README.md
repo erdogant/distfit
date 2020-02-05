@@ -20,6 +20,8 @@ dist.proba_parametric()
 dist.proba_emperical()
 # Plot results
 dist.plot()
+# Plot summary
+dist.plot_summary()
 
 See below for the exact working of the functions.
 ```
