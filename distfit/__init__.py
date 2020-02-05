@@ -1,6 +1,7 @@
 from distfit.distfit import (
     fit,
     plot,
+    plot_summary,
 )
 from distfit.hypotesting import (
     proba_emperical,

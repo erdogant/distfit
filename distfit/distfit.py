@@ -135,15 +135,75 @@ def plot(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
     return fig, ax
 
 
+# %% Plot summary
+def plot_summary(model, n_top=None, figsize=(15,8), ylim=None, verbose=3):
+    """Plot summary results.
+
+    Parameters
+    ----------
+    model : dict
+        The model that is created by the .fit() function.
+    n_top : int, optional
+        Show the top number of results. The default is None.
+    figsize : tuple, optional (default: (10,8))
+        The figure size.
+    ylim : Float, optional (default: None)
+        Limit figure in y-axis.
+    verbose : Int [1-5], optional (default: 3)
+        Print information to screen.
+
+    Returns
+    -------
+    fig,ax.
+
+    """
+    if model['method']=='parametric':
+
+        if n_top is None:
+            n_top = len(model['summary']['SSE'])
+
+        x = model['summary']['SSE'][0:n_top]
+        labels = model['summary']['Distribution'].values[0:n_top]
+
+        fig,ax = plt.subplots(figsize=figsize)
+        plt.plot(x)
+        # You can specify a rotation for the tick labels in degrees or with keywords.
+        plt.xticks(np.arange(len(x)), labels, rotation='vertical')
+        # Pad margins so that markers don't get clipped by the axes
+        plt.margins(0.2)
+        # Tweak spacing to prevent clipping of tick-labels
+        plt.subplots_adjust(bottom=0.15)
+        ax.grid(True)
+        plt.xlabel('Distribution')
+        plt.ylabel('SSE')
+        plt.title('Best fit: %s' %(model['model']['name']))
+        if ylim is not None:
+            plt.ylim(ymin=ylim[0], ymax=ylim[1])
+
+        plt.show()
+        return(fig, ax)
+    else:
+        print('[DISTFIT.plot_summary] Not possible when method is emperical')
+        return None, None
+
+
 # %% Plot
 def _plot_emperical(model, title='', figsize=(15,8), xlim=None, ylim=None, verbose=3):
     fig, ax = plt.subplots(figsize=figsize)
     plt.hist(model['samples'], 25, histtype='step', label='Emperical distribution')
-    ax.axvline(model['cii_low'], linestyle='--', c='r', label='cii low')
-    ax.axvline(model['cii_high'], linestyle='--', c='r', label='cii high')
-    for i in range(0,len(model['teststat'])):
-        if model['Padj'][i]<=model['alpha']:
-            ax.axvline(model['teststat'][i], c='g')
+    ax.axvline(model['cii_low'], linestyle='--', c='r', label='CII low')
+    ax.axvline(model['cii_high'], linestyle='--', c='r', label='CII high')
+
+    for i in range(0,len(model['proba']['teststat'])):
+        if model['proba']['Padj'].iloc[i]<=model['alpha'] and model['proba']['bound'].iloc[i] != 'none':
+            ax.axvline(model['proba']['teststat'].iloc[i], c='g', linestyle='--', linewidth=0.8)
+
+    idxIN = model['proba']['Padj']<=model['alpha']
+    if np.any(idxIN):
+        ax.scatter(model['proba']['teststat'].values[idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+    idxOUT = model['proba']['Padj']>model['alpha']
+    if np.any(idxOUT):
+        ax.scatter(model['proba']['teststat'].values[idxOUT], np.zeros(len(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     # Limit axis
     if xlim is not None:
@@ -152,15 +212,18 @@ def _plot_emperical(model, title='', figsize=(15,8), xlim=None, ylim=None, verbo
         plt.ylim(ymin=ylim[0], ymax=ylim[1])
 
     ax.grid(True)
+    ax.set_xlabel('Values')
+    ax.set_ylabel('Frequency')
     ax.set_title(title)
     ax.legend()
+
     return fig, ax
 
 
 # %% Plot
 def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
     # Store output and function parameters
-    out_dist = model['summary']
+    # out_dist = model['summary']
     out_dist = model['model']
     Param = model['Param']
     Param['title'] = title
