@@ -67,7 +67,7 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     Param['distribution'] = distribution
     Param['alpha'] = alpha
     Param['bound'] = bound
-    assert len(X)>0, print('[DISTFIT] Error: Input X is empty!')
+    assert len(X)>0, print('[DISTFIT.fit] Error: Input X is empty!')
 
     # Format the X
     X = _format_data(X)
@@ -103,19 +103,14 @@ def plot(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
     ----------
     model : dict
         The model that is created by the .fit() function.
-
     title : String, optional (default: '')
         Title of the plot.
-
     figsize : tuple, optional (default: (10,8))
         The figure size.
-
     xlim : Float, optional (default: None)
         Limit figure in x-axis.
-
     ylim : Float, optional (default: None)
         Limit figure in y-axis.
-
     verbose : Int [1-5], optional (default: 3)
         Print information to screen.
 

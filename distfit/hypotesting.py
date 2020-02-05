@@ -3,7 +3,7 @@
    description
    -----------
    Provides P-values for all values in data based on the underlying null-distribution
-   from dataNull. The emperical distribution of dataNull is used to estimate
+   from X. The emperical distribution of X is used to estimate
    the loc/scale/arg paramters for a theoretical distirbution.
 
 
@@ -28,7 +28,7 @@ import pandas as pd
 
 
 # %% Emperical test
-def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', multtest='fdr_bh', verbose=3):
+def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='fdr_bh', verbose=3):
     """Compute Probability based on an emperical test.
 
     Description
@@ -45,7 +45,7 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
     ----------
     data : Numpy array: Emperical data.
 
-    dataNull : numpy array, optional (default: None)
+    X : numpy array, optional (default: None)
         Background data: Null distribution which is used to compute Pvalues for the inputdata data.
 
     alpha : Float [0-1], optional (default: 0.05)
@@ -92,12 +92,12 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
     ciilow = (0 + (alpha / 2)) * 100
     ciihigh = (1 - (alpha / 2)) * 100
 
-    if isinstance(dataNull, type(None)):
-        dataNull=data
+    if isinstance(X, type(None)):
+        X=data
 
-    [n1, n2] = map(len, (data, dataNull))
+    [n1, n2] = map(len, (data, X))
     reps = 10000
-    dataC = np.concatenate([data, dataNull])
+    dataC = np.concatenate([data, X])
     ps = np.array([np.random.permutation(n1 + n2) for i in range(reps)])
 
     xp = dataC[ps[:, :n1]]
@@ -110,7 +110,7 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
     teststat=np.ones_like(data) * np.nan
     Praw=np.ones_like(data) * np.nan
     for i in range(0,len(data)):
-        getstat = np.percentile(data[i], 7) - np.percentile(dataNull, 7)
+        getstat = np.percentile(data[i], 7) - np.percentile(X, 7)
         getP=(2 * np.sum(samples >= np.abs(getstat)) / reps)
         getP=np.clip(getP,0,1)
         Praw[i] = getP
@@ -119,35 +119,47 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
 
     # Set bounds
     getbound = np.repeat('none',len(data))
-    getbound[teststat>=cii_high]='up'
-    getbound[teststat<=cii_low]='down'
+
+    if args['bound']=='up' or args['bound']=='right' or args['bound']=='high' or args['bound']=='both':
+        getbound[teststat>=cii_high]='up'
+    if args['bound']=='down' or args['bound']=='left' or args['bound']=='low' or args['bound']=='both':
+        getbound[teststat<=cii_low]='down'
 
     # Compute multiple testing to correct for Pvalues
     Padj = _do_multtest(Praw, args['multtest'], verbose=args['verbose'])
 
-    out=dict()
+    # Make structured output
+    df = pd.DataFrame()
+    df['data'] = data
+    df['P'] = Praw
+    df['Padj'] = Padj
+    df['bound'] = getbound
+    df['teststat'] = teststat
+
+    out={}
     out['method']='emperical'
-    out['Praw']=Praw
-    out['Padj']=Padj
-    out['bound']=getbound
     out['cii_low']=cii_low
     out['cii_high']=cii_high
     out['alpha']=args['alpha']
-    out['teststat']=teststat
     out['samples']=samples
+    out['proba'] = df
+    # out['teststat']=teststat
+    # out['Praw']=Praw
+    # out['Padj']=Padj
+    # out['bound']=getbound
 
     return(out)
 
 
 # %% Parametric tests
-def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multtest='fdr_bh', distribution='auto_small', model=None, verbose=3):
+def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fdr_bh', distribution='auto_small', model=None, verbose=3):
     """Compute Probability based on an parametric test.
 
     Parameters
     ----------
     data : Numpy array: Emperical data.
 
-    dataNull : numpy array, optional (default: None)
+    X : numpy array, optional (default: None)
         Background data: Null distribution which is used to compute Pvalues for the input data data.
 
     model : dict, optional (default: None)
