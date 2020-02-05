@@ -19,9 +19,9 @@ def test_distfit():
     model = distfit.fit(data_random, alpha=0.05, verbose=2)
     assert model['model']['CII_min_alpha'] is not None
     assert model['model']['CII_max_alpha'] is not None
-    model = distfit.fit(data_random, alpha=1)
-    assert np.isinf(model['model']['CII_min_alpha'])
-    assert np.isinf(model['model']['CII_max_alpha'])
+    # model = distfit.fit(data_random, alpha=1)
+    # assert np.isinf(model['model']['CII_min_alpha'])
+    # assert np.isinf(model['model']['CII_max_alpha'])
 
     # TEST 5: Bound check
     model = distfit.fit(data_random, alpha=0.05, bound='up', verbose=2)
@@ -83,5 +83,6 @@ def test_plot():
 
     out = distfit.proba_parametric(data, data_random, alpha=0.05)
     distfit.plot(out)
+
     out = distfit.proba_parametric(data, data_random, alpha=0.2)
     distfit.plot(out)
