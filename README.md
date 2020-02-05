@@ -11,14 +11,15 @@
 
 ## The following functions are available:
 ```python
+import distfit as dist
 # To make the distribution fit with the input data
-.fit()
+dist.fit()
 # Compute probabilities using the fitted distribution
-.proba_parametric()
+dist.proba_parametric()
 # Compute probabilities in an emperical manner
-.proba_emperical()
+dist.proba_emperical()
 # Plot results
-.plot()
+dist.plot()
 
 See below for the exact working of the functions.
 ```
