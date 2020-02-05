@@ -56,9 +56,9 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
 
     bound : String, optional (default: 'both')
         Set whether you want returned a P-value for the lower/upper bounds or both.
-        'both': Both (default)
-        'up':   Upperbounds
-        'low': Lowerbounds
+        'both'              : Both (default)
+        'up'/'high'/'right' : Upperbounds
+        'down'/'low'/'left' : Lowerbounds
 
     multtest : String, optional (default: 'fdr_bh')
         Multiple testing method.
@@ -120,7 +120,7 @@ def proba_emperical(data, dataNull=None, alpha=0.05, bins=50, bound='both', mult
     # Set bounds
     getbound = np.repeat('none',len(data))
     getbound[teststat>=cii_high]='up'
-    getbound[teststat<=cii_low]='low'
+    getbound[teststat<=cii_low]='down'
 
     # Compute multiple testing to correct for Pvalues
     Padj = _do_multtest(Praw, args['multtest'], verbose=args['verbose'])
@@ -163,9 +163,9 @@ def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multt
 
     bound : String, optional (default: 'both')
         Set whether you want returned a P-value for the lower/upper bounds or both.
-        'both': Both (default)
-        'up':   Upperbounds
-        'low': Lowerbounds
+        'both' : Both (default)
+        'up'/'high'/'right' : Upperbounds
+        'down'/'low'/'left' : Lowerbounds
 
     alpha : Float [0-1], optional (default: 0.05)
         Significance alpha.
@@ -232,14 +232,14 @@ def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multt
     getP = getdist.cdf(data, *arg, loc, scale) if arg else getdist.pdf(data, loc, scale)
 
     # Determine P based on upper/lower/no bounds
-    if Param['bound']=='up' or Param['bound']=='right':
+    if Param['bound']=='up' or Param['bound']=='right' or Param['bound']=='high':
         Praw = 1 - getP
-    elif Param['bound']=='low' or Param['bound']=='left':
+    elif Param['bound']=='down' or Param['bound']=='left' or Param['bound']=='low':
         Praw = getP
     elif Param['bound']=='both':
         Praw = np.min([1 - getP, getP], axis=0)
     else:
-        if Param['verbose']>=3: print('[DISTFIT.proba] WARNING: "bounds" is not set correctly! Options are: up/down/both.')
+        assert False, '[DISTFIT.proba] Error: "bounds" is not set correctly! Options are: up/down/both.'
         Praw=[]
 
     # Set all values in range[0..1]
@@ -253,7 +253,7 @@ def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multt
     if not isinstance(model['model']['CII_max_alpha'], type(None)):
         getbound[data>=model['model']['CII_max_alpha']]='up'
     if not isinstance(model['model']['CII_min_alpha'], type(None)):
-        getbound[data<=model['model']['CII_min_alpha']]='low'
+        getbound[data<=model['model']['CII_min_alpha']]='down'
 
     # Make structured output
     df = pd.DataFrame()
@@ -273,6 +273,7 @@ def proba_parametric(data, dataNull=[], alpha=0.05, bins=50, bound='both', multt
 def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
     if not isinstance(multtest, type(None)):
         if verbose>=3: print("[DISTFIT.proba] Multiple test correction..[%s]" %multtest)
+        if verbose>=5: print(Praw)
         Padj = multitest.multipletests(Praw, method=multtest)[1]
     else:
         Padj=Praw

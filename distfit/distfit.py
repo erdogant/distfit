@@ -34,8 +34,8 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     bound : String, optional (default: 'both')
         Set whether you want returned a P-value for the lower/upper bounds or both.
         'both': Both (default)
-        'up':   Upperbounds
-        'low': Lowerbounds
+        'up'/'high'/'right' : Upperbounds
+        'down'/'low'/'left' : Lowerbounds
 
     distribution : String, (default:'auto_small')
         The (set) of distribution to test.
@@ -51,7 +51,8 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     Returns
     -------
     dict.
-    
+
+
     Example
     -------
     dataNull=np.random.normal(0, 2, 1000)
@@ -212,18 +213,18 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
         plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if not isinstance(model.get('tests', None), type(None)):
+    if not isinstance(model.get('proba', None), type(None)):
         # Plot significant hits
         if Param['alpha'] is None:
             Param['alpha']=1
-        idxIN=np.where(model['tests']['Padj'].values<=Param['alpha'])[0]
+        idxIN=np.where(model['proba']['Padj'].values<=Param['alpha'])[0]
         if verbose>=3: print("[DISTFIT.plot] Number of significant regions detected: %d" %(len(idxIN)))
         for i in idxIN:
-            ax.axvline(x=model['tests']['data'].values[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
+            ax.axvline(x=model['proba']['data'].values[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
 
         # Plot the samples that are not signifcant after multiple test
-        idxOUT=np.where(model['tests']['Padj'].values>Param['alpha'])[0]
-        ax.scatter(model['tests']['data'].values[idxOUT], np.zeros(len(idxOUT)), color='red', marker='x', alpha=0.8, linewidth=1, label='Not significant')
+        idxOUT=np.where(model['proba']['Padj'].values>Param['alpha'])[0]
+        ax.scatter(model['proba']['data'].values[idxOUT], np.zeros(len(idxOUT)), color='red', marker='x', alpha=0.8, linewidth=1, label='Not significant')
 
     ax.legend()
     ax.grid(True)
@@ -356,9 +357,9 @@ def _compute_cii(out_dist, alpha=None, bound='both'):
     dist = getattr(st, out_dist['name'])
     CIIup, CIIdown = None, None
     if alpha is not None:
-        if bound=='up' or bound=='both' or bound=='right':
+        if bound=='up' or bound=='both' or bound=='right' or bound=='high':
             CIIdown = dist.ppf(1 - alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - alpha, loc=loc, scale=scale)
-        if bound=='low' or bound=='both' or bound=='left':
+        if bound=='down' or bound=='both' or bound=='left' or bound=='low':
             CIIup = dist.ppf(alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(alpha, loc=loc, scale=scale)
 
     # Store
