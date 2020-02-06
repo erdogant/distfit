@@ -10,7 +10,7 @@ from distfit.hypotesting import (
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 
 # module level doc-string

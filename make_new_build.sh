@@ -12,7 +12,7 @@ echo ""
 python setup.py sdist
 echo ""
 
-pip install -U dist/distfit-0.1.1-py3-none-any.whl
+pip install -U dist/distfit-0.1.3-py3-none-any.whl
 echo ""
 
 read -p ">twine upload dist/* TO UPLOAD TO PYPI..."

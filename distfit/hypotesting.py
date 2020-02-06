@@ -223,7 +223,7 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
     # Check which distribution fits best to the data
     if Param['verbose']>=3: print('[DISTFIT.proba] Analyzing underlying data distribution...')
 
-    if X==[] and model is None:
+    if len(X)==0 and model is None:
         if Param['verbose']>=3: print('[DISTFIT.proba] WARNING: Background distribution was absent, input data is used instead!')
         X=np.array(data.copy())
 

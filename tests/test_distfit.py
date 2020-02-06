@@ -71,8 +71,6 @@ def test_proba_parametric():
     out3 = distfit.proba_parametric(data, data_random, bound='both')
     assert np.all(np.isin(np.unique(out3['proba'].bound), ['none','down','up']))
     
-    out1['proba']['Padj']<=0.05
-
     # TEST 4: Check whether alpha responds on results
     out1 = distfit.proba_parametric(data, data_random, alpha=0.05)
     out2 = distfit.proba_parametric(data, data_random, alpha=0.2)
@@ -81,38 +79,38 @@ def test_proba_parametric():
     assert sum(out1['proba']['bound']=='none')>sum(out2['proba']['bound']=='none')
 
 
-def test_plot():
-    data_random = np.random.normal(0, 2, 1000)
-    data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+# def test_plot():
+#     data_random = np.random.normal(0, 2, 1000)
+#     data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
 
-    model = distfit.fit(data_random)
-    distfit.plot(model)
-    distfit.plot_summary(model)
+#     model = distfit.fit(data_random)
+#     distfit.plot(model)
+#     distfit.plot_summary(model)
 
-    out = distfit.proba_parametric(data, data_random)
-    distfit.plot(out)
+#     out = distfit.proba_parametric(data, data_random)
+#     distfit.plot(out)
 
-    out = distfit.proba_parametric(data, data_random, bound='up')
-    distfit.plot(out)
+#     out = distfit.proba_parametric(data, data_random, bound='up')
+#     distfit.plot(out)
 
-    out = distfit.proba_parametric(data, data_random, bound='down')
-    distfit.plot(out)
+#     out = distfit.proba_parametric(data, data_random, bound='down')
+#     distfit.plot(out)
 
-    out = distfit.proba_parametric(data, data_random, alpha=0.05)
-    distfit.plot(out)
+#     out = distfit.proba_parametric(data, data_random, alpha=0.05)
+#     distfit.plot(out)
 
-    out = distfit.proba_parametric(data, data_random, alpha=0.2)
-    distfit.plot(out)
+#     out = distfit.proba_parametric(data, data_random, alpha=0.2)
+#     distfit.plot(out)
 
 
-    out = distfit.proba_emperical(data, data_random)
-    distfit.plot(out)
+#     out = distfit.proba_emperical(data, data_random)
+#     distfit.plot(out)
 
-    out = distfit.proba_emperical(data, data_random, bound='up')
-    distfit.plot(out)
+#     out = distfit.proba_emperical(data, data_random, bound='up')
+#     distfit.plot(out)
 
-    out = distfit.proba_emperical(data, data_random, bound='down')
-    distfit.plot(out)
+#     out = distfit.proba_emperical(data, data_random, bound='down')
+#     distfit.plot(out)
 
-    out = distfit.proba_emperical(data, data_random, alpha=0.2)
-    distfit.plot(out)
+#     out = distfit.proba_emperical(data, data_random, alpha=0.2)
+#     distfit.plot(out)
