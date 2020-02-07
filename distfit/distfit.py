@@ -337,7 +337,6 @@ def _get_hist_params(data, bins):
     return(y_obs, X)
 
 
-
 # Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     out = []
@@ -347,7 +346,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     best_sse = np.inf
     out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['Distribution','SSE','LLE','loc','scale','arg'])
     max_name_len = np.max(list(map(lambda x: len(x.name),DISTRIBUTIONS)))
-    
+
     # Estimate distribution parameters
     for i,distribution in enumerate(DISTRIBUTIONS):
         logLik=0
@@ -400,8 +399,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
                     out_dist['arg'] = arg
 
             if verbose>=3:
-                
-                print("[DISTFIT.fit] Fitting [%s%s] [SSE: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' '*(max_name_len-len(distribution.name)), sse, loc, scale))
+                print("[DISTFIT.fit] Fitting [%s%s] [SSE: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' ' * (max_name_len - len(distribution.name)), sse, loc, scale))
 
         except Exception:
             pass
