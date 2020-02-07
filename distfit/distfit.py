@@ -337,17 +337,19 @@ def _get_hist_params(data, bins):
     return(y_obs, X)
 
 
+
 # Compute score for each distribution
-def _compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     out = []
     out_dist = {}
     out_dist['distribution'] = st.norm
     out_dist['params'] = (0.0, 1.0)
     best_sse = np.inf
     out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['Distribution','SSE','LLE','loc','scale','arg'])
-
+    max_name_len = np.max(list(map(lambda x: len(x.name),DISTRIBUTIONS)))
+    
     # Estimate distribution parameters
-    for i,dist in enumerate(DISTRIBUTIONS):
+    for i,distribution in enumerate(DISTRIBUTIONS):
         logLik=0
 
         # Try to fit the dist. However this can result in an error so therefore you need to try-catch
@@ -355,7 +357,8 @@ def _compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
             # Ignore warnings from data that can't be fit
             with warnings.catch_warnings():
                 # fit dist to data
-                params = dist.fit(data)
+                params = distribution.fit(data)
+                if verbose>=5: print(params)
 
                 # Separate parts of parameters
                 arg = params[:-2]
@@ -363,22 +366,22 @@ def _compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
                 scale = params[-1]
 
                 # Calculate fitted PDF and error with fit in distribution
-                pdf = dist.pdf(X, loc=loc, scale=scale, *arg)
+                pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
                 # Compute SSE
                 sse = np.sum(np.power(y_obs - pdf, 2.0))
                 logLik = np.nan
 
                 # try:
-                #     logLik = -np.sum( dist.logpdf(y_obs, loc=loc, scale=scale) )
+                #     logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
                 # except Exception:
                 #     pass
 #                if len(params)>2:
-#                    logLik = -np.sum( dist.logpdf(y_obs, arg=arg, loc=loc, scale=scale) )
+#                    logLik = -np.sum( distribution.logpdf(y_obs, arg=arg, loc=loc, scale=scale) )
 #                else:
-#                    logLik = -np.sum( dist.logpdf(y_obs, loc=loc, scale=scale) )
+#                    logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
 
 #                # Store results
-                out.values[i,0] = dist.name
+                out.values[i,0] = distribution.name
                 out.values[i,1] = sse
                 out.values[i,2] = logLik
                 out.values[i,3] = loc
@@ -388,8 +391,8 @@ def _compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
                 # identify if this distribution is better
                 if best_sse > sse > 0:
                     best_sse = sse
-                    out_dist['name'] = dist.name
-                    out_dist['distribution'] = dist
+                    out_dist['name'] = distribution.name
+                    out_dist['distribution'] = distribution
                     out_dist['params'] = params
                     out_dist['sse'] = sse
                     out_dist['loc'] = loc
@@ -397,7 +400,8 @@ def _compute_score_distribution(data, y_obs, X, DISTRIBUTIONS, verbose=3):
                     out_dist['arg'] = arg
 
             if verbose>=3:
-                print("[DISTFIT.fit] Checking for [%s] [SSE:%f]" %(dist.name,sse))
+                
+                print("[DISTFIT.fit] Fitting [%s%s] [SSE: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' '*(max_name_len-len(distribution.name)), sse, loc, scale))
 
         except Exception:
             pass
