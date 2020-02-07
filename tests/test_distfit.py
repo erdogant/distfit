@@ -5,7 +5,7 @@ def test_distfit():
     data_random = np.random.normal(0, 2, 1000)
     data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
     model = distfit.fit(data_random)
-
+    
     # TEST 1: check output is unchanged
     assert [*model.keys()]==['method', 'model', 'summary', 'histdata', 'size', 'Param']
     # TEST 2: Check model output is unchanged
@@ -34,20 +34,30 @@ def test_distfit():
     assert model['model']['CII_min_alpha'] is not None
     assert model['model']['CII_max_alpha'] is not None
 
+    # TEST 6: Distribution check
+    data_random = np.random.normal(0, 2, 10000)
+    model = distfit.fit(data_random, distribution='norm')
+    model['model']['loc']
+    '%.1f' %model['model']['scale']=='2.0'
+    '%.1f' %np.abs(model['model']['loc'])=='0.0'
+
 
 def test_proba_emperical():
-    data_random = np.random.normal(0, 2, 1000)
-    data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-    model = distfit.fit(data_random)
+    X = np.random.normal(0, 2, 1000)
+    y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
 
     # TEST 1: Check bounds
-    out1 = distfit.proba_emperical(data, data_random, bound='up')
+    out1 = distfit.proba_emperical(y, X, bound='up')
     assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
-    out2 = distfit.proba_emperical(data, data_random, bound='down')
+    out2 = distfit.proba_emperical(y, X, bound='down')
     assert np.all(np.isin(np.unique(out2['proba'].bound), ['none','down']))
-    out3 = distfit.proba_emperical(data, data_random, bound='both')
+    out3 = distfit.proba_emperical(y, X, bound='both')
     assert np.all(np.isin(np.unique(out3['proba'].bound), ['none','down','up']))
-
+    
+    # TEST 2: Check different sizes array
+    X = np.random.normal(0, 2, [10,100])
+    out1 = distfit.proba_emperical(y, X, bound='up')
+    assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
 
 def test_proba_parametric():
     data_random = np.random.normal(0, 2, 1000)
@@ -77,6 +87,12 @@ def test_proba_parametric():
     assert np.all(out2['proba']['Padj']==out1['proba']['Padj'])
     assert np.all(out2['proba']['Padj']==out1['proba']['Padj'])
     assert sum(out1['proba']['bound']=='none')>sum(out2['proba']['bound']=='none')
+
+    # TEST 5: Check different sizes array
+    X = np.random.normal(0, 2, [10,100])
+    y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+    out1 = distfit.proba_parametric(y, X, bound='up')
+    assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
 
 
 # def test_plot():
