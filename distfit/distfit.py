@@ -76,10 +76,10 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     DISTRIBUTIONS = _get_distributions(Param['distribution'])
 
     # Get histogram of original X
-    [y_obs, X] = _get_hist_params(X, Param['bins'])
+    [y_obs, X_bins] = _get_hist_params(X, Param['bins'])
 
     # Compute best distribution fit on the emperical X
-    out_summary, model = _compute_score_distribution(X, y_obs, X, DISTRIBUTIONS, verbose=Param['verbose'])
+    out_summary, model = _compute_score_distribution(X, X_bins, y_obs, DISTRIBUTIONS, verbose=Param['verbose'])
 
     # Determine confidence intervals on the best fitting distribution
     model = _compute_cii(model, alpha=Param['alpha'], bound=Param['bound'])
@@ -89,7 +89,7 @@ def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose
     out['method'] = 'parametric'
     out['model'] = model
     out['summary'] = out_summary
-    out['histdata'] = (y_obs, X)
+    out['histdata'] = (y_obs, X_bins)
     out['size'] = len(X)
     out['Param'] = Param
     return(out)
