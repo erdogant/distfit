@@ -1,11 +1,12 @@
 """Compute best fit to your emperical distribution for 89 different theoretical distributions using the Sum of Squared errors (SSE) estimates."""
 
-# ---------------------------------
+# --------------------------------------------------
 # Name        : distfit.py
 # Author      : E.Taskesen
 # Contact     : erdogant@gmail.com
+# github      : https://github.com/erdogant/distfit
 # Licence     : MIT
-# ---------------------------------
+# --------------------------------------------------
 
 
 # %% Libraries

@@ -13,10 +13,13 @@ hypo.proba_parametric(X)
 
 """
 
+# --------------------------------------------------
 # Name        : hypotesting.py
 # Author      : E.Taskesen
 # Contact     : erdogant@gmail.com
-# Licence     : See Licences
+# github      : https://github.com/erdogant/distfit
+# Licence     : MIT
+# --------------------------------------------------
 
 
 # %% Libraries
@@ -231,9 +234,6 @@ def proba_parametric(y, X=[], alpha=0.05, bins=50, bound='both', multtest='fdr_b
     if len(X)==0 and model is None:
         if Param['verbose']>=3: print('[DISTFIT.proba] WARNING: Background distribution was absent, input data is used instead!')
         X=np.array(y.copy())
-
-    # Format the data
-    X = _format_data(X)
 
     # Compute null-distribution parameters
     if (model is None) or model['Param']['alpha']!=Param['alpha']:

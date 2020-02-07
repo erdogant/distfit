@@ -1,3 +1,11 @@
+# --------------------------------------------------
+# Name        : examples.py
+# Author      : E.Taskesen
+# Contact     : erdogant@gmail.com
+# github      : https://github.com/erdogant/distfit
+# Licence     : MIT
+# --------------------------------------------------
+
 import numpy as np
 import distfit as dist
 print(dist.__version__)
@@ -10,7 +18,7 @@ model = dist.fit(X)
 dist.plot(model)
 dist.plot_summary(model)
 
-model = dist.proba_parametric(y, X)
+model = dist.proba_parametric(y, model=model)
 dist.plot(model)
 
 # %%
