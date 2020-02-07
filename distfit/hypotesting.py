@@ -1,16 +1,15 @@
 """Compute probability based on theoretical distribution.
 
-   description
-   -----------
-   Provides P-values for all values in data based on the underlying null-distribution
-   from X. The emperical distribution of X is used to estimate
-   the loc/scale/arg paramters for a theoretical distirbution.
+description
+-----------
+Provides P-values for all values in data based on the underlying null-distribution
+from X. The emperical distribution of X is used to estimate the loc/scale/arg paramters
+for a theoretical distirbution.
 
+import hypotesting as hypo
 
-    import hypotesting as hypo
-
-    hypo.proba_emperical(X)
-    hypo.proba_parametric(X)
+hypo.proba_emperical(X)
+hypo.proba_parametric(X)
 
 """
 
@@ -25,10 +24,11 @@ import numpy as np
 import statsmodels.stats.multitest as multitest
 import distfit as dist
 import pandas as pd
+from distfit.distfit import _format_data
 
 
 # %% Emperical test
-def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='fdr_bh', verbose=3):
+def proba_emperical(y, X=None, alpha=0.05, bins=50, bound='both', multtest='fdr_bh', n_perm=10000, verbose=3):
     """Compute Probability based on an emperical test.
 
     Description
@@ -43,7 +43,7 @@ def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='f
 
     Parameters
     ----------
-    data : Numpy array: Emperical data.
+    y : Numpy array: Emperical data.
 
     X : numpy array, optional (default: None)
         Background data: Null distribution which is used to compute Pvalues for the inputdata data.
@@ -74,6 +74,9 @@ def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='f
         'fdr_tsbh'       : two stage fdr correction (non-negative)
         'fdr_tsbky'      : two stage fdr correction (non-negative)
 
+    n_perm : Int [0-1], optional (default: 10000)
+        Number of permutations to determine Pvalues.
+
     verbose : Int [1-5], optional (default: 3)
         Print information to screen.
 
@@ -93,12 +96,14 @@ def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='f
     ciihigh = (1 - (alpha / 2)) * 100
 
     if isinstance(X, type(None)):
-        X=data
+        X=y
 
-    [n1, n2] = map(len, (data, X))
-    reps = 10000
-    dataC = np.concatenate([data, X])
-    ps = np.array([np.random.permutation(n1 + n2) for i in range(reps)])
+    # Format the data
+    X = _format_data(X)
+
+    [n1, n2] = map(len, (y, X))
+    dataC = np.concatenate([y, X])
+    ps = np.array([np.random.permutation(n1 + n2) for i in range(n_perm)])
 
     xp = dataC[ps[:, :n1]]
     yp = dataC[ps[:, n1:]]
@@ -107,18 +112,18 @@ def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='f
     cii_low=np.percentile(samples, ciilow)
     cii_high=np.percentile(samples, ciihigh)
 
-    teststat=np.ones_like(data) * np.nan
-    Praw=np.ones_like(data) * np.nan
-    for i in range(0,len(data)):
-        getstat = np.percentile(data[i], 7) - np.percentile(X, 7)
-        getP=(2 * np.sum(samples >= np.abs(getstat)) / reps)
+    teststat=np.ones_like(y) * np.nan
+    Praw=np.ones_like(y) * np.nan
+    for i in range(0,len(y)):
+        getstat = np.percentile(y[i], 7) - np.percentile(X, 7)
+        getP=(2 * np.sum(samples >= np.abs(getstat)) / n_perm)
         getP=np.clip(getP,0,1)
         Praw[i] = getP
         teststat[i] = getstat
-        if verbose>=4: print("[%.0f] - p-value = %f" %(data[i], getP))
+        if verbose>=4: print("[%.0f] - p-value = %f" %(y[i], getP))
 
     # Set bounds
-    getbound = np.repeat('none',len(data))
+    getbound = np.repeat('none',len(y))
 
     if args['bound']=='up' or args['bound']=='right' or args['bound']=='high' or args['bound']=='both':
         getbound[teststat>=cii_high]='up'
@@ -130,7 +135,7 @@ def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='f
 
     # Make structured output
     df = pd.DataFrame()
-    df['data'] = data
+    df['data'] = y
     df['P'] = Praw
     df['Padj'] = Padj
     df['bound'] = getbound
@@ -152,12 +157,12 @@ def proba_emperical(data, X=None, alpha=0.05, bins=50, bound='both', multtest='f
 
 
 # %% Parametric tests
-def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fdr_bh', distribution='auto_small', model=None, verbose=3):
+def proba_parametric(y, X=[], alpha=0.05, bins=50, bound='both', multtest='fdr_bh', distribution='auto_small', model=None, verbose=3):
     """Compute Probability based on an parametric test.
 
     Parameters
     ----------
-    data : Numpy array: Emperical data.
+    y : Numpy array: Emperical data.
 
     X : numpy array, optional (default: None)
         Background data: Null distribution which is used to compute Pvalues for the input data data.
@@ -207,9 +212,9 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
     None.
 
     """
-    if 'list' in str(type(data)): data=np.array(data)
-    if 'float' in str(type(data)): data=np.array([data])
-    assert 'numpy.ndarray' in str(type(data)), 'data should be of type np.array or list'
+    if 'list' in str(type(y)): y=np.array(y)
+    if 'float' in str(type(y)): y=np.array([y])
+    assert 'numpy.ndarray' in str(type(y)), 'y should be of type np.array or list'
     # if alpha==None: alpha=1
 
     Param = dict()
@@ -225,7 +230,10 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
 
     if len(X)==0 and model is None:
         if Param['verbose']>=3: print('[DISTFIT.proba] WARNING: Background distribution was absent, input data is used instead!')
-        X=np.array(data.copy())
+        X=np.array(y.copy())
+
+    # Format the data
+    X = _format_data(X)
 
     # Compute null-distribution parameters
     if (model is None) or model['Param']['alpha']!=Param['alpha']:
@@ -241,18 +249,17 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
     scale = model['model']['params'][-1]
 
     # Compute P-value for data based on null-distribution
-    getP = getdist.cdf(data, *arg, loc, scale) if arg else getdist.pdf(data, loc, scale)
+    getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.pdf(y, loc, scale)
 
     # Determine P based on upper/lower/no bounds
     if Param['bound']=='up' or Param['bound']=='right' or Param['bound']=='high':
         Praw = 1 - getP
-        # Praw = getP
     elif Param['bound']=='down' or Param['bound']=='left' or Param['bound']=='low':
         Praw = getP
     elif Param['bound']=='both':
         Praw = np.min([1 - getP, getP], axis=0)
     else:
-        assert False, '[DISTFIT.proba] Error: "bounds" is not set correctly! Options are: up/down/both.'
+        assert False, '[DISTFIT.proba] Error: "bounds" is not set correctly! Options are: up/down/right/left/high/low/both.'
         Praw=[]
 
     # Set all values in range[0..1]
@@ -260,17 +267,17 @@ def proba_parametric(data, X=[], alpha=0.05, bins=50, bound='both', multtest='fd
     # Multiple test correction
     Padj = _do_multtest(Praw, Param['multtest'], verbose=Param['verbose'])
     # up/down based on threshold
-    getbound = np.repeat('none', len(data))
+    getbound = np.repeat('none', len(y))
     if (Param['alpha'] is None):
         Param['alpha']=1
     if not isinstance(model['model']['CII_max_alpha'], type(None)):
-        getbound[data>=model['model']['CII_max_alpha']]='up'
+        getbound[y>=model['model']['CII_max_alpha']]='up'
     if not isinstance(model['model']['CII_min_alpha'], type(None)):
-        getbound[data<=model['model']['CII_min_alpha']]='down'
+        getbound[y<=model['model']['CII_min_alpha']]='down'
 
     # Make structured output
     df = pd.DataFrame()
-    df['data'] = data
+    df['data'] = y
     df['P'] = Praw
     df['Padj'] = Padj
     df['bound'] = getbound
