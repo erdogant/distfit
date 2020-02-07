@@ -120,7 +120,8 @@ y = [-1,-0.8,-0.6,0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.5]
 model = dist.fit(X)
 out = dist.proba_parametric(y, model=model)
 
-# Fit model and predict (manner 2)
+# Fit model and predict (manner 2) 
+# Note that this if not practical in a loop with fixed background
 out = dist.proba_parametric(y, X)
 
 # print probabilities
@@ -150,11 +151,6 @@ dist.plot(model)
 <p align="center">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="400" />
 </p>
-
-```python
-# Its also possible to do the distribution fit in the proba_ function. Note that this if not practical in a loop with fixed background. 
-model_P = dist.proba_parametric(expdata, X)
-```
 
 
 ### Citation
