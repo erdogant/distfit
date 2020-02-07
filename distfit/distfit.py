@@ -195,10 +195,10 @@ def _plot_emperical(model, title='', figsize=(15,8), xlim=None, ylim=None, verbo
 
     idxIN = model['proba']['Padj']<=model['alpha']
     if np.any(idxIN):
-        ax.scatter(model['proba']['teststat'].values[idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+        ax.scatter(model['proba']['teststat'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
     idxOUT = model['proba']['Padj']>model['alpha']
     if np.any(idxOUT):
-        ax.scatter(model['proba']['teststat'].values[idxOUT], np.zeros(len(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+        ax.scatter(model['proba']['teststat'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     # Limit axis
     if xlim is not None:
