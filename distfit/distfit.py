@@ -304,6 +304,7 @@ def _format_data(data):
     if 'pandas' in str(type(data)): data = data.values
     # Make sure its a vector
     data = data.ravel()
+    data = data.astype(float)
     return(data)
 
 
