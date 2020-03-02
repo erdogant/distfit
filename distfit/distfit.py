@@ -240,6 +240,10 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
     getmin = dist.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.0000001, loc=loc, scale=scale)
     getmax = dist.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.9999999, loc=loc, scale=scale)
 
+    # Take maximum/minimum based on emperical data to avoid long theoretical distribution tails
+    getmax = np.minimum(getmax, np.max(model['histdata'][1]))
+    getmin = np.maximum(getmin, np.min(model['histdata'][1]))
+
     # Build PDF and turn into pandas Series
     x = np.linspace(getmin, getmax, model['size'])
     y = dist.pdf(x, loc=loc, scale=scale, *arg)
