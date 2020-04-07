@@ -10,7 +10,7 @@ from distfit.hypotesting import (
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 
 # module level doc-string
@@ -32,10 +32,11 @@ Example
 
     fig,ax = dist.plot(model)
 
+    out = dist.proba_parametric(y=[-5,1,2,3,10], model=model)
+
+
 References
 ----------
     https://github.com/erdogant/distfit
-
-    See README.md file for more information.
 
 """

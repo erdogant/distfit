@@ -10,6 +10,7 @@ import numpy as np
 import distfit as dist
 print(dist.__version__)
 
+
 # %% Find best fit distribution 
 X = np.random.beta(5, 8, [100,100])
 y = [-1,-0.8,-0.6,0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.5]
@@ -21,10 +22,12 @@ dist.plot_summary(model)
 model = dist.proba_parametric(y, model=model)
 dist.plot(model)
 
+
 # %%
 model = dist.fit(X)
 out = dist.proba_parametric(y, model=model)
 dist.plot(out)
+
 
 # %%
 out = dist.proba_emperical(y, X)
