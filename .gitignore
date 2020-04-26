@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Personal
+old/
+
 # Distribution / packaging
 .pylint.*
 .Python

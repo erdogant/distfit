@@ -11,57 +11,124 @@ import distfit as dist
 print(dist.__version__)
 
 
-# %% Find best fit distribution 
+# %% Import class
+from distfit import dist
+dir(dist)
+
+
+# %%
+# Initialize
 X = np.random.beta(5, 8, [100,100])
 y = [-1,-0.8,-0.6,0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.5]
 
-model = dist.fit(X)
-dist.plot(model)
-dist.plot_summary(model)
+model = dist()
 
-model = dist.proba_parametric(y, model=model)
-dist.plot(model)
+# Fit and transform
+model.fit()
+model.transform(X)
+model.plot()
+model.predict(y)
+model.plot()
+
+# for Fit and transform in one go
+model = dist()
+model.fit_transform(X)
+model.plot()
+model.predict(y)
+model.plot()
+
+# Make plots
+model.plot_summary()
+
+# Show some results
+model.y_proba
+model.y_pred
+model.df
 
 
 # %%
-model = dist.fit(X)
-out = dist.proba_parametric(y, model=model)
-dist.plot(out)
+X = np.random.normal(0, 2, 1000)
+y = [-8,-6,0,1,2,3,4,5,6]
+
+model = dist(method='emperical')
+model.fit_transform(X)
+model.plot()
+
+# Make prediction
+model.predict(y)
+model.plot()
 
 
-# %%
-out = dist.proba_emperical(y, X)
-dist.plot(out)
+X = np.random.normal(5, 8, [100,100])
+y = [-35, -10, 0, 10, 15, 35]
+
+model = dist(method='emperical')
+model.fit_transform(X)
+model.predict(y)
+
+model.plot()
+
+model.y_proba
+model.y_pred
+model.df
 
 # %%
 X = np.random.beta(5, 8, 1000)
 
-model = dist.proba_parametric(y, X)
-dist.plot(model)
+model = dist()
+model.fit_transform(X)
+model.plot()
+
+# %% Find distribution parameters
+X = np.random.normal(0, 2, 5000)
+model = dist()
+model.fit_transform(X)
+model.plot()
+
+X = np.random.normal(10, 1, 5000)
+model = dist()
+model.fit_transform(X)
+model.plot()
+
+X = np.random.normal(10, 5, 5000)
+model = dist()
+model.fit_transform(X)
+model.plot()
 
 # %%
-model = dist.proba_parametric(y, X, bound='up')
-dist.plot(model)
+X = np.random.normal(0, 2, 1000)
+y = [-8,-6,0,1,2,3,4,5,6]
 
-model = dist.proba_parametric(y, X, bound='down')
-dist.plot(model)
+model = dist()
+model.fit_transform(X)
+model.predict(y)
+model.plot()
+model.df
 
-model = dist.proba_emperical(y, X)
-dist.plot(model)
+model = dist(bound='up')
+model.fit_transform(X)
+model.predict(y)
+model.plot()
+model.df
+
+model = dist(bound='down')
+model.fit_transform(X)
+model.predict(y)
+model.plot()
+model.df
 
 # %% Find best fit distribution ==============================
-y = np.random.beta(5, 8, 10000)
-model = dist.fit(y)
-dist.plot(model)
+X = np.random.normal(0, 2, 1000)
+y = [-8,-6,0,1,2,3,4,5,6]
 
-y = np.random.normal(5, 8, [100,100])
-model = dist.fit(y, distribution='auto_small')
-dist.plot(model)
+model = dist()
+model.fit_transform(X)
+model.plot()
 
-y = np.random.normal(5, 8, [100,100])
-model = dist.fit(y, distribution='norm')
-dist.plot(model)
+model = dist(distribution='auto_small')
+model.fit_transform(X)
+model.plot()
 
-# y = np.random.normal(5, 8, 10000)
-# model = dist.fit(y, bins=50, distribution='auto_full')
-# dist.plot(model)
+model = dist(distribution='auto_full')
+model.fit_transform(X)
+model.plot()

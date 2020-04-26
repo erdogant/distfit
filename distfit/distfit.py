@@ -1,5 +1,4 @@
 """Compute best fit to your emperical distribution for 89 different theoretical distributions using the Sum of Squared errors (SSE) estimates."""
-
 # --------------------------------------------------
 # Name        : distfit.py
 # Author      : E.Taskesen
@@ -13,193 +12,493 @@
 import warnings
 import numpy as np
 import pandas as pd
+import statsmodels.stats.multitest as multitest
 import scipy.stats as st
 import matplotlib.pyplot as plt
 warnings.filterwarnings('ignore')
 
 
-# %% Main
-def fit(X, alpha=0.05, bins=50, bound='both', distribution='auto_small', verbose=3):
-    """Fit best scoring theoretical distribution to the emperical data (X).
+# Class dist
+class dist():
+    """Create object to fit a model and make predictions.
 
-    Parameters
-    ----------
-    X : Numpy array: Emperical data.
-
-    alpha : String, optional (default: 0.05)
-        Significance alpha.
-
-    bins : Int, optional, (default: 50)
-        Bin size to determine the emperical historgram.
-
-    bound : String, optional (default: 'both')
-        Set whether you want returned a P-value for the lower/upper bounds or both.
-        'both': Both (default)
-        'up'/'high'/'right' : Upperbounds
-        'down'/'low'/'left' : Lowerbounds
-
-    distribution : String, (default:'auto_small')
-        The (set) of distribution to test.
-        'auto_small': A smaller set of distributions: [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm]
-        'auto_full' : The full set of distributions
-        'norm'      : normal distribution
-        't'         : Students T distribution
-        etc
-
-    verbose : Int [1-5], optional (default: 3)
-        Print information to screen.
-
-    Returns
-    -------
-    dict.
-
+    Description
+    -----------
+    Compute best fit to your emperical distribution for 89 different
+    theoretical distributions using the Sum of Squared errors (SSE) estimates.
+    Based on the fitted model new values can be examined where they belong on the distribution.
 
     Example
     -------
-    dataNull=np.random.normal(0, 2, 1000)
-    data=[-8,-6,0,1,2,3,4,5,6,7,8,9,10]
-    model = dist.proba_parametric(data)
-    dist.plot(model)
-
+    >>> X = np.random.normal(0, 2, 1000)
+    >>> y = [-8,-6,0,1,2,3,4,5,6]
+    >>>
+    >>> model = dist()
+    >>> model.fit_transform(X)
+    >>> model.plot()
+    >>>
+    >>> # Make prediction
+    >>> model.predict(y)
+    >>> model.plot()
     """
-    Param = {}
-    Param['verbose'] = verbose
-    Param['bins'] = bins
-    Param['distribution'] = distribution
-    Param['alpha'] = alpha
-    Param['bound'] = bound
-    assert len(X)>0, print('[DISTFIT.fit] Error: Input X is empty!')
 
-    # Format the X
-    X = _format_data(X)
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small'):
+        """Initialize distfit with parameters.
 
-    # Get list of distributions to check
-    DISTRIBUTIONS = _get_distributions(Param['distribution'])
+        Description
+        -----------
+        Specify the settings for the model.
 
-    # Get histogram of original X
-    [y_obs, X_bins] = _get_hist_params(X, Param['bins'])
+        Parameters
+        ----------
+        method : str, default: 'parametric'
+            Specify the method type
+                'parametric'
+                'emperical'
+        alpha : float, default: 0.05
+            Significance alpha.
+        multtest : str, default: 'fdr_bh'
+            Multiple testing method. Options are:
+                None : No multiple testing
+                'bonferroni' : one-step correction
+                'sidak' : one-step correction
+                'holm-sidak' : step down method using Sidak adjustments
+                'holm' : step-down method using Bonferroni adjustments
+                'simes-hochberg' : step-up method  (independent)
+                'hommel' : closed method based on Simes tests (non-negative)
+                'fdr_bh' : Benjamini/Hochberg  (non-negative)
+                'fdr_by' : Benjamini/Yekutieli (negative)
+                'fdr_tsbh' : two stage fdr correction (non-negative)
+                'fdr_tsbky' : two stage fdr correction (non-negative)
+        bins : int, default: 50
+            Bin size to determine the emperical historgram.
+        bound : str, default: 'both'
+            Set the directionality to test for significance.
+                Upper and lowerbounds: 'both'
+                Upperbounds: 'up', 'high', 'right'
+                Lowerbounds: 'down', 'low', 'left'
+        distribution : str, default: 'auto_small'
+            The (set) of distribution to test.
+                'auto_small': A smaller set of distributions: [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm]
+                'auto_full' : The full set of distributions
+                'norm' : normal distribution
+                't' : Students T distribution
 
-    # Compute best distribution fit on the emperical X
-    out_summary, model = _compute_score_distribution(X, X_bins, y_obs, DISTRIBUTIONS, verbose=Param['verbose'])
+        Returns
+        -------
+        object.
+            method : str
+                parametric or emperical method type.
+            alpha : float
+                cut-off for P-value significance.
+            bins : int
+                Number of bins used to create histogram.
+            bound : str
+                Upper, lower or both sides of the distribution are tested for significance.
+            distribution : str
+                Specified distribution or a set of distributions.
+            multtest : str
+                Multiple test correction method.
 
-    # Determine confidence intervals on the best fitting distribution
-    model = _compute_cii(model, alpha=Param['alpha'], bound=Param['bound'])
+        """
+        # Get list of distributions to check
+        if (alpha is None): alpha=1
 
-    # Return
-    out = {}
-    out['method'] = 'parametric'
-    out['model'] = model
-    out['summary'] = out_summary
-    out['histdata'] = (y_obs, X_bins)
-    out['size'] = len(X)
-    out['Param'] = Param
-    return(out)
+        self.method = method
+        self.alpha = alpha
+        self.bins = bins
+        self.bound = bound
+        self.distribution = distribution
+        self.multtest = multtest
+
+    # Fit
+    def fit(self, n_perm=10000, verbose=3):
+        """Collect the required distribution functions.
+
+        Parameters
+        ----------
+        n_perm : int, default: 10000
+            Number of permutations to model null-distribution in case of method is "emperical"
+        verbose : int [1-5], default: 3
+            Print information to screen. A higher number will print more.
+
+        Returns
+        -------
+        object.
+            distributions : list of functions containing distributions.
+
+        """
+        if verbose>=3: print('[distfit] >fit..')
+        # Get the desired distributions.
+        if self.method=='parametric':
+            self.distributions = _get_distributions(self.distribution)
+        elif self.method=='emperical':
+            self.n_perm = n_perm
+        else:
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+
+    # Transform
+    def transform(self, X, verbose=3):
+        """Determine best model for input data X.
+
+        Description
+        -----------
+        The input data X can be modellend in two manners:
+
+        **parametric**
+            In the parametric case, the best fit on the data is determined using the
+            sum of squared errors approach (SSE) for the specified distributions. Based on
+            the best distribution-fit, the confidence intervals (CII) can be determined
+            for later usage in the :func:`predict` function.
+        **Emperical**
+            In the emperical case, the data is ranked and the top/lower quantiles are determined.
+
+        Parameters
+        ----------
+        X : array-like
+            The Null distribution or background data is build form X.
+        verbose : int [1-5], default: 3
+            Print information to screen. A higher number will print more.
+
+        Returns
+        -------
+        object.
+            model : dict
+                dict containing keys with distribution parameters
+                sse : sum of square error
+                name : distribution name
+                distribution : distribution function
+                params : all kind of parameters
+                loc : loc function parameter
+                scale : scale function parameter
+                arg : arg function parameter
+            summary : list
+                Sum of square errors
+            histdata : tuple (observed, bins)
+                tuple containing observed and bins for data X in the histogram.
+            size : int
+                total number of elements in for data X
+
+        """
+        if len(X)<1: raise Exception('[distfit] Error: Input X is empty!')
+        if verbose>=3: print('[distfit] >transform..')
+        # Format the X
+        X = _format_data(X)
+        self.size = len(X)
+
+        if self.method=='parametric':
+            # Get histogram of original X
+            [y_obs, X_bins] = _get_hist_params(X, self.bins)
+            # Compute best distribution fit on the emperical X
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, verbose=verbose)
+            # Determine confidence intervals on the best fitting distribution
+            model = _compute_cii(self, model)
+            # Store
+            self.model = model
+            self.summary = out_summary
+            self.histdata = (y_obs, X_bins)
+        elif self.method=='emperical':
+            # Determine confidence intervals on the best fitting distribution
+            self.model = _compute_cii(self, X)
+            self.percentile = np.percentile(X, 7)
+        else:
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+
+    # Fit and transform in one go
+    def fit_transform(self, X, n_perm=10000, verbose=3):
+        """Fit best scoring theoretical distribution to the emperical data (X).
+
+        Parameters
+        ----------
+        X : array-like
+            Set of values belonging to the data
+        n_perm : int, default: 10000
+            Number of permutations to model null-distribution in case of method is "emperical"
+        verbose : int [1-5], default: 3
+            Print information to screen. A higher number will print more.
+
+        Returns
+        -------
+        object.
+
+        """
+        # Fit model to get list of distributions to check
+        self.fit(n_perm=n_perm, verbose=verbose)
+        # Transform X based on functions
+        self.transform(X, verbose=verbose)
+
+    def predict(self, y, verbose=3):
+        """Compute Probability for response variables y, using the specified method.
+
+        Description
+        -----------
+        Computes P-values for [y] based on the fited distribution from X.
+        The emperical distribution of X is used to estimate the loc/scale/arg parameters for a
+        theoretical distirbution in case method type is ``parametric``.
 
 
-# %% Plot
-def plot(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
-    """Make plot.
+        Parameters
+        ----------
+        y : array-like
+            Values to be predicted.
+        model : dict, default : None
+            The model created by the .fit() function.
+        verbose : int [1-5], default: 3
+            Print information to screen. A higher number will print more.
 
-    Parameters
-    ----------
-    model : dict
-        The model that is created by the .fit() function.
-    title : String, optional (default: '')
-        Title of the plot.
-    figsize : tuple, optional (default: (10,8))
-        The figure size.
-    xlim : Float, optional (default: None)
-        Limit figure in x-axis.
-    ylim : Float, optional (default: None)
-        Limit figure in y-axis.
-    verbose : Int [1-5], optional (default: 3)
-        Print information to screen.
+        Returns
+        -------
+        Object.
+            y_pred : list of str
+                prediction of bounds [upper, lower] for input y, using the fitted distribution X.
+            y_proba : list of float
+                probability for response variable y.
+            df : pd.DataFrame
+                Dataframe containing the predictions in a structed manner.
 
-    Returns
-    -------
-    fig : Figure
-    ax : ax of Figure
 
-    """
-    if model['method']=='parametric':
-        fig, ax = _plot_parametric(model, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
-    elif model['method']=='emperical':
-        fig, ax = _plot_emperical(model, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        """
+        if 'list' in str(type(y)): y=np.array(y)
+        if 'float' in str(type(y)): y=np.array([y])
+        if 'numpy.ndarray' not in str(type(y)): raise Exception('y should be of type np.array or list')
+        if verbose>=3: print('[distfit] >predict..')
+
+        if self.method=='parametric':
+            _predict_parametric(self, y, verbose=verbose)
+        elif self.method=='emperical':
+            _predict_emperical(self, y, verbose=verbose)
+        else:
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+
+    # Plot
+    def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+        """Make plot.
+
+        Parameters
+        ----------
+        model : dict
+            The model that is created by the .fit() function.
+        title : String, optional (default: '')
+            Title of the plot.
+        figsize : tuple, optional (default: (10,8))
+            The figure size.
+        xlim : Float, optional (default: None)
+            Limit figure in x-axis.
+        ylim : Float, optional (default: None)
+            Limit figure in y-axis.
+        verbose : Int [1-5], optional (default: 3)
+            Print information to screen.
+
+        Returns
+        -------
+        fig : Figure
+        ax : ax of Figure
+
+        """
+        if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: A model needs to be fitted first. Try fit_transform(X)')
+        if verbose>=3: print('[distfit] >plot..')
+        if (self.method=='parametric'):
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        elif (self.method=='emperical'):
+            fig, ax = _plot_emperical(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        else:
+            fig, ax = None, None
+        # Return
+        return fig, ax
+
+    # Plot summary
+    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, verbose=3):
+        """Plot summary results.
+
+        Parameters
+        ----------
+        model : dict
+            The model that is created by the .fit() function.
+        n_top : int, optional
+            Show the top number of results. The default is None.
+        figsize : tuple, optional (default: (10,8))
+            The figure size.
+        ylim : Float, optional (default: None)
+            Limit figure in y-axis.
+        verbose : Int [1-5], optional (default: 3)
+            Print information to screen.
+
+        Returns
+        -------
+        fig,ax.
+
+        """
+        if verbose>=3: print('[distfit] >plot summary..')
+        if self.method=='parametric':
+
+            if n_top is None:
+                n_top = len(self.summary['SSE'])
+
+            x = self.summary['SSE'][0:n_top]
+            labels = self.summary['Distribution'].values[0:n_top]
+            fig, ax = plt.subplots(figsize=figsize)
+            plt.plot(x)
+            # You can specify a rotation for the tick labels in degrees or with keywords.
+            plt.xticks(np.arange(len(x)), labels, rotation='vertical')
+            # Pad margins so that markers don't get clipped by the axes
+            plt.margins(0.2)
+            # Tweak spacing to prevent clipping of tick-labels
+            plt.subplots_adjust(bottom=0.15)
+            ax.grid(True)
+            plt.xlabel('Distribution')
+            plt.ylabel('SSE')
+            plt.title('Best fit: %s' %(self.model['name']))
+            if ylim is not None:
+                plt.ylim(ymin=ylim[0], ymax=ylim[1])
+
+            plt.show()
+            return(fig, ax)
+        else:
+            print('[distfit] This function works only in case of method is "parametric"')
+            return None, None
+
+
+# %% Utils
+def _predict_parametric(self, y, verbose=3):
+    # Check which distribution fits best to the data
+    if verbose>=3: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
+    if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
+
+    # Get distribution and the parameters
+    getdist = self.model['distribution']
+    arg = self.model['params'][:-2]
+    loc = self.model['params'][-2]
+    scale = self.model['params'][-1]
+
+    # Compute P-value for data based on null-distribution
+    getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.pdf(y, loc, scale)
+
+    # Determine P based on upper/lower/no bounds
+    if self.bound=='up' or self.bound=='right' or self.bound=='high':
+        Praw = 1 - getP
+    elif self.bound=='down' or self.bound=='left' or self.bound=='low':
+        Praw = getP
+    elif self.bound=='both':
+        Praw = np.min([1 - getP, getP], axis=0)
     else:
-        fig, ax = None, None
+        raise Exception('[distfit] >Error in predict: "bounds" is not set correctly! Options are: up/down/right/left/high/low/both.')
+        Praw=[]
 
-    return fig, ax
+    # Set all values in range[0..1]
+    Praw = np.clip(Praw, 0, 1)
+    # Multiple test correction
+    y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
+    # up/down based on threshold
+    y_pred = np.repeat('none', len(y))
+    if not isinstance(self.model['CII_max_alpha'], type(None)):
+        if self.bound=='up' or self.bound=='right' or self.bound=='high' or self.bound=='both':
+            y_pred[y>=self.model['CII_max_alpha']]='up'
+    if not isinstance(self.model['CII_min_alpha'], type(None)):
+        if self.bound=='down' or self.bound=='left' or self.bound=='low' or self.bound=='both':
+            y_pred[y<=self.model['CII_min_alpha']]='down'
+
+    # Make structured output
+    df = pd.DataFrame()
+    df['y'] = y
+    df['y_proba'] = y_proba
+    df['y_pred'] = y_pred
+    df['P'] = Praw
+    # Store in object
+    self.df = df
+    self.y_proba = y_proba
+    self.y_pred = y_pred
 
 
-# %% Plot summary
-def plot_summary(model, n_top=None, figsize=(15,8), ylim=None, verbose=3):
-    """Plot summary results.
+# Emperical test
+def _predict_emperical(self, y, verbose=3):
+    """Compute Probability based on an emperical test.
 
-    Parameters
-    ----------
-    model : dict
-        The model that is created by the .fit() function.
-    n_top : int, optional
-        Show the top number of results. The default is None.
-    figsize : tuple, optional (default: (10,8))
-        The figure size.
-    ylim : Float, optional (default: None)
-        Limit figure in y-axis.
-    verbose : Int [1-5], optional (default: 3)
-        Print information to screen.
+    Description
+    -----------
+    Suppose you have 2 data sets from unknown distribution and you want to test
+    if some arbitrary statistic (e.g 7th percentile) is the same in the 2 data sets.
+    An appropirate test statistic is the difference between the 7th percentile,
+    and if we knew the null distribution of this statisic, we could test for the
+    null hypothesis that the statistic = 0. Permuting the labels of the 2 data sets
+    allows us to create the empirical null distribution.
 
-    Returns
-    -------
-    fig,ax.
 
     """
-    if model['method']=='parametric':
+    # # Set Confidence intervals
+    # ciilow = (0 + (self.alpha / 2)) * 100
+    # ciihigh = (1 - (self.alpha / 2)) * 100
+    # # Format the data
+    # X = _format_data(X)
 
-        if n_top is None:
-            n_top = len(model['summary']['SSE'])
+    # [n1, n2] = map(len, (y, X))
+    # dataC = np.concatenate([y, X])
+    # ps = np.array([np.random.permutation(n1 + n2) for i in range(n_perm)])
 
-        x = model['summary']['SSE'][0:n_top]
-        labels = model['summary']['Distribution'].values[0:n_top]
+    # xp = dataC[ps[:, :n1]]
+    # yp = dataC[ps[:, n1:]]
+    # samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
 
-        fig,ax = plt.subplots(figsize=figsize)
-        plt.plot(x)
-        # You can specify a rotation for the tick labels in degrees or with keywords.
-        plt.xticks(np.arange(len(x)), labels, rotation='vertical')
-        # Pad margins so that markers don't get clipped by the axes
-        plt.margins(0.2)
-        # Tweak spacing to prevent clipping of tick-labels
-        plt.subplots_adjust(bottom=0.15)
-        ax.grid(True)
-        plt.xlabel('Distribution')
-        plt.ylabel('SSE')
-        plt.title('Best fit: %s' %(model['model']['name']))
-        if ylim is not None:
-            plt.ylim(ymin=ylim[0], ymax=ylim[1])
+    # cii_low=np.percentile(samples, ciilow)
+    # cii_high=np.percentile(samples, ciihigh)
+    # Set bounds
+    cii_high = (0 + (self.alpha / 2)) * 100
+    cii_low = (1 - (self.alpha / 2)) * 100
+    teststat = np.ones_like(y) * np.nan
+    Praw = np.ones_like(y) * np.nan
 
-        plt.show()
-        return(fig, ax)
-    else:
-        print('[DISTFIT.plot_summary] Not possible when method is emperical')
-        return None, None
+    # Compute statistics for y based on emperical distribution
+    for i in range(0,len(y)):
+        getstat = np.percentile(y[i], 7) - self.percentile
+        getP = (2 * np.sum(self.model['samples'] >= np.abs(getstat)) / self.n_perm)
+        getP = np.clip(getP,0,1)
+        Praw[i] = getP
+        teststat[i] = getstat
+        if verbose>=4: print("[%.0f] - p-value = %f" %(y[i], getP))
+
+    # Predict
+    y_pred = np.repeat('none', len(y))
+    if not isinstance(self.model['CII_max_alpha'], type(None)):
+        if self.bound=='up' or self.bound=='right' or self.bound=='high' or self.bound=='both':
+            y_pred[y > self.model['CII_max_alpha']]='up'
+    if not isinstance(self.model['CII_min_alpha'], type(None)):
+        if self.bound=='down' or self.bound=='left' or self.bound=='low' or self.bound=='both':
+            y_pred[y < self.model['CII_min_alpha']]='down'
+
+    # Compute multiple testing to correct for Pvalues
+    y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
+
+    # Make structured output
+    df = pd.DataFrame()
+    df['y'] = y
+    df['y_proba'] = y_proba
+    df['y_pred'] = y_pred
+    df['P'] = Praw
+    df['teststat'] = teststat
+    # Store in object
+    self.df = df
+    self.y_proba = y_proba
+    self.y_pred = y_pred
 
 
-# %% Plot
-def _plot_emperical(model, title='', figsize=(15,8), xlim=None, ylim=None, verbose=3):
+# Plot
+def _plot_emperical(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
     fig, ax = plt.subplots(figsize=figsize)
-    plt.hist(model['samples'], 25, histtype='step', label='Emperical distribution')
-    ax.axvline(model['cii_low'], linestyle='--', c='r', label='CII low')
-    ax.axvline(model['cii_high'], linestyle='--', c='r', label='CII high')
+    plt.hist(self.model['samples'], 25, histtype='step', label='Emperical distribution')
+    ax.axvline(self.model['CII_min_alpha'], linestyle='--', c='r', label='CII low')
+    ax.axvline(self.model['CII_max_alpha'], linestyle='--', c='r', label='CII high')
 
-    for i in range(0,len(model['proba']['teststat'])):
-        if model['proba']['Padj'].iloc[i]<=model['alpha'] and model['proba']['bound'].iloc[i] != 'none':
-            ax.axvline(model['proba']['teststat'].iloc[i], c='g', linestyle='--', linewidth=0.8)
+    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+    if hasattr(self, 'df'):
+        for i in range(0, len(self.df['y'])):
+            if self.df['y_proba'].iloc[i]<=self.alpha and self.df['y_pred'].iloc[i] != 'none':
+                ax.axvline(self.df['y'].iloc[i], c='g', linestyle='--', linewidth=0.8)
 
-    idxIN = model['proba']['Padj']<=model['alpha']
-    if np.any(idxIN):
-        ax.scatter(model['proba']['teststat'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
-    idxOUT = model['proba']['Padj']>model['alpha']
-    if np.any(idxOUT):
-        ax.scatter(model['proba']['teststat'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+        idxIN = self.df['y_proba']<=self.alpha
+        if np.any(idxIN):
+            ax.scatter(self.df['y'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+        idxOUT = self.df['y_proba']>self.alpha
+        if np.any(idxOUT):
+            ax.scatter(self.df['y'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     # Limit axis
     if xlim is not None:
@@ -217,53 +516,52 @@ def _plot_emperical(model, title='', figsize=(15,8), xlim=None, ylim=None, verbo
 
 
 # %% Plot
-def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
+def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
     # Store output and function parameters
-    # out_dist = model['summary']
-    out_dist = model['model']
-    Param = model['Param']
+    model = self.model
+    Param = {}
     Param['title'] = title
     Param['figsize'] = figsize
     Param['xlim'] = xlim
     Param['ylim'] = ylim
 
     # Make figure
-    best_dist = out_dist['distribution']
-    best_fit_name = out_dist['name']
-    best_fit_param = out_dist['params']
-    arg = out_dist['params'][:-2]
-    loc = out_dist['params'][-2]
-    scale = out_dist['params'][-1]
-    dist = getattr(st, out_dist['name'])
+    best_dist = model['distribution']
+    best_fit_name = model['name']
+    best_fit_param = model['params']
+    arg = model['params'][:-2]
+    loc = model['params'][-2]
+    scale = model['params'][-1]
+    distline = getattr(st, model['name'])
 
     # Plot line
-    getmin = dist.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.0000001, loc=loc, scale=scale)
-    getmax = dist.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else dist.ppf(0.9999999, loc=loc, scale=scale)
+    getmin = distline.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.0000001, loc=loc, scale=scale)
+    getmax = distline.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.9999999, loc=loc, scale=scale)
 
     # Take maximum/minimum based on emperical data to avoid long theoretical distribution tails
-    getmax = np.minimum(getmax, np.max(model['histdata'][1]))
-    getmin = np.maximum(getmin, np.min(model['histdata'][1]))
+    getmax = np.minimum(getmax, np.max(self.histdata[1]))
+    getmin = np.maximum(getmin, np.min(self.histdata[1]))
 
     # Build PDF and turn into pandas Series
-    x = np.linspace(getmin, getmax, model['size'])
-    y = dist.pdf(x, loc=loc, scale=scale, *arg)
-    # ymax=max(model['histdata'][0])
+    x = np.linspace(getmin, getmax, self.size)
+    y = distline.pdf(x, loc=loc, scale=scale, *arg)
+    # ymax=max(self.histdata[0])
 
     fig, ax = plt.subplots(figsize=figsize)
-    ax.plot(model['histdata'][1],model['histdata'][0], color='k', linewidth=1, label='Emperical distribution')
+    ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='Emperical distribution')
     ax.plot(x, y, 'b-', linewidth=1, label=best_fit_name)
 
     # Plot vertical line To stress the cut-off point
-    if model['model']['CII_min_alpha'] is not None:
-        label = 'CII low ' + '(' + str(Param['alpha']) + ')'
-        ax.axvline(x=out_dist['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
-    if model['model']['CII_max_alpha'] is not None:
-        label = 'CII high ' + '(' + str(Param['alpha']) + ')'
-        ax.axvline(x=out_dist['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+    if self.model['CII_min_alpha'] is not None:
+        label = 'CII low ' + '(' + str(self.alpha) + ')'
+        ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+    if self.model['CII_max_alpha'] is not None:
+        label = 'CII high ' + '(' + str(self.alpha) + ')'
+        ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
 
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
-    param_str = ', '.join(['{}={:0.2f}'.format(k,v) for k,v in zip(param_names, best_fit_param)])
+    param_str = ', '.join(['{}={:0.2f}'.format(k,v) for k, v in zip(param_names, best_fit_param)])
     ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
@@ -275,33 +573,32 @@ def _plot_parametric(model, title='', figsize=(10,8), xlim=None, ylim=None, verb
         plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if not isinstance(model.get('proba', None), type(None)):
+    if hasattr(self, 'df'):
         # Plot significant hits
-        if Param['alpha'] is None:
-            Param['alpha']=1
+        if self.alpha is None: self.alpha=1
 
-        idxIN=np.where(model['proba']['Padj'].values<=Param['alpha'])[0]
-        if verbose>=3: print("[DISTFIT.plot] Number of significant regions detected: %d" %(len(idxIN)))
+        idxIN=np.where(self.df['y_proba'].values<=self.alpha)[0]
+        if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
         for i in idxIN:
-            ax.axvline(x=model['proba']['data'].iloc[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
+            ax.axvline(x=self.df['y'].iloc[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
 
         # Plot the samples that are not signifcant after multiple test.
         if np.any(idxIN):
-            ax.scatter(model['proba']['data'].iloc[idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+            ax.scatter(self.df['y'].iloc[idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
 
         # Plot the samples that are not signifcant after multiple test.
-        idxOUT = np.where(model['proba']['Padj'].values>Param['alpha'])[0]
+        idxOUT = np.where(self.df['y_proba'].values>self.alpha)[0]
         if np.any(idxOUT):
-            ax.scatter(model['proba']['data'].values[idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+            ax.scatter(self.df['y'].values[idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     ax.legend()
     ax.grid(True)
 
-    if Param['verbose']>=3: print("[DISTFIT.plot] Estimated distribution: %s [loc:%f, scale:%f]" %(out_dist['name'],out_dist['params'][-2],out_dist['params'][-1]))
+    if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return (fig, ax)
 
 
-# %% Utils
+# Utils
 def _format_data(data):
     # Convert pandas to numpy
     if str(data.dtype)=='O': data=data.astype(float)
@@ -317,16 +614,16 @@ def _get_distributions(distribution):
     DISTRIBUTIONS=[]
     # Distributions to check
     if distribution=='auto_full':
-        DISTRIBUTIONS = [st.alpha,st.anglit,st.arcsine,st.beta,st.betaprime,st.bradford,st.burr,st.cauchy,st.chi,st.chi2,st.cosine,
-                         st.dgamma,st.dweibull,st.erlang,st.expon,st.exponnorm,st.exponweib,st.exponpow,st.f,st.fatiguelife,st.fisk,
-                         st.foldcauchy,st.foldnorm,st.frechet_r,st.frechet_l,st.genlogistic,st.genpareto,st.gennorm,st.genexpon,
-                         st.genextreme,st.gausshyper,st.gamma,st.gengamma,st.genhalflogistic,st.gilbrat,st.gompertz,st.gumbel_r,
-                         st.gumbel_l,st.halfcauchy,st.halflogistic,st.halfnorm,st.halfgennorm,st.hypsecant,st.invgamma,st.invgauss,
-                         st.invweibull,st.johnsonsb,st.johnsonsu,st.laplace,st.levy,st.levy_l,st.levy_stable,
-                         st.logistic,st.loggamma,st.loglaplace,st.lognorm,st.lomax,st.maxwell,st.mielke,st.nakagami,
-                         st.norm,st.pareto,st.pearson3,st.powerlaw,st.powerlognorm,st.powernorm,st.rdist,st.reciprocal,
-                         st.rayleigh,st.rice,st.recipinvgauss,st.semicircular,st.t,st.triang,st.truncexpon,st.truncnorm,st.tukeylambda,
-                         st.uniform,st.vonmises,st.vonmises_line,st.wald,st.weibull_min,st.weibull_max,st.wrapcauchy]
+        DISTRIBUTIONS = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
+                         st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm, st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk,
+                         st.foldcauchy, st.foldnorm, st.frechet_r, st.frechet_l, st.genlogistic, st.genpareto, st.gennorm, st.genexpon,
+                         st.genextreme, st.gausshyper, st.gamma, st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r,
+                         st.gumbel_l, st.halfcauchy, st.halflogistic, st.halfnorm, st.halfgennorm, st.hypsecant, st.invgamma, st.invgauss,
+                         st.invweibull, st.johnsonsb, st.johnsonsu, st.laplace, st.levy, st.levy_l, st.levy_stable,
+                         st.logistic, st.loggamma, st.loglaplace, st.lognorm, st.lomax, st.maxwell, st.mielke, st.nakagami,
+                         st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm, st.rdist, st.reciprocal,
+                         st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t, st.triang, st.truncexpon, st.truncnorm, st.tukeylambda,
+                         st.uniform, st.vonmises, st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
     elif distribution=='auto_small':
         DISTRIBUTIONS = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform]
     else:
@@ -346,16 +643,16 @@ def _get_hist_params(data, bins):
 # Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     out = []
-    out_dist = {}
-    out_dist['distribution'] = st.norm
-    out_dist['params'] = (0.0, 1.0)
+    model = {}
+    model['distribution'] = st.norm
+    model['params'] = (0.0, 1.0)
     best_sse = np.inf
-    out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['Distribution','SSE','LLE','loc','scale','arg'])
-    max_name_len = np.max(list(map(lambda x: len(x.name),DISTRIBUTIONS)))
+    out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['Distribution', 'SSE', 'LLE', 'loc', 'scale', 'arg'])
+    max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
-    for i,distribution in enumerate(DISTRIBUTIONS):
-        logLik=0
+    for i, distribution in enumerate(DISTRIBUTIONS):
+        logLik = 0
 
         # Try to fit the dist. However this can result in an error so therefore you need to try-catch
         try:
@@ -380,32 +677,31 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
                 #     logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
                 # except Exception:
                 #     pass
-#                if len(params)>2:
-#                    logLik = -np.sum( distribution.logpdf(y_obs, arg=arg, loc=loc, scale=scale) )
-#                else:
-#                    logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
+                # if len(params)>2:
+                #     logLik = -np.sum( distribution.logpdf(y_obs, arg=arg, loc=loc, scale=scale) )
+                # else:
+                #     logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
 
-#                # Store results
-                out.values[i,0] = distribution.name
-                out.values[i,1] = sse
-                out.values[i,2] = logLik
-                out.values[i,3] = loc
-                out.values[i,4] = scale
-                out.values[i,5] = arg
+                # Store results
+                out.values[i, 0] = distribution.name
+                out.values[i, 1] = sse
+                out.values[i, 2] = logLik
+                out.values[i, 3] = loc
+                out.values[i, 4] = scale
+                out.values[i, 5] = arg
 
                 # identify if this distribution is better
                 if best_sse > sse > 0:
                     best_sse = sse
-                    out_dist['name'] = distribution.name
-                    out_dist['distribution'] = distribution
-                    out_dist['params'] = params
-                    out_dist['sse'] = sse
-                    out_dist['loc'] = loc
-                    out_dist['scale'] = scale
-                    out_dist['arg'] = arg
+                    model['name'] = distribution.name
+                    model['distribution'] = distribution
+                    model['params'] = params
+                    model['sse'] = sse
+                    model['loc'] = loc
+                    model['scale'] = scale
+                    model['arg'] = arg
 
-            if verbose>=3:
-                print("[DISTFIT.fit] Fitting [%s%s] [SSE: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' ' * (max_name_len - len(distribution.name)), sse, loc, scale))
+            if verbose>=3: print("[distfit] >[%s%s] [SSE: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' ' * (max_name_len - len(distribution.name)), sse, loc, scale))
 
         except Exception:
             pass
@@ -414,26 +710,56 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     out = out.sort_values('SSE')
     out.reset_index(drop=True, inplace=True)
     # Return
-    return(out, out_dist)
+    return(out, model)
 
 
 # Determine confidence intervals on the best fitting distribution
-def _compute_cii(out_dist, alpha=None, bound='both'):
-    # Separate parts of parameters
-    arg = out_dist['params'][:-2]
-    loc = out_dist['params'][-2]
-    scale = out_dist['params'][-1]
+def _compute_cii(self, model):
+    if self.method=='parametric':
+        # Separate parts of parameters
+        arg = model['params'][:-2]
+        loc = model['params'][-2]
+        scale = model['params'][-1]
 
-    # Determine %CII
-    dist = getattr(st, out_dist['name'])
-    CIIup, CIIdown = None, None
-    if alpha is not None:
-        if bound=='up' or bound=='both' or bound=='right' or bound=='high':
-            CIIdown = dist.ppf(1 - alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - alpha, loc=loc, scale=scale)
-        if bound=='down' or bound=='both' or bound=='left' or bound=='low':
-            CIIup = dist.ppf(alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(alpha, loc=loc, scale=scale)
+        # Determine %CII
+        dist = getattr(st, model['name'])
+        CIIup, CIIdown = None, None
+        if self.alpha is not None:
+            if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
+                CIIdown = dist.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - self.alpha, loc=loc, scale=scale)
+            if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
+                CIIup = dist.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(self.alpha, loc=loc, scale=scale)
+    elif self.method=='emperical':
+        X = model
+        model = {}
+        # Set Confidence intervals
+        ps = np.array([np.random.permutation(len(X)) for i in range(self.n_perm)])
+        xp = X[ps[:, :100]]
+        yp = X[ps[:, 100:]]
+        samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
+        cii_high = (0 + (self.alpha / 2)) * 100
+        cii_low = (1 - (self.alpha / 2)) * 100
+        CIIup = np.percentile(samples, cii_high)
+        CIIdown = np.percentile(samples, cii_low)
+        # Store
+        model['samples'] = samples
+    else:
+        raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical"')
 
     # Store
-    out_dist['CII_min_alpha']=CIIup
-    out_dist['CII_max_alpha']=CIIdown
-    return(out_dist)
+    model['CII_min_alpha'] = CIIup
+    model['CII_max_alpha'] = CIIdown
+    return(model)
+
+
+# Multiple test correction
+def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
+    if not isinstance(multtest, type(None)):
+        if verbose>=3: print("[distfit] >Multiple test correction..[%s]" %multtest)
+        if verbose>=5: print(Praw)
+        Padj = multitest.multipletests(Praw, method=multtest)[1]
+    else:
+        Padj=Praw
+
+    Padj = np.clip(Padj, 0, 1)
+    return(Padj)

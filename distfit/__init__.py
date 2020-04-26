@@ -1,16 +1,14 @@
 from distfit.distfit import (
-    fit,
-    plot,
-    plot_summary,
+    dist,
 )
-from distfit.hypotesting import (
-    proba_emperical,
-    proba_parametric,
-)
+# from distfit.hypotesting import (
+    # proba_emperical,
+    # proba_parametric,
+# )
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '0.1.6'
+__version__ = '1.0.0'
 
 
 # module level doc-string

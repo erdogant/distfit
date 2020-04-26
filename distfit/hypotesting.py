@@ -1,26 +1,6 @@
 """Compute probability based on theoretical distribution.
 
-description
------------
-Provides P-values for all values in data based on the underlying null-distribution
-from X. The emperical distribution of X is used to estimate the loc/scale/arg paramters
-for a theoretical distirbution.
-
-import hypotesting as hypo
-
-hypo.proba_emperical(X)
-hypo.proba_parametric(X)
-
 """
-
-# --------------------------------------------------
-# Name        : hypotesting.py
-# Author      : E.Taskesen
-# Contact     : erdogant@gmail.com
-# github      : https://github.com/erdogant/distfit
-# Licence     : MIT
-# --------------------------------------------------
-
 
 # %% Libraries
 import numpy as np
@@ -151,10 +131,6 @@ def proba_emperical(y, X=None, alpha=0.05, bins=50, bound='both', multtest='fdr_
     out['alpha']=args['alpha']
     out['samples']=samples
     out['proba'] = df
-    # out['teststat']=teststat
-    # out['Praw']=Praw
-    # out['Padj']=Padj
-    # out['bound']=getbound
 
     return(out)
 
