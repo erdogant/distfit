@@ -42,7 +42,7 @@ class dist():
     >>> model.plot()
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small'):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small', n_perm=10000):
         """Initialize distfit with parameters.
 
         Description
@@ -83,6 +83,8 @@ class dist():
                 'auto_full' : The full set of distributions
                 'norm' : normal distribution
                 't' : Students T distribution
+        n_perm : int, default: 10000
+            Number of permutations to model null-distribution in case of method is "emperical"
 
         Returns
         -------
@@ -110,15 +112,14 @@ class dist():
         self.bound = bound
         self.distribution = distribution
         self.multtest = multtest
+        self.n_perm = n_perm
 
     # Fit
-    def fit(self, n_perm=10000, verbose=3):
+    def fit(self, verbose=3):
         """Collect the required distribution functions.
 
         Parameters
         ----------
-        n_perm : int, default: 10000
-            Number of permutations to model null-distribution in case of method is "emperical"
         verbose : int [1-5], default: 3
             Print information to screen. A higher number will print more.
 
@@ -133,7 +134,7 @@ class dist():
         if self.method=='parametric':
             self.distributions = _get_distributions(self.distribution)
         elif self.method=='emperical':
-            self.n_perm = n_perm
+            pass
         else:
             raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
 
@@ -205,15 +206,13 @@ class dist():
             raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
 
     # Fit and transform in one go
-    def fit_transform(self, X, n_perm=10000, verbose=3):
+    def fit_transform(self, X, verbose=3):
         """Fit best scoring theoretical distribution to the emperical data (X).
 
         Parameters
         ----------
         X : array-like
             Set of values belonging to the data
-        n_perm : int, default: 10000
-            Number of permutations to model null-distribution in case of method is "emperical"
         verbose : int [1-5], default: 3
             Print information to screen. A higher number will print more.
 
@@ -223,7 +222,7 @@ class dist():
 
         """
         # Fit model to get list of distributions to check
-        self.fit(n_perm=n_perm, verbose=verbose)
+        self.fit(verbose=verbose)
         # Transform X based on functions
         self.transform(X, verbose=verbose)
 
@@ -424,25 +423,9 @@ def _predict_emperical(self, y, verbose=3):
 
 
     """
-    # # Set Confidence intervals
-    # ciilow = (0 + (self.alpha / 2)) * 100
-    # ciihigh = (1 - (self.alpha / 2)) * 100
-    # # Format the data
-    # X = _format_data(X)
-
-    # [n1, n2] = map(len, (y, X))
-    # dataC = np.concatenate([y, X])
-    # ps = np.array([np.random.permutation(n1 + n2) for i in range(n_perm)])
-
-    # xp = dataC[ps[:, :n1]]
-    # yp = dataC[ps[:, n1:]]
-    # samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
-
-    # cii_low=np.percentile(samples, ciilow)
-    # cii_high=np.percentile(samples, ciihigh)
     # Set bounds
-    cii_high = (0 + (self.alpha / 2)) * 100
-    cii_low = (1 - (self.alpha / 2)) * 100
+    # cii_high = (0 + (self.alpha / 2)) * 100
+    # cii_low = (1 - (self.alpha / 2)) * 100
     teststat = np.ones_like(y) * np.nan
     Praw = np.ones_like(y) * np.nan
 
