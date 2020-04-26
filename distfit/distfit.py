@@ -360,7 +360,7 @@ class dist():
 # %% Utils
 def _predict_parametric(self, y, verbose=3):
     # Check which distribution fits best to the data
-    if verbose>=3: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
+    if verbose>=4: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
     if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
 
     # Get distribution and the parameters
@@ -473,13 +473,14 @@ def _plot_emperical(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbo
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
     if hasattr(self, 'df'):
         for i in range(0, len(self.df['y'])):
-            if self.df['y_proba'].iloc[i]<=self.alpha and self.df['y_pred'].iloc[i] != 'none':
+            # if self.df['y_proba'].iloc[i]<=self.alpha and self.df['y_pred'].iloc[i] != 'none':
+            if self.df['y_pred'].iloc[i] != 'none':
                 ax.axvline(self.df['y'].iloc[i], c='g', linestyle='--', linewidth=0.8)
 
-        idxIN = self.df['y_proba']<=self.alpha
+        idxIN = np.logical_or(self.df['y_pred']=='down', self.df['y_pred']=='up')
         if np.any(idxIN):
             ax.scatter(self.df['y'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
-        idxOUT = self.df['y_proba']>self.alpha
+        idxOUT = self.df['y_pred']=='none'
         if np.any(idxOUT):
             ax.scatter(self.df['y'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
@@ -717,8 +718,8 @@ def _compute_cii(self, model):
         model = {}
         # Set Confidence intervals
         ps = np.array([np.random.permutation(len(X)) for i in range(self.n_perm)])
-        xp = X[ps[:, :100]]
-        yp = X[ps[:, 100:]]
+        xp = X[ps[:, :10]]
+        yp = X[ps[:, 10:]]
         samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
         cii_high = (0 + (self.alpha / 2)) * 100
         cii_low = (1 - (self.alpha / 2)) * 100
