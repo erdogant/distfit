@@ -13,21 +13,16 @@
 
 The ``distfit`` library is created with classes to ensure simplicity in usage.
 
-:func:`distfit.distfit.fit` : Fit
-:func:`distfit.distfit.transform` : Transform
-:func:`distfit.distfit.fit_transform` : Transform
-:func:`distfit.distfit.predict` : Compute probabilities using the fitted distribution
-:func:`distfit.distfit.plot` : Plot results
-:func:`distfit.distfit.plot_summary` : Plot summary
-
-
 ```python
 # Import library
 from distfit import distfit
 
-# To make the distribution fit with the input data
-dist = distfit()
-dist.fit_transform(X)
+dist = distfit()        # Specify desired parameters
+dist.fit_transform(X)   # Fit distributions on emperical data X
+dist.plot()             # Plot the best fitted distribution
+dist.predict(y)         # Predict the probability of the resonse variables
+dist.plot()             # Plot again the best fitted distribution but in this case the y is also included
+
 ```
 
 ### Contents
