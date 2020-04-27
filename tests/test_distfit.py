@@ -6,7 +6,7 @@ def test_distfit():
     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
     # Initialize
     dist = distfit()
-    assert np.all(np.isin(['method', 'alpha', 'bins', 'y_pred', 'distribution','multtest','n_perm'], dir(dist)))
+    assert np.all(np.isin(['method', 'alpha', 'bins', 'distribution','multtest','n_perm'], dir(dist)))
 
     # Fit and transform data
     dist.fit_transform(X, verbose=3)
