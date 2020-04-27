@@ -145,10 +145,10 @@ model = distfit()
 model.fit_transform(X)
 model.plot()
 
-model = dist(distribution='auto_small')
+model = dist(distr='auto_small')
 model.fit_transform(X)
 model.plot()
 
-model = dist(distribution='auto_full')
+model = dist(distr='auto_full')
 model.fit_transform(X)
 model.plot()

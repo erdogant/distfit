@@ -57,7 +57,7 @@ class distfit():
     bound : str, default: 'both'
         Set the directionality to test for significance.
         Upperbounds = 'up', 'high' or 'right', whereas lowerbounds = 'down', 'low' or 'left'
-    distribution : str, default: 'auto_small'
+    distr : str, default: 'auto_small'
         The (set) of distribution to test. A set of distributions can be tested by:
         'auto_small', 'auto_full', or specify the theoretical distribution: 'norm', 't'
     n_perm : int, default: 10000
@@ -75,21 +75,21 @@ class distfit():
         Number of bins specified to create histogram.
     bound : str
         Specified testing directionality of the distribution.
-    distribution : str
+    distr : str
         Specified distribution or a set of distributions.
     multtest : str
         Specified multiple test correction method.
 
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small', n_perm=10000):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='auto_small', n_perm=10000):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
         self.alpha = alpha
         self.bins = bins
         self.bound = bound
-        self.distribution = distribution
+        self.distr = distr
         self.multtest = multtest
         self.n_perm = n_perm
 
@@ -112,7 +112,7 @@ class distfit():
         if verbose>=3: print('[distfit] >fit..')
         # Get the desired distributions.
         if self.method=='parametric':
-            self.distributions = _get_distributions(self.distribution)
+            self.distributions = _get_distributions(self.distr)
         elif self.method=='emperical':
             pass
         else:
@@ -342,7 +342,7 @@ def _predict_parametric(self, y, verbose=3):
     if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
 
     # Get distribution and the parameters
-    getdist = self.model['distribution']
+    getdist = self.model['distr']
     arg = self.model['params'][:-2]
     loc = self.model['params'][-2]
     scale = self.model['params'][-1]
@@ -488,7 +488,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     Param['ylim'] = ylim
 
     # Make figure
-    best_dist = model['distribution']
+    best_dist = model['distr']
     best_fit_name = model['name']
     best_fit_param = model['params']
     arg = model['params'][:-2]
@@ -572,11 +572,11 @@ def _format_data(data):
 
 
 # Get the distributions based on user input
-def _get_distributions(distribution):
-    DISTRIBUTIONS=[]
-    # Distributions to check
-    if distribution=='auto_full':
-        DISTRIBUTIONS = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
+def _get_distributions(distr):
+    distrs=[]
+    # distrs to check
+    if distr=='auto_full':
+        distrs = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
                          st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm, st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk,
                          st.foldcauchy, st.foldnorm, st.frechet_r, st.frechet_l, st.genlogistic, st.genpareto, st.gennorm, st.genexpon,
                          st.genextreme, st.gausshyper, st.gamma, st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r,
@@ -586,13 +586,13 @@ def _get_distributions(distribution):
                          st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm, st.rdist, st.reciprocal,
                          st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t, st.triang, st.truncexpon, st.truncnorm, st.tukeylambda,
                          st.uniform, st.vonmises, st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
-    elif distribution=='auto_small':
-        DISTRIBUTIONS = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform]
+    elif distr=='auto_small':
+        distrs = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform]
     else:
         # Connect object with variable to be used as a function again.
-        DISTRIBUTIONS = [getattr(st, distribution)]
+        distrs = [getattr(st, distr)]
 
-    return(DISTRIBUTIONS)
+    return(distrs)
 
 
 # Get histogram of original data
@@ -606,7 +606,7 @@ def _get_hist_params(data, bins):
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     out = []
     model = {}
-    model['distribution'] = st.norm
+    model['distr'] = st.norm
     model['params'] = (0.0, 1.0)
     best_sse = np.inf
     out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['Distribution', 'SSE', 'LLE', 'loc', 'scale', 'arg'])
@@ -656,7 +656,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
                 if best_sse > sse > 0:
                     best_sse = sse
                     model['name'] = distribution.name
-                    model['distribution'] = distribution
+                    model['distr'] = distribution
                     model['params'] = params
                     model['sse'] = sse
                     model['loc'] = loc

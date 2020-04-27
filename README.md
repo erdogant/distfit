@@ -111,6 +111,13 @@ It is however not unusual to see gamma and beta distribution as these are the "b
 Lets print the summary of detected distributions with the sum of square scores.
 
 ```python
+# All scores of the tested distributions
+print(dist.summary)
+
+# Distribution parameters for best fit
+dist.model
+
+# Make plot
 dist.plot_summary()
 ```
 <p align="center">
@@ -157,6 +164,18 @@ print(dist.df)
 # 8  6  0.008893     up  0.002964
 ```
 
+Example if you want to test one specific distribution, such as the normal distribution:
+
+```python
+dist = distfit(distr='norm')
+dist.fit_transform(X)
+
+# [distfit] >fit..
+# [distfit] >transform..
+# [distfit] >[norm] [SSE: 0.0151267] [loc=0.103 scale=2.028]
+
+dist.plot()
+```
 
 ### Citation
 Please cite distfit in your publications if this is useful for your research. Here is an example BibTeX entry:
