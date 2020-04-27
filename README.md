@@ -56,7 +56,7 @@ pip install -U .
 
 #### Check version number
 ```python
-import distfit as distfit
+import distfit
 print(distfit.__version__)
 ```
 
