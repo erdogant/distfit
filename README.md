@@ -4,26 +4,26 @@
 [![PyPI Version](https://img.shields.io/pypi/v/distfit)](https://pypi.org/project/distfit/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/distfit/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/distfit)](https://pepy.tech/project/distfit)
-[![Donate](https://img.shields.io/badge/donate-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)
 
 * Python package for probability density fitting and hypothesis testing.
 * Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. 
 * distfit scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
-### The following functions are available:
-```python
-import distfit as dist
-# To make the distribution fit with the input data
-dist.fit()
-# Compute probabilities using the fitted distribution
-dist.proba_parametric()
-# Compute probabilities in an emperical manner
-dist.proba_emperical()
-# Plot results
-dist.plot()
-# Plot summary
-dist.plot_summary()
+### Functionalities
 
+The ``distfit`` library is created with classes to ensure simplicity in usage.
+
+:func:`distfit.distfit.fit` : Fit
+:func:`distfit.distfit.transform` : Transform
+:func:`distfit.distfit.fit_transform` : Transform
+:func:`distfit.distfit.predict` : Compute probabilities using the fitted distribution
+:func:`distfit.distfit.plot` : Plot results
+:func:`distfit.distfit.plot_summary` : Plot summary
+
+
+```python
+from distfit import distfit
+# To make the distribution fit with the input data
 See below for the exact working of the functions.
 ```
 
