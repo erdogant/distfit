@@ -29,8 +29,7 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 
 ### Contents
 - [Installation](#-installation)
-- [Requirements](#-Requirements)
-- [Quick Start](#-quick-start)
+- [Examples](#-Examples)
 - [Contribute](#-contribute)
 - [Citation](#-citation)
 - [Maintainers](#-maintainers)
