@@ -169,7 +169,7 @@ Please cite distfit in your publications if this is useful for your research. He
 }
 ```
 
-### Maintainers
-  Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
-  Contributions are welcome.
-  See [LICENSE](LICENSE) for details.
+### Maintainer
+	Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
+	Contributions are welcome.
+	See [LICENSE](LICENSE) for details.
