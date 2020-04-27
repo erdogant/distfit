@@ -6,9 +6,10 @@
 [![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit/month)
 [![Sphinx](https://img.shields.io/badge/Sphinx-Docs-blue)](https://erdogant.github.io/distfit/)
 
-* Python package for probability density fitting and hypothesis testing.
-* Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. 
-* distfit scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
+### Background
+    Python package for probability density fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), and hypothesis testing.
+    Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon.
+    ``distfit`` scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
 <p align="center">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example.png" width="650" />
@@ -37,8 +38,7 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 - [License](#-copyright)
 
 ### Installation
-* Install distfit from PyPI (recommended). distfit is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
-* It is distributed under the MIT license.
+    Install distfit from PyPI (recommended). distfit is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
 
 #### Install from PyPi
 ```
@@ -89,16 +89,16 @@ dist.plot()
 # Prints the screen:
 # [distfit] >fit..
 # [distfit] >transform..
-# [distfit] >[norm      ] [SSE: 0.0133619] [loc=-0.059 scale=2.031] 
-# [distfit] >[expon     ] [SSE: 0.3911576] [loc=-6.213 scale=6.154] 
-# [distfit] >[pareto    ] [SSE: 0.6755185] [loc=-7.965 scale=1.752] 
-# [distfit] >[dweibull  ] [SSE: 0.0183543] [loc=-0.053 scale=1.726] 
-# [distfit] >[t         ] [SSE: 0.0133619] [loc=-0.059 scale=2.031] 
-# [distfit] >[genextreme] [SSE: 0.0115116] [loc=-0.830 scale=1.964] 
-# [distfit] >[gamma     ] [SSE: 0.0111372] [loc=-19.843 scale=0.209] 
-# [distfit] >[lognorm   ] [SSE: 0.0111236] [loc=-29.689 scale=29.561] 
-# [distfit] >[beta      ] [SSE: 0.0113012] [loc=-12.340 scale=41.781] 
-# [distfit] >[uniform   ] [SSE: 0.2481737] [loc=-6.213 scale=12.281] 
+# [distfit] >[norm      ] [RSS: 0.0133619] [loc=-0.059 scale=2.031] 
+# [distfit] >[expon     ] [RSS: 0.3911576] [loc=-6.213 scale=6.154] 
+# [distfit] >[pareto    ] [RSS: 0.6755185] [loc=-7.965 scale=1.752] 
+# [distfit] >[dweibull  ] [RSS: 0.0183543] [loc=-0.053 scale=1.726] 
+# [distfit] >[t         ] [RSS: 0.0133619] [loc=-0.059 scale=2.031] 
+# [distfit] >[genextreme] [RSS: 0.0115116] [loc=-0.830 scale=1.964] 
+# [distfit] >[gamma     ] [RSS: 0.0111372] [loc=-19.843 scale=0.209] 
+# [distfit] >[lognorm   ] [RSS: 0.0111236] [loc=-29.689 scale=29.561] 
+# [distfit] >[beta      ] [RSS: 0.0113012] [loc=-12.340 scale=41.781] 
+# [distfit] >[uniform   ] [RSS: 0.2481737] [loc=-6.213 scale=12.281] 
 ```
 
 <p align="center">
@@ -108,7 +108,7 @@ dist.plot()
 Note that the best fit should be [normal], as this was also the input data. 
 However, many other distributions can be very similar with specific loc/scale parameters. 
 It is however not unusual to see gamma and beta distribution as these are the "barba-pappas" among the distributions. 
-Lets print the summary of detected distributions with the sum of square scores.
+Lets print the summary of detected distributions with the Residual Sum of Squares.
 
 ```python
 # All scores of the tested distributions
@@ -172,7 +172,7 @@ dist.fit_transform(X)
 
 # [distfit] >fit..
 # [distfit] >transform..
-# [distfit] >[norm] [SSE: 0.0151267] [loc=0.103 scale=2.028]
+# [distfit] >[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]
 
 dist.plot()
 ```

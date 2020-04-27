@@ -1,4 +1,4 @@
-"""Compute best fit to your emperical distribution for 89 different theoretical distributions using the Sum of Squared errors (SSE) estimates."""
+"""Compute best fit to your emperical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates."""
 # --------------------------------------------------
 # Name        : distfit.py
 # Author      : E.Taskesen
@@ -24,9 +24,8 @@ class distfit():
 
     Description
     -----------
-    Compute best fit to your emperical distribution for 89 different
-    theoretical distributions using the Sum of Squared errors (SSE) estimates.
-    Based on the fitted model new values can be examined where they belong on the distribution.
+    Probability density fitting across 89 univariate distributions to
+    non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.
 
     Example
     -------
@@ -57,9 +56,10 @@ class distfit():
     bound : str, default: 'both'
         Set the directionality to test for significance.
         Upperbounds = 'up', 'high' or 'right', whereas lowerbounds = 'down', 'low' or 'left'
-    distr : str, default: 'auto_small'
+    distr : str, default: 'popular'
         The (set) of distribution to test. A set of distributions can be tested by:
-        'auto_small', 'auto_full', or specify the theoretical distribution: 'norm', 't'
+        'popular', 'full', or specify the theoretical distribution: 'norm', 't'.
+        See docs for more information about 'popular' and 'full'.
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "emperical"
 
@@ -82,7 +82,7 @@ class distfit():
 
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='auto_small', n_perm=10000):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', n_perm=10000):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -128,7 +128,7 @@ class distfit():
 
         **parametric**
             In the parametric case, the best fit on the data is determined using the
-            sum of squared errors approach (SSE) for the specified distributions. Based on
+            Residual Sum of Squares approach (RSS) for the specified distributions. Based on
             the best distribution-fit, the confidence intervals (CII) can be determined
             for later usage in the :func:`predict` function.
         **Emperical**
@@ -146,7 +146,7 @@ class distfit():
         object.
         model : dict
             dict containing keys with distribution parameters
-            sse : sum of square error
+            RSS : Residual Sum of Squares
             name : distribution name
             distribution : distribution function
             params : all kind of parameters
@@ -154,7 +154,7 @@ class distfit():
             scale : scale function parameter
             arg : arg function parameter
         summary : list
-            Sum of square errors
+            Residual Sum of Squares
         histdata : tuple (observed, bins)
             tuple containing observed and bins for data X in the histogram.
         size : int
@@ -270,7 +270,7 @@ class distfit():
         Returns
         -------
         tuple (fig, ax)
-        
+
         """
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: A model needs to be fitted first. Try fit_transform(X)')
         if verbose>=3: print('[distfit] >plot..')
@@ -309,10 +309,10 @@ class distfit():
         if self.method=='parametric':
 
             if n_top is None:
-                n_top = len(self.summary['SSE'])
+                n_top = len(self.summary['RSS'])
 
-            x = self.summary['SSE'][0:n_top]
-            labels = self.summary['Distribution'].values[0:n_top]
+            x = self.summary['RSS'][0:n_top]
+            labels = self.summary['distr'].values[0:n_top]
             fig, ax = plt.subplots(figsize=figsize)
             plt.plot(x)
             # You can specify a rotation for the tick labels in degrees or with keywords.
@@ -323,7 +323,7 @@ class distfit():
             plt.subplots_adjust(bottom=0.15)
             ax.grid(True)
             plt.xlabel('Distribution name')
-            plt.ylabel('SSE (lower is better)')
+            plt.ylabel('RSS (lower is better)')
             plt.title('Best fit: %s' %(self.model['name']))
             if ylim is not None:
                 plt.ylim(ymin=ylim[0], ymax=ylim[1])
@@ -573,10 +573,18 @@ def _format_data(data):
 
 # Get the distributions based on user input
 def _get_distributions(distr):
-    distrs=[]
-    # distrs to check
-    if distr=='auto_full':
-        distrs = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
+    out_distr=[]
+    
+    # Get specified list of distributions
+    if isinstance(distr, list):
+        for getdistr in distr:
+            try:
+                out_distr.append(getattr(st, getdistr))
+            except:
+                print('[distfit] >Error: [%s] does not exist! <skipping>' %(getdistr))
+
+    elif distr=='full':
+        out_distr = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
                          st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm, st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk,
                          st.foldcauchy, st.foldnorm, st.frechet_r, st.frechet_l, st.genlogistic, st.genpareto, st.gennorm, st.genexpon,
                          st.genextreme, st.gausshyper, st.gamma, st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r,
@@ -586,13 +594,18 @@ def _get_distributions(distr):
                          st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm, st.rdist, st.reciprocal,
                          st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t, st.triang, st.truncexpon, st.truncnorm, st.tukeylambda,
                          st.uniform, st.vonmises, st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
-    elif distr=='auto_small':
-        distrs = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform]
-    else:
-        # Connect object with variable to be used as a function again.
-        distrs = [getattr(st, distr)]
 
-    return(distrs)
+    elif distr=='popular':
+        out_distr = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform]
+    else:
+        # Collect distributions
+        try:
+            out_distr = [getattr(st, distr)]
+        except:
+            print('[distfit] >Error: [%s] does not exist! <skipping>' %(distr))
+    
+    if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
+    return(out_distr)
 
 
 # Get histogram of original data
@@ -608,8 +621,8 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     model = {}
     model['distr'] = st.norm
     model['params'] = (0.0, 1.0)
-    best_sse = np.inf
-    out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['Distribution', 'SSE', 'LLE', 'loc', 'scale', 'arg'])
+    best_RSS = np.inf
+    out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['distr', 'RSS', 'LLE', 'loc', 'scale', 'arg'])
     max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
@@ -631,8 +644,8 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
 
                 # Calculate fitted PDF and error with fit in distribution
                 pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
-                # Compute SSE
-                sse = np.sum(np.power(y_obs - pdf, 2.0))
+                # Compute RSS
+                RSS = np.sum(np.power(y_obs - pdf, 2.0))
                 logLik = np.nan
 
                 # try:
@@ -646,30 +659,30 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
 
                 # Store results
                 out.values[i, 0] = distribution.name
-                out.values[i, 1] = sse
+                out.values[i, 1] = RSS
                 out.values[i, 2] = logLik
                 out.values[i, 3] = loc
                 out.values[i, 4] = scale
                 out.values[i, 5] = arg
 
                 # identify if this distribution is better
-                if best_sse > sse > 0:
-                    best_sse = sse
+                if best_RSS > RSS > 0:
+                    best_RSS = RSS
                     model['name'] = distribution.name
                     model['distr'] = distribution
                     model['params'] = params
-                    model['sse'] = sse
+                    model['RSS'] = RSS
                     model['loc'] = loc
                     model['scale'] = scale
                     model['arg'] = arg
 
-            if verbose>=3: print("[distfit] >[%s%s] [SSE: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' ' * (max_name_len - len(distribution.name)), sse, loc, scale))
+            if verbose>=3: print("[distfit] >[%s%s] [RSS: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' ' * (max_name_len - len(distribution.name)), RSS, loc, scale))
 
         except Exception:
             pass
 
     # Sort the output
-    out = out.sort_values('SSE')
+    out = out.sort_values('RSS')
     out.reset_index(drop=True, inplace=True)
     # Return
     return(out, model)

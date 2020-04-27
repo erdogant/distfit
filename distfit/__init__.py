@@ -12,9 +12,8 @@ distfit
 
 Description
 -----------
-Probability density fitting and hypothesis testing.
-Computes best fit to the input emperical distribution for 89 theoretical
-distributions using the Sum of Squared errors (SSE) estimates.
+Probability density fitting across 89 univariate distributions to non-censored 
+data by residual sum of squares (RSS), and hypothesis testing.
 
 Example
 -------
