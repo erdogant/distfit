@@ -4,6 +4,7 @@
 [![PyPI Version](https://img.shields.io/pypi/v/distfit)](https://pypi.org/project/distfit/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/distfit/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit/month)
+[![Sphinx](https://img.shields.io/badge/Sphinx-Docs-blue)](https://erdogant.github.io/distfit/)
 
 * Python package for probability density fitting and hypothesis testing.
 * Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. 
