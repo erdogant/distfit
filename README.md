@@ -22,9 +22,12 @@ The ``distfit`` library is created with classes to ensure simplicity in usage.
 
 
 ```python
+# Import library
 from distfit import distfit
+
 # To make the distribution fit with the input data
-See below for the exact working of the functions.
+dist = distfit()
+dist.fit_transform(X)
 ```
 
 ### Contents
