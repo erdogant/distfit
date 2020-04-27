@@ -19,7 +19,7 @@ warnings.filterwarnings('ignore')
 
 
 # Class dist
-class dist():
+class distfit():
     """Create object to fit a model and make predictions.
 
     Description
@@ -33,13 +33,13 @@ class dist():
     >>> X = np.random.normal(0, 2, 1000)
     >>> y = [-8,-6,0,1,2,3,4,5,6]
     >>>
-    >>> model = dist()
-    >>> model.fit_transform(X)
-    >>> model.plot()
+    >>> dist = distfit()
+    >>> dist.fit_transform(X)
+    >>> dist.plot()
     >>>
     >>> # Make prediction
-    >>> model.predict(y)
-    >>> model.plot()
+    >>> dist.predict(y)
+    >>> dist.plot()
     """
 
     def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small', n_perm=10000):
@@ -344,8 +344,8 @@ class dist():
             # Tweak spacing to prevent clipping of tick-labels
             plt.subplots_adjust(bottom=0.15)
             ax.grid(True)
-            plt.xlabel('Distribution')
-            plt.ylabel('SSE')
+            plt.xlabel('Distribution name')
+            plt.ylabel('SSE (lower is better)')
             plt.title('Best fit: %s' %(self.model['name']))
             if ylim is not None:
                 plt.ylim(ymin=ylim[0], ymax=ylim[1])

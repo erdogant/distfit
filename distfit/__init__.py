@@ -1,10 +1,6 @@
 from distfit.distfit import (
-    dist,
+    distfit,
 )
-# from distfit.hypotesting import (
-    # proba_emperical,
-    # proba_parametric,
-# )
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
@@ -18,19 +14,24 @@ distfit
 
 Description
 -----------
-    Probability density function fitting and hypothesis testing.
-    Computes best fit to the input emperical distribution for 89 theoretical
-    distributions using the Sum of Squared errors (SSE) estimates.
+Probability density function fitting and hypothesis testing.
+Computes best fit to the input emperical distribution for 89 theoretical
+distributions using the Sum of Squared errors (SSE) estimates.
 
 Example
 -------
-    import distfit as dist
+>>> from distfit import distfit
 
-    model = dist.fit(X)
-
-    fig,ax = dist.plot(model)
-
-    out = dist.proba_parametric(y=[-5,1,2,3,10], model=model)
+>>> X = np.random.normal(0, 2, 1000)
+>>> y = [-8,-6,0,1,2,3,4,5,6]
+>>>
+>>> dist = distfit()
+>>> dist.fit_transform(X)
+>>> dist.plot()
+>>>
+>>> # Make prediction
+>>> dist.predict(y)
+>>> dist.plot()
 
 
 References
