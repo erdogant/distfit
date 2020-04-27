@@ -98,7 +98,7 @@ dist.plot()
 ```
 
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="600" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="450" />
 </p>
 
 Note that the best fit should be [normal], as this was also the input data. 
@@ -110,7 +110,7 @@ Lets print the summary of detected distributions with the sum of square scores.
 dist.plot_summary()
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_summary.png" width="600" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_summary.png" width="450" />
 </p>
 
 After we have a fitted model, we can make some predictions using the theoretical distributions. 
@@ -125,7 +125,7 @@ dist.plot()
 # [distfit] >Multiple test correction..[fdr_bh]
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_prediction.png" width="600" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_prediction.png" width="450" />
 </p>
 
 The results of the prediction are stored in ``y_proba`` and ``y_pred``
