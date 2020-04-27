@@ -66,16 +66,19 @@ class distfit():
     Returns
     -------
     object.
-        method : str, Specified method for fitting and predicting.
-        alpha : float, Specified cut-off for P-value significance.
-        bins : int
-            Number of bins specified to create histogram.
-        bound : str
-            Specified testing directionality of the distribution.
-        distribution : str
-            Specified distribution or a set of distributions.
-        multtest : str
-            Specified multiple test correction method.
+
+    method : str
+        Specified method for fitting and predicting.
+    alpha : float
+        Specified cut-off for P-value significance.
+    bins : int
+        Number of bins specified to create histogram.
+    bound : str
+        Specified testing directionality of the distribution.
+    distribution : str
+        Specified distribution or a set of distributions.
+    multtest : str
+        Specified multiple test correction method.
 
     """
 
