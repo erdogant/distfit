@@ -10,7 +10,7 @@
 * distfit scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example.png" width="450" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example.png" width="650" />
 </p>
 
 ### Functionalities
