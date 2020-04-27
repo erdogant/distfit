@@ -110,7 +110,7 @@ Lets print the summary of detected distributions with the sum of square scores.
 dist.plot_summary()
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig_summary.png" width="400" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_summary.png" width="400" />
 </p>
 
 After we have a fitted model, we can make some predictions using the theoretical distributions. 
