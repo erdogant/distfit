@@ -19,10 +19,8 @@ from distfit import distfit
 
 dist = distfit()        # Specify desired parameters
 dist.fit_transform(X)   # Fit distributions on emperical data X
-dist.plot()             # Plot the best fitted distribution
 dist.predict(y)         # Predict the probability of the resonse variables
-dist.plot()             # Plot again the best fitted distribution but in this case the y is also included
-
+dist.plot()             # Plot the best fitted distribution (y is included if prediction is made)
 ```
 
 ### Contents
@@ -38,117 +36,110 @@ dist.plot()             # Plot again the best fitted distribution but in this ca
 * Install distfit from PyPI (recommended). distfit is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
 * It is distributed under the MIT license.
 
-### Requirements
-```python
-pip install numpy pandas matplotlib
-```
-### Quick Start
+#### Install from PyPi
 ```
 pip install distfit
 ```
-### Alternatively, install distfit from the GitHub source:
+
+#### Install directly from github source (beta version)
 ```bash
-git clone https://github.com/erdogant/distfit.git
-cd distfit
-python setup.py install
+pip install git+https://github.com/erdogant/distfit#egg=master
 ```  
 
-#### Import distfit package
+#### Install by cloning  (beta version)
+```bash
+pip install git+https://github.com/erdogant/distfit
+git clone https://github.com/erdogant/distfit.git
+cd distfit
+pip install -U .
+```  
+
+
+#### Check version number
 ```python
-import distfit as dist
+import distfit as distfit
+print(distfit.__version__)
 ```
-#### Generate some random data:
+
+### Examples
+```python
+from distfit import distfit
+```
+
+#### Example 1:
+
+Create Some random data and model using default parameters:
+
 ```python
 import numpy as np
-X = np.random.beta(5, 8, [100,100])
-# or 
-# X = np.random.beta(5, 8, 1000)
-# or anything else
-
-# Print to screen
-print(X)
-# array([[-12.65284521,  -3.81514715,  -4.53613236],
-#        [ 11.5865475 ,   2.42547023,   6.6395518 ],
-#        [  3.82076163,   6.65765319,   9.95795751],
-#        ...,
-#        [  3.65728268,   7.298237  ,  -4.25641318],
-#        [  7.51820943,  16.26147929,  -0.60033084],
-#        [  2.49165326,   3.97880574,   7.98986818]])
+X = np.random.normal(0, 2, [100,10])
+y = [-8,-6,0,1,2,3,4,5,6]
 ```
 
-#### Example fitting best scoring distribution to input-data:
+Specify ``distfit`` parameters. In this example nothing is specied and that means that all parameters are set to default.
 ```python
-model = dist.fit(X)
-dist.plot(model)
+dist = distfit()
+dist.fit_transform(X)
+dist.plot()
 
-# Output looks like this:
-# [DISTFIT.fit] Fitting [norm      ] [SSE: 1.1641360] [loc=0.384 scale=0.128] 
-# [DISTFIT.fit] Fitting [expon     ] [SSE: 82.9253587] [loc=0.037 scale=0.347] 
-# [DISTFIT.fit] Fitting [pareto    ] [SSE: 100.6452574] [loc=-0.711 scale=0.749] 
-# [DISTFIT.fit] Fitting [dweibull  ] [SSE: 3.0304725] [loc=0.376 scale=0.112] 
-# [DISTFIT.fit] Fitting [t         ] [SSE: 1.1640207] [loc=0.384 scale=0.128] 
-# [DISTFIT.fit] Fitting [genextreme] [SSE: 0.4763435] [loc=0.335 scale=0.123] 
-# [DISTFIT.fit] Fitting [gamma     ] [SSE: 0.6668446] [loc=-0.514 scale=0.018] 
-# [DISTFIT.fit] Fitting [lognorm   ] [SSE: 0.6960495] [loc=-1.046 scale=1.424] 
-# [DISTFIT.fit] Fitting [beta      ] [SSE: 0.3419988] [loc=-0.009 scale=0.987] 
-# [DISTFIT.fit] Fitting [uniform   ] [SSE: 56.8836516] [loc=0.037 scale=0.797] 
-
+# Prints the screen:
+# [distfit] >fit..
+# [distfit] >transform..
+# [distfit] >[norm      ] [SSE: 0.0133619] [loc=-0.059 scale=2.031] 
+# [distfit] >[expon     ] [SSE: 0.3911576] [loc=-6.213 scale=6.154] 
+# [distfit] >[pareto    ] [SSE: 0.6755185] [loc=-7.965 scale=1.752] 
+# [distfit] >[dweibull  ] [SSE: 0.0183543] [loc=-0.053 scale=1.726] 
+# [distfit] >[t         ] [SSE: 0.0133619] [loc=-0.059 scale=2.031] 
+# [distfit] >[genextreme] [SSE: 0.0115116] [loc=-0.830 scale=1.964] 
+# [distfit] >[gamma     ] [SSE: 0.0111372] [loc=-19.843 scale=0.209] 
+# [distfit] >[lognorm   ] [SSE: 0.0111236] [loc=-29.689 scale=29.561] 
+# [distfit] >[beta      ] [SSE: 0.0113012] [loc=-12.340 scale=41.781] 
+# [distfit] >[uniform   ] [SSE: 0.2481737] [loc=-6.213 scale=12.281] 
 ```
+
 <p align="center">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="400" />
 </p>
 
-Note that the best fit should be [beta], as this was also the input data. 
+Note that the best fit should be [normal], as this was also the input data. 
 However, many other distributions can be very similar with specific loc/scale parameters. 
-In this case, the beta-distribution scored best. 
 It is however not unusual to see gamma and beta distribution as these are the "barba-pappas" among the distributions. 
+Lets print the summary of detected distributions with the sum of square scores.
 
-* Summary of the SSE scores:
-<p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig3.png" width="400" />
-</p>
-
-#### Example Compute probability whether values are of interest compared 95%CII of the data distribution:
-This can be done using a pre-trained model or in simply in one run.
 ```python
-X = np.random.beta(5, 8, [100,100])
-y = [-1,-0.8,-0.6,0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.5]
-
-# Fit model (manner 1)
-model = dist.fit(X)
-out = dist.proba_parametric(y, model=model)
-
-# Fit model and predict (manner 2) 
-# Note that this if not practical in a loop with fixed background
-out = dist.proba_parametric(y, X)
-
-# print probabilities
-print(out['proba'])
-
-#   data             P          Padj bound
-#   -1.0  0.000000e+00  0.000000e+00  down
-#   -0.8  0.000000e+00  0.000000e+00  down
-#   -0.6  0.000000e+00  0.000000e+00  down
-#    0.0  1.559231e-08  3.563956e-08  down
-#    0.1  4.467564e-03  7.148102e-03  down
-#    0.2  7.085374e-02  8.720461e-02  none
-#    0.3  2.726085e-01  2.907824e-01  none
-#    0.4  4.390847e-01  4.390847e-01  none
-#    0.5  1.905598e-01  2.177826e-01  none
-#    0.6  5.360688e-02  7.147584e-02  none
-#    0.7  7.935965e-03  1.154322e-02    up
-#    0.8  3.697836e-04  6.573931e-04    up
-#    0.9  8.037999e-07  1.607600e-06    up
-#    1.0  0.000000e+00  0.000000e+00    up
-#    1.1  0.000000e+00  0.000000e+00    up
-#    1.5  0.000000e+00  0.000000e+00    up
-
-# Make plot
-dist.plot(model)
+dist.plot_summary()
 ```
 <p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig2b.png" width="400" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig_summary.png" width="400" />
 </p>
+
+After we have a fitted model, we can make some predictions using the theoretical distributions. 
+After making some predictions, we can plot again but now the predictions are automatically included.
+
+```python
+dist.predict(y)
+dist.plot()
+# 
+# Prints to screen:
+# [distfit] >predict..
+# [distfit] >Multiple test correction..[fdr_bh]
+```
+<p align="center">
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_prediction.png" width="400" />
+</p>
+
+The results of the prediction are stored in ``y_proba`` and ``y_pred``
+```python
+
+# Show the predictions for y
+print(dist.y_pred)
+
+# Show the probabilities for y that belong with the predictions
+print(dist.y_proba)
+
+# All predicted information is also stored in a structured dataframe
+print(dist.df)
+```
 
 
 ### Citation
@@ -170,6 +161,3 @@ Please cite distfit in your publications if this is useful for your research. He
 
 ### Licence
 See [LICENSE](LICENSE) for details.
-
-### Donation
-* This work is created and maintained in my free time. If you wish to buy me a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a> for this work, it is very appreciated.

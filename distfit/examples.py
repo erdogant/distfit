@@ -16,6 +16,20 @@ from distfit import distfit
 dir(distfit)
 
 
+#%%
+
+X = np.random.normal(0, 2, 5000)
+y = [-8,-6,0,1,2,3,4,5,6]
+
+model = distfit()
+model.fit_transform(X)
+model.plot()
+
+# Make prediction
+model.predict(y)
+model.plot()
+
+
 # %% Fit and transform
 X = np.random.beta(5, 8, [100,100])
 y = [-1,-0.8,-0.6,0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.5]
@@ -46,18 +60,6 @@ model.y_proba
 model.y_pred
 model.df
 
-#%%
-
-X = np.random.normal(0, 2, 5000)
-y = [-8,-6,0,1,2,3,4,5,6]
-
-model = distfit()
-model.fit_transform(X)
-model.plot()
-
-# Make prediction
-model.predict(y)
-model.plot()
 
 
 # %%

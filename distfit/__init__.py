@@ -21,7 +21,7 @@ distributions using the Sum of Squared errors (SSE) estimates.
 Example
 -------
 >>> from distfit import distfit
-
+>>>
 >>> X = np.random.normal(0, 2, 1000)
 >>> y = [-8,-6,0,1,2,3,4,5,6]
 >>>
@@ -32,7 +32,6 @@ Example
 >>> # Make prediction
 >>> dist.predict(y)
 >>> dist.plot()
-
 
 References
 ----------

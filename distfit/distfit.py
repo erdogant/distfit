@@ -40,72 +40,49 @@ class distfit():
     >>> # Make prediction
     >>> dist.predict(y)
     >>> dist.plot()
+
+    Parameters
+    ----------
+    method : str, default: 'parametric'
+        Specify the method type: 'parametric',  'emperical'
+    alpha : float, default: 0.05
+        Significance alpha.
+    multtest : str, default: 'fdr_bh'
+        None, 'bonferroni', 'sidak', 'holm-sidak', 'holm', 'simes-hochberg',
+        'hommel', 'fdr_bh', 'fdr_by', 'fdr_tsbh', 'fdr_tsbky'
+    bins : int, default: 50
+        Bin size to determine the emperical historgram.
+    bound : str, default: 'both'
+        Set the directionality to test for significance.
+        Upperbounds = 'up', 'high' or 'right', whereas lowerbounds = 'down', 'low' or 'left'
+    distribution : str, default: 'auto_small'
+        The (set) of distribution to test. A set of distributions can be tested by:
+            'auto_small', 'auto_full', or specify the theoretical distribution: 'norm', 't'
+    n_perm : int, default: 10000
+        Number of permutations to model null-distribution in case of method is "emperical"
+
+    Returns
+    -------
+    object.
+        method : str
+            Specified method for fitting and predicting.
+        alpha : float
+            Specified cut-off for P-value significance.
+        bins : int
+            Number of bins specified to create histogram.
+        bound : str
+            Specified testing directionality of the distribution.
+        distribution : str
+            Specified distribution or a set of distributions.
+        multtest : str
+            Specified multiple test correction method.
+
     """
 
     def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small', n_perm=10000):
-        """Initialize distfit with parameters.
-
-        Description
-        -----------
-        Specify the settings for the model.
-
-        Parameters
-        ----------
-        method : str, default: 'parametric'
-            Specify the method type
-                'parametric'
-                'emperical'
-        alpha : float, default: 0.05
-            Significance alpha.
-        multtest : str, default: 'fdr_bh'
-            Multiple testing method. Options are:
-                None : No multiple testing
-                'bonferroni' : one-step correction
-                'sidak' : one-step correction
-                'holm-sidak' : step down method using Sidak adjustments
-                'holm' : step-down method using Bonferroni adjustments
-                'simes-hochberg' : step-up method  (independent)
-                'hommel' : closed method based on Simes tests (non-negative)
-                'fdr_bh' : Benjamini/Hochberg  (non-negative)
-                'fdr_by' : Benjamini/Yekutieli (negative)
-                'fdr_tsbh' : two stage fdr correction (non-negative)
-                'fdr_tsbky' : two stage fdr correction (non-negative)
-        bins : int, default: 50
-            Bin size to determine the emperical historgram.
-        bound : str, default: 'both'
-            Set the directionality to test for significance.
-                Upper and lowerbounds: 'both'
-                Upperbounds: 'up', 'high', 'right'
-                Lowerbounds: 'down', 'low', 'left'
-        distribution : str, default: 'auto_small'
-            The (set) of distribution to test.
-                'auto_small': A smaller set of distributions: [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm]
-                'auto_full' : The full set of distributions
-                'norm' : normal distribution
-                't' : Students T distribution
-        n_perm : int, default: 10000
-            Number of permutations to model null-distribution in case of method is "emperical"
-
-        Returns
-        -------
-        object.
-            method : str
-                parametric or emperical method type.
-            alpha : float
-                cut-off for P-value significance.
-            bins : int
-                Number of bins used to create histogram.
-            bound : str
-                Upper, lower or both sides of the distribution are tested for significance.
-            distribution : str
-                Specified distribution or a set of distributions.
-            multtest : str
-                Multiple test correction method.
-
-        """
+        """Initialize distfit with parameters."""
         # Get list of distributions to check
         if (alpha is None): alpha=1
-
         self.method = method
         self.alpha = alpha
         self.bins = bins
@@ -738,6 +715,31 @@ def _compute_cii(self, model):
 
 # Multiple test correction
 def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
+    """Multiple test correction for input pvalues.
+
+    Parameters
+    ----------
+    Praw : list of float
+        Pvalues.
+    multtest : str, default: 'fdr_bh'
+        Multiple testing method. Options are:
+            None : No multiple testing
+            'bonferroni' : one-step correction
+            'sidak' : one-step correction
+            'holm-sidak' : step down method using Sidak adjustments
+            'holm' : step-down method using Bonferroni adjustments
+            'simes-hochberg' : step-up method  (independent)
+            'hommel' : closed method based on Simes tests (non-negative)
+            'fdr_bh' : Benjamini/Hochberg  (non-negative)
+            'fdr_by' : Benjamini/Yekutieli (negative)
+            'fdr_tsbh' : two stage fdr correction (non-negative)
+            'fdr_tsbky' : two stage fdr correction (non-negative)
+    Returns
+    -------
+    list of float.
+        Corrected pvalues.
+
+    """
     if not isinstance(multtest, type(None)):
         if verbose>=3: print("[distfit] >Multiple test correction..[%s]" %multtest)
         if verbose>=5: print(Praw)
