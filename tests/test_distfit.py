@@ -14,7 +14,7 @@ def test_distfit():
     # TEST 1: check output is unchanged
     assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
     # TEST 2: Check model output is unchanged
-    assert [*dist.model.keys()]==['distr', 'params', 'name', 'sse', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
+    assert [*dist.model.keys()]==['distr', 'params', 'name', 'RSS', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
 
     # TEST 3: Check specific distribution
     dist = distfit(distr='t')

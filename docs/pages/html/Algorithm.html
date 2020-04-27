@@ -93,9 +93,9 @@
 <p class="caption"><span class="caption-text">Methods</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Algorithm</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#aaa">AAA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#bbb">BBB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ccc">CCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distributions">Distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#residual-sum-of-squares-rss">Residual Sum of Squares (RSS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#goodness-of-fit">Goodness-of-fit</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Cross validation and hyperparameter tuning.html">Cross validation and hyperparameter tuning</a></li>
@@ -178,28 +178,62 @@
   <hr class="docutils" id="code-directive" />
 <div class="section" id="algorithm">
 <h1>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">distfit</span></code> method consists of various parts, namely, AAA BBB and CCC</p>
-<div class="section" id="aaa">
-<h2>AAA<a class="headerlink" href="#aaa" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example URL:</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;ahrenhei.without-transfer.ru/nethost.exe&#39;</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library uses the goodness of fit test to determine the best probability distribution to the non-censored data. It works by comparing the observed frequency (<strong>f</strong>) to the expected frequency from the model (<strong>f-hat</strong>), and computing the residual sum of squares (RSS). Note that non-censored data is the <em>full dataset</em>, and not having any part deleted or suppressed as that can lead to biases.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">distfit</span></code> we can test up to 89 univariate distributions, derived from the <code class="docutils literal notranslate"><span class="pre">scipy</span></code> library, for which the best fitted distribution is returned with the loc, scale, arg parameters.</p>
+<div class="section" id="distributions">
+<h2>Distributions<a class="headerlink" href="#distributions" title="Permalink to this headline">¶</a></h2>
+<p>The distributions to be tested can be specified at initialization using the <code class="docutils literal notranslate"><span class="pre">distr</span></code> parameter.</p>
+<dl class="simple">
+<dt>Distributions options:</dt><dd><ul class="simple">
+<li><p>Manually specifying one or multiple distribution</p></li>
+<li><p>‘popular’ set of distributions</p></li>
+<li><p>‘full’ set of distributions</p></li>
+</ul>
+</dd>
+<dt>Manually specifying</dt><dd><p>Manually specifying can be for one or multiple distributions. See example below how its done.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load library</span>
+<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="c1"># Initialize model and test only for normal distribution</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
+<span class="c1"># Set multiple distributions to test for</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="bbb">
-<h2>BBB<a class="headerlink" href="#bbb" title="Permalink to this headline">¶</a></h2>
-<p>We used BBB for…</p>
 <dl class="simple">
-<dt>TFIDF</dt><dd><ul class="simple">
-<li><p>BBB.1</p></li>
-<li><p>BBB.2</p></li>
+<dt>Popular set</dt><dd><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">popular</span></code> set contains the following set of distributions and can be used as depicted below:</p></li>
+<li><p><strong>norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform</strong></p></li>
 </ul>
 </dd>
 </dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;popular&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="ccc">
-<h2>CCC<a class="headerlink" href="#ccc" title="Permalink to this headline">¶</a></h2>
-<p>We used a CCC model…</p>
+<dl class="simple">
+<dt>Full set</dt><dd><ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">full</span></code> set contains the following set of distributions:</p></li>
+<li><p><strong>alpha, anglit, arcsine, beta, betaprime, bradford, burr, cauchy, chi, chi2, cosine, dgamma, dweibull, erlang, expon, exponnorm, exponweib, exponpow, f, fatiguelife, fisk, foldcauchy, foldnorm, frechet_r, frechet_l, genlogistic, genpareto, gennorm, genexpon, genextreme, gausshyper, gamma, gengamma, genhalflogistic, gilbrat, gompertz, gumbel_r, gumbel_l, halfcauchy, halflogistic, halfnorm, halfgennorm, hypsecant, invgamma, invgauss, invweibull, johnsonsb, johnsonsu, laplace, levy, levy_l, levy_stable, logistic, loggamma, loglaplace, lognorm, lomax, maxwell, mielke, nakagami, norm, pareto, pearson3, powerlaw, powerlognorm, powernorm, rdist, reciprocal, rayleigh, rice, recipinvgauss, semicircular, t, triang, truncexpon, truncnorm, tukeylambda, uniform, vonmises, vonmises_line, wald, weibull_min, weibull_max, wrapcauchy</strong></p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="residual-sum-of-squares-rss">
+<h2>Residual Sum of Squares (RSS)<a class="headerlink" href="#residual-sum-of-squares-rss" title="Permalink to this headline">¶</a></h2>
+<p>The <em>RSS</em> describes the deviation predicted from actual empirical values of data. Or in other words, the differences in the estimates. It is a measure of the discrepancy between the data and an estimation model. A small RSS indicates a tight fit of the model to the data. RSS is computed by:</p>
+<div class="figure align-default">
+<img alt="_images/RSS.svg" src="_images/RSS.svg" /></div>
+<p>Where <strong>yi</strong> is the ith value of the variable to be predicted, <strong>xi</strong> is the i-th value of the explanatory variable, and <strong>f(xi)</strong> is the predicted value of <strong>yi</strong> (also termed <strong>y-hat</strong>).</p>
+</div>
+<div class="section" id="goodness-of-fit">
+<h2>Goodness-of-fit<a class="headerlink" href="#goodness-of-fit" title="Permalink to this headline">¶</a></h2>
+<p>Besides <em>RSS</em>, there are various other approaches to determine the goodness-of-fit, such as the maximum likelihood estimation (mle), moment matching estimation (mme), quantile matching estimation (qme) or maximizing goodness-of-fit estimation (mge). <code class="docutils literal notranslate"><span class="pre">distfit</span></code> may be extended with more approaches in future versions.</p>
 </div>
 </div>
 

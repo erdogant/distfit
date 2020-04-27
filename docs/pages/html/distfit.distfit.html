@@ -171,14 +171,13 @@
             
   <div class="section" id="module-distfit.distfit">
 <span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this headline">¶</a></h1>
-<p>Compute best fit to your emperical distribution for 89 different theoretical distributions using the Sum of Squared errors (SSE) estimates.</p>
+<p>Compute best fit to your emperical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
 <dl class="py class">
 <dt id="distfit.distfit.distfit">
-<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distribution</span><span class="o">=</span><span class="default_value">'auto_small'</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">'popular'</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit theoretical distribution on emperical data, make predictions and plot.</p>
-<p>Compute best fit to your emperical distribution for 89 different
-theoretical distributions using the Sum of Squared errors (SSE) estimates.
-Based on the fitted model new values can be examined where they belong on the distribution.</p>
+<p>Probability density fitting across 89 univariate distributions to
+non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -204,8 +203,9 @@ Based on the fitted model new values can be examined where they belong on the di
 <li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 50</em>) – Bin size to determine the emperical historgram.</p></li>
 <li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – Set the directionality to test for significance.
 Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down’, ‘low’ or ‘left’</p></li>
-<li><p><strong>distribution</strong> (<em>str</em><em>, </em><em>default: 'auto_small'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
-‘auto_small’, ‘auto_full’, or specify the theoretical distribution: ‘norm’, ‘t’</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
+‘popular’, ‘full’, or specify the theoretical distribution: ‘norm’, ‘t’.
+See docs for more information about ‘popular’ and ‘full’.</p></li>
 <li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “emperical”</p></li>
 </ul>
 </dd>
@@ -216,7 +216,7 @@ Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down
 <li><p><strong>alpha</strong> (<em>float</em>) – Specified cut-off for P-value significance.</p></li>
 <li><p><strong>bins</strong> (<em>int</em>) – Number of bins specified to create histogram.</p></li>
 <li><p><strong>bound</strong> (<em>str</em>) – Specified testing directionality of the distribution.</p></li>
-<li><p><strong>distribution</strong> (<em>str</em>) – Specified distribution or a set of distributions.</p></li>
+<li><p><strong>distr</strong> (<em>str</em>) – Specified distribution or a set of distributions.</p></li>
 <li><p><strong>multtest</strong> (<em>str</em>) – Specified multiple test correction method.</p></li>
 </ul>
 </p>
@@ -341,7 +341,7 @@ theoretical distirbution in case method type is <code class="docutils literal no
 <p>The input data X can be modellend in two manners:</p>
 <dl class="simple">
 <dt><strong>parametric</strong></dt><dd><p>In the parametric case, the best fit on the data is determined using the
-sum of squared errors approach (SSE) for the specified distributions. Based on
+Residual Sum of Squares approach (RSS) for the specified distributions. Based on
 the best distribution-fit, the confidence intervals (CII) can be determined
 for later usage in the <a class="reference internal" href="#distfit.distfit.distfit.predict" title="distfit.distfit.distfit.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a> function.</p>
 </dd>
@@ -359,14 +359,14 @@ for later usage in the <a class="reference internal" href="#distfit.distfit.dist
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>object.</em></p></li>
 <li><p><strong>model</strong> (<em>dict</em>) – dict containing keys with distribution parameters
-sse : sum of square error
+RSS : Residual Sum of Squares
 name : distribution name
 distribution : distribution function
 params : all kind of parameters
 loc : loc function parameter
 scale : scale function parameter
 arg : arg function parameter</p></li>
-<li><p><strong>summary</strong> (<em>list</em>) – Sum of square errors</p></li>
+<li><p><strong>summary</strong> (<em>list</em>) – Residual Sum of Squares</p></li>
 <li><p><strong>histdata</strong> (<em>tuple (observed, bins)</em>) – tuple containing observed and bins for data X in the histogram.</p></li>
 <li><p><strong>size</strong> (<em>int</em>) – total number of elements in for data X</p></li>
 </ul>
