@@ -1,132 +1,111 @@
 import numpy as np
-import distfit
+from distfit import distfit
 
 def test_distfit():
-    data_random = np.random.normal(0, 2, 1000)
-    data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-    model = distfit.fit(data_random)
+    X = np.random.normal(0, 2, 1000)
+    y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+    # Initialize
+    dist = distfit()
+    assert np.all(np.isin(['method', 'alpha', 'bins', 'y_pred', 'distribution','multtest','n_perm'], dir(dist)))
+
+    # Fit and transform data
+    dist.fit_transform(X, verbose=3)
     
     # TEST 1: check output is unchanged
-    assert [*model.keys()]==['method', 'model', 'summary', 'histdata', 'size', 'Param']
+    assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
     # TEST 2: Check model output is unchanged
-    assert [*model['model'].keys()]==['distribution', 'params', 'name', 'sse', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
+    assert [*dist.model.keys()]==['distribution', 'params', 'name', 'sse', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
 
     # TEST 3: Check specific distribution
-    model = distfit.fit(data_random, distribution='t', verbose=2)
-    assert model['model']['name']=='t'
+    dist = distfit(distribution='t')
+    dist.fit_transform(X)
+    assert dist.model['name']=='t'
 
     # TEST 4: Check specific distribution
-    model = distfit.fit(data_random, alpha=0.05, verbose=2)
-    assert model['model']['CII_min_alpha'] is not None
-    assert model['model']['CII_max_alpha'] is not None
-    # model = distfit.fit(data_random, alpha=1)
-    # assert np.isinf(model['model']['CII_min_alpha'])
-    # assert np.isinf(model['model']['CII_max_alpha'])
+    dist = distfit(distribution='t', alpha=None)
+    dist.fit_transform(X)
+    assert dist.model['CII_min_alpha'] is not None
+    assert dist.model['CII_max_alpha'] is not None
 
     # TEST 5: Bound check
-    model = distfit.fit(data_random, alpha=0.05, bound='up', verbose=2)
-    assert model['model']['CII_min_alpha'] is None
-    assert model['model']['CII_max_alpha'] is not None
-    model = distfit.fit(data_random, alpha=0.05, bound='down', verbose=2)
-    assert model['model']['CII_min_alpha'] is not None
-    assert model['model']['CII_max_alpha'] is None
-    model = distfit.fit(data_random, alpha=0.05, bound='both', verbose=2)
-    assert model['model']['CII_min_alpha'] is not None
-    assert model['model']['CII_max_alpha'] is not None
+    dist = distfit(distribution='t', bound='up', alpha=0.05)
+    dist.fit_transform(X, verbose=0)
+    assert dist.model['CII_min_alpha'] is None
+    assert dist.model['CII_max_alpha'] is not None
+    dist = distfit(distribution='t', bound='down', alpha=0.05)
+    dist.fit_transform(X, verbose=0)
+    assert dist.model['CII_min_alpha'] is not None
+    assert dist.model['CII_max_alpha'] is None
+    dist = distfit(distribution='t', bound='both', alpha=0.05)
+    dist.fit_transform(X, verbose=0)
+    assert dist.model['CII_min_alpha'] is not None
+    assert dist.model['CII_max_alpha'] is not None
 
-    # TEST 6: Distribution check
-    data_random = np.random.normal(0, 2, 10000)
-    model = distfit.fit(data_random, distribution='norm')
-    model['model']['loc']
-    '%.1f' %model['model']['scale']=='2.0'
-    '%.1f' %np.abs(model['model']['loc'])=='0.0'
+    # TEST 6: Distribution check: Make sure the right loc and scale paramters are detected
+    X = np.random.normal(0, 2, 10000)
+    dist = distfit(distribution='norm', alpha=0.05)
+    dist.fit_transform(X, verbose=0)
+    dist.model['loc']
+    '%.1f' %dist.model['scale']=='2.0'
+    '%.1f' %np.abs(dist.model['loc'])=='0.0'
 
-
-def test_proba_emperical():
+    # TEST 7
     X = np.random.normal(0, 2, 1000)
     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
 
     # TEST 1: Check bounds
-    out1 = distfit.proba_emperical(y, X, bound='up')
-    assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
-    out2 = distfit.proba_emperical(y, X, bound='down')
-    assert np.all(np.isin(np.unique(out2['proba'].bound), ['none','down']))
-    out3 = distfit.proba_emperical(y, X, bound='both')
-    assert np.all(np.isin(np.unique(out3['proba'].bound), ['none','down','up']))
-    
-    # TEST 2: Check different sizes array
-    X = np.random.normal(0, 2, [10,100])
-    out1 = distfit.proba_emperical(y, X, bound='up')
-    assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
+    out1 = distfit(distribution='norm',  bound='up')
+    out1.fit_transform(X, verbose=0)
+    out1.predict(y, verbose=0)
+    assert np.all(np.isin(np.unique(out1.df['y_pred']), ['none','up']))
 
-def test_proba_parametric():
+    out2 = distfit(distribution='norm',  bound='down')
+    out2.fit_transform(X, verbose=0)
+    out2.predict(y, verbose=0)
+    assert np.all(np.isin(np.unique(out2.df['y_pred']), ['none','down']))
+
+    out3 = distfit(distribution='norm',  bound='down')
+    out3.fit_transform(X, verbose=0)
+    out3.predict(y, verbose=0)
+    assert np.all(np.isin(np.unique(out3.df['y_pred']), ['none','down','up']))
+
+    # TEST 8: Check different sizes array
+    X = np.random.normal(0, 2, [10,100])
+    dist = distfit(distribution='norm',  bound='up')
+    dist.fit_transform(X, verbose=0)
+    dist.predict(y, verbose=0)
+    assert np.all(np.isin(np.unique(dist.df['y_pred']), ['none','up']))
+
+    # TEST 9
     data_random = np.random.normal(0, 2, 1000)
     data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-    model = distfit.fit(data_random)
+    dist = distfit()
+    dist.fit_transform(X, verbose=0)
 
-    # TEST 1: Check pre-trained model gives same results
-    out1 = distfit.proba_parametric(data, data_random, model=model)
-    out2 = distfit.proba_parametric(data, data_random)
-    assert np.all(out1['proba']==out2['proba'])
-
-    # TEST 2 Check number of output probabilities
-    out = distfit.proba_parametric(data, data_random, model=model)
-    assert out['proba'].shape[0]==len(data)
+    # TEST 10 Check number of output probabilities
+    dist.fit_transform(X, verbose=0)
+    dist.predict(y)
+    assert dist.y_proba.shape[0]==len(y)
     
-    # TEST 3: Check bounds
-    out1 = distfit.proba_parametric(data, data_random, bound='up')
-    assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
-    out2 = distfit.proba_parametric(data, data_random, bound='down')
-    assert np.all(np.isin(np.unique(out2['proba'].bound), ['none','down']))
-    out3 = distfit.proba_parametric(data, data_random, bound='both')
-    assert np.all(np.isin(np.unique(out3['proba'].bound), ['none','down','up']))
-    
-    # TEST 4: Check whether alpha responds on results
-    out1 = distfit.proba_parametric(data, data_random, alpha=0.05)
-    out2 = distfit.proba_parametric(data, data_random, alpha=0.2)
-    assert np.all(out2['proba']['Padj']==out1['proba']['Padj'])
-    assert np.all(out2['proba']['Padj']==out1['proba']['Padj'])
-    assert sum(out1['proba']['bound']=='none')>sum(out2['proba']['bound']=='none')
+    # TEST 11: Check whether alpha responds on results
+    out1 = distfit(alpha=0.05)
+    out1.fit_transform(X, verbose=0)
+    out1.predict(y)
 
-    # TEST 5: Check different sizes array
+    out2 = distfit(alpha=0.2)
+    out2.fit_transform(X, verbose=0)
+    out2.predict(y)
+
+    assert np.all(out1.y_proba==out2.y_proba)
+    assert not np.all(out1.y_pred==out2.y_pred)
+    assert np.all(out1.df['P'].values==out2.df['P'].values)
+    assert sum(out1.y_pred=='none')>sum(out2.y_pred=='none')
+
+    # TEST 12: Check different sizes array
     X = np.random.normal(0, 2, [10,100])
     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-    out1 = distfit.proba_parametric(y, X, bound='up')
-    assert np.all(np.isin(np.unique(out1['proba'].bound), ['none','up']))
 
-
-# def test_plot():
-#     data_random = np.random.normal(0, 2, 1000)
-#     data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-
-#     model = distfit.fit(data_random)
-#     distfit.plot(model)
-#     distfit.plot_summary(model)
-
-#     out = distfit.proba_parametric(data, data_random)
-#     distfit.plot(out)
-
-#     out = distfit.proba_parametric(data, data_random, bound='up')
-#     distfit.plot(out)
-
-#     out = distfit.proba_parametric(data, data_random, bound='down')
-#     distfit.plot(out)
-
-#     out = distfit.proba_parametric(data, data_random, alpha=0.05)
-#     distfit.plot(out)
-
-#     out = distfit.proba_parametric(data, data_random, alpha=0.2)
-#     distfit.plot(out)
-
-
-#     out = distfit.proba_emperical(data, data_random)
-#     distfit.plot(out)
-
-#     out = distfit.proba_emperical(data, data_random, bound='up')
-#     distfit.plot(out)
-
-#     out = distfit.proba_emperical(data, data_random, bound='down')
-#     distfit.plot(out)
-
-#     out = distfit.proba_emperical(data, data_random, alpha=0.2)
-#     distfit.plot(out)
+    dist = distfit(bound='up')
+    dist.fit_transform(X, verbose=0)
+    dist.predict(y)
+    assert np.all(np.isin(np.unique(dist.y_pred), ['none','up']))
