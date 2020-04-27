@@ -20,7 +20,7 @@ warnings.filterwarnings('ignore')
 
 # Class dist
 class distfit():
-    """Create object to fit a model and make predictions.
+    """Fit theoretical distribution on emperical data, make predictions and plot.
 
     Description
     -----------
@@ -66,10 +66,8 @@ class distfit():
     Returns
     -------
     object.
-        method : str
-            Specified method for fitting and predicting.
-        alpha : float
-            Specified cut-off for P-value significance.
+        method : str, Specified method for fitting and predicting.
+        alpha : float, Specified cut-off for P-value significance.
         bins : int
             Number of bins specified to create histogram.
         bound : str
@@ -82,8 +80,7 @@ class distfit():
     """
 
     def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distribution='auto_small', n_perm=10000):
-        """Initialize distfit with parameters."""
-        # Get list of distributions to check
+        """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
         self.alpha = alpha

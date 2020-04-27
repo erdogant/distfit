@@ -35,6 +35,6 @@ Example
 
 References
 ----------
-    https://github.com/erdogant/distfit
+https://github.com/erdogant/distfit
 
 """
