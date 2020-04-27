@@ -1,11 +1,10 @@
 .. _code_directive:
-
 -------------------------------------
 
 Algorithm
 '''''''''
 
-The ``distfit`` library uses the goodness of fit test to determine the best probability distribution to the non-censored data. It works by comparing the observed frequency (**f**) to the expected frequency from the model (**f-hat**), and computing the residual sum of squares (RSS). Note that non-censored data is the *full dataset*, and not having any part deleted or suppressed as that can lead to biases.
+The ``distfit`` library uses the goodness of fit test to determine the best probability distribution to the non-censored data. It works by comparing the observed frequency (*f*) to the expected frequency from the model (*f-hat*), and computing the residual sum of squares (RSS). Note that non-censored data is the *full dataset*, and not having any part deleted or suppressed as that can lead to biases.
 
 With ``distfit`` we can test up to 89 univariate distributions, derived from the ``scipy`` library, for which the best fitted distribution is returned with the loc, scale, arg parameters. 
 
@@ -14,13 +13,10 @@ Distributions
 ---------------------
 
 The distributions to be tested can be specified at initialization using the ``distr`` parameter. 
-
-Distributions options:
-	* Manually specifying one or multiple distribution
-	* 'popular' set of distributions
-	* 'full' set of distributions
-
-
+The distributions options are 
+1. Manually specifying one or multiple distribution
+2. *popular* set of distributions
+3. *full* set of distributions
 
 Manually specifying
 	Manually specifying can be for one or multiple distributions. See example below how its done.
@@ -66,3 +62,32 @@ Where **yi** is the ith value of the variable to be predicted, **xi** is the i-t
 Goodness-of-fit
 ---------------
 Besides *RSS*, there are various other approaches to determine the goodness-of-fit, such as the maximum likelihood estimation (mle), moment matching estimation (mme), quantile matching estimation (qme) or maximizing goodness-of-fit estimation (mge). ``distfit`` may be extended with more approaches in future versions.
+
+
+Output parameters
+-----------------
+
+dist.summary
+dist.y_proba
+dist.y_pred
+dist.df
+dist.summary
+
+# Input distributions
+dist.distr
+
+# Selected distributions
+dist.distributions
+
+# Best distribution
+dist.model['distr']
+
+# Best distribution parameters
+dist.model['loc']
+dist.model['scale']
+dist.model['arg']
+dist.model['RSS']
+dist.model['name']
+dist.model['CII_min_alpha']
+dist.model['CII_max_alpha']
+

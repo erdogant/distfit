@@ -93,7 +93,6 @@
 <p class="caption"><span class="caption-text">Methods</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Algorithm.html">Algorithm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Cross validation and hyperparameter tuning.html">Cross validation and hyperparameter tuning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html">Performance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#results">Results</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Save and Load.html">Save and Load</a></li>
@@ -223,7 +222,7 @@ Each public function contains a docstring that is based on numpy standards.</p>
 <div class="section" id="complexity">
 <h2>Complexity<a class="headerlink" href="#complexity" title="Permalink to this headline">¶</a></h2>
 <p>This library has been developed by using measures that help decreasing technical debt.
-Version 0.1.0 of the <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library scored, according the code analyzer: <strong>VALUE</strong>, for which values &gt; 0 are good and 10 is a maximum score.
+Version 1.1.0 of the <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library scored, according the code analyzer: <strong>2.25</strong>, for which values &gt; 0 are good and 10 is a maximum score.
 Developing software with low(er) technical dept may take extra development time, but has many advantages:</p>
 <ul class="simple">
 <li><p>Higher quality code</p></li>
@@ -241,20 +240,24 @@ The following tests are secured using <code class="xref py py-func docutils lite
 <li><p>The output values are checked and whether they are encoded properly.</p></li>
 <li><p>The check of whether parameters are handled correctly.</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest tests<span class="se">\t</span>est_distfit.py
-
-<span class="o">======================================</span> <span class="nb">test</span> session <span class="nv">starts</span> <span class="o">======================================</span>
-platform win32 -- Python <span class="m">3</span>.6.10, pytest-5.4.0, py-1.8.1, pluggy-0.13.1
-collected <span class="m">3</span> items
-
-tests<span class="se">\t</span>est_distfit.py ...                                                                <span class="o">[</span><span class="m">100</span>%<span class="o">]</span>
-
-<span class="o">=======================================</span> warnings <span class="nv">summary</span> <span class="o">========================================</span>
-tests/test_distfit.py::test_plot
-
-<span class="o">===========================</span> <span class="m">3</span> passed, <span class="m">1</span> warning in <span class="m">1254</span>.97s <span class="o">(</span><span class="m">0</span>:20:54<span class="o">)</span> <span class="o">===========================</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
+<dl>
+<dt>====================================== test session starts ======================================</dt><dd><p>platform win32 – Python 3.7.7, pytest-5.4.1, py-1.8.1, pluggy-0.13.1
+rootdir: d:stackPYTHONREPOSITORIESdistfit
+collected 1 item</p>
+<p>teststest_distfit.py .                                                                    [100%]</p>
+<p>======================================= warnings summary ========================================
+tests/test_distfit.py::test_distfit
+tests/test_distfit.py::test_distfit
+tests/test_distfit.py::test_distfit
+tests/test_distfit.py::test_distfit
+tests/test_distfit.py::test_distfit
+tests/test_distfit.py::test_distfit</p>
+<p>================================ 1 passed, 8 warnings in 15.59s =================================</p>
+</dd>
+</dl>
 </div>
 </div>
 

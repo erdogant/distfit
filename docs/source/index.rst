@@ -29,7 +29,6 @@ Content
   :caption: Methods
 
   Algorithm
-  Cross validation and hyperparameter tuning
   Performance
   Save and Load
 
