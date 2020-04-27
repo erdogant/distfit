@@ -1,11 +1,7 @@
 distfit's documentation!
 ========================
 
-``distfit`` is python package for probability density functions for the fit of univariate distributions to non-censored data by residual sum of squares (RSS). ``distfit`` determines the best fit for 89 theoretical distributions. The best fitted theoretical distribution is returned with the loc, scale, arg parameters which can then be used to compute the probability on new data-points.
-
-
-, moment matching (mme), quantile matching (qme) or maximizing goodness-of-fit estimation (mge). The latter is also known as minimizing distance estimation.
-
+``distfit`` is python package for probability density functions of univariate distributions on non-censored data by residual sum of squares (RSS). ``distfit`` determines the best fit across 89 theoretical distributions. The best fitted theoretical distribution is returned with the loc, scale, arg parameters. New data-points can then be assed for significance on the detected distribution.
 
 Content
 =======
