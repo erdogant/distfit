@@ -27,6 +27,14 @@ model.plot()
 
 # Make prediction
 model.predict(y)
+
+#plot
+model.plot()
+model.plot_summary()
+
+# %%
+model = distfit(distr=['norm','t','aap'])
+model.fit_transform(X)
 model.plot()
 
 
@@ -56,10 +64,10 @@ model.plot()
 model.plot_summary()
 
 # %% Show some results
-model.y_proba
-model.y_pred
-model.df
-
+print(model.y_proba)
+print(model.y_pred)
+print(model.df)
+print(model.summary)
 
 
 # %%
@@ -145,10 +153,10 @@ model = distfit()
 model.fit_transform(X)
 model.plot()
 
-model = dist(distr='auto_small')
+model = dist(distr='popular')
 model.fit_transform(X)
 model.plot()
 
-model = dist(distr='auto_full')
+model = dist(distr='full')
 model.fit_transform(X)
 model.plot()
