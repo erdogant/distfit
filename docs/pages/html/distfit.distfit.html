@@ -82,7 +82,6 @@
               <p class="caption"><span class="caption-text">Background</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Abstract.html">Abstract</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Abstract.html#schematic-overview">Schematic overview</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Installation</span></p>
 <ul>
@@ -205,33 +204,22 @@ Based on the fitted model new values can be examined where they belong on the di
 <li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 50</em>) – Bin size to determine the emperical historgram.</p></li>
 <li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – Set the directionality to test for significance.
 Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down’, ‘low’ or ‘left’</p></li>
-<li><p><strong>distribution</strong> (<em>str</em><em>, </em><em>default: 'auto_small'</em>) – <dl class="simple">
-<dt>The (set) of distribution to test. A set of distributions can be tested by:</dt><dd><p>’auto_small’, ‘auto_full’, or specify the theoretical distribution: ‘norm’, ‘t’</p>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>distribution</strong> (<em>str</em><em>, </em><em>default: 'auto_small'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
+‘auto_small’, ‘auto_full’, or specify the theoretical distribution: ‘norm’, ‘t’</p></li>
 <li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “emperical”</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>method : str, Specified method for fitting and predicting.
-alpha : float, Specified cut-off for P-value significance.
-bins : int</p>
-<blockquote>
-<div><p>Number of bins specified to create histogram.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>bound<span class="classifier">str</span></dt><dd><p>Specified testing directionality of the distribution.</p>
-</dd>
-<dt>distribution<span class="classifier">str</span></dt><dd><p>Specified distribution or a set of distributions.</p>
-</dd>
-<dt>multtest<span class="classifier">str</span></dt><dd><p>Specified multiple test correction method.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>object.</em></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Specified method for fitting and predicting.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Specified cut-off for P-value significance.</p></li>
+<li><p><strong>bins</strong> (<em>int</em>) – Number of bins specified to create histogram.</p></li>
+<li><p><strong>bound</strong> (<em>str</em>) – Specified testing directionality of the distribution.</p></li>
+<li><p><strong>distribution</strong> (<em>str</em>) – Specified distribution or a set of distributions.</p></li>
+<li><p><strong>multtest</strong> (<em>str</em>) – Specified multiple test correction method.</p></li>
+</ul>
 </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -243,10 +231,11 @@ bins : int</p>
 <dd class="field-odd"><p><strong>verbose</strong> (<em>int</em><em> [</em><em>1-5</em><em>]</em><em>, </em><em>default: 3</em>) – Print information to screen. A higher number will print more.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>distributions : list of functions containing distributions.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>object.</em></p></li>
+<li><p><strong>distributions</strong> (<em>functions</em>) – list of functions containing distributions.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -287,11 +276,10 @@ bins : int</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>fig</strong> (<em>Figure</em>)</p></li>
-<li><p><strong>ax</strong> (<em>ax of Figure</em>)</p></li>
-</ul>
-</p>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple (fig, ax)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -314,7 +302,7 @@ bins : int</p>
 <dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>fig,ax.</p>
+<dd class="field-odd"><p>tuple (fig, ax)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -335,18 +323,13 @@ theoretical distirbution in case method type is <code class="docutils literal no
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>y_pred<span class="classifier">list of str</span></dt><dd><p>prediction of bounds [upper, lower] for input y, using the fitted distribution X.</p>
-</dd>
-<dt>y_proba<span class="classifier">list of float</span></dt><dd><p>probability for response variable y.</p>
-</dd>
-<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>Dataframe containing the predictions in a structed manner.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Object.</em></p></li>
+<li><p><strong>y_pred</strong> (<em>list of str</em>) – prediction of bounds [upper, lower] for input y, using the fitted distribution X.</p></li>
+<li><p><strong>y_proba</strong> (<em>list of float</em>) – probability for response variable y.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe containing the predictions in a structed manner.</p></li>
+</ul>
 </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -373,27 +356,21 @@ for later usage in the <a class="reference internal" href="#distfit.distfit.dist
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>model<span class="classifier">dict</span></dt><dd><p>dict containing keys with distribution parameters
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>object.</em></p></li>
+<li><p><strong>model</strong> (<em>dict</em>) – dict containing keys with distribution parameters
 sse : sum of square error
 name : distribution name
 distribution : distribution function
 params : all kind of parameters
 loc : loc function parameter
 scale : scale function parameter
-arg : arg function parameter</p>
-</dd>
-<dt>summary<span class="classifier">list</span></dt><dd><p>Sum of square errors</p>
-</dd>
-<dt>histdata<span class="classifier">tuple (observed, bins)</span></dt><dd><p>tuple containing observed and bins for data X in the histogram.</p>
-</dd>
-<dt>size<span class="classifier">int</span></dt><dd><p>total number of elements in for data X</p>
-</dd>
-</dl>
+arg : arg function parameter</p></li>
+<li><p><strong>summary</strong> (<em>list</em>) – Sum of square errors</p></li>
+<li><p><strong>histdata</strong> (<em>tuple (observed, bins)</em>) – tuple containing observed and bins for data X in the histogram.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – total number of elements in for data X</p></li>
+</ul>
 </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object.</p>
 </dd>
 </dl>
 </dd></dl>

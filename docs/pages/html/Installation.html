@@ -83,7 +83,6 @@
               <p class="caption"><span class="caption-text">Background</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Abstract.html">Abstract</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Abstract.html#schematic-overview">Schematic overview</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Installation</span></p>
 <ul class="current">
@@ -178,17 +177,21 @@
 <div class="section" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <p>A quick example how to learn a model on a given dataset.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
-<span class="kn">import</span> <span class="nn">distfit</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 
-<span class="c1"># Retrieve URLs of malicous and normal urls:</span>
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">distfit</span><span class="o">.</span><span class="n">load_example</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
 
-<span class="c1"># Learn model on the data</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">distfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pos_label</span><span class="o">=</span><span class="s1">&#39;bad&#39;</span><span class="p">)</span>
+<span class="c1"># Initialize model</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
 
-<span class="c1"># Plot the model performance</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">distfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="c1"># Find best theoretical distribution for emperical data X</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+<span class="c1"># Make prediction</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -196,7 +199,7 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="create-environment">
 <h2>Create environment<a class="headerlink" href="#create-environment" title="Permalink to this headline">¶</a></h2>
-<p>If desired, install <code class="docutils literal notranslate"><span class="pre">distfit</span></code> from an isolated Python environment using conda:</p>
+<p>If desired, install <code class="docutils literal notranslate"><span class="pre">distfit</span></code> in an isolated Python environment using conda:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">env_distfit</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">env_distfit</span>
 </pre></div>
@@ -218,7 +221,7 @@
 <span class="go">conda env list</span>
 
 <span class="gp">#</span> Remove the distfit environment
-<span class="go">conda env remove --name distfit</span>
+<span class="go">conda env remove --name env_distfit</span>
 
 <span class="gp">#</span> List all the active environments. distfit should be absent.
 <span class="go">conda env list</span>

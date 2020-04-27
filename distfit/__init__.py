@@ -1,6 +1,4 @@
-from distfit.distfit import (
-    distfit,
-)
+from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
@@ -14,7 +12,7 @@ distfit
 
 Description
 -----------
-Probability density function fitting and hypothesis testing.
+Probability density fitting and hypothesis testing.
 Computes best fit to the input emperical distribution for 89 theoretical
 distributions using the Sum of Squared errors (SSE) estimates.
 

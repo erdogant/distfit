@@ -1,11 +1,10 @@
 distfit's documentation!
 ========================
 
-WORK IN PROGRES!
-
-*distfit* is Python package
-
-* Greate package
+*distfit* is Python package for probability density functions fitting on emperical datasets.
+``distfit``can determine the best fit to the input emperical distribution for 89 theoretical distributions using the Sum of Squared errors (SSE) estimates.
+The best fitted theoretical distribution is returned with the loc, scale, arg parameters which can then be used
+to compute the probability on new data-points.
 
 
 Content

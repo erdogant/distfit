@@ -59,7 +59,7 @@ class distfit():
         Upperbounds = 'up', 'high' or 'right', whereas lowerbounds = 'down', 'low' or 'left'
     distribution : str, default: 'auto_small'
         The (set) of distribution to test. A set of distributions can be tested by:
-            'auto_small', 'auto_full', or specify the theoretical distribution: 'norm', 't'
+        'auto_small', 'auto_full', or specify the theoretical distribution: 'norm', 't'
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "emperical"
 
@@ -105,7 +105,8 @@ class distfit():
         Returns
         -------
         object.
-            distributions : list of functions containing distributions.
+        distributions : functions
+            list of functions containing distributions.
 
         """
         if verbose>=3: print('[distfit] >fit..')
@@ -143,21 +144,21 @@ class distfit():
         Returns
         -------
         object.
-            model : dict
-                dict containing keys with distribution parameters
-                sse : sum of square error
-                name : distribution name
-                distribution : distribution function
-                params : all kind of parameters
-                loc : loc function parameter
-                scale : scale function parameter
-                arg : arg function parameter
-            summary : list
-                Sum of square errors
-            histdata : tuple (observed, bins)
-                tuple containing observed and bins for data X in the histogram.
-            size : int
-                total number of elements in for data X
+        model : dict
+            dict containing keys with distribution parameters
+            sse : sum of square error
+            name : distribution name
+            distribution : distribution function
+            params : all kind of parameters
+            loc : loc function parameter
+            scale : scale function parameter
+            arg : arg function parameter
+        summary : list
+            Sum of square errors
+        histdata : tuple (observed, bins)
+            tuple containing observed and bins for data X in the histogram.
+        size : int
+            total number of elements in for data X
 
         """
         if len(X)<1: raise Exception('[distfit] Error: Input X is empty!')
@@ -214,7 +215,6 @@ class distfit():
         The emperical distribution of X is used to estimate the loc/scale/arg parameters for a
         theoretical distirbution in case method type is ``parametric``.
 
-
         Parameters
         ----------
         y : array-like
@@ -227,12 +227,12 @@ class distfit():
         Returns
         -------
         Object.
-            y_pred : list of str
-                prediction of bounds [upper, lower] for input y, using the fitted distribution X.
-            y_proba : list of float
-                probability for response variable y.
-            df : pd.DataFrame
-                Dataframe containing the predictions in a structed manner.
+        y_pred : list of str
+            prediction of bounds [upper, lower] for input y, using the fitted distribution X.
+        y_proba : list of float
+            probability for response variable y.
+        df : pd.DataFrame
+            Dataframe containing the predictions in a structed manner.
 
 
         """
@@ -269,9 +269,8 @@ class distfit():
 
         Returns
         -------
-        fig : Figure
-        ax : ax of Figure
-
+        tuple (fig, ax)
+        
         """
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: A model needs to be fitted first. Try fit_transform(X)')
         if verbose>=3: print('[distfit] >plot..')
@@ -303,7 +302,7 @@ class distfit():
 
         Returns
         -------
-        fig,ax.
+        tuple (fig, ax)
 
         """
         if verbose>=3: print('[distfit] >plot summary..')

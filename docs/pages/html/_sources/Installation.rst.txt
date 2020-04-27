@@ -10,17 +10,21 @@ A quick example how to learn a model on a given dataset.
 
 .. code:: python
 
-    # Import library
-    import distfit
+    from distfit import distfit
 
-    # Retrieve URLs of malicous and normal urls:
-    X, y = distfit.load_example()
+    X = np.random.normal(0, 2, 1000)
+    y = [-8,-6,0,1,2,3,4,5,6]
 
-    # Learn model on the data
-    model = distfit.fit_transform(X, y, pos_label='bad')
+    # Initialize model
+    dist = distfit()
 
-    # Plot the model performance
-    results = distfit.plot(model)
+    # Find best theoretical distribution for emperical data X
+    dist.fit_transform(X)
+    dist.plot()
+
+    # Make prediction
+    dist.predict(y)
+    dist.plot()
 
 
 Installation
@@ -30,7 +34,7 @@ Create environment
 ------------------
 
 
-If desired, install ``distfit`` from an isolated Python environment using conda:
+If desired, install ``distfit`` in an isolated Python environment using conda:
 
 .. code-block:: python
 
@@ -60,7 +64,7 @@ If you want to remove your ``distfit`` installation with your environment, it ca
    conda env list
 
    # Remove the distfit environment
-   conda env remove --name distfit
+   conda env remove --name env_distfit
 
    # List all the active environments. distfit should be absent.
    conda env list
