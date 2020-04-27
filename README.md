@@ -48,7 +48,6 @@ pip install git+https://github.com/erdogant/distfit#egg=master
 
 #### Install by cloning  (beta version)
 ```bash
-pip install git+https://github.com/erdogant/distfit
 git clone https://github.com/erdogant/distfit.git
 cd distfit
 pip install -U .
@@ -62,11 +61,12 @@ print(distfit.__version__)
 ```
 
 ### Examples
+
+Import ``distfit`` library
+
 ```python
 from distfit import distfit
 ```
-
-#### Example 1:
 
 Create Some random data and model using default parameters:
 
@@ -133,12 +133,24 @@ The results of the prediction are stored in ``y_proba`` and ``y_pred``
 
 # Show the predictions for y
 print(dist.y_pred)
+# ['down' 'down' 'none' 'none' 'none' 'none' 'up' 'up' 'up']
 
 # Show the probabilities for y that belong with the predictions
 print(dist.y_proba)
-
+# [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
+ 
 # All predicted information is also stored in a structured dataframe
 print(dist.df)
+#    y   y_proba y_pred         P
+# 0 -8  0.000028   down  0.000003
+# 1 -6  0.002747   down  0.000610
+# 2  0  0.474740   none  0.474740
+# 3  1  0.328637   none  0.292122
+# 4  2  0.199195   none  0.154929
+# 5  3  0.106316   none  0.070877
+# 6  4  0.050591     up  0.028106
+# 7  5  0.021892     up  0.009730
+# 8  6  0.008893     up  0.002964
 ```
 
 
