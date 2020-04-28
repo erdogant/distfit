@@ -11,10 +11,6 @@
     Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon.
     ``distfit`` scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
-<p align="center">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example.png" width="650" />
-</p>
-
 ### Functionalities
 
 The ``distfit`` library is created with classes to ensure simplicity in usage.
