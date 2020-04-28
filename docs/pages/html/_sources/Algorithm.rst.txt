@@ -95,7 +95,7 @@ After making predictions using the predict function: :func:`distfit.distfit.dist
 
 
 
-Output parameters
+Output variables
 -----------------
 There are many output parameters provided by ``distfit``.
 It all starts with the initialization:
@@ -105,8 +105,7 @@ It all starts with the initialization:
     # Initialize model and select popular distributions
     dist = distfit(alpha=0.01)
 
-fit_transform
-^^^^^^^^^^^^^
+
 The object now returns variables that are set by default, except for the ``alpha`` parameter (nothing else is provided). For more details, see the **returns** in the docstrings at :func:`distfit.distfit.distfit`. In the next step, input-data *X* can be provided:
 
 .. code:: python
@@ -114,8 +113,8 @@ The object now returns variables that are set by default, except for the ``alpha
     # Initialize model and select popular distributions
     dist.fit_transform(X)
 
-The object can now be feeded with input data X that will add more output variables to the object.
-Feeding the object is done with the ``fit`` and ``transform`` function. Instead of using the two functions seperately, it can be done with ``fit_transform``: :func:`distfit.distfit.distfit.fit_transform`.
+The object can now be feeded with data *X*, using ``fit`` and ``transform`` function, that will add more output variables to the object.
+Instead of using the two functions seperately, it can also be performed with ``fit_transform``: :func:`distfit.distfit.distfit.fit_transform`.
 
 The fit_transform outputs the variables *summary*, *distributions* and *model*
 
@@ -138,10 +137,10 @@ dist.summary
     # 9      pareto    0.634924  ...    1.42095                    (0.5384782616155881,)
 
 
-**dist.distributions** is a list containing the extracted ``pdfs`` from ``scripy``
+**dist.distributions** is a list containing the extracted pdfs from ``scripy``
 	The collected distributions.
 
-**dist.model** contains information regarding the best scoring ``pdf``:
+**dist.model** contains information regarding the best scoring pdf:
 	* dist.model['RSS']
 	* dist.model['name']
 	* dist.model['distr']

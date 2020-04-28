@@ -97,10 +97,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#residual-sum-of-squares-rss">Residual Sum of Squares (RSS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#goodness-of-fit">Goodness-of-fit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#predictions">Predictions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#output-parameters">Output parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fit-transform">fit_transform</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#output-variables">Output variables</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html">Performance</a></li>
@@ -270,23 +267,21 @@ The distributions options are
 </dd>
 </dl>
 </div>
-<div class="section" id="output-parameters">
-<h2>Output parameters<a class="headerlink" href="#output-parameters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="output-variables">
+<h2>Output variables<a class="headerlink" href="#output-variables" title="Permalink to this headline">¶</a></h2>
 <p>There are many output parameters provided by <code class="docutils literal notranslate"><span class="pre">distfit</span></code>.
 It all starts with the initialization:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="fit-transform">
-<h3>fit_transform<a class="headerlink" href="#fit-transform" title="Permalink to this headline">¶</a></h3>
 <p>The object now returns variables that are set by default, except for the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> parameter (nothing else is provided). For more details, see the <strong>returns</strong> in the docstrings at <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit" title="distfit.distfit.distfit"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit()</span></code></a>. In the next step, input-data <em>X</em> can be provided:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The object can now be feeded with input data X that will add more output variables to the object.
-Feeding the object is done with the <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">transform</span></code> function. Instead of using the two functions seperately, it can be done with <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>: <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit.fit_transform" title="distfit.distfit.distfit.fit_transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit.fit_transform()</span></code></a>.</p>
+<p>The object can now be feeded with data <em>X</em>, using <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">transform</span></code> function, that will add more output variables to the object.
+Instead of using the two functions seperately, it can also be performed with <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>: <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit.fit_transform" title="distfit.distfit.distfit.fit_transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit.fit_transform()</span></code></a>.</p>
 <p>The fit_transform outputs the variables <em>summary</em>, <em>distributions</em> and <em>model</em></p>
 <dl class="simple">
 <dt>dist.summary</dt><dd><p>The summary of the fits across the distributions.</p>
@@ -307,9 +302,9 @@ Feeding the object is done with the <code class="docutils literal notranslate"><
 </pre></div>
 </div>
 <dl class="simple">
-<dt><strong>dist.distributions</strong> is a list containing the extracted <code class="docutils literal notranslate"><span class="pre">pdfs</span></code> from <code class="docutils literal notranslate"><span class="pre">scripy</span></code></dt><dd><p>The collected distributions.</p>
+<dt><strong>dist.distributions</strong> is a list containing the extracted pdfs from <code class="docutils literal notranslate"><span class="pre">scripy</span></code></dt><dd><p>The collected distributions.</p>
 </dd>
-<dt><strong>dist.model</strong> contains information regarding the best scoring <code class="docutils literal notranslate"><span class="pre">pdf</span></code>:</dt><dd><ul class="simple">
+<dt><strong>dist.model</strong> contains information regarding the best scoring pdf:</dt><dd><ul class="simple">
 <li><p>dist.model[‘RSS’]</p></li>
 <li><p>dist.model[‘name’]</p></li>
 <li><p>dist.model[‘distr’]</p></li>
@@ -320,7 +315,6 @@ Feeding the object is done with the <code class="docutils literal notranslate"><
 </ul>
 </dd>
 </dl>
-</div>
 </div>
 </div>
 

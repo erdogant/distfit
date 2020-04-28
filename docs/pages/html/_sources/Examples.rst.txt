@@ -5,43 +5,61 @@
 Examples
 ''''''''''
 
-Learn new model with gridsearch and train-test set
+Fit distribution
 --------------------------------------------------
-
-AAA
 
 .. code:: python
 
-    # Import library
-    import distfit
+    # Example data
+    X = np.random.normal(10, 3, 2000)
+    y = [3,4,5,6,10,11,12,18,20]
 
-    # Load example data set    
-    X,y_true = distfit.load_example()
+    # Initialize
+    dist = distfit()
+    dist.fit_transform(X)
 
-    # Retrieve URLs of malicous and normal urls:
-    model = distfit.fit_transform(X, y_true, pos_label='bad', train_test=True, gridsearch=True)
-
-    # The test error will be shown
-    results = distfit.plot(model)
+    # Make prediction
+    dist.predict(y)
 
 
-Learn new model on the entire data set
+
+.. |fig1a| image:: ../figs/example_fig1a.png
+    :scale: 80%
+
+.. table:: Distribution fit
+   :align: center
+
+   +---------+
+   | |fig1a| |
+   +---------+
+
+
+Make predictions
 --------------------------------------------------
 
-BBBB
-
+Make some predictions can with the ``predict`` function. 
+Due to multiple testing it can occur that samples are outside the boundary 
+of the distribution confidence interval but are not marked as significant.
 
 .. code:: python
 
-    # Import library
-    import distfit
+    # Example data
+    X = np.random.normal(10, 3, 2000)
+    y = [3,4,5,6,10,11,12,18,20]
 
-    # Load example data set    
-    X,y_true = distfit.load_example()
+    # Initialize
+    dist = distfit(distr='full', alpha=0.01)
+    dist.fit_transform(X)
 
-    # Retrieve URLs of malicous and normal urls:
-    model = distfit.fit_transform(X, y_true, pos_label='bad', train_test=False, gridsearch=True)
+    # Make prediction
+    dist.predict(y)
 
-    # The train error will be shown. Such results are heavily biased as the model also learned on this set of data
-    results = distfit.plot(model)
+.. |fig1b| image:: ../figs/example_fig1b.png
+    :scale: 80%
 
+.. table:: Plot distribution with predictions
+   :align: center
+
+   +---------+
+   | |fig1b| |
+   +---------+
