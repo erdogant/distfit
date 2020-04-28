@@ -258,8 +258,6 @@ class distfit():
 
         Parameters
         ----------
-        model : dict
-            The model that is created by the .fit() function.
         title : String, optional (default: '')
             Title of the plot.
         figsize : tuple, optional (default: (10,8))
@@ -293,8 +291,6 @@ class distfit():
 
         Parameters
         ----------
-        model : dict
-            The model that is created by the .fit() function.
         n_top : int, optional
             Show the top number of results. The default is None.
         figsize : tuple, optional (default: (10,8))
@@ -344,8 +340,6 @@ class distfit():
 
         Parameters
         ----------
-        model : dict
-            model resulted from the fit_transform() function.
         filepath : str
             Pathname to store pickle files.
         verbose : int, optional
