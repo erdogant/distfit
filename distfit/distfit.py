@@ -12,8 +12,10 @@
 import warnings
 import numpy as np
 import pandas as pd
+import distfit.utils.picklefast as pf
 import statsmodels.stats.multitest as multitest
 import scipy.stats as st
+from scipy.interpolate import make_interp_spline
 import matplotlib.pyplot as plt
 warnings.filterwarnings('ignore')
 
@@ -335,6 +337,82 @@ class distfit():
         else:
             print('[distfit] This function works only in case of method is "parametric"')
             return None, None
+
+    # Save model
+    def save(self, filepath, verbose=3):
+        """Save learned model in pickle file.
+
+        Parameters
+        ----------
+        model : dict
+            model resulted from the fit_transform() function.
+        filepath : str
+            Pathname to store pickle files.
+        verbose : int, optional
+            Show message. A higher number gives more informatie. The default is 3.
+
+        Returns
+        -------
+        object
+        
+        """
+        args = ['alpha','bins','bound','df','distr','distributions','histdata','method','model','multtest','n_perm','size','smooth','summary','y_pred']
+        out={}
+        for arg in args:
+            if hasattr(self, arg):
+                if arg=='alpha': out.update({arg : self.alpha})
+                if arg=='bins': out.update({arg : self.bins})
+                if arg=='bound': out.update({arg : self.bound})
+                if arg=='df': out.update({arg : self.df})
+                if arg=='distr': out.update({arg : self.distr})
+                if arg=='distributions': out.update({arg : self.distributions})
+                if arg=='histdata': out.update({arg : self.histdata})
+                if arg=='method': out.update({arg : self.method})
+                if arg=='model': out.update({arg : self.model})
+                if arg=='multtest': out.update({arg : self.multtest})
+                if arg=='n_perm': out.update({arg : self.n_perm})
+                if arg=='size': out.update({arg : self.size})
+                if arg=='smooth': out.update({arg : self.smooth})
+                if arg=='summary': out.update({arg : self.summary})
+                if arg=='y_pred': out.update({arg : self.y_pred})
+
+        status = pf.save(filepath, out, verbose=verbose)
+        if verbose>=3: print('[distfit] >Saving.. %s' %(status))
+
+    # Load model.
+    def load(self, filepath, verbose=3):
+        """Load learned model.
+
+        Parameters
+        ----------
+        filepath : str
+            Pathname to store pickle files.
+        verbose : int, optional
+            Show message. A higher number gives more informatie. The default is 3.
+
+        Returns
+        -------
+        Object.
+
+        """
+        out = pf.load(filepath, verbose=verbose)
+        # Store all in object
+        if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
+        if out.get('summary', None) is not None: self.summary = out['summary']
+        if out.get('smooth', None) is not None: self.smooth = out['smooth']
+        if out.get('size', None) is not None: self.size = out['size']
+        if out.get('n_perm', None) is not None: self.n_perm = out['n_perm']
+        if out.get('multtest', None) is not None: self.multtest = out['multtest']
+        if out.get('model', None) is not None: self.model = out['model']
+        if out.get('method', None) is not None: self.method = out['method']
+        if out.get('histdata', None) is not None: self.histdata = out['histdata']
+        if out.get('distributions', None) is not None: self.distributions = out['distributions']
+        if out.get('distr', None) is not None: self.distr = out['distr']
+        if out.get('bound', None) is not None: self.bound = out['bound']
+        if out.get('df', None) is not None: self.df = out['df']
+        if out.get('bound', None) is not None: self.bound = out['bound']
+        if out.get('bins', None) is not None: self.bins = out['bins']
+        if out.get('alpha', None) is not None: self.alpha = out['alpha']
 
 
 # %% Utils
@@ -771,7 +849,6 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
 
 def _make_smooth_line(xs, ys, window=1, verbose=3):
     if window is not None:
-        from scipy.interpolate import make_interp_spline
         if verbose>=3: print('[distfit] >Smoothing histogram by interpolation..')
         # Specify number of points to interpolate the data
         nr_interpol=1

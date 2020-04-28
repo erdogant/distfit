@@ -13,7 +13,7 @@ print(distfit.__version__)
 
 # %% Import class
 from distfit import distfit
-dir(distfit)
+print(dir(distfit))
 
 
 #%%
@@ -31,6 +31,11 @@ model.predict(y)
 #plot
 model.plot()
 model.plot_summary()
+
+# Save
+model.save(filepath='c:\\temp\\model.pkl')
+# Load
+model.load(filepath='c:\\temp\\model.pkl')
 
 # %%
 X = np.random.normal(0, 2, 5000)
@@ -52,10 +57,11 @@ dist.plot()
 dist = distfit()
 
 # %%
-X = np.random.normal(0, 2, 5000)
-model = distfit()
+X = np.random.normal(0, 2, 100)
+model = distfit(smooth=10)
 model.fit_transform(X)
 model.plot()
+
 # %%
 # Create random data with varying number of samples
 import pandas as pd
