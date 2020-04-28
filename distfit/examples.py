@@ -28,7 +28,7 @@ model.plot()
 # Make prediction
 model.predict(y)
 
-#plot
+# plot
 model.plot()
 model.plot_summary()
 
@@ -37,24 +37,6 @@ model.save(filepath='c:\\temp\\model.pkl')
 # Load
 model.load(filepath='c:\\temp\\model.pkl')
 
-# %%
-X = np.random.normal(0, 2, 5000)
-dist = distfit(interp=None)
-dist.fit_transform(X)
-dist.plot()
-
-[ys, xs] = _get_hist_params(X, dist.bins)
-plt.plot(xs, ys,'k')
-[xnew, ynew] = _make_smooth_line(xs, ys, smooth_factor=1, verbose=3)
-plt.plot(xnew, ynew,'r')
-
-dist.summary
-dist.model
-
-dist.plot()
-
-
-dist = distfit()
 
 # %%
 X = np.random.normal(0, 2, 100)
@@ -219,3 +201,17 @@ model.plot()
 model = dist(distr='full')
 model.fit_transform(X)
 model.plot()
+
+
+# %%
+X = np.random.normal(10, 3, 2000)
+y = [3,4,5,6,10,11,12,18,20]
+
+# Initialize
+dist = distfit(distr='full', alpha=0.05)
+dist.fit_transform(X)
+dist.plot()
+
+# Make prediction
+dist.predict(y)
+dist.plot()
