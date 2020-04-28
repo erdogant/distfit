@@ -82,7 +82,7 @@ class distfit():
 
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', n_perm=10000):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -91,6 +91,7 @@ class distfit():
         self.bound = bound
         self.distr = distr
         self.multtest = multtest
+        self.smooth = smooth
         self.n_perm = n_perm
 
     # Fit
@@ -148,7 +149,7 @@ class distfit():
             dict containing keys with distribution parameters
             RSS : Residual Sum of Squares
             name : distribution name
-            distribution : distribution function
+            distr : distribution function
             params : all kind of parameters
             loc : loc function parameter
             scale : scale function parameter
@@ -169,7 +170,8 @@ class distfit():
 
         if self.method=='parametric':
             # Get histogram of original X
-            [y_obs, X_bins] = _get_hist_params(X, self.bins)
+            [X_bins, y_obs] = _get_hist_params(X, self.bins)
+            [X_bins, y_obs] = _make_smooth_line(X_bins, y_obs, window=self.smooth, verbose=verbose)
             # Compute best distribution fit on the emperical X
             out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, verbose=verbose)
             # Determine confidence intervals on the best fitting distribution
@@ -496,7 +498,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     scale = model['params'][-1]
     distline = getattr(st, model['name'])
 
-    # Plot line
+    # Get pdf boundaries
     getmin = distline.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.0000001, loc=loc, scale=scale)
     getmax = distline.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.9999999, loc=loc, scale=scale)
 
@@ -504,16 +506,18 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     getmax = np.minimum(getmax, np.max(self.histdata[1]))
     getmin = np.maximum(getmin, np.min(self.histdata[1]))
 
-    # Build PDF and turn into pandas Series
+    # Build pdf and turn into pandas Series
     x = np.linspace(getmin, getmax, self.size)
     y = distline.pdf(x, loc=loc, scale=scale, *arg)
     # ymax=max(self.histdata[0])
 
     fig, ax = plt.subplots(figsize=figsize)
+    # Plot emperical data
     ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='Emperical distribution')
+    # Plot pdf
     ax.plot(x, y, 'b-', linewidth=1, label=best_fit_name)
 
-    # Plot vertical line To stress the cut-off point
+    # Plot vertical line to stress the cut-off point
     if self.model['CII_min_alpha'] is not None:
         label = 'CII low ' + '(' + str(self.alpha) + ')'
         ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
@@ -612,7 +616,7 @@ def _get_distributions(distr):
 def _get_hist_params(data, bins):
     [y_obs, X] = np.histogram(data, bins=bins, density=True)
     X = (X + np.roll(X, -1))[:-1] / 2.0
-    return(y_obs, X)
+    return(X, y_obs)
 
 
 # Compute score for each distribution
@@ -763,3 +767,33 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
 
     Padj = np.clip(Padj, 0, 1)
     return(Padj)
+
+
+def _make_smooth_line(xs, ys, window=1, verbose=3):
+    if window is not None:
+        from scipy.interpolate import make_interp_spline
+        if verbose>=3: print('[distfit] >Smoothing histogram by interpolation..')
+        # Specify number of points to interpolate the data
+        nr_interpol=1
+        # Interpolate xs line
+        extpoints = np.linspace(0, len(xs), len(xs) * nr_interpol)
+        spl = make_interp_spline(range(0, len(xs)), xs, k=3)
+        xnew = spl(extpoints)
+        xnew[window:-window]
+
+        # First smoothing on the raw input data
+        ys=_smooth(ys,window)
+        # Interpolate ys line
+        spl = make_interp_spline(range(0, len(ys)), ys, k=3)
+        ynew = spl(extpoints)
+        ynew[window:-window]
+
+    else:
+        xnew, ynew = xs, ys
+    return xnew, ynew
+
+
+def _smooth(y, window):
+    box = np.ones(window) / window
+    y_smooth = np.convolve(y, box, mode='same')
+    return y_smooth

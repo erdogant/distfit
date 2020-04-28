@@ -33,10 +33,63 @@ model.plot()
 model.plot_summary()
 
 # %%
-model = distfit(distr=['norm','t','aap'])
+X = np.random.normal(0, 2, 5000)
+dist = distfit(interp=None)
+dist.fit_transform(X)
+dist.plot()
+
+[ys, xs] = _get_hist_params(X, dist.bins)
+plt.plot(xs, ys,'k')
+[xnew, ynew] = _make_smooth_line(xs, ys, smooth_factor=1, verbose=3)
+plt.plot(xnew, ynew,'r')
+
+dist.summary
+dist.model
+
+dist.plot()
+
+
+dist = distfit()
+
+# %%
+X = np.random.normal(0, 2, 5000)
+model = distfit()
 model.fit_transform(X)
 model.plot()
+# %%
+# Create random data with varying number of samples
+import pandas as pd
+samples = np.arange(250, 20000, 250)
 
+#%%
+# Initialize model
+smooth_window=[None,1,3,5,7,9,11]
+plt.figure(figsize=(15,10))
+
+for smooth in smooth_window:
+    dist = distfit(distr='norm', smooth=smooth)
+    # Estimate paramters for the number of samples
+    out = []
+    for s in samples:
+        X = np.random.normal(0, 2, s)
+        dist.fit_transform(X, verbose=0)
+        out.append([dist.model['loc'], dist.model['scale'], dist.model['name'], np.where(dist.summary['distr']=='norm')[0][0], s])
+    
+    
+    df=pd.DataFrame(out, columns=['std','mu','name','norm_place','samples'])
+    ax=df['mu'].plot(grid=True, label='smooth: '+str(smooth) + ' - ' + str(df['mu'].mean()))
+
+ax.set_xlabel('Nr.Samples')
+ax.set_ylabel('mu')
+ax.set_xticks(np.arange(0,len(samples)))
+ax.set_xticklabels(samples.astype(str))
+ax.legend()
+
+# ax=df['std'].plot(grid=True)
+# ax.set_xlabel('Nr.Samples')
+# ax.set_ylabel('std')
+# ax.set_xticks(np.arange(0,len(samples)))
+# ax.set_xticklabels(samples.astype(str))
 
 # %% Fit and transform
 X = np.random.beta(5, 8, [100,100])
