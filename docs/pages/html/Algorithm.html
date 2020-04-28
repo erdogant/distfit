@@ -96,11 +96,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#distributions">Distributions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#residual-sum-of-squares-rss">Residual Sum of Squares (RSS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#goodness-of-fit">Goodness-of-fit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#output-parameters">Output parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#predictions">Predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-parameters">Output parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fit-transform">fit_transform</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#results">Results</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Save and Load.html">Save and Load</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -233,27 +236,91 @@ The distributions options are
 <h2>Goodness-of-fit<a class="headerlink" href="#goodness-of-fit" title="Permalink to this headline">¶</a></h2>
 <p>Besides <em>RSS</em>, there are various other approaches to determine the goodness-of-fit, such as the maximum likelihood estimation (mle), moment matching estimation (mme), quantile matching estimation (qme) or maximizing goodness-of-fit estimation (mge). <code class="docutils literal notranslate"><span class="pre">distfit</span></code> may be extended with more approaches in future versions.</p>
 </div>
+<div class="section" id="predictions">
+<h2>Predictions<a class="headerlink" href="#predictions" title="Permalink to this headline">¶</a></h2>
+<p>After making predictions using the predict function: <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit.predict" title="distfit.distfit.distfit.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit.predict()</span></code></a>, the following output variables are available. More information can be found under <strong>return</strong> in the docstring.</p>
+<dl>
+<dt><strong>dist.predict</strong></dt><dd><blockquote>
+<div><ul class="simple">
+<li><p>dist.y_proba</p></li>
+<li><p>dist.y_pred</p></li>
+<li><p>dist.df</p></li>
+<li><p>dist.summary</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Praw<span class="classifier">list of float</span></dt><dd><p>Pvalues.</p>
+</dd>
+<dt>multtest<span class="classifier">str, default: ‘fdr_bh’</span></dt><dd><dl class="simple">
+<dt>Multiple testing method. Options are:</dt><dd><p>None : No multiple testing
+‘bonferroni’ : one-step correction
+‘sidak’ : one-step correction
+‘holm-sidak’ : step down method using Sidak adjustments
+‘holm’ : step-down method using Bonferroni adjustments
+‘simes-hochberg’ : step-up method  (independent)
+‘hommel’ : closed method based on Simes tests (non-negative)
+‘fdr_bh’ : Benjamini/Hochberg  (non-negative)
+‘fdr_by’ : Benjamini/Yekutieli (negative)
+‘fdr_tsbh’ : two stage fdr correction (non-negative)
+‘fdr_tsbky’ : two stage fdr correction (non-negative)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</div>
 <div class="section" id="output-parameters">
 <h2>Output parameters<a class="headerlink" href="#output-parameters" title="Permalink to this headline">¶</a></h2>
-<p>dist.summary
-dist.y_proba
-dist.y_pred
-dist.df
-dist.summary</p>
-<p># Input distributions
-dist.distr</p>
-<p># Selected distributions
-dist.distributions</p>
-<p># Best distribution
-dist.model[‘distr’]</p>
-<p># Best distribution parameters
-dist.model[‘loc’]
-dist.model[‘scale’]
-dist.model[‘arg’]
-dist.model[‘RSS’]
-dist.model[‘name’]
-dist.model[‘CII_min_alpha’]
-dist.model[‘CII_max_alpha’]</p>
+<p>There are many output parameters provided by <code class="docutils literal notranslate"><span class="pre">distfit</span></code>.
+It all starts with the initialization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="fit-transform">
+<h3>fit_transform<a class="headerlink" href="#fit-transform" title="Permalink to this headline">¶</a></h3>
+<p>The object now returns variables that are set by default, except for the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> parameter (nothing else is provided). For more details, see the <strong>returns</strong> in the docstrings at <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit" title="distfit.distfit.distfit"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit()</span></code></a>. In the next step, input-data <em>X</em> can be provided:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The object can now be feeded with input data X that will add more output variables to the object.
+Feeding the object is done with the <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">transform</span></code> function. Instead of using the two functions seperately, it can be done with <code class="docutils literal notranslate"><span class="pre">fit_transform</span></code>: <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit.fit_transform" title="distfit.distfit.distfit.fit_transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit.fit_transform()</span></code></a>.</p>
+<p>The fit_transform outputs the variables <em>summary</em>, <em>distributions</em> and <em>model</em></p>
+<dl class="simple">
+<dt>dist.summary</dt><dd><p>The summary of the fits across the distributions.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+<span class="c1">#   distr         RSS  ...      scale                                      arg</span>
+<span class="c1"># 0       gamma  0.00185211  ...  0.0370159                     (3004.147964288284,)</span>
+<span class="c1"># 1           t  0.00186936  ...    2.02883                     (2517332.591227023,)</span>
+<span class="c1"># 2        norm  0.00186945  ...    2.02882                                       ()</span>
+<span class="c1"># 3        beta  0.00186949  ...    37.7852  (39.068072383763294, 46.06165256503778)</span>
+<span class="c1"># 4     lognorm  0.00197359  ...    57.4149                   (0.03537982752374607,)</span>
+<span class="c1"># 5  genextreme  0.00297519  ...     2.0106                    (0.2437702978900108,)</span>
+<span class="c1"># 6    dweibull  0.00695379  ...    1.73297                    (1.2545534252305621,)</span>
+<span class="c1"># 7     uniform    0.241881  ...    14.1011                                       ()</span>
+<span class="c1"># 8       expon    0.353202  ...    6.99491                                       ()</span>
+<span class="c1"># 9      pareto    0.634924  ...    1.42095                    (0.5384782616155881,)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><strong>dist.distributions</strong> is a list containing the extracted <code class="docutils literal notranslate"><span class="pre">pdfs</span></code> from <code class="docutils literal notranslate"><span class="pre">scripy</span></code></dt><dd><p>The collected distributions.</p>
+</dd>
+<dt><strong>dist.model</strong> contains information regarding the best scoring <code class="docutils literal notranslate"><span class="pre">pdf</span></code>:</dt><dd><ul class="simple">
+<li><p>dist.model[‘RSS’]</p></li>
+<li><p>dist.model[‘name’]</p></li>
+<li><p>dist.model[‘distr’]</p></li>
+<li><p>dist.model[‘params’]</p></li>
+<li><p>dist.model[‘loc’]</p></li>
+<li><p>dist.model[‘scale’]</p></li>
+<li><p>dist.model[‘arg’]</p></li>
+</ul>
+</dd>
+</dl>
+</div>
 </div>
 </div>
 

@@ -93,7 +93,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Algorithm.html">Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#results">Results</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Save and Load.html">Save and Load</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
@@ -173,8 +172,8 @@
 <p>Compute best fit to your emperical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
 <dl class="py class">
 <dt id="distfit.distfit.distfit">
-<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">'popular'</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit theoretical distribution on emperical data, make predictions and plot.</p>
+<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">'popular'</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability density function fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), making plots, and hypothesis testing.</p>
 <p>Probability density fitting across 89 univariate distributions to
 non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
 <p class="rubric">Example</p>
@@ -360,7 +359,7 @@ for later usage in the <a class="reference internal" href="#distfit.distfit.dist
 <li><p><strong>model</strong> (<em>dict</em>) – dict containing keys with distribution parameters
 RSS : Residual Sum of Squares
 name : distribution name
-distribution : distribution function
+distr : distribution function
 params : all kind of parameters
 loc : loc function parameter
 scale : scale function parameter

@@ -4,74 +4,164 @@
 
 Performance
 '''''''''''
-
-To measure the goodness of fit we use various evaluation metrics to check the classification model’s performance.
-The performance scores can be derived in ``urldetect`` using in the function :func:`urldetect.plot`.
-
-The performance of the model can deviate based on the threshold being used but the theshold this will not affect the learning process :func:`urldetect.fit_transform`.
-After learning a model, and predicting new samples with it, each sample will get a probability belowing to the class. In case of our two-class approach the simple rule account: **P(class malicous) = 1-P(class normal)**
-The threshold is used on the probabilities to devide samples into the malicous or normal class.
+The performance of ``distfit`` can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf). 
 
 
-AUC
----
-
-The Area Under The Curve (AUC) and Receiver Operating Characteristics curve (ROC) are one of the most important evaluation metrics for checking any classification model’s performance. 
-In our case we designed a two-class model with URLs being **malicous** or not. The probability ranges between [0-1], and the threshold for classification is set at 0.5, where <0.5 is normal and >0.5 is malicous.
-This value can be tweaked to either reduce the number of False positives or True Negatives :func:`urldetect.plot`. 
-
-The goal of the AUC-ROC is to determine the probability curve and degree or measure of separability by using various thresholds settings.
-It describes *how much* the model is capable of distinguishing between the classes. The higher the AUC, the better the model is at predicting whereas a AUC of 0.5 represents *random* results.
-
-A perfect score would result in an AUC score=1 and ROC curve like this:
-
-.. _ROC_best:
-
-.. figure:: ../figs/ROC_best.png
-
-
-
-Confusion matrix
-----------------
-
-A confusion matrix is a table that is often used to describe the performance of a classification model (or “classifier”) 
-on a set of test data for which the true values are known. It allows the visualization of the performance of an algorithm.
-
-
-Kappa score
------------
-
-Cohen's kappa coefficient is a statistic that is used to measure inter-rated reliability for qualitative (categorical) items.
+Parameter fitting
+-----------------
+Lets evalute the performance of ``distfit`` of the detected parameters when we draw random samples from a normal (Gaussian) distribution with *mu*=0 and *std*=2. We would expect to find *mu* and *std* very close to the input values.
 
 .. code:: python
 
-    scoring = make_scorer(cohen_kappa_score, greater_is_better=True)
+    # Initialize model and specify distribution to be normal
+    X = np.random.normal(0, 2, 5000)
 
+For demonstration puprposes we pre-specify the ``normal`` distribution to find the best parameters. When we do that, as shown below, a *mean* or *loc* of **0.004** is detected and a standard deviation (scale) with **2.02** which is very close to our input parameters. 
 
-Probability graph
------------------
+.. code:: python
 
-The probability graph plots the probabilities of the samples being classified.
+    dist = distfit(distr='norm')
+    dist.fit_transform(X)
+    print(dist.model)
 
+    # {'distr': <scipy.stats._continuous_distns.norm_gen at 0x15d8406b208>,
+    #  'params': (0.00444619012906402, 2.0209991080448138),
+    #  'name': 'norm',
+    #  'RSS': 0.0021541850376229827,
+    #  'loc': 0.00444619012906402,
+    #  'scale': 2.0209991080448138,
+    #  'arg': (),
+    #  'CII_min_alpha': -3.319801522804139,
+    #  'CII_max_alpha': 3.328693903062266}
 
-Results
-'''''''
+.. code:: python
 
-The classification performance can be derived using the function :func:`urldetect.plot`. 
-Results for the malicous URLs, using a 5-fold crossvalidation with gridsearch is as follows:
+    dist.plot()
 
-.. _Figure_1:
+.. _gaus_mu_0:
 
-.. figure:: ../figs/Figure_1.png
+.. figure:: ../figs/gaus_mu_0.png
     :scale: 80%
 
-.. _Figure_2:
 
-.. figure:: ../figs/Figure_2.png
+Probability Density Function fitting
+-------------------------------------
+
+To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the emperical data to the model. 
+
+.. code:: python
+
+    dist = distfit()
+    dist.fit_transform(X)
+    print(dist.summary)
+
+    # 	distr         RSS  ...        scale                                     arg
+    # 0        norm  0.00215419  ...        2.021                                      ()
+    # 1           t  0.00215429  ...      2.02105                    (2734197.302263666,)
+    # 2       gamma  0.00216592  ...   0.00599666                   (113584.76147029496,)
+    # 3        beta  0.00220002  ...      39.4803  (46.39522231565038, 47.98055489856441)
+    # 4     lognorm  0.00226011  ...      139.173                 (0.014515926633415211,)
+    # 5  genextreme  0.00370334  ...      2.01326                   (0.2516817342848604,)
+    # 6    dweibull  0.00617939  ...        1.732                   (1.2681369071313497,)
+    # 7     uniform    0.244839  ...      14.3579                                      ()
+    # 8      pareto    0.358765  ...  2.40844e+08                   (31772216.567824945,)
+    # 9       expon    0.360553  ...      7.51848                                      ()
+
+The model detected ``normal`` as the **best** pdf but a good RSS score is also detected for the *t* and *gamma* distribution. But this is not unexpected to see. A summary plot of the evaluated pdfs looks a following:
+
+.. code:: python
+
+    dist.plot_summary()
+
+.. _gaus_mu_0_summary:
+
+.. figure:: ../figs/gaus_mu_0_summary.png
     :scale: 80%
 
-.. _Figure_3:
 
-.. figure:: ../figs/Figure_3.png
-    :scale: 80%
+Varying sample size
+--------------------
+The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the *mu*, *std* and detected distribution name.
+
+
+.. code:: python
+
+    # Create random data with varying number of samples
+    samples = np.arange(250, 10000, 250)
+
+    # Initialize model
+    distr='norm'
+    
+    # Estimate parameters for the number of samples
+    for s in samples:
+        print(s)
+        X = np.random.normal(0, 2, s)
+        dist.fit_transform(X, verbose=0)
+        out.append([dist.model['loc'], dist.model['scale'], dist.model['name'], s])
+
+When we plot the results, ``distfit`` nicely shows that by increasing the number of samples results in a better fit of the parameters. A convergence towards mu=2 and std=0 is clearly seen.
+
+
+.. |fig1| image:: ../figs/perf_sampling.png
+    :scale: 90%
+
+.. |fig2| image:: ../figs/perf_sampling_std.png
+    :scale: 90%
+
+.. table:: Sampling example
+   :align: center
+
+   +---------+---------+
+   | |fig1|  | |fig2|  |
+   +---------+---------+
+
+
+
+Smoothing window
+----------------
+If the number of samples is very low, it can be difficult to get a good fit on your data.
+A solution is to play with the ``bin`` size, eg. increase bin size. 
+Another manner is by smoothing the histogram with the ``smooth`` parameter. The default is set to ``None``.
+Lets evaluate the effect of this parameter.
+
+.. code:: python
+
+    # Generate data
+    X = np.random.normal(0, 2, 100)
+
+.. code:: python
+
+    # Fit model without smoothing
+    model = distfit()
+    model.fit_transform(X)
+    model.plot()
+
+    # Fit model with heavy smoothing
+    model = distfit(smooth=10)
+    model.fit_transform(X)
+    model.plot()
+
+
+.. |logo1| image:: ../figs/gaus_mu_0_100samples.png
+    :scale: 60%
+
+.. |logo2| image:: ../figs/gaus_mu_0_100samples_smooth10.png
+    :scale: 60%
+
+.. table:: Comparison smoothing parameter
+   :align: center
+
+   +---------+---------+
+   | |logo1| | |logo2| |
+   +---------+---------+
+
+
+Here we are going to combine the number of samples with the smoothing parameter.
+It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average *mu*.
+
+.. _perf_sampling_mu_smoothing:
+
+.. figure:: ../figs/perf_sampling_mu_smoothing.png
+    :scale: 70%
+
 

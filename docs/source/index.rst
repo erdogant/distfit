@@ -21,7 +21,7 @@ Content
 
 
 .. toctree::
-  :maxdepth: 1
+  :maxdepth: 3
   :caption: Methods
 
   Algorithm

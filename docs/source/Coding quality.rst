@@ -81,14 +81,14 @@ The following tests are secured using :func:`tests.test_distfit`:
 
 .. code-block:: bash
 
-====================================== test session starts ======================================
+	============================ test session starts ============================
 	platform win32 -- Python 3.7.7, pytest-5.4.1, py-1.8.1, pluggy-0.13.1
 	rootdir: d:\stack\PYTHON\REPOSITORIES\distfit
 	collected 1 item
 
-	tests\test_distfit.py .                                                                    [100%]
+	tests\test_distfit.py .                                  [100%]
 
-	======================================= warnings summary ========================================
+	============================ warnings summary ===============================
 	tests/test_distfit.py::test_distfit
 	tests/test_distfit.py::test_distfit
 	tests/test_distfit.py::test_distfit
@@ -96,6 +96,6 @@ The following tests are secured using :func:`tests.test_distfit`:
 	tests/test_distfit.py::test_distfit
 	tests/test_distfit.py::test_distfit
 
-	================================ 1 passed, 8 warnings in 15.59s =================================
+	====================== 1 passed, 8 warnings in 15.59s =======================
 
 
