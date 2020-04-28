@@ -20,7 +20,7 @@ warnings.filterwarnings('ignore')
 
 # Class dist
 class distfit():
-    """Fit theoretical distribution on emperical data, make predictions and plot.
+    """Probability density function fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), making plots, and hypothesis testing.
 
     Description
     -----------

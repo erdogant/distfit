@@ -12,8 +12,8 @@ distfit
 
 Description
 -----------
-Probability density fitting across 89 univariate distributions to non-censored 
-data by residual sum of squares (RSS), and hypothesis testing.
+Probability density function fitting across 89 univariate distributions to non-censored 
+data by residual sum of squares (RSS), making plots, and hypothesis testing.
 
 Example
 -------
