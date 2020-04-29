@@ -96,7 +96,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#distributions">Distributions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#residual-sum-of-squares-rss">Residual Sum of Squares (RSS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#goodness-of-fit">Goodness-of-fit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#predictions">Predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#probabilities-and-multiple-test-correction">Probabilities and multiple test correction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-parameters">Input parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#output-variables">Output variables</a></li>
 </ul>
 </li>
@@ -178,8 +179,8 @@
   <hr class="docutils" />
 <div class="section" id="algorithm">
 <h1>Algorithm<a class="headerlink" href="#algorithm" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library uses the goodness of fit test to determine the best probability distribution to the non-censored data. It works by comparing the observed frequency (<em>f</em>) to the expected frequency from the model (<em>f-hat</em>), and computing the residual sum of squares (RSS). Note that non-censored data is the <em>full dataset</em>, and not having any part deleted or suppressed as that can lead to biases.</p>
-<p>With <code class="docutils literal notranslate"><span class="pre">distfit</span></code> we can test up to 89 univariate distributions, derived from the <code class="docutils literal notranslate"><span class="pre">scipy</span></code> library, for which the best fitted distribution is returned with the loc, scale, arg parameters.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library uses the goodness of fit test to determine the best probability distribution to the non-censored data. It works by comparing the observed frequency (<em>f</em>) to the expected frequency from the model (<em>f-hat</em>), and computing the residual sum of squares (RSS). Note that non-censored data is the <em>full dataset</em>, and not having any part deleted or suppressed as that can lead to biases.
+With <code class="docutils literal notranslate"><span class="pre">distfit</span></code> we can test up to 89 univariate distributions, derived from the <code class="docutils literal notranslate"><span class="pre">scipy</span></code> library, for which the best fitted distribution is returned with the loc, scale, arg parameters.</p>
 <div class="section" id="distributions">
 <h2>Distributions<a class="headerlink" href="#distributions" title="Permalink to this headline">¶</a></h2>
 <p>The distributions to be tested can be specified at initialization using the <code class="docutils literal notranslate"><span class="pre">distr</span></code> parameter.
@@ -199,24 +200,153 @@ The distributions options are
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Popular set</dt><dd><ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">popular</span></code> set contains the following set of distributions and can be used as depicted below:</p></li>
-<li><p><strong>norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform</strong></p></li>
-</ul>
-</dd>
-</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">popular</span></code> set of PDFs contains the following set of distributions and can be used as depicted below:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>norm</p></td>
+<td><p>genextreme</p></td>
+</tr>
+<tr class="row-even"><td><p>expon</p></td>
+<td><p>gamma</p></td>
+</tr>
+<tr class="row-odd"><td><p>pareto</p></td>
+<td><p>lognorm</p></td>
+</tr>
+<tr class="row-even"><td><p>dweibull</p></td>
+<td><p>beta</p></td>
+</tr>
+<tr class="row-odd"><td><p>t</p></td>
+<td><p>uniform</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;popular&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Full set</dt><dd><ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">full</span></code> set contains the following set of distributions:</p></li>
-<li><p><strong>alpha, anglit, arcsine, beta, betaprime, bradford, burr, cauchy, chi, chi2, cosine, dgamma, dweibull, erlang, expon, exponnorm, exponweib, exponpow, f, fatiguelife, fisk, foldcauchy, foldnorm, frechet_r, frechet_l, genlogistic, genpareto, gennorm, genexpon, genextreme, gausshyper, gamma, gengamma, genhalflogistic, gilbrat, gompertz, gumbel_r, gumbel_l, halfcauchy, halflogistic, halfnorm, halfgennorm, hypsecant, invgamma, invgauss, invweibull, johnsonsb, johnsonsu, laplace, levy, levy_l, levy_stable, logistic, loggamma, loglaplace, lognorm, lomax, maxwell, mielke, nakagami, norm, pareto, pearson3, powerlaw, powerlognorm, powernorm, rdist, reciprocal, rayleigh, rice, recipinvgauss, semicircular, t, triang, truncexpon, truncnorm, tukeylambda, uniform, vonmises, vonmises_line, wald, weibull_min, weibull_max, wrapcauchy</strong></p></li>
-</ul>
-</dd>
-</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">full</span></code> set contains the following set of distributions:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+<col style="width: 23%" />
+<col style="width: 18%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>alpha</p></td>
+<td><p>betaprime</p></td>
+<td><p>chi2</p></td>
+<td><p>expon</p></td>
+<td><p>fatiguelife</p></td>
+</tr>
+<tr class="row-even"><td><p>anglit</p></td>
+<td><p>bradford</p></td>
+<td><p>cosine</p></td>
+<td><p>exponnorm</p></td>
+<td><p>fisk</p></td>
+</tr>
+<tr class="row-odd"><td><p>arcsine</p></td>
+<td><p>burr</p></td>
+<td><p>dgamma</p></td>
+<td><p>exponweib</p></td>
+<td><p>foldcauchy</p></td>
+</tr>
+<tr class="row-even"><td><p>arcsine</p></td>
+<td><p>cauchy</p></td>
+<td><p>dweibull</p></td>
+<td><p>exponpow</p></td>
+<td><p>foldnorm</p></td>
+</tr>
+<tr class="row-odd"><td><p>beta</p></td>
+<td><p>chi</p></td>
+<td><p>erlang</p></td>
+<td><p>f</p></td>
+<td><p>frechet_r</p></td>
+</tr>
+<tr class="row-even"><td><p>gilbrat</p></td>
+<td><p>gompertz</p></td>
+<td><p>gumbel_r</p></td>
+<td><p>gumbel_l</p></td>
+<td><p>halfcauchy</p></td>
+</tr>
+<tr class="row-odd"><td><p>halfgennorm</p></td>
+<td><p>hypsecant</p></td>
+<td><p>invgamma</p></td>
+<td><p>invgauss</p></td>
+<td><p>invweibull</p></td>
+</tr>
+<tr class="row-even"><td><p>laplace</p></td>
+<td><p>levy</p></td>
+<td><p>levy_l</p></td>
+<td><p>levy_stable</p></td>
+<td><p>logistic</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>lognorm</p></td>
+<td rowspan="2"><p>lomax</p></td>
+<td rowspan="2"><p>maxwell</p></td>
+<td rowspan="2"><p>mielke</p></td>
+<td rowspan="2"><p>nakagami</p></td>
+</tr>
+<tr class="row-even"></tr>
+<tr class="row-odd"><td><p>pearson3</p></td>
+<td><p>powerlaw</p></td>
+<td><p>powerlognorm</p></td>
+<td><p>powernorm</p></td>
+<td><p>rdist</p></td>
+</tr>
+<tr class="row-even"><td><p>rice</p></td>
+<td><p>recipinvgauss</p></td>
+<td><p>semicircular</p></td>
+<td><p>t</p></td>
+<td><p>triang</p></td>
+</tr>
+<tr class="row-odd"><td><p>tukeylambda</p></td>
+<td><p>uniform</p></td>
+<td><p>vonmises</p></td>
+<td><p>vonmises_line</p></td>
+<td><p>wald</p></td>
+</tr>
+<tr class="row-even"><td><p>wrapcauchy</p></td>
+<td><p>gengamma</p></td>
+<td><p>genlogistic</p></td>
+<td><p>frechet_l</p></td>
+<td><p>halfnorm</p></td>
+</tr>
+<tr class="row-odd"><td><p>genexpon</p></td>
+<td><p>genextreme</p></td>
+<td><p>gennorm</p></td>
+<td><p>gausshyper</p></td>
+<td><p>genpareto</p></td>
+</tr>
+<tr class="row-even"><td><p>gamma</p></td>
+<td><p>genhalflogistic</p></td>
+<td><p>halflogistic</p></td>
+<td><p>johnsonsb</p></td>
+<td><p>johnsonsu</p></td>
+</tr>
+<tr class="row-odd"><td><p>loggamma</p></td>
+<td><p>loglaplace</p></td>
+<td><p>norm</p></td>
+<td><p>pareto</p></td>
+<td><p>rayleigh</p></td>
+</tr>
+<tr class="row-even"><td><p>reciprocal</p></td>
+<td><p>truncexpon</p></td>
+<td><p>truncnorm</p></td>
+<td><p>weibull_min</p></td>
+<td><p>weibull_max</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select popular distributions</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
 </pre></div>
@@ -233,39 +363,133 @@ The distributions options are
 <h2>Goodness-of-fit<a class="headerlink" href="#goodness-of-fit" title="Permalink to this headline">¶</a></h2>
 <p>Besides <em>RSS</em>, there are various other approaches to determine the goodness-of-fit, such as the maximum likelihood estimation (mle), moment matching estimation (mme), quantile matching estimation (qme) or maximizing goodness-of-fit estimation (mge). <code class="docutils literal notranslate"><span class="pre">distfit</span></code> may be extended with more approaches in future versions.</p>
 </div>
-<div class="section" id="predictions">
-<h2>Predictions<a class="headerlink" href="#predictions" title="Permalink to this headline">¶</a></h2>
-<p>After making predictions using the predict function: <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit.predict" title="distfit.distfit.distfit.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit.predict()</span></code></a>, the following output variables are available. More information can be found under <strong>return</strong> in the docstring.</p>
-<dl>
-<dt><strong>dist.predict</strong></dt><dd><blockquote>
-<div><ul class="simple">
+<div class="section" id="probabilities-and-multiple-test-correction">
+<h2>Probabilities and multiple test correction<a class="headerlink" href="#probabilities-and-multiple-test-correction" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> function: <a class="reference internal" href="distfit.distfit.html#distfit.distfit.distfit.predict" title="distfit.distfit.distfit.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.distfit.distfit.predict()</span></code></a> will compute the probability of samples in the fitted <em>PDF</em>.
+Each probability will by default corrected for multiple testing. Multiple testing correction refers to re-calculating probabilities obtained from a statistical test which was repeated multiple times. In order to retain a prescribed family-wise error
+rate alpha in an analysis involving more than one comparison, the error rate for each comparison must be more stringent than alpha.
+Note that, due to multiple testing approaches, it can occur that samples can be located
+outside the confidence interval but not marked as significant. See section Algorithm -&gt; Multiple testing for more information.</p>
+<p>The following output variables are available. More information can be found under <strong>return</strong> in the docstring.</p>
+<dl class="simple">
+<dt>dist.predict</dt><dd><ul class="simple">
 <li><p>dist.y_proba</p></li>
 <li><p>dist.y_pred</p></li>
 <li><p>dist.df</p></li>
 <li><p>dist.summary</p></li>
 </ul>
-</div></blockquote>
-<dl class="simple">
-<dt>Praw<span class="classifier">list of float</span></dt><dd><p>Pvalues.</p>
-</dd>
-<dt>multtest<span class="classifier">str, default: ‘fdr_bh’</span></dt><dd><dl class="simple">
-<dt>Multiple testing method. Options are:</dt><dd><p>None : No multiple testing
-‘bonferroni’ : one-step correction
-‘sidak’ : one-step correction
-‘holm-sidak’ : step down method using Sidak adjustments
-‘holm’ : step-down method using Bonferroni adjustments
-‘simes-hochberg’ : step-up method  (independent)
-‘hommel’ : closed method based on Simes tests (non-negative)
-‘fdr_bh’ : Benjamini/Hochberg  (non-negative)
-‘fdr_by’ : Benjamini/Yekutieli (negative)
-‘fdr_tsbh’ : two stage fdr correction (non-negative)
-‘fdr_tsbky’ : two stage fdr correction (non-negative)</p>
 </dd>
 </dl>
-</dd>
-</dl>
-</dd>
-</dl>
+<p>The output variable <code class="docutils literal notranslate"><span class="pre">y_proba</span></code> is by default corrected for multiple testing using the false discovery rate (fdr).
+FDR-controlling procedures are designed to control the expected proportion of “discoveries” that are false.
+If desired, other multiple test method can be choosen, each with its own properties.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">multtest</span><span class="o">=</span><span class="s1">&#39;holm&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 76%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>None</p></td>
+<td><p>No multiple testing</p></td>
+</tr>
+<tr class="row-even"><td><p>bonferroni</p></td>
+<td><p>one-step correction</p></td>
+</tr>
+<tr class="row-odd"><td><p>sidak</p></td>
+<td><p>one-step correction</p></td>
+</tr>
+<tr class="row-even"><td><p>holm-sidak</p></td>
+<td><p>step down method using Sidak adjustments</p></td>
+</tr>
+<tr class="row-odd"><td><p>holm</p></td>
+<td><p>step-down method using Bonferroni adjustments</p></td>
+</tr>
+<tr class="row-even"><td><p>simes-hochberg</p></td>
+<td><p>step-up method  (independent)</p></td>
+</tr>
+<tr class="row-odd"><td><p>hommel</p></td>
+<td><p>closed method based on Simes tests (non-negative)</p></td>
+</tr>
+<tr class="row-even"><td><p>fdr_bh</p></td>
+<td><p>Benjamini/Hochberg  (non-negative)</p></td>
+</tr>
+<tr class="row-odd"><td><p>fdr_by</p></td>
+<td><p>Benjamini/Yekutieli (negative)</p></td>
+</tr>
+<tr class="row-even"><td><p>fdr_tsbh</p></td>
+<td><p>two stage fdr correction (non-negative)</p></td>
+</tr>
+<tr class="row-odd"><td><p>fdr_tsbky</p></td>
+<td><p>two stage fdr correction (non-negative)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="input-parameters">
+<h2>Input parameters<a class="headerlink" href="#input-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Various input parameters can be specified at initialization of <code class="docutils literal notranslate"><span class="pre">distfit</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 5%" />
+<col style="width: 21%" />
+<col style="width: 58%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Variable name</p></td>
+<td><p>type</p></td>
+<td><p>Default</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p>method</p></td>
+<td><p>str</p></td>
+<td><p>‘parametric’</p></td>
+<td><p>Specify the method type: ‘parametric’, ‘emperical’</p></td>
+</tr>
+<tr class="row-odd"><td><p>alpha</p></td>
+<td><p>float</p></td>
+<td><p>0.05</p></td>
+<td><p>Significance alpha.</p></td>
+</tr>
+<tr class="row-even"><td><p>multtest</p></td>
+<td><p>str</p></td>
+<td><p>‘fdr_bh’</p></td>
+<td><p>Multiple test correction method</p></td>
+</tr>
+<tr class="row-odd"><td><p>bins</p></td>
+<td><p>int</p></td>
+<td><p>50</p></td>
+<td><p>To determine the emperical historgram</p></td>
+</tr>
+<tr class="row-even"><td><p>bound</p></td>
+<td><p>int</p></td>
+<td><p>‘both’</p></td>
+<td><p>Directionality to test for significance
+Upper and lowerbounds: ‘both’
+Upperbounds: ‘up’, ‘high’, ‘right’
+Lowerbounds: ‘down’, ‘low’, ‘left’</p></td>
+</tr>
+<tr class="row-odd"><td><p>distr</p></td>
+<td><p>str</p></td>
+<td><p>‘popular’</p></td>
+<td><p>The (set) of distribution to test.
+‘popular’, ‘full’
+‘t’ : user specified
+‘norm’ : user specified
+etc</p></td>
+</tr>
+<tr class="row-even"><td><p>n_perm</p></td>
+<td><p>int</p></td>
+<td><p>10000</p></td>
+<td><p>Number of permutations to model
+null-distribution in case of method is ‘emperical’</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="output-variables">
 <h2>Output variables<a class="headerlink" href="#output-variables" title="Permalink to this headline">¶</a></h2>

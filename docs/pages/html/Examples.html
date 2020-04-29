@@ -202,9 +202,9 @@
 </div>
 <div class="section" id="make-predictions">
 <h2>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline">¶</a></h2>
-<p>Make some predictions can with the <code class="docutils literal notranslate"><span class="pre">predict</span></code> function.
-Due to multiple testing it can occur that samples are outside the boundary
-of the distribution confidence interval but are not marked as significant.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> function will compute the probability of samples in the fitted <em>PDF</em>.
+Note that, due to multiple testing approaches, it can occur that samples can be located
+outside the confidence interval but not marked as significant. See section Algorithm -&gt; Multiple testing for more information.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example data</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>

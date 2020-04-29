@@ -1,11 +1,10 @@
 .. _code_directive:
--------------------------------------
+--------------------
 
 Algorithm
 '''''''''
 
 The ``distfit`` library uses the goodness of fit test to determine the best probability distribution to the non-censored data. It works by comparing the observed frequency (*f*) to the expected frequency from the model (*f-hat*), and computing the residual sum of squares (RSS). Note that non-censored data is the *full dataset*, and not having any part deleted or suppressed as that can lead to biases.
-
 With ``distfit`` we can test up to 89 univariate distributions, derived from the ``scipy`` library, for which the best fitted distribution is returned with the loc, scale, arg parameters. 
 
 
@@ -30,19 +29,63 @@ Manually specifying
     # Set multiple distributions to test for
     dist = distfit(distr=['norm','t'])
 
-Popular set
-	* The ``popular`` set contains the following set of distributions and can be used as depicted below:
-	* **norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform**
+The ``popular`` set of PDFs contains the following set of distributions and can be used as depicted below:
+
+	+------------+------------+
+	| norm       | genextreme | 
+	+------------+------------+ 
+	| expon      | gamma      | 
+	+------------+------------+ 
+	| pareto     | lognorm    | 
+	+------------+------------+ 
+	| dweibull   | beta       | 
+	+------------+------------+ 
+	| t          | uniform    | 
+	+------------+------------+ 
 
 .. code:: python
 
     # Initialize model and select popular distributions
     dist = distfit(distr='popular')
 
+ 
+The ``full`` set contains the following set of distributions:
 
-Full set
-	* The ``full`` set contains the following set of distributions:
-	* **alpha, anglit, arcsine, beta, betaprime, bradford, burr, cauchy, chi, chi2, cosine, dgamma, dweibull, erlang, expon, exponnorm, exponweib, exponpow, f, fatiguelife, fisk, foldcauchy, foldnorm, frechet_r, frechet_l, genlogistic, genpareto, gennorm, genexpon, genextreme, gausshyper, gamma, gengamma, genhalflogistic, gilbrat, gompertz, gumbel_r, gumbel_l, halfcauchy, halflogistic, halfnorm, halfgennorm, hypsecant, invgamma, invgauss, invweibull, johnsonsb, johnsonsu, laplace, levy, levy_l, levy_stable, logistic, loggamma, loglaplace, lognorm, lomax, maxwell, mielke, nakagami, norm, pareto, pearson3, powerlaw, powerlognorm, powernorm, rdist, reciprocal, rayleigh, rice, recipinvgauss, semicircular, t, triang, truncexpon, truncnorm, tukeylambda, uniform, vonmises, vonmises_line, wald, weibull_min, weibull_max, wrapcauchy**
+	+------------+---------------+------------+---------------+------------+  
+	| alpha      | betaprime     | chi2       | expon         | fatiguelife|  
+	+------------+---------------+------------+---------------+------------+  
+	| anglit     | bradford      | cosine     | exponnorm     | fisk       |  
+	+------------+---------------+------------+---------------+------------+  
+	| arcsine    | burr          | dgamma     | exponweib     | foldcauchy |  
+	+------------+---------------+------------+---------------+------------+  
+	| arcsine    | cauchy        | dweibull   | exponpow      | foldnorm   |  
+	+------------+---------------+------------+---------------+------------+  
+	| beta       | chi           | erlang     | f             | frechet_r  |  
+	+------------+---------------+------------+---------------+------------+  
+	|gilbrat     | gompertz      | gumbel_r   | gumbel_l      | halfcauchy |
+	+------------+---------------+------------+---------------+------------+  
+	| halfgennorm| hypsecant     | invgamma   | invgauss      | invweibull |
+	+------------+---------------+------------+---------------+------------+  
+	| laplace    | levy          | levy_l     | levy_stable   | logistic   |
+	+------------+---------------+------------+---------------+------------+  
+	+ lognorm    | lomax         | maxwell    | mielke        | nakagami   |
+	+------------+---------------+------------+---------------+------------+  
+	| pearson3   | powerlaw      |powerlognorm| powernorm     | rdist      |
+	+------------+---------------+------------+---------------+------------+  
+	| rice       | recipinvgauss |semicircular| t             | triang     |
+	+------------+---------------+------------+---------------+------------+  
+	|tukeylambda | uniform       | vonmises   | vonmises_line | wald       |
+	+------------+---------------+------------+---------------+------------+  
+	| wrapcauchy | gengamma      |genlogistic | frechet_l     | halfnorm   |
+	+------------+---------------+------------+---------------+------------+  
+	| genexpon   | genextreme    | gennorm    | gausshyper    | genpareto  | 
+	+------------+---------------+------------+---------------+------------+
+	| gamma      |genhalflogistic|halflogistic| johnsonsb     | johnsonsu  |
+	+------------+---------------+------------+---------------+------------+
+	| loggamma   | loglaplace    | norm       | pareto        | rayleigh   |
+	+------------+---------------+------------+---------------+------------+
+	| reciprocal | truncexpon    | truncnorm  | weibull_min   | weibull_max|
+	+------------+---------------+------------+---------------+------------+
 
 .. code:: python
 
@@ -65,34 +108,87 @@ Besides *RSS*, there are various other approaches to determine the goodness-of-f
 
 
 
-Predictions
-------------
+Probabilities and multiple test correction
+-------------------------------------------
 
-After making predictions using the predict function: :func:`distfit.distfit.distfit.predict`, the following output variables are available. More information can be found under **return** in the docstring.
+The ``predict`` function: :func:`distfit.distfit.distfit.predict` will compute the probability of samples in the fitted *PDF*. 
+Each probability will by default corrected for multiple testing. Multiple testing correction refers to re-calculating probabilities obtained from a statistical test which was repeated multiple times. In order to retain a prescribed family-wise error 
+rate alpha in an analysis involving more than one comparison, the error rate for each comparison must be more stringent than alpha.
+Note that, due to multiple testing approaches, it can occur that samples can be located 
+outside the confidence interval but not marked as significant. See section Algorithm -> Multiple testing for more information.
 
-**dist.predict**
+The following output variables are available. More information can be found under **return** in the docstring.
+
+dist.predict
 	* dist.y_proba
 	* dist.y_pred
 	* dist.df
 	* dist.summary
 
+The output variable ``y_proba`` is by default corrected for multiple testing using the false discovery rate (fdr).
+FDR-controlling procedures are designed to control the expected proportion of "discoveries" that are false.
+If desired, other multiple test method can be choosen, each with its own properties.
 
-    Praw : list of float
-        Pvalues.
-    multtest : str, default: 'fdr_bh'
-        Multiple testing method. Options are:
-            None : No multiple testing
-            'bonferroni' : one-step correction
-            'sidak' : one-step correction
-            'holm-sidak' : step down method using Sidak adjustments
-            'holm' : step-down method using Bonferroni adjustments
-            'simes-hochberg' : step-up method  (independent)
-            'hommel' : closed method based on Simes tests (non-negative)
-            'fdr_bh' : Benjamini/Hochberg  (non-negative)
-            'fdr_by' : Benjamini/Yekutieli (negative)
-            'fdr_tsbh' : two stage fdr correction (non-negative)
-            'fdr_tsbky' : two stage fdr correction (non-negative)
+.. code:: python
 
+    # Initialize
+    dist = distfit(multtest='holm', alpha=0.01)
+
+
++----------------+---------------------------------------------------+
+| None           | No multiple testing                               |
++----------------+---------------------------------------------------+
+| bonferroni     | one-step correction                               |
++----------------+---------------------------------------------------+
+| sidak          | one-step correction                               |
++----------------+---------------------------------------------------+
+| holm-sidak     | step down method using Sidak adjustments          |
++----------------+---------------------------------------------------+
+|holm            | step-down method using Bonferroni adjustments     |
++----------------+---------------------------------------------------+
+|simes-hochberg  | step-up method  (independent)                     |
++----------------+---------------------------------------------------+
+|hommel          | closed method based on Simes tests (non-negative) |
++----------------+---------------------------------------------------+
+|fdr_bh          | Benjamini/Hochberg  (non-negative)                |
++----------------+---------------------------------------------------+
+|fdr_by          | Benjamini/Yekutieli (negative)                    |
++----------------+---------------------------------------------------+
+|fdr_tsbh        | two stage fdr correction (non-negative)           |
++----------------+---------------------------------------------------+
+|fdr_tsbky       | two stage fdr correction (non-negative)           |
++----------------+---------------------------------------------------+
+
+
+Input parameters
+-----------------
+Various input parameters can be specified at initialization of ``distfit``.
+
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| Variable name   | type| Default               | Description                                                   |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| method          | str | 'parametric'          | Specify the method type: 'parametric', 'emperical'            |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| alpha           |float| 0.05                  | Significance alpha.                                           |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| multtest        | str | 'fdr_bh'              | Multiple test correction method                               |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| bins            | int | 50                    | To determine the emperical historgram                         |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| bound           | int | 'both'                | Directionality to test for significance                       |
+|                 |     |                       | Upper and lowerbounds: 'both'                                 |
+|                 |     |                       | Upperbounds: 'up', 'high', 'right'                            |
+|                 |     |                       | Lowerbounds: 'down', 'low', 'left'                            |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| distr           | str | 'popular'             | The (set) of distribution to test.                            |
+|                 |     |                       | 'popular', 'full'                                             |
+|                 |     |                       | 't' : user specified                                          |
+|                 |     |                       | 'norm' : user specified                                       |
+|                 |     |                       | etc                                                           |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
+| n_perm          | int | 10000                 | Number of permutations to model                               |
+|                 |     |                       | null-distribution in case of method is 'emperical'            |
++-----------------+-----+-----------------------+---------------------------------------------------------------+
 
 
 Output variables

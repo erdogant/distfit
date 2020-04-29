@@ -37,9 +37,9 @@ Fit distribution
 Make predictions
 --------------------------------------------------
 
-Make some predictions can with the ``predict`` function. 
-Due to multiple testing it can occur that samples are outside the boundary 
-of the distribution confidence interval but are not marked as significant.
+The ``predict`` function will compute the probability of samples in the fitted *PDF*. 
+Note that, due to multiple testing approaches, it can occur that samples can be located 
+outside the confidence interval but not marked as significant. See section Algorithm -> Multiple testing for more information.
 
 .. code:: python
 
