@@ -1,7 +1,7 @@
 distfit's documentation!
 ========================
 
-``distfit`` is python package for probability density functions of univariate distributions on non-censored data by residual sum of squares (RSS). ``distfit`` determines the best fit across 89 theoretical distributions. The best fitted theoretical distribution is returned with the loc, scale, arg parameters. New data-points can then be assed for significance on the detected distribution.
+``distfit`` is python package for probability density fitting of univariate distributions on non-censored data. With the Residual Sum of Squares (RSS) we determine the best fit across 89 theoretical distributions for which the best fitted theoretical distribution is returned with the loc, scale, arg parameters. The probability of new data-points can then be assed for significance.
 
 Content
 =======
