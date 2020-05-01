@@ -65,8 +65,7 @@ for smooth in smooth_window:
         X = np.random.normal(0, 2, s)
         dist.fit_transform(X, verbose=0)
         out.append([dist.model['loc'], dist.model['scale'], dist.model['name'], np.where(dist.summary['distr']=='norm')[0][0], s])
-    
-    
+
     df=pd.DataFrame(out, columns=['std','mu','name','norm_place','samples'])
     ax=df['mu'].plot(grid=True, label='smooth: '+str(smooth) + ' - ' + str(df['mu'].mean()))
 
