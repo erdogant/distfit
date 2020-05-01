@@ -9,16 +9,17 @@
 
 
 # %% Libraries
+import distfit.utils.picklefast as picklefast
+from distfit.utils.smoothline import smoothline
+
 import warnings
+warnings.filterwarnings('ignore')
+import scipy.stats as st
+
 import numpy as np
 import pandas as pd
-import distfit.utils.picklefast as pf
 import statsmodels.stats.multitest as multitest
-import scipy.stats as st
-from scipy.interpolate import make_interp_spline
 import matplotlib.pyplot as plt
-warnings.filterwarnings('ignore')
-
 
 # Class dist
 class distfit():
@@ -173,7 +174,7 @@ class distfit():
         if self.method=='parametric':
             # Get histogram of original X
             [X_bins, y_obs] = _get_hist_params(X, self.bins)
-            [X_bins, y_obs] = _make_smooth_line(X_bins, y_obs, window=self.smooth, verbose=verbose)
+            [X_bins, y_obs] = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
             # Compute best distribution fit on the emperical X
             out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, verbose=verbose)
             # Determine confidence intervals on the best fitting distribution
@@ -253,7 +254,7 @@ class distfit():
             raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
 
     # Plot
-    def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+    def plot(self, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
         """Make plot.
 
         Parameters
@@ -274,7 +275,7 @@ class distfit():
         tuple (fig, ax)
 
         """
-        if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: A model needs to be fitted first. Try fit_transform(X)')
+        if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
@@ -348,7 +349,7 @@ class distfit():
         Returns
         -------
         object
-        
+
         """
         args = ['alpha','bins','bound','df','distr','distributions','histdata','method','model','multtest','n_perm','size','smooth','summary','y_pred']
         out={}
@@ -370,7 +371,7 @@ class distfit():
                 if arg=='summary': out.update({arg : self.summary})
                 if arg=='y_pred': out.update({arg : self.y_pred})
 
-        status = pf.save(filepath, out, verbose=verbose)
+        status = picklefast.save(filepath, out, verbose=verbose)
         if verbose>=3: print('[distfit] >Saving.. %s' %(status))
 
     # Load model.
@@ -389,7 +390,7 @@ class distfit():
         Object.
 
         """
-        out = pf.load(filepath, verbose=verbose)
+        out = picklefast.load(filepath, verbose=verbose)
         # Store all in object
         if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
         if out.get('summary', None) is not None: self.summary = out['summary']
@@ -650,7 +651,7 @@ def _format_data(data):
 # Get the distributions based on user input
 def _get_distributions(distr):
     out_distr=[]
-    
+
     # Get specified list of distributions
     if isinstance(distr, list):
         for getdistr in distr:
@@ -839,32 +840,3 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
 
     Padj = np.clip(Padj, 0, 1)
     return(Padj)
-
-
-def _make_smooth_line(xs, ys, window=1, verbose=3):
-    if window is not None:
-        if verbose>=3: print('[distfit] >Smoothing histogram by interpolation..')
-        # Specify number of points to interpolate the data
-        nr_interpol=1
-        # Interpolate xs line
-        extpoints = np.linspace(0, len(xs), len(xs) * nr_interpol)
-        spl = make_interp_spline(range(0, len(xs)), xs, k=3)
-        xnew = spl(extpoints)
-        xnew[window:-window]
-
-        # First smoothing on the raw input data
-        ys=_smooth(ys,window)
-        # Interpolate ys line
-        spl = make_interp_spline(range(0, len(ys)), ys, k=3)
-        ynew = spl(extpoints)
-        ynew[window:-window]
-
-    else:
-        xnew, ynew = xs, ys
-    return xnew, ynew
-
-
-def _smooth(y, window):
-    box = np.ones(window) / window
-    y_smooth = np.convolve(y, box, mode='same')
-    return y_smooth

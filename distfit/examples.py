@@ -15,27 +15,26 @@ print(distfit.__version__)
 from distfit import distfit
 print(dir(distfit))
 
-
 #%%
 
 X = np.random.normal(0, 2, 5000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
-model = distfit()
-model.fit_transform(X)
-model.plot()
+dist = distfit()
+dist.fit_transform(X)
+dist.plot()
 
 # Make prediction
-model.predict(y)
+dist.predict(y)
 
 # plot
-model.plot()
-model.plot_summary()
+dist.plot()
+dist.plot_summary()
 
 # Save
-model.save(filepath='c:\\temp\\model.pkl')
+dist.save(filepath='c:\\temp\\model.pkl')
 # Load
-model.load(filepath='c:\\temp\\model.pkl')
+dist.load(filepath='c:\\temp\\model.pkl')
 
 
 # %%
