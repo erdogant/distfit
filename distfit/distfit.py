@@ -686,10 +686,19 @@ def _get_distributions(distr):
 
 
 # Get histogram of original data
-def _get_hist_params(data, bins):
-    [y_obs, X] = np.histogram(data, bins=bins, density=True)
-    X = (X + np.roll(X, -1))[:-1] / 2.0
-    return(X, y_obs)
+def _get_hist_params(X, bins, mhist='numpy'):
+    if mhist=='numpy':
+        [histvals, binedges] = np.histogram(X, bins=bins, density=True)
+        binedges = (binedges + np.roll(binedges, -1))[:-1] / 2.0
+        # binedges[-1] += 10**-6
+    else:
+        import seaborn as sns
+        snsout = sns.distplot(X, bins=bins, norm_hist=False).get_lines()[0].get_data()
+        histvals = snsout[1]
+        binedges = snsout[0]
+        binedges = np.append(binedges,10**-6)
+
+    return(binedges, histvals)
 
 
 # Compute score for each distribution
