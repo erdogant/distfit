@@ -13,6 +13,8 @@ Lets evalute the performance of ``distfit`` of the detected parameters when we d
 
 .. code:: python
 
+    from distfit import distfit
+    import numpy as np
     # Initialize model and specify distribution to be normal
     X = np.random.normal(0, 2, 5000)
 

@@ -17,6 +17,8 @@ Saving a learned model can be done using the function :func:`distfit.save`:
 
 .. code:: python
 
+    from distfit import distfit
+    import numpy as np
     # Example data
     X = np.random.normal(0, 2, 5000)
     y = [-8,-6,0,1,2,3,4,5,6]

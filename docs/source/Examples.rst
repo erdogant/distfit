@@ -9,6 +9,8 @@ Fit distribution
 --------------------------------------------------
 
 .. code:: python
+    from distfit import distfit
+    import numpy as np
 
     # Example data
     X = np.random.normal(10, 3, 2000)

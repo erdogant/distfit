@@ -89,7 +89,7 @@ The ``full`` set contains the following set of distributions:
 
 .. code:: python
 
-    # Initialize model and select popular distributions
+    # Initialize model and select all distributions
     dist = distfit(distr='full')
 
 
@@ -112,10 +112,8 @@ Probabilities and multiple test correction
 -------------------------------------------
 
 The ``predict`` function: :func:`distfit.distfit.distfit.predict` will compute the probability of samples in the fitted *PDF*. 
-Each probability will by default corrected for multiple testing. Multiple testing correction refers to re-calculating probabilities obtained from a statistical test which was repeated multiple times. In order to retain a prescribed family-wise error 
-rate alpha in an analysis involving more than one comparison, the error rate for each comparison must be more stringent than alpha.
-Note that, due to multiple testing approaches, it can occur that samples can be located 
-outside the confidence interval but not marked as significant. See section Algorithm -> Multiple testing for more information.
+Each probability will by default be corrected for multiple testing. Multiple testing correction refers to re-calculating probabilities obtained from a statistical test which was repeated multiple times. In order to retain a prescribed family-wise error rate alpha in an analysis involving more than one comparison, the error rate for each comparison must be more stringent than alpha.
+Note that, due to multiple testing approaches, it can occur that samples can be located outside the confidence interval but not marked as significant. See section Algorithm -> Multiple testing for more information.
 
 The following output variables are available. More information can be found under **return** in the docstring.
 
@@ -127,7 +125,7 @@ dist.predict
 
 The output variable ``y_proba`` is by default corrected for multiple testing using the false discovery rate (fdr).
 FDR-controlling procedures are designed to control the expected proportion of "discoveries" that are false.
-If desired, other multiple test method can be choosen, each with its own properties.
+If desired, other multiple test methods can be choosen, each with its own properties.
 
 .. code:: python
 
@@ -162,7 +160,7 @@ If desired, other multiple test method can be choosen, each with its own propert
 
 Input parameters
 -----------------
-Various input parameters can be specified at initialization of ``distfit``.
+Various input parameters can be specified at the initialization of ``distfit``.
 
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 | Variable name   | type| Default               | Description                                                   |
