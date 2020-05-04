@@ -135,13 +135,13 @@ class distfit():
             Residual Sum of Squares approach (RSS) for the specified distributions. Based on
             the best distribution-fit, the confidence intervals (CII) can be determined
             for later usage in the :func:`predict` function.
-        **Emperical**
+        **emperical**
             In the emperical case, the data is ranked and the top/lower quantiles are determined.
 
         Parameters
         ----------
         X : array-like
-            The Null distribution or background data is build form X.
+            The Null distribution or background data is build from X.
         verbose : int [1-5], default: 3
             Print information to screen. A higher number will print more.
 
@@ -212,13 +212,13 @@ class distfit():
         self.transform(X, verbose=verbose)
 
     def predict(self, y, verbose=3):
-        """Compute Probability for response variables y, using the specified method.
+        """Compute probability for response variables y, using the specified method.
 
         Description
         -----------
-        Computes P-values for [y] based on the fited distribution from X.
+        Computes P-values for [y] based on the fitted distribution from X.
         The emperical distribution of X is used to estimate the loc/scale/arg parameters for a
-        theoretical distirbution in case method type is ``parametric``.
+        theoretical distribution in case method type is ``parametric``.
 
         Parameters
         ----------
@@ -381,9 +381,9 @@ class distfit():
         Parameters
         ----------
         filepath : str
-            Pathname to store pickle files.
+            Pathname to stored pickle files.
         verbose : int, optional
-            Show message. A higher number gives more informatie. The default is 3.
+            Show message. A higher number gives more information. The default is 3.
 
         Returns
         -------
@@ -467,7 +467,7 @@ def _predict_emperical(self, y, verbose=3):
 
     Description
     -----------
-    Suppose you have 2 data sets from unknown distribution and you want to test
+    Suppose you have 2 data sets with a unknown distribution and you want to test
     if some arbitrary statistic (e.g 7th percentile) is the same in the 2 data sets.
     An appropirate test statistic is the difference between the 7th percentile,
     and if we knew the null distribution of this statisic, we could test for the
@@ -483,13 +483,13 @@ def _predict_emperical(self, y, verbose=3):
     Praw = np.ones_like(y) * np.nan
 
     # Compute statistics for y based on emperical distribution
-    for i in range(0,len(y)):
+    for i in range(0, len(y)):
         getstat = np.percentile(y[i], 7) - self.percentile
         getP = (2 * np.sum(self.model['samples'] >= np.abs(getstat)) / self.n_perm)
-        getP = np.clip(getP,0,1)
+        getP = np.clip(getP, 0, 1)
         Praw[i] = getP
         teststat[i] = getstat
-        if verbose>=4: print("[%.0f] - p-value = %f" %(y[i], getP))
+        if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getP))
 
     # Predict
     y_pred = np.repeat('none', len(y))
