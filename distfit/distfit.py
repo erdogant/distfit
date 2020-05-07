@@ -63,6 +63,8 @@ class distfit():
         The (set) of distribution to test. A set of distributions can be tested by:
         'popular', 'full', or specify the theoretical distribution: 'norm', 't'.
         See docs for more information about 'popular' and 'full'.
+    smooth : int, default: None
+        Smoothing the histogram can help to get a better fit when there are only few samples available.
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "emperical"
 
@@ -108,8 +110,8 @@ class distfit():
 
         Returns
         -------
-        object.
-        distributions : functions
+        Object.
+        self.distributions : functions
             list of functions containing distributions.
 
         """
@@ -147,7 +149,7 @@ class distfit():
 
         Returns
         -------
-        object.
+        Object.
         model : dict
             dict containing keys with distribution parameters
             RSS : Residual Sum of Squares
@@ -548,6 +550,7 @@ def _plot_emperical(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbo
     ax.set_ylabel('Frequency')
     ax.set_title(title)
     ax.legend()
+    plt.show()
 
     return fig, ax
 
@@ -632,6 +635,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
 
     ax.legend()
     ax.grid(True)
+    plt.show()
 
     if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return (fig, ax)
