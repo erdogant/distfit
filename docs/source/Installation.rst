@@ -11,6 +11,7 @@ A quick example how to learn a model on a given dataset.
 .. code:: python
 
     from distfit import distfit
+    import numpy as np
 
     X = np.random.normal(0, 2, 1000)
     y = [-8,-6,0,1,2,3,4,5,6]
