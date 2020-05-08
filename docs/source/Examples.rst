@@ -14,14 +14,17 @@ Fit distribution
     X = np.random.normal(10, 3, 2000)
     y = [3,4,5,6,10,11,12,18,20]
 
+    # From the distfit library import the class distfit
+    from distfit import distfit
+
     # Initialize
     dist = distfit()
+
+    # Search for best theoretical fit on your emperical data
     dist.fit_transform(X)
 
-    # Make prediction
-    dist.predict(y)
-
-
+    # Plot
+    dist.plot()
 
 .. |fig1a| image:: ../figs/example_fig1a.png
     :scale: 80%
@@ -47,12 +50,20 @@ outside the confidence interval but not marked as significant. See section Algor
     X = np.random.normal(10, 3, 2000)
     y = [3,4,5,6,10,11,12,18,20]
 
+    # From the distfit library import the class distfit
+    from distfit import distfit
+
     # Initialize
-    dist = distfit(distr='full', alpha=0.01)
+    dist = distfit()
+
+    # Search for best theoretical fit on your emperical data
     dist.fit_transform(X)
 
-    # Make prediction
+    # Make prediction on new datapoints based on the fit
     dist.predict(y)
+
+    # The plot function will now also include the predictions of y
+    dist.plot()
 
 .. |fig1b| image:: ../figs/example_fig1b.png
     :scale: 80%
