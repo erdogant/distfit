@@ -100,7 +100,9 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fit-distribution">Fit distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specify-distribution">Specify distribution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#make-predictions">Make predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extract-results">Extract results</a></li>
 </ul>
 </li>
 </ul>
@@ -177,16 +179,25 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="fit-distribution">
 <h2>Fit distribution<a class="headerlink" href="#fit-distribution" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example data</span>
+<p>Specify distfit parameters. In this example nothing is specied and that means that all parameters are set to default.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Example data</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
 
+<span class="c1"># From the distfit library import the class distfit</span>
+<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+
 <span class="c1"># Initialize</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+
+<span class="c1"># Search for best theoretical fit on your emperical data</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Make prediction</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="c1"># Plot</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id1">
@@ -199,6 +210,35 @@
 </tr>
 </tbody>
 </table>
+<p>Note that the best fit should be [normal], as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see gamma and beta distribution as these are the “barba-pappas” among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plot</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils align-center" id="id2">
+<caption><span class="caption-text">Summary of fitted theoretical Distributions</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/fig1_summary.png"><img alt="fig1summary" src="_images/fig1_summary.png" style="width: 710.4000000000001px; height: 425.6px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="specify-distribution">
+<h2>Specify distribution<a class="headerlink" href="#specify-distribution" title="Permalink to this headline">¶</a></h2>
+<p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># [distfit] &gt;fit..</span>
+<span class="c1"># [distfit] &gt;transform..</span>
+<span class="c1"># [distfit] &gt;[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]</span>
+
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="make-predictions">
 <h2>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline">¶</a></h2>
@@ -209,16 +249,24 @@ outside the confidence interval but not marked as significant. See section Algor
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
 
+<span class="c1"># From the distfit library import the class distfit</span>
+<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+
 <span class="c1"># Initialize</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+
+<span class="c1"># Search for best theoretical fit on your emperical data</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Make prediction</span>
+<span class="c1"># Make prediction on new datapoints based on the fit</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># The plot function will now also include the predictions of y</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<table class="docutils align-center" id="id2">
-<caption><span class="caption-text">Plot distribution with predictions</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-center" id="id3">
+<caption><span class="caption-text">Plot distribution with predictions</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 100%" />
 </colgroup>
@@ -227,6 +275,39 @@ outside the confidence interval but not marked as significant. See section Algor
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="extract-results">
+<h2>Extract results<a class="headerlink" href="#extract-results" title="Permalink to this headline">¶</a></h2>
+<p>All the results are stored in the object. In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
+The results of the prediction are stored in y_proba and y_pred.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># All scores of the tested distributions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+
+<span class="c1"># Distribution parameters for best fit</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">model</span>
+
+<span class="c1"># Show the predictions for y</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">y_pred</span><span class="p">)</span>
+<span class="c1"># [&#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39; &#39;up&#39;]</span>
+
+<span class="c1"># Show the probabilities for y that belong with the predictions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">y_proba</span><span class="p">)</span>
+<span class="c1"># [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]</span>
+
+<span class="c1"># All predicted information is also stored in a structured dataframe</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<span class="c1">#    y   y_proba y_pred         P</span>
+<span class="c1"># 0 -8  0.000028   down  0.000003</span>
+<span class="c1"># 1 -6  0.002747   down  0.000610</span>
+<span class="c1"># 2  0  0.474740   none  0.474740</span>
+<span class="c1"># 3  1  0.328637   none  0.292122</span>
+<span class="c1"># 4  2  0.199195   none  0.154929</span>
+<span class="c1"># 5  3  0.106316   none  0.070877</span>
+<span class="c1"># 6  4  0.050591     up  0.028106</span>
+<span class="c1"># 7  5  0.021892     up  0.009730</span>
+<span class="c1"># 8  6  0.008893     up  0.002964</span>
+</pre></div>
+</div>
 </div>
 </div>
 

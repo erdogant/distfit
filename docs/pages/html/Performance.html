@@ -181,7 +181,9 @@
 <div class="section" id="parameter-fitting">
 <h2>Parameter fitting<a class="headerlink" href="#parameter-fitting" title="Permalink to this headline">¶</a></h2>
 <p>Lets evalute the performance of <code class="docutils literal notranslate"><span class="pre">distfit</span></code> of the detected parameters when we draw random samples from a normal (Gaussian) distribution with <em>mu*=0 and *std*=2. We would expect to find *mu</em> and <em>std</em> very close to the input values.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and specify distribution to be normal</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># Initialize model and specify distribution to be normal</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
 </pre></div>
 </div>

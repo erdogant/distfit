@@ -204,6 +204,7 @@ Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down
 <li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
 ‘popular’, ‘full’, or specify the theoretical distribution: ‘norm’, ‘t’.
 See docs for more information about ‘popular’ and ‘full’.</p></li>
+<li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.</p></li>
 <li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “emperical”</p></li>
 </ul>
 </dd>
@@ -230,8 +231,8 @@ See docs for more information about ‘popular’ and ‘full’.</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><em>object.</em></p></li>
-<li><p><strong>distributions</strong> (<em>functions</em>) – list of functions containing distributions.</p></li>
+<li><p><em>Object.</em></p></li>
+<li><p><strong>self.distributions</strong> (<em>functions</em>) – list of functions containing distributions.</p></li>
 </ul>
 </p>
 </dd>
@@ -265,8 +266,8 @@ See docs for more information about ‘popular’ and ‘full’.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>str</em>) – Pathname to store pickle files.</p></li>
-<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Show message. A higher number gives more informatie. The default is 3.</p></li>
+<li><p><strong>filepath</strong> (<em>str</em>) – Pathname to stored pickle files.</p></li>
+<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Show message. A higher number gives more information. The default is 3.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -326,10 +327,10 @@ See docs for more information about ‘popular’ and ‘full’.</p></li>
 <dl class="py method">
 <dt id="distfit.distfit.distfit.predict">
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute Probability for response variables y, using the specified method.</p>
-<p>Computes P-values for [y] based on the fited distribution from X.
+<dd><p>Compute probability for response variables y, using the specified method.</p>
+<p>Computes P-values for [y] based on the fitted distribution from X.
 The emperical distribution of X is used to estimate the loc/scale/arg parameters for a
-theoretical distirbution in case method type is <code class="docutils literal notranslate"><span class="pre">parametric</span></code>.</p>
+theoretical distribution in case method type is <code class="docutils literal notranslate"><span class="pre">parametric</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -381,19 +382,19 @@ Residual Sum of Squares approach (RSS) for the specified distributions. Based on
 the best distribution-fit, the confidence intervals (CII) can be determined
 for later usage in the <a class="reference internal" href="#distfit.distfit.distfit.predict" title="distfit.distfit.distfit.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a> function.</p>
 </dd>
-<dt><strong>Emperical</strong></dt><dd><p>In the emperical case, the data is ranked and the top/lower quantiles are determined.</p>
+<dt><strong>emperical</strong></dt><dd><p>In the emperical case, the data is ranked and the top/lower quantiles are determined.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>array-like</em>) – The Null distribution or background data is build form X.</p></li>
+<li><p><strong>X</strong> (<em>array-like</em>) – The Null distribution or background data is build from X.</p></li>
 <li><p><strong>verbose</strong> (<em>int</em><em> [</em><em>1-5</em><em>]</em><em>, </em><em>default: 3</em>) – Print information to screen. A higher number will print more.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><em>object.</em></p></li>
+<li><p><em>Object.</em></p></li>
 <li><p><strong>model</strong> (<em>dict</em>) – dict containing keys with distribution parameters
 RSS : Residual Sum of Squares
 name : distribution name
