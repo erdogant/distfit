@@ -4,7 +4,7 @@
 [![PyPI Version](https://img.shields.io/pypi/v/distfit)](https://pypi.org/project/distfit/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/distfit/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit/month)
-[![Downloads](https://pepy.tech/badge/distfit/)](https://pepy.tech/project/distfit/)
+[![Downloads](https://pepy.tech/badge/distfit)](https://pepy.tech/project/distfit)
 [![Sphinx](https://img.shields.io/badge/Sphinx-Docs-blue)](https://erdogant.github.io/distfit/)
 
 ### Background
