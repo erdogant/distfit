@@ -267,11 +267,13 @@ class distfit():
         if verbose>=3: print('[distfit] >predict..')
 
         if self.method=='parametric':
-            _predict_parametric(self, y, verbose=verbose)
+            out = _predict_parametric(self, y, verbose=verbose)
         elif self.method=='emperical':
-            _predict_emperical(self, y, verbose=verbose)
+            out = _predict_emperical(self, y, verbose=verbose)
         else:
             raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+        # Return
+        return out
 
     # Plot
     def plot(self, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
@@ -499,6 +501,11 @@ def _predict_parametric(self, y, verbose=3):
     self.df = df
     self.y_proba = y_proba
     self.y_pred = y_pred
+    out = {}
+    out['df'] = df
+    out['y_proba'] = y_proba
+    out['y_pred'] = y_pred
+    return out
 
 
 # Emperical test
@@ -554,6 +561,11 @@ def _predict_emperical(self, y, verbose=3):
     self.df = df
     self.y_proba = y_proba
     self.y_pred = y_pred
+    out = {}
+    out['df'] = df
+    out['y_proba'] = y_proba
+    out['y_pred'] = y_pred
+    return out
 
 
 # Plot

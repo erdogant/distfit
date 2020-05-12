@@ -25,11 +25,11 @@ X = np.random.normal(0, 2, 5000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
 dist = distfit()
-result = dist.fit_transform(X)
+model = dist.fit_transform(X)
 dist.plot()
 
 # Make prediction
-dist.predict(y)
+results = dist.predict(y)
 
 # plot
 dist.plot()
@@ -39,6 +39,8 @@ dist.plot_summary()
 dist.save(filepath='c:\\temp\\model.pkl')
 # Load
 dist.load(filepath='c:\\temp\\model.pkl')
+
+# Store entire object
 
 
 # %%
