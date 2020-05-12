@@ -8,24 +8,24 @@
 
 import numpy as np
 import distfit as distfit
-print(distfit.__version__)
+# print(distfit.__version__)
 
 
 # %% Import class
 from distfit import distfit
-print(dir(distfit))
+# print(dir(distfit))
 
 # %%
-from sklearn.datasets.samples_generator import make_blobs
-[data, labels_true] = make_blobs(n_samples=10000, centers=3, n_features=1, cluster_std=0.3, random_state=0)
+# from sklearn.datasets.samples_generator import make_blobs
+# [data, labels_true] = make_blobs(n_samples=10000, centers=3, n_features=1, cluster_std=0.3, random_state=0)
 
 
-#%%
+# %%
 X = np.random.normal(0, 2, 5000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
 dist = distfit()
-dist.fit_transform(X)
+result = dist.fit_transform(X)
 dist.plot()
 
 # Make prediction

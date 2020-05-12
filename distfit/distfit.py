@@ -212,6 +212,24 @@ class distfit():
         self.fit(verbose=verbose)
         # Transform X based on functions
         self.transform(X, verbose=verbose)
+        # Store
+        results = _store(self.alpha,
+                         self.bins,
+                         self.bound,
+                         self.distr,
+                         self.distributions,
+                         self.histdata,
+                         self.method,
+                         self.model,
+                         self.multtest,
+                         self.n_perm,
+                         self.size,
+                         self.smooth,
+                         self.summary,
+                         )
+        # Return
+        return results
+
 
     def predict(self, y, verbose=3):
         """Compute probability for response variables y, using the specified method.
@@ -394,7 +412,6 @@ class distfit():
         """
         out = picklefast.load(filepath, verbose=verbose)
         # Store all in object
-        if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
         if out.get('summary', None) is not None: self.summary = out['summary']
         if out.get('smooth', None) is not None: self.smooth = out['smooth']
         if out.get('size', None) is not None: self.size = out['size']
@@ -406,13 +423,34 @@ class distfit():
         if out.get('distributions', None) is not None: self.distributions = out['distributions']
         if out.get('distr', None) is not None: self.distr = out['distr']
         if out.get('bound', None) is not None: self.bound = out['bound']
-        if out.get('df', None) is not None: self.df = out['df']
         if out.get('bound', None) is not None: self.bound = out['bound']
         if out.get('bins', None) is not None: self.bins = out['bins']
         if out.get('alpha', None) is not None: self.alpha = out['alpha']
+        # Predict
+        if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
+        if out.get('df', None) is not None: self.df = out['df']
 
 
 # %% Utils
+def _store(alpha, bins, bound, distr, distributions, histdata, method, model, multtest, n_perm, size, smooth, summary):
+    out = {}
+    out['alpha'] = alpha
+    out['bins'] = bins
+    out['bound'] = bound
+    out['distr'] = distr
+    out['distributions'] = distributions
+    out['histdata'] = histdata
+    out['method'] = method
+    out['model'] = model
+    out['multtest'] = multtest
+    out['n_perm'] = n_perm
+    out['size'] = size
+    out['smooth'] = smooth
+    out['summary'] = summary
+    # Return
+    return out
+
+
 def _predict_parametric(self, y, verbose=3):
     # Check which distribution fits best to the data
     if verbose>=4: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
