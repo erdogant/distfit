@@ -233,7 +233,6 @@ class distfit():
                          self.bins,
                          self.bound,
                          self.distr,
-                         self.distributions,
                          self.histdata,
                          self.method,
                          self.model,
@@ -429,18 +428,18 @@ class distfit():
 
         """
         out = picklefast.load(filepath, verbose=verbose)
-        # Store all in object
+        # Model Fit
+        if out.get('model', None) is not None: self.model = out['model']
         if out.get('summary', None) is not None: self.summary = out['summary']
-        if out.get('smooth', None) is not None: self.smooth = out['smooth']
+        if out.get('histdata', None) is not None: self.histdata = out['histdata']
         if out.get('size', None) is not None: self.size = out['size']
+        # Parameters
+        if out.get('smooth', None) is not None: self.smooth = out['smooth']
         if out.get('n_perm', None) is not None: self.n_perm = out['n_perm']
         if out.get('multtest', None) is not None: self.multtest = out['multtest']
-        if out.get('model', None) is not None: self.model = out['model']
         if out.get('method', None) is not None: self.method = out['method']
-        if out.get('histdata', None) is not None: self.histdata = out['histdata']
         if out.get('distributions', None) is not None: self.distributions = out['distributions']
         if out.get('distr', None) is not None: self.distr = out['distr']
-        if out.get('bound', None) is not None: self.bound = out['bound']
         if out.get('bound', None) is not None: self.bound = out['bound']
         if out.get('bins', None) is not None: self.bins = out['bins']
         if out.get('alpha', None) is not None: self.alpha = out['alpha']
@@ -450,21 +449,20 @@ class distfit():
 
 
 # %% Utils
-def _store(alpha, bins, bound, distr, distributions, histdata, method, model, multtest, n_perm, size, smooth, summary):
+def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary):
     out = {}
+    out['model'] = model
+    out['summary'] = summary
+    out['histdata'] = histdata
+    out['size'] = size
     out['alpha'] = alpha
     out['bins'] = bins
     out['bound'] = bound
     out['distr'] = distr
-    out['distributions'] = distributions
-    out['histdata'] = histdata
     out['method'] = method
-    out['model'] = model
     out['multtest'] = multtest
     out['n_perm'] = n_perm
-    out['size'] = size
     out['smooth'] = smooth
-    out['summary'] = summary
     # Return
     return out
 
