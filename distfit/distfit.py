@@ -345,7 +345,6 @@ class distfit():
         """
         if verbose>=3: print('[distfit] >plot summary..')
         if self.method=='parametric':
-
             if n_top is None:
                 n_top = len(self.summary['RSS'])
 
@@ -389,7 +388,7 @@ class distfit():
 
         """
         args = ['alpha','bins','bound','df','distr','distributions','histdata','method','model','multtest','n_perm','size','smooth','summary','y_pred']
-        out={}
+        out = {}
         for arg in args:
             if hasattr(self, arg):
                 if arg=='alpha': out.update({arg : self.alpha})
