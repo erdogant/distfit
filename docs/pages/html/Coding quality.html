@@ -177,7 +177,7 @@
   <hr class="docutils" id="code-directive" />
 <div class="section" id="coding-quality">
 <h1>Coding quality<a class="headerlink" href="#coding-quality" title="Permalink to this headline">¶</a></h1>
-<p>I value software quality. Higher quality software has fewer defects, better security, and better performance, which leads to happier users who can work more effectively.
+<p>Higher quality software has fewer defects, better security, and better performance, which leads to happier users who can work more effectively.
 Code reviews are an effective method for improving software quality. McConnell (2004) suggests that unit testing finds approximately 25% of defects, function testing 35%, integration testing 45%, and code review 55-60%.
 While this means that none of these methods is good enough on their own and that they should be combined, clearly code review is an essential tool here.</p>
 <p>This library is therefore developed with several techniques, such as code styling, low complexity, docstrings, reviews, and unit tests.
@@ -186,25 +186,19 @@ Such conventions are helpfull to improve the quality, make the code cleaner and 
 <h2>library<a class="headerlink" href="#library" title="Permalink to this headline">¶</a></h2>
 <p>The file structure of the generated package looks like:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>path/to/distfit/
-├── .editorconfig
 ├── .gitignore
-├── .pre-commit-config.yml
-├── .prospector.yml
-├── CHANGELOG.rst
 ├── docs
 │   ├── conf.py
 │   ├── index.rst
 │   └── ...
 ├── LICENSE
 ├── MANIFEST.in
-├── NOTICE
 ├── distfit
 │   ├── __init__.py
 │   ├── __version__.py
 │   └── distfit.py
 ├── README.md
 ├── requirements.txt
-├── setup.cfg
 ├── setup.py
 └── tests
     ├── __init__.py

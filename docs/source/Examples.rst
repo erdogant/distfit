@@ -33,7 +33,7 @@ Specify distfit parameters. In this example nothing is specied and that means th
     dist.plot()
 
 .. |fig1a| image:: ../figs/example_fig1a.png
-    :scale: 80%
+    :scale: 70%
 
 .. table:: Distribution fit
    :align: center
@@ -50,7 +50,7 @@ Note that the best fit should be [normal], as this was also the input data. Howe
     dist.plot_summary()
 
 .. |fig1summary| image:: ../figs/fig1_summary.png
-    :scale: 80%
+    :scale: 60%
 
 .. table:: Summary of fitted theoretical Distributions
    :align: center
@@ -108,7 +108,7 @@ outside the confidence interval but not marked as significant. See section Algor
 
 
 .. |fig1b| image:: ../figs/example_fig1b.png
-    :scale: 80%
+    :scale: 70%
 
 .. table:: Plot distribution with predictions
    :align: center

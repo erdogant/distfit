@@ -70,11 +70,11 @@ Citing *distfit*
 ----------------
 Here is an example BibTeX entry:
 
-@misc{erdogant2019distfit,
-  title={distfit},
-  author={Erdogan Taskesen},
-  year={2019},
-  howpublished={\url{https://github.com/erdogant/distfit}}}
+	@misc{erdogant2019distfit,
+	  title={distfit},
+	  author={Erdogan Taskesen},
+	  year={2019},
+	  howpublished={\url{https://github.com/erdogant/distfit}}}
 
 
 

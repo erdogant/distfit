@@ -31,8 +31,7 @@ A quick example how to learn a model on a given dataset.
 Installation
 ''''''''''''
 
-Create environment
-------------------
+**Create environment**
 
 
 If desired, install ``distfit`` in an isolated Python environment using conda:
