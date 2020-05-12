@@ -38,11 +38,11 @@ class distfit():
     >>> y = [-8,-6,0,1,2,3,4,5,6]
     >>>
     >>> dist = distfit()
-    >>> dist.fit_transform(X)
+    >>> model_results = dist.fit_transform(X)
     >>> dist.plot()
     >>>
     >>> # Make prediction
-    >>> dist.predict(y)
+    >>> results = dist.predict(y)
     >>> dist.plot()
 
     Parameters
@@ -205,7 +205,23 @@ class distfit():
 
         Returns
         -------
-        object.
+        dict.
+        model : dict
+            dict containing keys with distribution parameters
+            RSS : Residual Sum of Squares
+            name : distribution name
+            distr : distribution function
+            params : all kind of parameters
+            loc : loc function parameter
+            scale : scale function parameter
+            arg : arg function parameter
+        summary : list
+            Residual Sum of Squares
+        histdata : tuple (observed, bins)
+            tuple containing observed and bins for data X in the histogram.
+        size : int
+            total number of elements in for data X
+            
 
         """
         # Fit model to get list of distributions to check
