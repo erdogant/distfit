@@ -28,13 +28,13 @@ Saving a learned model can be done using the function :func:`distfit.save`:
     dist.predict(y)
     
     # Save model
-    distfit.save('my_first_model.pkl')
+    dist.save('my_first_model.pkl')
 
 
 Loading
 ----------------------
 
-Loading a learned model can be done using the function :func:`distfit.load`:
+Loading a learned model can be done using the function :func:`dist.load`:
 
 .. code:: python
 

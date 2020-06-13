@@ -183,11 +183,11 @@ non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make prediction</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -251,10 +251,21 @@ See docs for more information about ‘popular’ and ‘full’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>dict.</em></p></li>
+<li><p><strong>model</strong> (<em>dict</em>) – dict containing keys with distribution parameters
+RSS : Residual Sum of Squares
+name : distribution name
+distr : distribution function
+params : all kind of parameters
+loc : loc function parameter
+scale : scale function parameter
+arg : arg function parameter</p></li>
+<li><p><strong>summary</strong> (<em>list</em>) – Residual Sum of Squares</p></li>
+<li><p><strong>histdata</strong> (<em>tuple (observed, bins)</em>) – tuple containing observed and bins for data X in the histogram.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – total number of elements in for data X</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

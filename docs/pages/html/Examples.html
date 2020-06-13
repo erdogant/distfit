@@ -194,7 +194,7 @@
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
 
 <span class="c1"># Search for best theoretical fit on your emperical data</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># Plot</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -230,7 +230,8 @@
 <h2>Specify distribution<a class="headerlink" href="#specify-distribution" title="Permalink to this headline">¶</a></h2>
 <p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Fit on data</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># [distfit] &gt;fit..</span>
 <span class="c1"># [distfit] &gt;transform..</span>
@@ -259,10 +260,45 @@ outside the confidence interval but not marked as significant. See section Algor
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># Make prediction on new datapoints based on the fit</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 <span class="c1"># The plot function will now also include the predictions of y</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">out</span></code> is a dictionary containing <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">df</span></code>.
+The output values has the same order as input value <code class="docutils literal notranslate"><span class="pre">y</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print probabilities</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
+<span class="c1"># &gt; [0.02702734, 0.04908335, 0.08492715, 0.13745288, 0.49567466, 0.41288701, 0.3248188 , 0.02260135, 0.00636084]</span>
+
+<span class="c1"># Print the labels with respect to the confidence intervals</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
+<span class="c1"># &gt; [&#39;down&#39; &#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39;]</span>
+
+<span class="c1"># Print the dataframe containing the total information</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |    |   y |    y_proba | y_pred   |          P |</span>
+<span class="c1"># +====+=====+============+==========+============+</span>
+<span class="c1"># |  0 |   3 | 0.0270273  | down     | 0.00900911 |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  1 |   4 | 0.0490833  | down     | 0.0218148  |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  2 |   5 | 0.0849271  | down     | 0.0471817  |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  3 |   6 | 0.137453   | none     | 0.0916353  |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  4 |  10 | 0.495675   | none     | 0.495675   |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  5 |  11 | 0.412887   | none     | 0.367011   |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  6 |  12 | 0.324819   | none     | 0.252637   |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  7 |  18 | 0.0226014  | up       | 0.00502252 |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  8 |  20 | 0.00636084 | up       | 0.00070676 |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id3">
@@ -278,8 +314,9 @@ outside the confidence interval but not marked as significant. See section Algor
 </div>
 <div class="section" id="extract-results">
 <h2>Extract results<a class="headerlink" href="#extract-results" title="Permalink to this headline">¶</a></h2>
-<p>All the results are stored in the object. In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
-The results of the prediction are stored in y_proba and y_pred.</p>
+<p>In the previous example, we showed that the output can be captured <code class="docutils literal notranslate"><span class="pre">results</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> but the results are also stored in the object itself.
+In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
+The same variable names are used;  <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">df</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># All scores of the tested distributions</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
 
@@ -296,16 +333,27 @@ The results of the prediction are stored in y_proba and y_pred.</p>
 
 <span class="c1"># All predicted information is also stored in a structured dataframe</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
-<span class="c1">#    y   y_proba y_pred         P</span>
-<span class="c1"># 0 -8  0.000028   down  0.000003</span>
-<span class="c1"># 1 -6  0.002747   down  0.000610</span>
-<span class="c1"># 2  0  0.474740   none  0.474740</span>
-<span class="c1"># 3  1  0.328637   none  0.292122</span>
-<span class="c1"># 4  2  0.199195   none  0.154929</span>
-<span class="c1"># 5  3  0.106316   none  0.070877</span>
-<span class="c1"># 6  4  0.050591     up  0.028106</span>
-<span class="c1"># 7  5  0.021892     up  0.009730</span>
-<span class="c1"># 8  6  0.008893     up  0.002964</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |    |   y |    y_proba | y_pred   |          P |</span>
+<span class="c1"># +====+=====+============+==========+============+</span>
+<span class="c1"># |  0 |   3 | 0.0270273  | down     | 0.00900911 |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  1 |   4 | 0.0490833  | down     | 0.0218148  |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  2 |   5 | 0.0849271  | down     | 0.0471817  |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  3 |   6 | 0.137453   | none     | 0.0916353  |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  4 |  10 | 0.495675   | none     | 0.495675   |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  5 |  11 | 0.412887   | none     | 0.367011   |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  6 |  12 | 0.324819   | none     | 0.252637   |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  7 |  18 | 0.0226014  | up       | 0.00502252 |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
+<span class="c1"># |  8 |  20 | 0.00636084 | up       | 0.00070676 |</span>
+<span class="c1"># +----+-----+------------+----------+------------+</span>
 </pre></div>
 </div>
 </div>
