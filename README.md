@@ -5,10 +5,12 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/erdogant/distfit/blob/master/LICENSE)
 [![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit/month)
 [![Downloads](https://pepy.tech/badge/distfit)](https://pepy.tech/project/distfit)
-[![Sphinx](https://img.shields.io/badge/Sphinx-Docs-blue)](https://erdogant.github.io/distfit/)
+[![Sphinx](https://img.shields.io/badge/Sphinx-Docs-Green)](https://erdogant.github.io/distfit/)
+
+	Star it if you like it!
 
 ### Background
-Python package for probability density fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), and hypothesis testing.
+``distfit`` is a python package for probability density fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), and hypothesis testing.
 Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. ``distfit`` scores each of the 89 different distributions for the fit wih the emperical distribution and return the best scoring distribution.
 
 ### Functionalities
@@ -186,4 +188,3 @@ Please cite distfit in your publications if this is useful for your research. He
 ### Maintainer
 	Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
 	Contributions are welcome.
-	See [LICENSE](LICENSE) for details.
