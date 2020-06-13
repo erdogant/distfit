@@ -278,29 +278,81 @@ The output values has the same order as input value <code class="docutils litera
 
 <span class="c1"># Print the dataframe containing the total information</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |    |   y |    y_proba | y_pred   |          P |</span>
-<span class="c1"># +====+=====+============+==========+============+</span>
-<span class="c1"># |  0 |   3 | 0.0270273  | down     | 0.00900911 |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  1 |   4 | 0.0490833  | down     | 0.0218148  |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  2 |   5 | 0.0849271  | down     | 0.0471817  |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  3 |   6 | 0.137453   | none     | 0.0916353  |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  4 |  10 | 0.495675   | none     | 0.495675   |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  5 |  11 | 0.412887   | none     | 0.367011   |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  6 |  12 | 0.324819   | none     | 0.252637   |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  7 |  18 | 0.0226014  | up       | 0.00502252 |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  8 |  20 | 0.00636084 | up       | 0.00070676 |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
 </pre></div>
 </div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 28%" />
+<col style="width: 23%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>y</p></th>
+<th class="head"><p>y_proba</p></th>
+<th class="head"><p>y_pred</p></th>
+<th class="head"><p>P</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>3</p></td>
+<td><p>0.0270273</p></td>
+<td><p>down</p></td>
+<td><p>0.00900911</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>0.0490833</p></td>
+<td><p>down</p></td>
+<td><p>0.0218148</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>5</p></td>
+<td><p>0.0849271</p></td>
+<td><p>down</p></td>
+<td><p>0.0471817</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>6</p></td>
+<td><p>0.137453</p></td>
+<td><p>none</p></td>
+<td><p>0.0916353</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>10</p></td>
+<td><p>0.495675</p></td>
+<td><p>none</p></td>
+<td><p>0.495675</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>11</p></td>
+<td><p>0.412887</p></td>
+<td><p>none</p></td>
+<td><p>0.367011</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>12</p></td>
+<td><p>0.324819</p></td>
+<td><p>none</p></td>
+<td><p>0.252637</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>18</p></td>
+<td><p>0.0226014</p></td>
+<td><p>up</p></td>
+<td><p>0.00502252</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>20</p></td>
+<td><p>0.00636084</p></td>
+<td><p>up</p></td>
+<td><p>0.00070676</p></td>
+</tr>
+</tbody>
+</table>
 <table class="docutils align-center" id="id3">
 <caption><span class="caption-text">Plot distribution with predictions</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
@@ -333,29 +385,81 @@ The same variable names are used;  <code class="docutils literal notranslate"><s
 
 <span class="c1"># All predicted information is also stored in a structured dataframe</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |    |   y |    y_proba | y_pred   |          P |</span>
-<span class="c1"># +====+=====+============+==========+============+</span>
-<span class="c1"># |  0 |   3 | 0.0270273  | down     | 0.00900911 |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  1 |   4 | 0.0490833  | down     | 0.0218148  |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  2 |   5 | 0.0849271  | down     | 0.0471817  |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  3 |   6 | 0.137453   | none     | 0.0916353  |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  4 |  10 | 0.495675   | none     | 0.495675   |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  5 |  11 | 0.412887   | none     | 0.367011   |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  6 |  12 | 0.324819   | none     | 0.252637   |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  7 |  18 | 0.0226014  | up       | 0.00502252 |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
-<span class="c1"># |  8 |  20 | 0.00636084 | up       | 0.00070676 |</span>
-<span class="c1"># +----+-----+------------+----------+------------+</span>
 </pre></div>
 </div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 28%" />
+<col style="width: 23%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>y</p></th>
+<th class="head"><p>y_proba</p></th>
+<th class="head"><p>y_pred</p></th>
+<th class="head"><p>P</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>3</p></td>
+<td><p>0.0270273</p></td>
+<td><p>down</p></td>
+<td><p>0.00900911</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>0.0490833</p></td>
+<td><p>down</p></td>
+<td><p>0.0218148</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>5</p></td>
+<td><p>0.0849271</p></td>
+<td><p>down</p></td>
+<td><p>0.0471817</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>6</p></td>
+<td><p>0.137453</p></td>
+<td><p>none</p></td>
+<td><p>0.0916353</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>10</p></td>
+<td><p>0.495675</p></td>
+<td><p>none</p></td>
+<td><p>0.495675</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>11</p></td>
+<td><p>0.412887</p></td>
+<td><p>none</p></td>
+<td><p>0.367011</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>12</p></td>
+<td><p>0.324819</p></td>
+<td><p>none</p></td>
+<td><p>0.252637</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>18</p></td>
+<td><p>0.0226014</p></td>
+<td><p>up</p></td>
+<td><p>0.00502252</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>20</p></td>
+<td><p>0.00636084</p></td>
+<td><p>up</p></td>
+<td><p>0.00070676</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
