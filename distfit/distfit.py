@@ -21,7 +21,7 @@ import pandas as pd
 import statsmodels.stats.multitest as multitest
 import matplotlib.pyplot as plt
 
-# Class dist
+# %% Class dist
 class distfit():
     """Probability density function fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), making plots, and hypothesis testing.
 
@@ -274,7 +274,6 @@ class distfit():
         df : pd.DataFrame
             Dataframe containing the predictions in a structed manner.
 
-
         """
         if 'list' in str(type(y)): y=np.array(y)
         if 'float' in str(type(y)): y=np.array([y])
@@ -286,7 +285,7 @@ class distfit():
         elif self.method=='emperical':
             out = _predict_emperical(self, y, verbose=verbose)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical"')
         # Return
         return out
 

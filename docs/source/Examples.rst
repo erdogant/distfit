@@ -27,7 +27,7 @@ Specify distfit parameters. In this example nothing is specied and that means th
     dist = distfit()
 
     # Search for best theoretical fit on your emperical data
-    dist.fit_transform(X)
+    results = dist.fit_transform(X)
 
     # Plot
     dist.plot()
@@ -68,7 +68,8 @@ Suppose you want to test for one specific distribution, such as the normal distr
 .. code:: python
 
     dist = distfit(distr='norm')
-    dist.fit_transform(X)
+    # Fit on data
+    results = dist.fit_transform(X)
 
     # [distfit] >fit..
     # [distfit] >transform..
@@ -101,11 +102,48 @@ outside the confidence interval but not marked as significant. See section Algor
     dist.fit_transform(X)
 
     # Make prediction on new datapoints based on the fit
-    dist.predict(y)
+    out = dist.predict(y)
 
     # The plot function will now also include the predictions of y
     dist.plot()
 
+``out`` is a dictionary containing ``y_proba``, ``y_pred`` and ``df``. 
+The output values has the same order as input value ``y``
+
+.. code:: python
+
+    # Print probabilities
+    print(out['y_proba'])
+    # > [0.02702734, 0.04908335, 0.08492715, 0.13745288, 0.49567466, 0.41288701, 0.3248188 , 0.02260135, 0.00636084]
+    
+    # Print the labels with respect to the confidence intervals
+    print(out['y_pred'])
+    # > ['down' 'down' 'down' 'none' 'none' 'none' 'none' 'up' 'up']
+
+    # Print the dataframe containing the total information
+    print(out['df'])
+    # +----+-----+------------+----------+------------+
+    # |    |   y |    y_proba | y_pred   |          P |
+    # +====+=====+============+==========+============+
+    # |  0 |   3 | 0.0270273  | down     | 0.00900911 |
+    # +----+-----+------------+----------+------------+
+    # |  1 |   4 | 0.0490833  | down     | 0.0218148  |
+    # +----+-----+------------+----------+------------+
+    # |  2 |   5 | 0.0849271  | down     | 0.0471817  |
+    # +----+-----+------------+----------+------------+
+    # |  3 |   6 | 0.137453   | none     | 0.0916353  |
+    # +----+-----+------------+----------+------------+
+    # |  4 |  10 | 0.495675   | none     | 0.495675   |
+    # +----+-----+------------+----------+------------+
+    # |  5 |  11 | 0.412887   | none     | 0.367011   |
+    # +----+-----+------------+----------+------------+
+    # |  6 |  12 | 0.324819   | none     | 0.252637   |
+    # +----+-----+------------+----------+------------+
+    # |  7 |  18 | 0.0226014  | up       | 0.00502252 |
+    # +----+-----+------------+----------+------------+
+    # |  8 |  20 | 0.00636084 | up       | 0.00070676 |
+    # +----+-----+------------+----------+------------+
+    
 
 .. |fig1b| image:: ../figs/example_fig1b.png
     :scale: 70%
@@ -121,8 +159,9 @@ outside the confidence interval but not marked as significant. See section Algor
 Extract results
 --------------------------------------------------
 
-All the results are stored in the object. In our examples it is the ``dist`` object.
-The results of the prediction are stored in y_proba and y_pred.
+In the previous example, we showed that the output can be captured ``results`` and ``out`` but the results are also stored in the object itself. 
+In our examples it is the ``dist`` object.
+The same variable names are used;  ``y_proba``, ``y_pred`` and ``df``.
 
 
 .. code:: python
@@ -143,13 +182,24 @@ The results of the prediction are stored in y_proba and y_pred.
  
     # All predicted information is also stored in a structured dataframe
     print(dist.df)
-    #    y   y_proba y_pred         P
-    # 0 -8  0.000028   down  0.000003
-    # 1 -6  0.002747   down  0.000610
-    # 2  0  0.474740   none  0.474740
-    # 3  1  0.328637   none  0.292122
-    # 4  2  0.199195   none  0.154929
-    # 5  3  0.106316   none  0.070877
-    # 6  4  0.050591     up  0.028106
-    # 7  5  0.021892     up  0.009730
-    # 8  6  0.008893     up  0.002964
+    # +----+-----+------------+----------+------------+
+    # |    |   y |    y_proba | y_pred   |          P |
+    # +====+=====+============+==========+============+
+    # |  0 |   3 | 0.0270273  | down     | 0.00900911 |
+    # +----+-----+------------+----------+------------+
+    # |  1 |   4 | 0.0490833  | down     | 0.0218148  |
+    # +----+-----+------------+----------+------------+
+    # |  2 |   5 | 0.0849271  | down     | 0.0471817  |
+    # +----+-----+------------+----------+------------+
+    # |  3 |   6 | 0.137453   | none     | 0.0916353  |
+    # +----+-----+------------+----------+------------+
+    # |  4 |  10 | 0.495675   | none     | 0.495675   |
+    # +----+-----+------------+----------+------------+
+    # |  5 |  11 | 0.412887   | none     | 0.367011   |
+    # +----+-----+------------+----------+------------+
+    # |  6 |  12 | 0.324819   | none     | 0.252637   |
+    # +----+-----+------------+----------+------------+
+    # |  7 |  18 | 0.0226014  | up       | 0.00502252 |
+    # +----+-----+------------+----------+------------+
+    # |  8 |  20 | 0.00636084 | up       | 0.00070676 |
+    # +----+-----+------------+----------+------------+
