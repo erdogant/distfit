@@ -165,13 +165,13 @@ Various input parameters can be specified at the initialization of ``distfit``.
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 | Variable name   | type| Default               | Description                                                   |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
-| method          | str | 'parametric'          | Specify the method type: 'parametric', 'emperical'            |
+| method          | str | 'parametric'          | Specify the method type: 'parametric', 'empirical'            |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 | alpha           |float| 0.05                  | Significance alpha.                                           |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 | multtest        | str | 'fdr_bh'              | Multiple test correction method                               |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
-| bins            | int | 50                    | To determine the emperical historgram                         |
+| bins            | int | 50                    | To determine the empirical historgram                         |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 | bound           | int | 'both'                | Directionality to test for significance                       |
 |                 |     |                       | Upper and lowerbounds: 'both'                                 |
@@ -185,7 +185,7 @@ Various input parameters can be specified at the initialization of ``distfit``.
 |                 |     |                       | etc                                                           |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 | n_perm          | int | 10000                 | Number of permutations to model                               |
-|                 |     |                       | null-distribution in case of method is 'emperical'            |
+|                 |     |                       | null-distribution in case of method is 'empirical'            |
 +-----------------+-----+-----------------------+---------------------------------------------------------------+
 
 

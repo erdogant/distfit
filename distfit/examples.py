@@ -119,7 +119,7 @@ print(model.summary)
 X = np.random.normal(0, 2, 1000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
-model = dist(method='emperical')
+model = dist(method='empirical')
 model.fit_transform(X)
 model.plot()
 
@@ -136,7 +136,7 @@ model.fit_transform(X)
 model.predict(y)
 model.plot()
 
-model = dist(method='emperical')
+model = dist(method='empirical')
 model.fit_transform(X)
 model.predict(y)
 model.plot()

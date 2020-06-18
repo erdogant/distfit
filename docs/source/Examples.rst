@@ -26,7 +26,7 @@ Specify distfit parameters. In this example nothing is specied and that means th
     # Initialize
     dist = distfit()
 
-    # Search for best theoretical fit on your emperical data
+    # Search for best theoretical fit on your empirical data
     results = dist.fit_transform(X)
 
     # Plot
@@ -98,7 +98,7 @@ outside the confidence interval but not marked as significant. See section Algor
     # Initialize
     dist = distfit()
 
-    # Search for best theoretical fit on your emperical data
+    # Search for best theoretical fit on your empirical data
     dist.fit_transform(X)
 
     # Make prediction on new datapoints based on the fit

@@ -1,4 +1,4 @@
-"""Compute best fit to your emperical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates."""
+"""Compute best fit to your empirical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates."""
 # --------------------------------------------------
 # Name        : distfit.py
 # Author      : E.Taskesen
@@ -48,14 +48,14 @@ class distfit():
     Parameters
     ----------
     method : str, default: 'parametric'
-        Specify the method type: 'parametric',  'emperical'
+        Specify the method type: 'parametric',  'empirical'
     alpha : float, default: 0.05
         Significance alpha.
     multtest : str, default: 'fdr_bh'
         None, 'bonferroni', 'sidak', 'holm-sidak', 'holm', 'simes-hochberg',
         'hommel', 'fdr_bh', 'fdr_by', 'fdr_tsbh', 'fdr_tsbky'
     bins : int, default: 50
-        Bin size to determine the emperical historgram.
+        Bin size to determine the empirical historgram.
     bound : str, default: 'both'
         Set the directionality to test for significance.
         Upperbounds = 'up', 'high' or 'right', whereas lowerbounds = 'down', 'low' or 'left'
@@ -66,7 +66,7 @@ class distfit():
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
     n_perm : int, default: 10000
-        Number of permutations to model null-distribution in case of method is "emperical"
+        Number of permutations to model null-distribution in case of method is "empirical"
 
     Returns
     -------
@@ -119,10 +119,10 @@ class distfit():
         # Get the desired distributions.
         if self.method=='parametric':
             self.distributions = _get_distributions(self.distr)
-        elif self.method=='emperical':
+        elif self.method=='empirical':
             pass
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical".')
 
     # Transform
     def transform(self, X, verbose=3):
@@ -137,8 +137,8 @@ class distfit():
             Residual Sum of Squares approach (RSS) for the specified distributions. Based on
             the best distribution-fit, the confidence intervals (CII) can be determined
             for later usage in the :func:`predict` function.
-        **emperical**
-            In the emperical case, the data is ranked and the top/lower quantiles are determined.
+        **empirical**
+            In the empirical case, the data is ranked and the top/lower quantiles are determined.
 
         Parameters
         ----------
@@ -177,7 +177,7 @@ class distfit():
             # Get histogram of original X
             [X_bins, y_obs] = _get_hist_params(X, self.bins)
             [X_bins, y_obs] = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
-            # Compute best distribution fit on the emperical X
+            # Compute best distribution fit on the empirical X
             out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, verbose=verbose)
             # Determine confidence intervals on the best fitting distribution
             model = _compute_cii(self, model)
@@ -185,16 +185,16 @@ class distfit():
             self.model = model
             self.summary = out_summary
             self.histdata = (y_obs, X_bins)
-        elif self.method=='emperical':
+        elif self.method=='empirical':
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, X)
             self.percentile = np.percentile(X, 7)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical".')
 
     # Fit and transform in one go
     def fit_transform(self, X, verbose=3):
-        """Fit best scoring theoretical distribution to the emperical data (X).
+        """Fit best scoring theoretical distribution to the empirical data (X).
 
         Parameters
         ----------
@@ -252,7 +252,7 @@ class distfit():
         Description
         -----------
         Computes P-values for [y] based on the fitted distribution from X.
-        The emperical distribution of X is used to estimate the loc/scale/arg parameters for a
+        The empirical distribution of X is used to estimate the loc/scale/arg parameters for a
         theoretical distribution in case method type is ``parametric``.
 
         Parameters
@@ -282,10 +282,10 @@ class distfit():
 
         if self.method=='parametric':
             out = _predict_parametric(self, y, verbose=verbose)
-        elif self.method=='emperical':
-            out = _predict_emperical(self, y, verbose=verbose)
+        elif self.method=='empirical':
+            out = _predict_empirical(self, y, verbose=verbose)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical"')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical"')
         # Return
         return out
 
@@ -315,8 +315,8 @@ class distfit():
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
-        elif (self.method=='emperical'):
-            fig, ax = _plot_emperical(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        elif (self.method=='empirical'):
+            fig, ax = _plot_empirical(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         else:
             fig, ax = None, None
         # Return
@@ -520,9 +520,9 @@ def _predict_parametric(self, y, verbose=3):
     return out
 
 
-# Emperical test
-def _predict_emperical(self, y, verbose=3):
-    """Compute Probability based on an emperical test.
+# empirical test
+def _predict_empirical(self, y, verbose=3):
+    """Compute Probability based on an empirical test.
 
     Description
     -----------
@@ -541,7 +541,7 @@ def _predict_emperical(self, y, verbose=3):
     teststat = np.ones_like(y) * np.nan
     Praw = np.ones_like(y) * np.nan
 
-    # Compute statistics for y based on emperical distribution
+    # Compute statistics for y based on empirical distribution
     for i in range(0, len(y)):
         getstat = np.percentile(y[i], 7) - self.percentile
         getP = (2 * np.sum(self.model['samples'] >= np.abs(getstat)) / self.n_perm)
@@ -581,9 +581,9 @@ def _predict_emperical(self, y, verbose=3):
 
 
 # Plot
-def _plot_emperical(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
+def _plot_empirical(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
     fig, ax = plt.subplots(figsize=figsize)
-    plt.hist(self.model['samples'], 25, histtype='step', label='Emperical distribution')
+    plt.hist(self.model['samples'], 25, histtype='step', label='empirical distribution')
     ax.axvline(self.model['CII_min_alpha'], linestyle='--', c='r', label='CII low')
     ax.axvline(self.model['CII_max_alpha'], linestyle='--', c='r', label='CII high')
 
@@ -640,7 +640,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     getmin = distline.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.0000001, loc=loc, scale=scale)
     getmax = distline.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.9999999, loc=loc, scale=scale)
 
-    # Take maximum/minimum based on emperical data to avoid long theoretical distribution tails
+    # Take maximum/minimum based on empirical data to avoid long theoretical distribution tails
     getmax = np.minimum(getmax, np.max(self.histdata[1]))
     getmin = np.maximum(getmin, np.min(self.histdata[1]))
 
@@ -650,8 +650,8 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     # ymax=max(self.histdata[0])
 
     fig, ax = plt.subplots(figsize=figsize)
-    # Plot emperical data
-    ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='Emperical distribution')
+    # Plot empirical data
+    ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='empirical distribution')
     # Plot pdf
     ax.plot(x, y, 'b-', linewidth=1, label=best_fit_name)
 
@@ -856,7 +856,7 @@ def _compute_cii(self, model):
                 CIIdown = dist.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - self.alpha, loc=loc, scale=scale)
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
                 CIIup = dist.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(self.alpha, loc=loc, scale=scale)
-    elif self.method=='emperical':
+    elif self.method=='empirical':
         X = model
         model = {}
         # Set Confidence intervals
@@ -871,7 +871,7 @@ def _compute_cii(self, model):
         # Store
         model['samples'] = samples
     else:
-        raise Exception('[distfit] Error: method parameter can only be "parametric" or "emperical"')
+        raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical"')
 
     # Store
     model['CII_min_alpha'] = CIIup

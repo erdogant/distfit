@@ -49,7 +49,7 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 Probability Density Function fitting
 -------------------------------------
 
-To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the emperical data to the model. 
+To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model. 
 
 .. code:: python
 
