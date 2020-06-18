@@ -169,7 +169,7 @@
             
   <div class="section" id="module-distfit.distfit">
 <span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this headline">¶</a></h1>
-<p>Compute best fit to your emperical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
+<p>Compute best fit to your empirical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
 <dl class="py class">
 <dt id="distfit.distfit.distfit">
 <em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">'popular'</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
@@ -194,18 +194,18 @@ non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default: 'parametric'</em>) – Specify the method type: ‘parametric’,  ‘emperical’</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default: 'parametric'</em>) – Specify the method type: ‘parametric’,  ‘empirical’</p></li>
 <li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>default: 0.05</em>) – Significance alpha.</p></li>
 <li><p><strong>multtest</strong> (<em>str</em><em>, </em><em>default: 'fdr_bh'</em>) – None, ‘bonferroni’, ‘sidak’, ‘holm-sidak’, ‘holm’, ‘simes-hochberg’,
 ‘hommel’, ‘fdr_bh’, ‘fdr_by’, ‘fdr_tsbh’, ‘fdr_tsbky’</p></li>
-<li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 50</em>) – Bin size to determine the emperical historgram.</p></li>
+<li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 50</em>) – Bin size to determine the empirical historgram.</p></li>
 <li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – Set the directionality to test for significance.
 Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down’, ‘low’ or ‘left’</p></li>
 <li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
 ‘popular’, ‘full’, or specify the theoretical distribution: ‘norm’, ‘t’.
 See docs for more information about ‘popular’ and ‘full’.</p></li>
 <li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.</p></li>
-<li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “emperical”</p></li>
+<li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “empirical”</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -242,7 +242,7 @@ See docs for more information about ‘popular’ and ‘full’.</p></li>
 <dl class="py method">
 <dt id="distfit.distfit.distfit.fit_transform">
 <code class="sig-name descname">fit_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.fit_transform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit best scoring theoretical distribution to the emperical data (X).</p>
+<dd><p>Fit best scoring theoretical distribution to the empirical data (X).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -340,7 +340,7 @@ arg : arg function parameter</p></li>
 <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute probability for response variables y, using the specified method.</p>
 <p>Computes P-values for [y] based on the fitted distribution from X.
-The emperical distribution of X is used to estimate the loc/scale/arg parameters for a
+The empirical distribution of X is used to estimate the loc/scale/arg parameters for a
 theoretical distribution in case method type is <code class="docutils literal notranslate"><span class="pre">parametric</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -393,7 +393,7 @@ Residual Sum of Squares approach (RSS) for the specified distributions. Based on
 the best distribution-fit, the confidence intervals (CII) can be determined
 for later usage in the <a class="reference internal" href="#distfit.distfit.distfit.predict" title="distfit.distfit.distfit.predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">predict()</span></code></a> function.</p>
 </dd>
-<dt><strong>emperical</strong></dt><dd><p>In the emperical case, the data is ranked and the top/lower quantiles are determined.</p>
+<dt><strong>empirical</strong></dt><dd><p>In the empirical case, the data is ranked and the top/lower quantiles are determined.</p>
 </dd>
 </dl>
 <dl class="field-list simple">

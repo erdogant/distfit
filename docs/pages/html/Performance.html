@@ -212,7 +212,7 @@
 </div>
 <div class="section" id="probability-density-function-fitting">
 <h2>Probability Density Function fitting<a class="headerlink" href="#probability-density-function-fitting" title="Permalink to this headline">¶</a></h2>
-<p>To measure the goodness of fit of <em>pdfs</em>, we will evaluate multiple <em>pdfs</em> using the <strong>RSS</strong> metrics. The goodness of fit scores are stored in <code class="docutils literal notranslate"><span class="pre">dist.summary</span></code>. In this example, we will <strong>not</strong> specify any distribution but only provide the emperical data to the model.</p>
+<p>To measure the goodness of fit of <em>pdfs</em>, we will evaluate multiple <em>pdfs</em> using the <strong>RSS</strong> metrics. The goodness of fit scores are stored in <code class="docutils literal notranslate"><span class="pre">dist.summary</span></code>. In this example, we will <strong>not</strong> specify any distribution but only provide the empirical data to the model.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>

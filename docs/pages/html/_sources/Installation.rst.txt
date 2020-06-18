@@ -19,7 +19,7 @@ A quick example how to learn a model on a given dataset.
     # Initialize model
     dist = distfit()
 
-    # Find best theoretical distribution for emperical data X
+    # Find best theoretical distribution for empirical data X
     dist.fit_transform(X)
     dist.plot()
 
