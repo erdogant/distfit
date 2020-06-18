@@ -3,17 +3,15 @@
 # Author      : E.Taskesen
 # Contact     : erdogant@gmail.com
 # github      : https://github.com/erdogant/distfit
-# Licence     : MIT
 # --------------------------------------------------
 
 import numpy as np
-import distfit as distfit
-# print(distfit.__version__)
-
+import distfit
+print(distfit.__version__)
+print(dir(distfit))
 
 # %% Import class
 from distfit import distfit
-# print(dir(distfit))
 
 # %%
 # from sklearn.datasets.samples_generator import make_blobs
@@ -56,10 +54,12 @@ samples = np.arange(250, 20000, 250)
 
 #%%
 # Initialize model
+import matplotlib.pyplot as plt
+from tqdm import tqdm
 smooth_window=[None,1,3,5,7,9,11]
 plt.figure(figsize=(15,10))
 
-for smooth in smooth_window:
+for smooth in tqdm(smooth_window):
     dist = distfit(distr='norm', smooth=smooth)
     # Estimate paramters for the number of samples
     out = []
@@ -119,7 +119,7 @@ print(model.summary)
 X = np.random.normal(0, 2, 1000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
-model = dist(method='empirical')
+model = distfit()
 model.fit_transform(X)
 model.plot()
 
@@ -136,7 +136,7 @@ model.fit_transform(X)
 model.predict(y)
 model.plot()
 
-model = dist(method='empirical')
+model = distfit()
 model.fit_transform(X)
 model.predict(y)
 model.plot()
@@ -178,13 +178,13 @@ model.predict(y)
 model.plot()
 model.df
 
-model = dist(bound='up')
+model = distfit(bound='up')
 model.fit_transform(X)
 model.predict(y)
 model.plot()
 model.df
 
-model = dist(bound='down')
+model = distfit(bound='down')
 model.fit_transform(X)
 model.predict(y)
 model.plot()
@@ -198,11 +198,11 @@ model = distfit()
 model.fit_transform(X)
 model.plot()
 
-model = dist(distr='popular')
+model = distfit(distr='popular')
 model.fit_transform(X)
 model.plot()
 
-model = dist(distr='full')
+model = distfit(distr='full')
 model.fit_transform(X)
 model.plot()
 
