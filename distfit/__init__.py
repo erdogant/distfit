@@ -1,6 +1,4 @@
-from distfit.distfit import (
-    distfit,
-    )
+from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
