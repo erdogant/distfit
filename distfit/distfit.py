@@ -34,10 +34,16 @@ class distfit():
     -------
     >>> from distfit import distfit
     >>>
+    >>> # Create dataset
     >>> X = np.random.normal(0, 2, 1000)
     >>> y = [-8,-6,0,1,2,3,4,5,6]
     >>>
+    >>> # Set parameters
+    >>> # Default method is set to parameteric models
     >>> dist = distfit()
+    >>> # In case of quantile
+    >>> dist = distfit(method='quantile')
+    >>> # Fit using method
     >>> model_results = dist.fit_transform(X)
     >>> dist.plot()
     >>>
@@ -173,22 +179,29 @@ class distfit():
         X = _format_data(X)
         self.size = len(X)
 
+        # Get histogram of original X
+        [X_bins, y_obs] = _get_hist_params(X, self.bins)
+        # Smoothing by interpolation
+        [X_bins, y_obs] = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
+        self.histdata = (y_obs, X_bins)
+
         if self.method=='parametric':
-            # Get histogram of original X
-            [X_bins, y_obs] = _get_hist_params(X, self.bins)
-            [X_bins, y_obs] = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
             # Compute best distribution fit on the empirical X
             out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, verbose=verbose)
             # Determine confidence intervals on the best fitting distribution
-            model = _compute_cii(self, model)
+            model = _compute_cii(self, model, verbose=verbose)
             # Store
             self.model = model
             self.summary = out_summary
-            self.histdata = (y_obs, X_bins)
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, X)
+            self.model = _compute_cii(self, X, verbose=verbose)
+            self.summary = None
+        elif self.method=='percentile':
+            # Determine confidence intervals on the best fitting distribution
+            self.model = _compute_cii(self, X, verbose=verbose)
             self.percentile = np.percentile(X, 7)
+            self.summary = None
         else:
             raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile".')
 
@@ -318,6 +331,7 @@ class distfit():
         elif (self.method=='quantile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         else:
+            if verbose>=3: print('[distfit] >Warning: nothing to plot. Method not yet implemented for %s' %(self.method))
             fig, ax = None, None
         # Return
         return fig, ax
@@ -445,26 +459,7 @@ class distfit():
         if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
         if out.get('df', None) is not None: self.df = out['df']
 
-
-# %% Utils
-def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary):
-    out = {}
-    out['model'] = model
-    out['summary'] = summary
-    out['histdata'] = histdata
-    out['size'] = size
-    out['alpha'] = alpha
-    out['bins'] = bins
-    out['bound'] = bound
-    out['distr'] = distr
-    out['method'] = method
-    out['multtest'] = multtest
-    out['n_perm'] = n_perm
-    out['smooth'] = smooth
-    # Return
-    return out
-
-
+# %%
 def _predict_parametric(self, y, verbose=3):
     # Check which distribution fits best to the data
     if verbose>=4: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
@@ -520,8 +515,61 @@ def _predict_parametric(self, y, verbose=3):
     return out
 
 
-# quantile test
+# %% _predict_quantile predict
 def _predict_quantile(self, y, verbose=3):
+    """Compute Probability based on quantiles.
+
+    Description
+    -----------
+    Suppose you have 2 data sets with a unknown distribution and you want to test
+    if some arbitrary statistic (e.g 7th percentile) is the same in the 2 data sets.
+    An appropirate test statistic is the difference between the 7th percentile,
+    and if we knew the null distribution of this statisic, we could test for the
+    null hypothesis that the statistic = 0. Permuting the labels of the 2 data sets
+    allows us to create the empirical null distribution.
+
+
+    """
+    # Set bounds
+    teststat = np.ones_like(y) * np.nan
+    Praw = np.ones_like(y)
+
+    # Predict
+    y_pred = np.repeat('none', len(y))
+    if not isinstance(self.model['CII_max_alpha'], type(None)):
+        if self.bound=='up' or self.bound=='right' or self.bound=='high' or self.bound=='both':
+            y_pred[y > self.model['CII_max_alpha']]='up'
+    if not isinstance(self.model['CII_min_alpha'], type(None)):
+        if self.bound=='down' or self.bound=='left' or self.bound=='low' or self.bound=='both':
+            y_pred[y < self.model['CII_min_alpha']]='down'
+
+    # Compute multiple testing to correct for Pvalues
+    # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
+    Praw[np.isin(y_pred,['down','up'])]=0
+
+    # Make structured output
+    df = pd.DataFrame()
+    df['y'] = y
+    df['y_proba'] = Praw
+    df['y_pred'] = y_pred
+    df['P'] = Praw
+    df['teststat'] = teststat
+
+    # Store in object
+    self.df = df
+    self.y_proba = Praw
+    self.y_pred = y_pred
+
+    out = {}
+    out['df'] = df
+    out['y_proba'] = Praw
+    out['y_pred'] = y_pred
+    return out
+
+
+
+# %% percentile predict
+def _predict_percentile(self, y, verbose=3):
     """Compute Probability based on quantiles.
 
     Description
@@ -583,7 +631,9 @@ def _predict_quantile(self, y, verbose=3):
 # Plot
 def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
     fig, ax = plt.subplots(figsize=figsize)
-    plt.hist(self.model['samples'], 25, histtype='step', label='empirical distribution')
+    # Plot empirical data
+    ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='empirical distribution')
+    # add CII
     ax.axvline(self.model['CII_min_alpha'], linestyle='--', c='r', label='CII low')
     ax.axvline(self.model['CII_max_alpha'], linestyle='--', c='r', label='CII high')
 
@@ -596,10 +646,10 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbos
 
         idxIN = np.logical_or(self.df['y_pred']=='down', self.df['y_pred']=='up')
         if np.any(idxIN):
-            ax.scatter(self.df['y'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+            ax.scatter(self.df['y'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Outside boundaries')
         idxOUT = self.df['y_pred']=='none'
         if np.any(idxOUT):
-            ax.scatter(self.df['y'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+            ax.scatter(self.df['y'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Inside boundaries')
 
     # Limit axis
     if xlim is not None:
@@ -703,7 +753,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     return (fig, ax)
 
 
-# Utils
+# %% Utils
 def _format_data(data):
     # Convert pandas to numpy
     if str(data.dtype)=='O': data=data.astype(float)
@@ -714,7 +764,25 @@ def _format_data(data):
     return(data)
 
 
-# Get the distributions based on user input
+def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary):
+    out = {}
+    out['model'] = model
+    out['summary'] = summary
+    out['histdata'] = histdata
+    out['size'] = size
+    out['alpha'] = alpha
+    out['bins'] = bins
+    out['bound'] = bound
+    out['distr'] = distr
+    out['method'] = method
+    out['multtest'] = multtest
+    out['n_perm'] = n_perm
+    out['smooth'] = smooth
+    # Return
+    return out
+
+
+# %% Get the distributions based on user input
 def _get_distributions(distr):
     out_distr=[]
 
@@ -751,7 +819,7 @@ def _get_distributions(distr):
     return(out_distr)
 
 
-# Get histogram of original data
+# %% Get histogram of original data
 def _get_hist_params(X, bins, mhist='numpy'):
     if mhist=='numpy':
         [histvals, binedges] = np.histogram(X, bins=bins, density=True)
@@ -767,7 +835,7 @@ def _get_hist_params(X, bins, mhist='numpy'):
     return(binedges, histvals)
 
 
-# Compute score for each distribution
+# %% Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     out = []
     model = {}
@@ -840,8 +908,10 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     return(out, model)
 
 
-# Determine confidence intervals on the best fitting distribution
-def _compute_cii(self, model):
+# %% Determine confidence intervals on the best fitting distribution
+def _compute_cii(self, model, verbose=3):
+    if verbose>=3: print("[distfit] >Compute confidence interval [%s]" %(self.method))
+    CIIup, CIIdown = None, None
     if self.method=='parametric':
         # Separate parts of parameters
         arg = model['params'][:-2]
@@ -850,13 +920,18 @@ def _compute_cii(self, model):
 
         # Determine %CII
         dist = getattr(st, model['name'])
-        CIIup, CIIdown = None, None
         if self.alpha is not None:
             if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
                 CIIdown = dist.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - self.alpha, loc=loc, scale=scale)
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
                 CIIup = dist.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(self.alpha, loc=loc, scale=scale)
     elif self.method=='quantile':
+        X = model
+        model = {}
+        CIIdown = np.quantile(X, 1 - self.alpha)
+        CIIup = np.quantile(X, self.alpha)
+        # model['model'] = model
+    elif self.method=='percentile':
         X = model
         model = {}
         # Set Confidence intervals

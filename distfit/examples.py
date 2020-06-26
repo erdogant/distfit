@@ -207,17 +207,20 @@ model.fit_transform(X)
 model.plot()
 
 
-# %%
+# %% Quantile approach
+from distfit import distfit
+import numpy as np
+
 X = np.random.normal(10, 3, 2000)
 y = [3,4,5,6,10,11,12,18,20]
 
 # Initialize
-dist = distfit(distr='full', alpha=0.05)
+dist = distfit(method='quantile', alpha=0.05)
 dist.fit_transform(X)
 dist.plot()
 
 # Make prediction
 dist.predict(y)
 dist.plot()
+dist.plot_summary()
 
-# %%
