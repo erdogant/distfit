@@ -127,6 +127,9 @@ class distfit():
         # Get the desired distributions.
         if self.method=='parametric':
             self.distributions = _get_distributions(self.distr)
+        elif self.method=='discrete':
+            pass
+            # TODO: https://stackoverflow.com/questions/62360325/determining-best-fit-distributions-by-sse-python-3-8/62489856#62489856
         elif self.method=='quantile':
             pass
         elif self.method=='percentile':
@@ -197,6 +200,8 @@ class distfit():
             # Store
             self.model = model
             self.summary = out_summary
+        elif self.method=='discrete':
+            pass
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, X, verbose=verbose)
@@ -299,6 +304,8 @@ class distfit():
 
         if self.method=='parametric':
             out = _predict_parametric(self, y, verbose=verbose)
+        elif self.method=='discrete':
+            pass
         elif self.method=='quantile':
             out = _predict_quantile(self, y, verbose=verbose)
         elif self.method=='percentile':
@@ -334,6 +341,8 @@ class distfit():
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        elif (self.method=='discrete'):
+            pass
         elif (self.method=='quantile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='percentile'):
