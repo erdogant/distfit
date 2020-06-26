@@ -127,8 +127,10 @@ class distfit():
             self.distributions = _get_distributions(self.distr)
         elif self.method=='quantile':
             pass
+        elif self.method=='percentile':
+            pass
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
 
     # Transform
     def transform(self, X, verbose=3):
@@ -203,7 +205,7 @@ class distfit():
             self.percentile = np.percentile(X, 7)
             self.summary = None
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
 
     # Fit and transform in one go
     def fit_transform(self, X, verbose=3):
@@ -298,7 +300,7 @@ class distfit():
         elif self.method=='quantile':
             out = _predict_quantile(self, y, verbose=verbose)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile"')
+            raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
         # Return
         return out
 
@@ -946,7 +948,7 @@ def _compute_cii(self, model, verbose=3):
         # Store
         model['samples'] = samples
     else:
-        raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile"')
+        raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
 
     # Store
     model['CII_min_alpha'] = CIIup
