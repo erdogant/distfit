@@ -29,7 +29,9 @@ Content
   :maxdepth: 3
   :caption: Methods
 
-  Algorithm
+  Parametric
+  Quantile
+  Percentile
   Performance
   Save and Load
 
