@@ -7,7 +7,6 @@ def test_distfit():
     # Initialize
     dist = distfit()
     assert np.all(np.isin(['method', 'alpha', 'bins', 'distr','multtest','n_perm'], dir(dist)))
-
     # Fit and transform data
     dist.fit_transform(X, verbose=3)
     
@@ -109,3 +108,17 @@ def test_distfit():
     dist.fit_transform(X, verbose=0)
     dist.predict(y)
     assert np.all(np.isin(np.unique(dist.y_pred), ['none','up']))
+
+    # TEST 13: Precentile
+    X = np.random.normal(0, 2, [10,100])
+    y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+    dist = distfit(method='percentile')
+    dist.fit_transform(X, verbose=0)
+    results=dist.predict(y)
+    assert np.all(np.isin([*results.keys()], ['df', 'y_proba', 'y_pred']))
+
+    # TEST 14: Quantile
+    dist = distfit(method='quantile')
+    dist.fit_transform(X, verbose=0)
+    results=dist.predict(y)
+    assert np.all(np.isin([*results.keys()], ['df', 'y_proba', 'y_pred']))
