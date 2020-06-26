@@ -38,9 +38,9 @@ The method **percentile** simply computes the confidence intervals based on the 
 .. table:: Distribution fit
    :align: center
 
-   +-----------------+
-   | fig_percentile1 |
-   +-----------------+
+   +-------------------+
+   | |fig_percentile1| |
+   +-------------------+
 
 .. code:: python
 
@@ -56,9 +56,9 @@ The method **percentile** simply computes the confidence intervals based on the 
 .. table:: Distribution fit
    :align: center
 
-   +-----------------+
-   | fig_percentile2 |
-   +-----------------+
+   +-------------------+
+   | |fig_percentile2| |
+   +-------------------+
 
 
 +-----+-----------+----------+-----+------------+

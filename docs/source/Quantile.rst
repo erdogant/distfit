@@ -38,9 +38,9 @@ The method **quantile** simply computes the confidence intervals based on the *q
 .. table:: Distribution fit
    :align: center
 
-   +---------------+
-   | fig_quantile1 |
-   +---------------+
+   +-----------------+
+   | |fig_quantile1| |
+   +-----------------+
 
 .. code:: python
 
@@ -56,8 +56,8 @@ The method **quantile** simply computes the confidence intervals based on the *q
 .. table:: Distribution fit
    :align: center
 
-   +---------------+
-   | fig_quantile2 |
-   +---------------+
+   +-----------------+
+   | |fig_quantile2| |
+   +-----------------+
 
 
