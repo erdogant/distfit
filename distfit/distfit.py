@@ -43,6 +43,8 @@ class distfit():
     >>> dist = distfit()
     >>> # In case of quantile
     >>> dist = distfit(method='quantile')
+    >>> # In case of quantile
+    >>> dist = distfit(method='percentile')
     >>> # Fit using method
     >>> model_results = dist.fit_transform(X)
     >>> dist.plot()
@@ -175,7 +177,7 @@ class distfit():
             total number of elements in for data X
 
         """
-        if len(X)<1: raise Exception('[distfit] Error: Input X is empty!')
+        if len(X)<1: raise Exception('[distfit] >Error: Input X is empty!')
         if verbose>=3: print('[distfit] >transform..')
         # Format the X
         X = _format_data(X)
@@ -299,6 +301,8 @@ class distfit():
             out = _predict_parametric(self, y, verbose=verbose)
         elif self.method=='quantile':
             out = _predict_quantile(self, y, verbose=verbose)
+        elif self.method=='percentile':
+            out = _predict_percentile(self, y, verbose=verbose)
         else:
             raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
         # Return
@@ -331,6 +335,8 @@ class distfit():
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='quantile'):
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        elif (self.method=='percentile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         else:
             if verbose>=3: print('[distfit] >Warning: nothing to plot. Method not yet implemented for %s' %(self.method))
@@ -519,19 +525,7 @@ def _predict_parametric(self, y, verbose=3):
 
 # %% _predict_quantile predict
 def _predict_quantile(self, y, verbose=3):
-    """Compute Probability based on quantiles.
-
-    Description
-    -----------
-    Suppose you have 2 data sets with a unknown distribution and you want to test
-    if some arbitrary statistic (e.g 7th percentile) is the same in the 2 data sets.
-    An appropirate test statistic is the difference between the 7th percentile,
-    and if we knew the null distribution of this statisic, we could test for the
-    null hypothesis that the statistic = 0. Permuting the labels of the 2 data sets
-    allows us to create the empirical null distribution.
-
-
-    """
+    """Predict based on quantiles."""
     # Set bounds
     teststat = np.ones_like(y) * np.nan
     Praw = np.ones_like(y)
@@ -569,7 +563,6 @@ def _predict_quantile(self, y, verbose=3):
     return out
 
 
-
 # %% percentile predict
 def _predict_percentile(self, y, verbose=3):
     """Compute Probability based on quantiles.
@@ -586,19 +579,8 @@ def _predict_percentile(self, y, verbose=3):
 
     """
     # Set bounds
-    # cii_high = (0 + (self.alpha / 2)) * 100
-    # cii_low = (1 - (self.alpha / 2)) * 100
     teststat = np.ones_like(y) * np.nan
-    Praw = np.ones_like(y) * np.nan
-
-    # Compute statistics for y based on quantile distribution
-    for i in range(0, len(y)):
-        getstat = np.percentile(y[i], 7) - self.percentile
-        getP = (2 * np.sum(self.model['samples'] >= np.abs(getstat)) / self.n_perm)
-        getP = np.clip(getP, 0, 1)
-        Praw[i] = getP
-        teststat[i] = getstat
-        if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getP))
+    Praw = np.ones_like(y)
 
     # Predict
     y_pred = np.repeat('none', len(y))
@@ -609,8 +591,20 @@ def _predict_percentile(self, y, verbose=3):
         if self.bound=='down' or self.bound=='left' or self.bound=='low' or self.bound=='both':
             y_pred[y < self.model['CII_min_alpha']]='down'
 
+    # Compute statistics for y based on quantile distribution
+    for i in range(0, len(y)):
+        getstat = np.percentile(y[i], 7) - self.percentile
+        # getP = (2 * np.sum(self.model['samples'] >= np.abs(getstat)) / self.n_perm)
+        # getP = np.clip(getP, 0, 1)
+        # Praw[i] = getP
+        teststat[i] = getstat
+        if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getP))
+
+    Praw[np.isin(y_pred,['down','up'])]=0
+
     # Compute multiple testing to correct for Pvalues
-    y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
+    # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
+    y_proba = Praw
 
     # Make structured output
     df = pd.DataFrame()
@@ -937,16 +931,16 @@ def _compute_cii(self, model, verbose=3):
         X = model
         model = {}
         # Set Confidence intervals
-        ps = np.array([np.random.permutation(len(X)) for i in range(self.n_perm)])
-        xp = X[ps[:, :10]]
-        yp = X[ps[:, 10:]]
-        samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
+        # ps = np.array([np.random.permutation(len(X)) for i in range(self.n_perm)])
+        # xp = X[ps[:, :10]]
+        # yp = X[ps[:, 10:]]
+        # samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
         cii_high = (0 + (self.alpha / 2)) * 100
         cii_low = (1 - (self.alpha / 2)) * 100
-        CIIup = np.percentile(samples, cii_high)
-        CIIdown = np.percentile(samples, cii_low)
+        CIIup = np.percentile(X, cii_high)
+        CIIdown = np.percentile(X, cii_low)
         # Store
-        model['samples'] = samples
+        # model['samples'] = samples
     else:
         raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
 

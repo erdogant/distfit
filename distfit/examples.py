@@ -216,7 +216,8 @@ X = np.random.normal(10, 3, 2000)
 y = [3,4,5,6,10,11,12,18,20]
 
 # Initialize
-dist = distfit(method='quantile', alpha=0.05)
+dist = distfit(method='percentile', alpha=0.05)
+# dist = distfit(method='quantile', alpha=0.05)
 dist.fit_transform(X)
 dist.plot()
 
@@ -225,3 +226,5 @@ dist.predict(y)
 dist.plot()
 dist.plot_summary()
 
+from tabulate import tabulate
+print(tabulate(dist.df, tablefmt="grid", headers="keys"))
