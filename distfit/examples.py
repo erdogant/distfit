@@ -219,3 +219,5 @@ dist.plot()
 # Make prediction
 dist.predict(y)
 dist.plot()
+
+# %%

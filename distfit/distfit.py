@@ -48,7 +48,7 @@ class distfit():
     Parameters
     ----------
     method : str, default: 'parametric'
-        Specify the method type: 'parametric',  'empirical'
+        Specify the method type: 'parametric','quantile'
     alpha : float, default: 0.05
         Significance alpha.
     multtest : str, default: 'fdr_bh'
@@ -66,7 +66,7 @@ class distfit():
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
     n_perm : int, default: 10000
-        Number of permutations to model null-distribution in case of method is "empirical"
+        Number of permutations to model null-distribution in case of method is "quantile"
 
     Returns
     -------
@@ -119,10 +119,10 @@ class distfit():
         # Get the desired distributions.
         if self.method=='parametric':
             self.distributions = _get_distributions(self.distr)
-        elif self.method=='empirical':
+        elif self.method=='quantile':
             pass
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile".')
 
     # Transform
     def transform(self, X, verbose=3):
@@ -137,8 +137,8 @@ class distfit():
             Residual Sum of Squares approach (RSS) for the specified distributions. Based on
             the best distribution-fit, the confidence intervals (CII) can be determined
             for later usage in the :func:`predict` function.
-        **empirical**
-            In the empirical case, the data is ranked and the top/lower quantiles are determined.
+        **quantile**
+            In the quantile case, the data is ranked and the top/lower quantiles are determined.
 
         Parameters
         ----------
@@ -185,12 +185,12 @@ class distfit():
             self.model = model
             self.summary = out_summary
             self.histdata = (y_obs, X_bins)
-        elif self.method=='empirical':
+        elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, X)
             self.percentile = np.percentile(X, 7)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile".')
 
     # Fit and transform in one go
     def fit_transform(self, X, verbose=3):
@@ -282,10 +282,10 @@ class distfit():
 
         if self.method=='parametric':
             out = _predict_parametric(self, y, verbose=verbose)
-        elif self.method=='empirical':
-            out = _predict_empirical(self, y, verbose=verbose)
+        elif self.method=='quantile':
+            out = _predict_quantile(self, y, verbose=verbose)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical"')
+            raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile"')
         # Return
         return out
 
@@ -315,8 +315,8 @@ class distfit():
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
-        elif (self.method=='empirical'):
-            fig, ax = _plot_empirical(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+        elif (self.method=='quantile'):
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         else:
             fig, ax = None, None
         # Return
@@ -520,9 +520,9 @@ def _predict_parametric(self, y, verbose=3):
     return out
 
 
-# empirical test
-def _predict_empirical(self, y, verbose=3):
-    """Compute Probability based on an empirical test.
+# quantile test
+def _predict_quantile(self, y, verbose=3):
+    """Compute Probability based on quantiles.
 
     Description
     -----------
@@ -541,7 +541,7 @@ def _predict_empirical(self, y, verbose=3):
     teststat = np.ones_like(y) * np.nan
     Praw = np.ones_like(y) * np.nan
 
-    # Compute statistics for y based on empirical distribution
+    # Compute statistics for y based on quantile distribution
     for i in range(0, len(y)):
         getstat = np.percentile(y[i], 7) - self.percentile
         getP = (2 * np.sum(self.model['samples'] >= np.abs(getstat)) / self.n_perm)
@@ -581,7 +581,7 @@ def _predict_empirical(self, y, verbose=3):
 
 
 # Plot
-def _plot_empirical(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
+def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
     fig, ax = plt.subplots(figsize=figsize)
     plt.hist(self.model['samples'], 25, histtype='step', label='empirical distribution')
     ax.axvline(self.model['CII_min_alpha'], linestyle='--', c='r', label='CII low')
@@ -856,7 +856,7 @@ def _compute_cii(self, model):
                 CIIdown = dist.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - self.alpha, loc=loc, scale=scale)
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
                 CIIup = dist.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(self.alpha, loc=loc, scale=scale)
-    elif self.method=='empirical':
+    elif self.method=='quantile':
         X = model
         model = {}
         # Set Confidence intervals
@@ -871,7 +871,7 @@ def _compute_cii(self, model):
         # Store
         model['samples'] = samples
     else:
-        raise Exception('[distfit] Error: method parameter can only be "parametric" or "empirical"')
+        raise Exception('[distfit] Error: method parameter can only be "parametric" or "quantile"')
 
     # Store
     model['CII_min_alpha'] = CIIup
