@@ -607,7 +607,7 @@ def _predict_percentile(self, y, verbose=3):
         # getP = np.clip(getP, 0, 1)
         # Praw[i] = getP
         teststat[i] = getstat
-        if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getP))
+        if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getstat))
 
     Praw[np.isin(y_pred,['down','up'])]=0
 
