@@ -550,7 +550,7 @@ def _predict_quantile(self, y, verbose=3):
 
     # Compute multiple testing to correct for Pvalues
     # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
-    Praw[np.isin(y_pred,['down','up'])]=0
+    Praw[np.isin(y_pred,['down','up'])] = 0
 
     # Make structured output
     df = pd.DataFrame()
@@ -906,6 +906,8 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
 
         except Exception:
             pass
+            # e = sys.exc_info()[0]
+            # if verbose>=1: print(e)
 
     # Sort the output
     out = out.sort_values('RSS')
