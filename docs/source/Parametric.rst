@@ -66,7 +66,7 @@ The ``full`` set contains the following set of distributions:
 	+------------+---------------+------------+---------------+------------+  
 	| halfgennorm| hypsecant     | invgamma   | invgauss      | invweibull |
 	+------------+---------------+------------+---------------+------------+  
-	| laplace    | levy          | levy_l     | levy_stable   | logistic   |
+	| laplace    | levy          | levy_l [X] | levy_stable[X]| logistic   |
 	+------------+---------------+------------+---------------+------------+  
 	+ lognorm    | lomax         | maxwell    | mielke        | nakagami   |
 	+------------+---------------+------------+---------------+------------+  
@@ -86,6 +86,8 @@ The ``full`` set contains the following set of distributions:
 	+------------+---------------+------------+---------------+------------+
 	| reciprocal | truncexpon    | truncnorm  | weibull_min   | weibull_max|
 	+------------+---------------+------------+---------------+------------+
+
+Note that levy_l and  levy_stable are removed from the full list because it is too slow.
 
 .. code:: python
 
