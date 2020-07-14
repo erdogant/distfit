@@ -56,7 +56,7 @@ class distfit():
     Parameters
     ----------
     method : str, default: 'parametric'
-        Specify the method type: 'parametric','quantile'
+        Specify the method type: 'parametric','quantile','percentile'
     alpha : float, default: 0.05
         Significance alpha.
     multtest : str, default: 'fdr_bh'
