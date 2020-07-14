@@ -290,8 +290,8 @@ The distributions options are
 </tr>
 <tr class="row-even"><td><p>laplace</p></td>
 <td><p>levy</p></td>
-<td><p>levy_l</p></td>
-<td><p>levy_stable</p></td>
+<td><p>levy_l [X]</p></td>
+<td><p>levy_stable[X]</p></td>
 <td><p>logistic</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><p>lognorm</p></td>
@@ -352,6 +352,7 @@ The distributions options are
 </tbody>
 </table>
 </div></blockquote>
+<p>Note that levy_l and  levy_stable are removed from the full list because it is too slow.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select all distributions</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
 </pre></div>
