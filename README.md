@@ -38,7 +38,7 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 - [License](#-copyright)
 
 ### Installation
-    Install distfit from PyPI (recommended). distfit is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
+Install distfit from PyPI (recommended). distfit is compatible with Python 3.6+ and runs on Linux, MacOS X and Windows. 
 
 #### Install from PyPi
 ```
