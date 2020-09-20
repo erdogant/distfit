@@ -50,14 +50,14 @@ model.plot()
 
 # %%
 # Create random data with varying number of samples
-import pandas as pd
-samples = np.arange(250, 20000, 250)
 
 #%%
 # Initialize model
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-smooth_window=[None,1,3,5,7,9,11]
+import pandas as pd
+samples = np.arange(250, 20000, 250)
+smooth_window=[None,2,4,6,8,10]
 plt.figure(figsize=(15,10))
 
 for smooth in tqdm(smooth_window):
@@ -67,15 +67,18 @@ for smooth in tqdm(smooth_window):
     for s in samples:
         X = np.random.normal(0, 2, s)
         dist.fit_transform(X, verbose=0)
-        out.append([dist.model['loc'], dist.model['scale'], dist.model['name'], np.where(dist.summary['distr']=='norm')[0][0], s])
+        # out.append([dist.model['RSS'], dist.model['name'], np.where(dist.summary['distr']=='norm')[0][0], s])
+        out.append([dist.model['scale'], dist.model['name'], s])
 
-    df=pd.DataFrame(out, columns=['std','mu','name','norm_place','samples'])
+    df=pd.DataFrame(out, columns=['mu','name','samples'])
     ax=df['mu'].plot(grid=True, label='smooth: '+str(smooth) + ' - ' + str(df['mu'].mean()))
 
 ax.set_xlabel('Nr.Samples')
 ax.set_ylabel('mu')
 ax.set_xticks(np.arange(0,len(samples)))
-ax.set_xticklabels(samples.astype(str))
+ax.set_xticklabels(samples.astype(str), rotation = 90)
+# ax.set_ylim([0, 0.02])
+# ax.set_ylim([1.9, 2.1])
 ax.legend()
 
 # ax=df['std'].plot(grid=True)
@@ -83,6 +86,36 @@ ax.legend()
 # ax.set_ylabel('std')
 # ax.set_xticks(np.arange(0,len(samples)))
 # ax.set_xticklabels(samples.astype(str))
+
+#%%
+# Initialize model
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+import pandas as pd
+samples = np.arange(250, 20000, 250)
+smooth_window=[None, 2,4,6,8,10]
+plt.figure(figsize=(15,10))
+
+for smooth in tqdm(smooth_window):
+    dist = distfit(distr='uniform', smooth=smooth)
+    # dist = distfit(smooth=smooth)
+    # Estimate paramters for the number of samples
+    out = []
+    for s in samples:
+        X = np.random.randint(0, 100, s)
+        dist.fit_transform(X, verbose=0)
+        out.append([dist.model['RSS'], dist.model['name'], np.where(dist.summary['distr']=='uniform')[0][0], s])
+
+    df = pd.DataFrame(out, columns=['RSS','name','out','samples'])
+    ax=df['RSS'].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df['RSS'].mean()))
+
+ax.set_xlabel('Nr.Samples')
+ax.set_ylabel('RSS')
+ax.set_xticks(np.arange(0,len(samples)))
+ax.set_xticklabels(samples.astype(str), rotation = 90)
+ax.set_ylim([0, 0.0005])
+ax.legend()
+
 
 # %% Fit and transform
 X = np.random.beta(5, 8, [100,100])
