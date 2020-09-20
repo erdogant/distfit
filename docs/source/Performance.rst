@@ -166,7 +166,8 @@ It is interesting to see that there is no clear contribution of the smoothing. T
 .. figure:: ../figs/perf_sampling_mu_smoothing.png
     :scale: 80%
 
-Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that **not** smooting shows the best fit by an increasing number of samples (blue line); from *7000* samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems only to be usefull for very small samples sizes.
+Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that **not** smooting shows the best fit by an increasing number of samples (blue line); from *7000* samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems to be effective for samples sizes lower then approximately 5000 samples. Note that number may be different across data sets.
+
 
 
 .. _perf_sampling_mu_smoothing:
@@ -219,7 +220,7 @@ For demonstration purposes, lets generate random integer values from a uniform d
 	ax.set_ylim([0, 0.001])
 	ax.legend()
 
-The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is the smooting windows 2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. From *7000* samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems only to be usefull with very small samples sizes. Similar results were also seen for continous data.
+The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is the smooting windows 2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. From *7000* samples, the smooting window does improve the fitting at all anymore. Note that number may be different across data sets. The conlusion is that the smooting window seems only to be usefull with very small samples sizes. Similar results were also seen for continous data.
 
 .. _int_smooth_samples_sizes:
 
