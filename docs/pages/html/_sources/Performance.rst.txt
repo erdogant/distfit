@@ -48,8 +48,7 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 Probability Density Function fitting
 ''''''''''''''''''''''''''''''''''''''''''''
 
-
-To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model. 
+To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model.
 
 .. code:: python
 
@@ -81,11 +80,10 @@ The model detected ``normal`` as the **best** pdf but a good RSS score is also d
     :scale: 80%
 
 
-Varying sample size
-''''''''''''''''''''''
+Varying sample sizes
+'''''''''''''''''''''''''''''''''''''
 
-The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the *mu*, *std* and detected distribution name.
-
+The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the *mu*, *std*. In this experiment we are generating random continous values from a normal distribution. We will fixate fitting normal distribution and examine the loc, and scale parameters.
 
 .. code:: python
 
@@ -120,8 +118,8 @@ When we plot the results, ``distfit`` nicely shows that by increasing the number
 
 
 
-Smoothing window
-''''''''''''''''''''''
+Smoothing
+''''''''''''''''''''''''''''''''
 
 If the number of samples is very low, it can be difficult to get a good fit on your data.
 A solution is to play with the ``bin`` size, eg. increase bin size. 
@@ -161,11 +159,69 @@ Lets evaluate the effect of this parameter.
 
 
 Here we are going to combine the number of samples with the smoothing parameter.
-It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average *mu*.
+It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average *mu*. We see that all smooting windows jump up-and-down the mu=2. However, the more samples, the smaller the variation becomes. The smooting parameter seems to be only effective in very low sample sizes.
 
 .. _perf_sampling_mu_smoothing:
 
 .. figure:: ../figs/perf_sampling_mu_smoothing.png
-    :scale: 70%
+    :scale: 80%
+
+Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that **not** smooting shows the best fit by an increasing number of samples (blue line); from *7000* samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems only to be usefull for very small samples sizes.
 
 
+.. _perf_sampling_mu_smoothing:
+
+.. figure:: ../figs/normal_smooth_sample_sizes.png
+    :scale: 80%
+
+
+
+Integer fitting
+''''''''''''''''''''''''''''''''
+
+In this example we will demonstrate the effect of fitting a distribution on integer values.
+For demonstration purposes, lets generate random integer values from a uniform distribution, and examine the RSS scores. We will iterate over sample sizes and smoothing windows to analyze the performance.
+
+.. code:: python
+
+	import matplotlib.pyplot as plt
+	from tqdm import tqdm
+	import pandas as pd
+
+	# Sample sizes
+	samples = np.arange(250, 20000, 250)
+	# Smooting windows
+	smooth_window=[None, 2, 4, 6, 8, 10]
+	
+	# Figure
+	plt.figure(figsize=(15,10))
+	
+	# Iterate over smooting window
+	for smooth in tqdm(smooth_window):
+            # Fit only for the uniform distribution
+	    dist = distfit(distr='uniform', smooth=smooth)
+	    # Estimate paramters for the number of samples
+	    out = []
+
+	    # Iterate over sample sizes
+	    for s in samples:
+		X = np.random.randint(0, 100, s)
+		dist.fit_transform(X, verbose=0)
+		out.append([dist.model['RSS'], dist.model['name'], s])
+
+	    df = pd.DataFrame(out, columns=['RSS','name','samples'])
+	    ax=df['RSS'].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df['RSS'].mean()))
+
+	ax.set_xlabel('Nr.Samples')
+	ax.set_ylabel('RSS')
+	ax.set_xticks(np.arange(0,len(samples)))
+	ax.set_xticklabels(samples.astype(str))
+	ax.set_ylim([0, 0.001])
+	ax.legend()
+
+The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is the smooting windows 2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. From *7000* samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems only to be usefull with very small samples sizes. Similar results were also seen for continous data.
+
+.. _int_smooth_samples_sizes:
+
+.. figure:: ../figs/int_smooth_sample_sizes.png
+    :scale: 80%

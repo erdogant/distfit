@@ -102,8 +102,9 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parameter fitting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#probability-density-function-fitting">Probability Density Function fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#varying-sample-size">Varying sample size</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#smoothing-window">Smoothing window</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#varying-sample-sizes">Varying sample sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#smoothing">Smoothing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#integer-fitting">Integer fitting</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Save and Load</span></p>
 <ul>
@@ -248,9 +249,9 @@
 <a class="reference internal image-reference" href="_images/gaus_mu_0_summary.png"><img alt="_images/gaus_mu_0_summary.png" src="_images/gaus_mu_0_summary.png" style="width: 710.4000000000001px; height: 425.6px;" /></a>
 </div>
 </div>
-<div class="section" id="varying-sample-size">
-<h1>Varying sample size<a class="headerlink" href="#varying-sample-size" title="Permalink to this headline">¶</a></h1>
-<p>The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the <em>mu</em>, <em>std</em> and detected distribution name.</p>
+<div class="section" id="varying-sample-sizes">
+<h1>Varying sample sizes<a class="headerlink" href="#varying-sample-sizes" title="Permalink to this headline">¶</a></h1>
+<p>The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the <em>mu</em>, <em>std</em>. In this experiment we are generating random continous values from a normal distribution. We will fixate fitting normal distribution and examine the loc, and scale parameters.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create random data with varying number of samples</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
 
@@ -266,8 +267,8 @@
 </pre></div>
 </div>
 <p>When we plot the results, <code class="docutils literal notranslate"><span class="pre">distfit</span></code> nicely shows that by increasing the number of samples results in a better fit of the parameters. A convergence towards mu=2 and std=0 is clearly seen.</p>
-<table class="docutils align-center" id="id1">
-<caption><span class="caption-text">Sampling example</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-center" id="id2">
+<caption><span class="caption-text">Sampling example</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 50%" />
 <col style="width: 50%" />
@@ -279,8 +280,8 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="smoothing-window">
-<h1>Smoothing window<a class="headerlink" href="#smoothing-window" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="smoothing">
+<h1>Smoothing<a class="headerlink" href="#smoothing" title="Permalink to this headline">¶</a></h1>
 <p>If the number of samples is very low, it can be difficult to get a good fit on your data.
 A solution is to play with the <code class="docutils literal notranslate"><span class="pre">bin</span></code> size, eg. increase bin size.
 Another manner is by smoothing the histogram with the <code class="docutils literal notranslate"><span class="pre">smooth</span></code> parameter. The default is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.
@@ -300,8 +301,8 @@ Lets evaluate the effect of this parameter.</p>
 <span class="n">model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<table class="docutils align-center" id="id2">
-<caption><span class="caption-text">Comparison smoothing parameter</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-center" id="id3">
+<caption><span class="caption-text">Comparison smoothing parameter</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col style="width: 50%" />
 <col style="width: 50%" />
@@ -313,9 +314,58 @@ Lets evaluate the effect of this parameter.</p>
 </tbody>
 </table>
 <p>Here we are going to combine the number of samples with the smoothing parameter.
-It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average <em>mu</em>.</p>
+It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average <em>mu</em>. We see that all smooting windows jump up-and-down the mu=2. However, the more samples, the smaller the variation becomes. The smooting parameter seems to be only effective in very low sample sizes.</p>
 <div class="figure align-default" id="perf-sampling-mu-smoothing">
-<a class="reference internal image-reference" href="_images/perf_sampling_mu_smoothing.png"><img alt="_images/perf_sampling_mu_smoothing.png" src="_images/perf_sampling_mu_smoothing.png" style="width: 625.8px; height: 412.29999999999995px;" /></a>
+<a class="reference internal image-reference" href="_images/perf_sampling_mu_smoothing.png"><img alt="_images/perf_sampling_mu_smoothing.png" src="_images/perf_sampling_mu_smoothing.png" style="width: 715.2px; height: 488.0px;" /></a>
+</div>
+<p>Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples (blue line); from <em>7000</em> samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems only to be usefull for very small samples sizes.</p>
+<div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="_images/normal_smooth_sample_sizes.png"><img alt="_images/normal_smooth_sample_sizes.png" src="_images/normal_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" /></a>
+</div>
+</div>
+<div class="section" id="integer-fitting">
+<h1>Integer fitting<a class="headerlink" href="#integer-fitting" title="Permalink to this headline">¶</a></h1>
+<p>In this example we will demonstrate the effect of fitting a distribution on integer values.
+For demonstration purposes, lets generate random integer values from a uniform distribution, and examine the RSS scores. We will iterate over sample sizes and smoothing windows to analyze the performance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Sample sizes</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+<span class="c1"># Smooting windows</span>
+<span class="n">smooth_window</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+<span class="c1"># Figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Iterate over smooting window</span>
+<span class="k">for</span> <span class="n">smooth</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">smooth_window</span><span class="p">):</span>
+    <span class="c1"># Fit only for the uniform distribution</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span><span class="p">)</span>
+    <span class="c1"># Estimate paramters for the number of samples</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iterate over sample sizes</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;RSS&#39;</span><span class="p">],</span> <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">])</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;RSS&#39;</span><span class="p">,</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="s1">&#39;samples&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RSS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;smooth: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smooth</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - RSS: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;RSS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Nr.Samples&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RSS&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is the smooting windows 2. Tip: do not use this. Interesting to see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples. From <em>7000</em> samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems only to be usefull with very small samples sizes. Similar results were also seen for continous data.</p>
+<div class="figure align-default" id="int-smooth-samples-sizes">
+<a class="reference internal image-reference" href="_images/int_smooth_sample_sizes.png"><img alt="_images/int_smooth_sample_sizes.png" src="_images/int_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" /></a>
 </div>
 </div>
 
