@@ -2,11 +2,8 @@
 
 -------------------------------------
 
-Examples
-''''''''''
-
 Fit distribution
---------------------------------------------------
+''''''''''''''''''''
 
 Specify distfit parameters. In this example nothing is specied and that means that all parameters are set to default.
 
@@ -61,7 +58,7 @@ Note that the best fit should be [normal], as this was also the input data. Howe
 
 
 Specify distribution
---------------------------------------------------
+''''''''''''''''''''''
 
 Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:
 
@@ -80,7 +77,7 @@ Suppose you want to test for one specific distribution, such as the normal distr
 
 
 Make predictions
---------------------------------------------------
+''''''''''''''''''''''
 
 The ``predict`` function will compute the probability of samples in the fitted *PDF*. 
 Note that, due to multiple testing approaches, it can occur that samples can be located 
@@ -158,7 +155,7 @@ The output values has the same order as input value ``y``
 
 
 Extract results
---------------------------------------------------
+''''''''''''''''''''''
 
 In the previous example, we showed that the output can be captured ``results`` and ``out`` but the results are also stored in the object itself. 
 In our examples it is the ``dist`` object.

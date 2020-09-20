@@ -2,13 +2,12 @@
 
 -------------------------------------
 
-Performance
-'''''''''''
-The performance of ``distfit`` can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf). 
+
+The **performance** of ``distfit`` can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf). 
 
 
 Parameter fitting
------------------
+''''''''''''''''''''''
 Lets evalute the performance of ``distfit`` of the detected parameters when we draw random samples from a normal (Gaussian) distribution with *mu*=0 and *std*=2. We would expect to find *mu* and *std* very close to the input values.
 
 .. code:: python
@@ -47,7 +46,8 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 
 
 Probability Density Function fitting
--------------------------------------
+''''''''''''''''''''''''''''''''''''''''''''
+
 
 To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model. 
 
@@ -82,7 +82,8 @@ The model detected ``normal`` as the **best** pdf but a good RSS score is also d
 
 
 Varying sample size
---------------------
+''''''''''''''''''''''
+
 The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the *mu*, *std* and detected distribution name.
 
 
@@ -120,7 +121,8 @@ When we plot the results, ``distfit`` nicely shows that by increasing the number
 
 
 Smoothing window
-----------------
+''''''''''''''''''''''
+
 If the number of samples is very low, it can be difficult to get a good fit on your data.
 A solution is to play with the ``bin`` size, eg. increase bin size. 
 Another manner is by smoothing the histogram with the ``smooth`` parameter. The default is set to ``None``.

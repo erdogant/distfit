@@ -2,16 +2,13 @@
 
 -------------------------------------
 
-Save and Load
-''''''''''''''
-
-Saving and loading models can be desired to start from a previous learning point.
+**Saving** and **loading** models can be desired to start from a previous learning point.
 In order to accomplish this, two functions are implemented: function :func:`distfit.save` and function :func:`distfit.load`
 Below is an illustration how to save and load models.
 
 
 Saving
-----------------
+''''''''''''''
 
 Saving a learned model can be done using the function :func:`distfit.save`:
 
@@ -32,7 +29,7 @@ Saving a learned model can be done using the function :func:`distfit.save`:
 
 
 Loading
-----------------------
+''''''''''''''
 
 Loading a learned model can be done using the function :func:`dist.load`:
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; distfit distfit documentation</title>
+  <title>Fit distribution &mdash; distfit distfit documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Coding quality" href="Coding quality.html" />
-    <link rel="prev" title="Save and Load" href="Save and Load.html" /> 
+    <link rel="next" title="Coding quality" href="Coding%20quality.html" />
+    <link rel="prev" title="Saving" href="Save%20and%20Load.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,22 +97,29 @@
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Save and Load.html">Save and Load</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-size">Varying sample size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing-window">Smoothing window</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Save and Load</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html">Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html#loading">Loading</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#fit-distribution">Fit distribution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#specify-distribution">Specify distribution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#make-predictions">Make predictions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#extract-results">Extract results</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fit distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#specify-distribution">Specify distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#make-predictions">Make predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#extract-results">Extract results</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Coding quality.html">Coding quality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
 </ul>
 
@@ -160,7 +167,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Examples</li>
+      <li>Fit distribution</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -180,10 +187,8 @@
            <div itemprop="articleBody">
             
   <hr class="docutils" id="code-directive" />
-<div class="section" id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="fit-distribution">
-<h2>Fit distribution<a class="headerlink" href="#fit-distribution" title="Permalink to this headline">¶</a></h2>
+<h1>Fit distribution<a class="headerlink" href="#fit-distribution" title="Permalink to this headline">¶</a></h1>
 <p>Specify distfit parameters. In this example nothing is specied and that means that all parameters are set to default.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -232,7 +237,7 @@
 </table>
 </div>
 <div class="section" id="specify-distribution">
-<h2>Specify distribution<a class="headerlink" href="#specify-distribution" title="Permalink to this headline">¶</a></h2>
+<h1>Specify distribution<a class="headerlink" href="#specify-distribution" title="Permalink to this headline">¶</a></h1>
 <p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
 <span class="c1"># Fit on data</span>
@@ -247,7 +252,7 @@
 </div>
 </div>
 <div class="section" id="make-predictions">
-<h2>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline">¶</a></h2>
+<h1>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> function will compute the probability of samples in the fitted <em>PDF</em>.
 Note that, due to multiple testing approaches, it can occur that samples can be located
 outside the confidence interval but not marked as significant. See section Algorithm -&gt; Multiple testing for more information.</p>
@@ -370,7 +375,7 @@ The output values has the same order as input value <code class="docutils litera
 </table>
 </div>
 <div class="section" id="extract-results">
-<h2>Extract results<a class="headerlink" href="#extract-results" title="Permalink to this headline">¶</a></h2>
+<h1>Extract results<a class="headerlink" href="#extract-results" title="Permalink to this headline">¶</a></h1>
 <p>In the previous example, we showed that the output can be captured <code class="docutils literal notranslate"><span class="pre">results</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> but the results are also stored in the object itself.
 In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
 The same variable names are used;  <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">df</span></code>.</p>
@@ -466,7 +471,6 @@ The same variable names are used;  <code class="docutils literal notranslate"><s
 </tbody>
 </table>
 </div>
-</div>
 
 
            </div>
@@ -476,10 +480,10 @@ The same variable names are used;  <code class="docutils literal notranslate"><s
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Coding quality.html" class="btn btn-neutral float-right" title="Coding quality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Coding%20quality.html" class="btn btn-neutral float-right" title="Coding quality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Save and Load.html" class="btn btn-neutral float-left" title="Save and Load" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Save%20and%20Load.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

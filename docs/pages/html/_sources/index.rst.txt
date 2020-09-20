@@ -32,7 +32,17 @@ Content
   Parametric
   Quantile
   Percentile
+
+.. toctree::
+  :maxdepth: 3
+  :caption: Performance
+
   Performance
+
+.. toctree::
+  :maxdepth: 3
+  :caption: Save and Load
+
   Save and Load
 
 

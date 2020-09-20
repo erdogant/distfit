@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Save and Load &mdash; distfit distfit documentation</title>
+  <title>Saving &mdash; distfit distfit documentation</title>
   
 
   
@@ -36,8 +36,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Examples" href="Examples.html" />
-    <link rel="prev" title="Performance" href="Performance.html" /> 
+    <link rel="next" title="Fit distribution" href="Examples.html" />
+    <link rel="prev" title="Parameter fitting" href="Performance.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,24 +93,33 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Methods</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html">Performance</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Save and Load</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#saving">Saving</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#loading">Loading</a></li>
 </ul>
-</li>
+<p class="caption"><span class="caption-text">Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-size">Varying sample size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing-window">Smoothing window</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Save and Load</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#loading">Loading</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Fit distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#specify-distribution">Specify distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#make-predictions">Make predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#extract-results">Extract results</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Coding quality.html">Coding quality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
 </ul>
 
@@ -158,7 +167,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Save and Load</li>
+      <li>Saving</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,13 +187,11 @@
            <div itemprop="articleBody">
             
   <hr class="docutils" id="code-directive" />
-<div class="section" id="save-and-load">
-<h1>Save and Load<a class="headerlink" href="#save-and-load" title="Permalink to this headline">¶</a></h1>
-<p>Saving and loading models can be desired to start from a previous learning point.
+<p><strong>Saving</strong> and <strong>loading</strong> models can be desired to start from a previous learning point.
 In order to accomplish this, two functions are implemented: function <code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.save()</span></code> and function <code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.load()</span></code>
 Below is an illustration how to save and load models.</p>
 <div class="section" id="saving">
-<h2>Saving<a class="headerlink" href="#saving" title="Permalink to this headline">¶</a></h2>
+<h1>Saving<a class="headerlink" href="#saving" title="Permalink to this headline">¶</a></h1>
 <p>Saving a learned model can be done using the function <code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.save()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -202,7 +209,7 @@ Below is an illustration how to save and load models.</p>
 </div>
 </div>
 <div class="section" id="loading">
-<h2>Loading<a class="headerlink" href="#loading" title="Permalink to this headline">¶</a></h2>
+<h1>Loading<a class="headerlink" href="#loading" title="Permalink to this headline">¶</a></h1>
 <p>Loading a learned model can be done using the function <code class="xref py py-func docutils literal notranslate"><span class="pre">dist.load()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
@@ -210,7 +217,6 @@ Below is an illustration how to save and load models.</p>
 <span class="c1"># Load model</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;my_first_model.pkl&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
 </div>
 </div>
 
@@ -222,10 +228,10 @@ Below is an illustration how to save and load models.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Examples.html" class="btn btn-neutral float-right" title="Fit distribution" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Performance.html" class="btn btn-neutral float-left" title="Performance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Performance.html" class="btn btn-neutral float-left" title="Parameter fitting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
