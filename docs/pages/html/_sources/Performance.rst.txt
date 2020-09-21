@@ -83,7 +83,7 @@ The model detected ``normal`` as the **best** pdf but a good RSS score is also d
 Varying sample sizes
 '''''''''''''''''''''''''''''''''''''
 
-The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the *mu*, *std*. In this experiment we are generating random continous values from a normal distribution. We will fixate fitting normal distribution and examine the loc, and scale parameters.
+The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the *mu*, *std*. In this experiment we are generating random continuous values from a normal distribution. We will fixate fitting normal distribution and examine the loc, and scale parameters.
 
 .. code:: python
 
@@ -166,7 +166,7 @@ It is interesting to see that there is no clear contribution of the smoothing. T
 .. figure:: ../figs/perf_sampling_mu_smoothing.png
     :scale: 80%
 
-Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that **not** smooting shows the best fit by an increasing number of samples (blue line); from *7000* samples, the smooting window does improve the fitting at all anymore. The conlusion is that the smooting window seems to be effective for samples sizes lower then approximately 5000 samples. Note that number may be different across data sets.
+Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that **not** smooting shows the best fit by an increasing number of samples (blue line). As an example, from *7000* samples, the smooting window does **not** improve the fitting at all anymore. The conlusion is that smooting seems only be effective for samples sizes lower then approximately 5000 samples. Note that this number may be different across data sets.
 
 
 
@@ -220,7 +220,7 @@ For demonstration purposes, lets generate random integer values from a uniform d
 	ax.set_ylim([0, 0.001])
 	ax.legend()
 
-The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is the smooting windows 2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. From *7000* samples, the smooting window does improve the fitting at all anymore. Note that number may be different across data sets. The conlusion is that the smooting window seems only to be usefull with very small samples sizes. Similar results were also seen for continous data.
+The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. As an example, smooting does **not** improve the fitting anymore in case of more then *7000* samples. Note that this number may be different across data sets. The conlusion is that smooting seems only usefull for small(er) samples sizes. Similar results were also seen for continuous data.
 
 .. _int_smooth_samples_sizes:
 

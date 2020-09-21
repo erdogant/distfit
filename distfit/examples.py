@@ -104,9 +104,10 @@ for smooth in tqdm(smooth_window):
     for s in samples:
         X = np.random.randint(0, 100, s)
         dist.fit_transform(X, verbose=0)
-        out.append([dist.model['RSS'], dist.model['name'], np.where(dist.summary['distr']=='uniform')[0][0], s])
+        # out.append([dist.model['RSS'], dist.model['name'], np.where(dist.summary['distr']=='uniform')[0][0], s])
+        out.append([dist.model['RSS'], dist.model['name'], s])
 
-    df = pd.DataFrame(out, columns=['RSS','name','out','samples'])
+    df = pd.DataFrame(out, columns=['RSS','name','samples'])
     ax=df['RSS'].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df['RSS'].mean()))
 
 ax.set_xlabel('Nr.Samples')
