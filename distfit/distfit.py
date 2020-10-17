@@ -9,7 +9,7 @@
 
 
 # %% Libraries
-import distfit.utils.picklefast as picklefast
+import pypickle
 from distfit.utils.smoothline import smoothline
 
 import warnings
@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.stats.multitest as multitest
 import matplotlib.pyplot as plt
+
 
 # %% Class dist
 class distfit():
@@ -437,7 +438,7 @@ class distfit():
                 if arg=='summary': out.update({arg : self.summary})
                 if arg=='y_pred': out.update({arg : self.y_pred})
 
-        status = picklefast.save(filepath, out, verbose=verbose)
+        status = pypickle.save(filepath, out, verbose=verbose)
         if verbose>=3: print('[distfit] >Saving.. %s' %(status))
 
     # Load model.
@@ -456,7 +457,7 @@ class distfit():
         Object.
 
         """
-        out = picklefast.load(filepath, verbose=verbose)
+        out = pypickle.load(filepath, verbose=verbose)
         # Model Fit
         if out.get('model', None) is not None: self.model = out['model']
         if out.get('summary', None) is not None: self.summary = out['summary']
@@ -475,6 +476,7 @@ class distfit():
         # Predict
         if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
         if out.get('df', None) is not None: self.df = out['df']
+
 
 # %%
 def _predict_parametric(self, y, verbose=3):
