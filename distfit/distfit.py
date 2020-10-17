@@ -31,29 +31,6 @@ class distfit():
     Probability density fitting across 89 univariate distributions to
     non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.
 
-    Example
-    -------
-    >>> from distfit import distfit
-    >>>
-    >>> # Create dataset
-    >>> X = np.random.normal(0, 2, 1000)
-    >>> y = [-8,-6,0,1,2,3,4,5,6]
-    >>>
-    >>> # Set parameters
-    >>> # Default method is set to parameteric models
-    >>> dist = distfit()
-    >>> # In case of quantile
-    >>> dist = distfit(method='quantile')
-    >>> # In case of quantile
-    >>> dist = distfit(method='percentile')
-    >>> # Fit using method
-    >>> model_results = dist.fit_transform(X)
-    >>> dist.plot()
-    >>>
-    >>> # Make prediction
-    >>> results = dist.predict(y)
-    >>> dist.plot()
-
     Parameters
     ----------
     method : str, default: 'parametric'
@@ -94,6 +71,29 @@ class distfit():
     multtest : str
         Specified multiple test correction method.
 
+    Example
+    -------
+    >>> from distfit import distfit
+    >>> import numpy as np
+    >>>
+    >>> # Create dataset
+    >>> X = np.random.normal(0, 2, 1000)
+    >>> y = [-8,-6,0,1,2,3,4,5,6]
+    >>>
+    >>> # Set parameters
+    >>> # Default method is set to parameteric models
+    >>> dist = distfit()
+    >>> # In case of quantile
+    >>> dist = distfit(method='quantile')
+    >>> # In case of quantile
+    >>> dist = distfit(method='percentile')
+    >>> # Fit using method
+    >>> model_results = dist.fit_transform(X)
+    >>> dist.plot()
+    >>>
+    >>> # Make prediction
+    >>> results = dist.predict(y)
+    >>> dist.plot()
     """
 
     def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000):
@@ -244,7 +244,6 @@ class distfit():
             tuple containing observed and bins for data X in the histogram.
         size : int
             total number of elements in for data X
-            
 
         """
         # Fit model to get list of distributions to check
@@ -267,7 +266,6 @@ class distfit():
                          )
         # Return
         return results
-
 
     def predict(self, y, verbose=3):
         """Compute probability for response variables y, using the specified method.
@@ -317,7 +315,7 @@ class distfit():
         return out
 
     # Plot
-    def plot(self, title='', figsize=(10,8), xlim=None, ylim=None, verbose=3):
+    def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
         """Make plot.
 
         Parameters
@@ -552,7 +550,7 @@ def _predict_quantile(self, y, verbose=3):
 
     # Compute multiple testing to correct for Pvalues
     # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
-    Praw[np.isin(y_pred,['down','up'])] = 0
+    Praw[np.isin(y_pred, ['down', 'up'])] = 0
 
     # Make structured output
     df = pd.DataFrame()
@@ -611,7 +609,7 @@ def _predict_percentile(self, y, verbose=3):
         teststat[i] = getstat
         if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getstat))
 
-    Praw[np.isin(y_pred,['down','up'])]=0
+    Praw[np.isin(y_pred, ['down', 'up'])] = 0
 
     # Compute multiple testing to correct for Pvalues
     # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
@@ -722,7 +720,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
 
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
-    param_str = ', '.join(['{}={:0.2f}'.format(k,v) for k, v in zip(param_names, best_fit_param)])
+    param_str = ', '.join(['{}={:0.2f}'.format(k, v) for k, v in zip(param_names, best_fit_param)])
     ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
@@ -838,7 +836,7 @@ def _get_hist_params(X, bins, mhist='numpy'):
         snsout = sns.distplot(X, bins=bins, norm_hist=False).get_lines()[0].get_data()
         histvals = snsout[1]
         binedges = snsout[0]
-        binedges = np.append(binedges,10**-6)
+        binedges = np.append(binedges, 10**-6)
 
     return(binedges, histvals)
 
@@ -850,7 +848,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
     model['distr'] = st.norm
     model['params'] = (0.0, 1.0)
     best_RSS = np.inf
-    out = pd.DataFrame(index=range(0,len(DISTRIBUTIONS)), columns=['distr', 'RSS', 'LLE', 'loc', 'scale', 'arg'])
+    out = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'RSS', 'LLE', 'loc', 'scale', 'arg'])
     max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
@@ -985,6 +983,7 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
             'fdr_by' : Benjamini/Yekutieli (negative)
             'fdr_tsbh' : two stage fdr correction (non-negative)
             'fdr_tsbky' : two stage fdr correction (non-negative)
+
     Returns
     -------
     list of float.
