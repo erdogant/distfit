@@ -2,7 +2,7 @@ from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '1.1.5'
+__version__ = '1.1.6'
 
 
 # module level doc-string
@@ -12,12 +12,13 @@ distfit
 
 Description
 -----------
-Probability density function fitting across 89 univariate distributions to non-censored 
+Probability density function fitting across 89 univariate distributions to non-censored
 data by residual sum of squares (RSS), making plots, and hypothesis testing.
 
 Example
 -------
 >>> from distfit import distfit
+>>> import numpy as np
 >>>
 >>> X = np.random.normal(0, 2, 1000)
 >>> y = [-8,-6,0,1,2,3,4,5,6]
@@ -32,6 +33,7 @@ Example
 
 References
 ----------
-https://github.com/erdogant/distfit
+    * https://github.com/erdogant/distfit
+    * https://erdogant.github.io/distfit
 
 """
