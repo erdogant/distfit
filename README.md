@@ -9,6 +9,7 @@
 [![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit/month)
 [![Downloads](https://pepy.tech/badge/distfit)](https://pepy.tech/project/distfit)
 [![Sphinx](https://img.shields.io/badge/Sphinx-Docs-Green)](https://erdogant.github.io/distfit/)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/erdogant/hnet/blob/master/notebooks/hnet.ipynb)
 
 	Star it if you like it!
 
