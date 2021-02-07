@@ -25,7 +25,11 @@ y = [-8,-6,0,1,2,3,4,5,6]
 
 dist = distfit(distr='full', todf=False)
 model = dist.fit_transform(X)
+results = dist.predict(y)
 dist.plot()
+
+dist = distfit(distr='full', todf=True)
+dist.fit_transform(X)
 
 # Make prediction
 results = dist.predict(y)
@@ -144,9 +148,9 @@ model.plot()
 model.plot_summary()
 
 # %% Show some results
-print(model.y_proba)
-print(model.y_pred)
-print(model.df)
+print(model.results['y_proba'])
+print(model.results['y_pred'])
+print(model.results['df'])
 print(model.summary)
 
 
@@ -170,15 +174,17 @@ model = distfit()
 model.fit_transform(X)
 model.predict(y)
 model.plot()
+model.results['y_proba']
+model.results['y_pred']
 
-model = distfit()
+model = distfit(todf=True)
 model.fit_transform(X)
 model.predict(y)
 model.plot()
 
-model.y_proba
-model.y_pred
-model.df
+model.results['y_proba']
+model.results['y_pred']
+model.results['df'] # Only availble when using todf=True
 
 # %%
 X = np.random.beta(5, 8, 1000)
@@ -207,23 +213,27 @@ model.plot()
 X = np.random.normal(0, 2, 1000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
-model = distfit()
+model = distfit(todf=True)
 model.fit_transform(X)
 model.predict(y)
 model.plot()
-model.df
 
-model = distfit(bound='up')
-model.fit_transform(X)
-model.predict(y)
-model.plot()
-model.df
+model.results['y_proba']
+model.results['y_pred']
+model.results['df']
 
-model = distfit(bound='down')
+
+model = distfit(bound='up', todf=True)
 model.fit_transform(X)
 model.predict(y)
 model.plot()
-model.df
+model.results['df']
+
+model = distfit(bound='down', todf=True)
+model.fit_transform(X)
+model.predict(y)
+model.plot()
+model.results['df']
 
 # %% Find best fit distribution
 X = np.random.normal(0, 2, 1000)
@@ -250,7 +260,7 @@ X = np.random.normal(10, 3, 2000)
 y = [3,4,5,6,10,11,12,18,20]
 
 # Initialize
-dist = distfit(method='percentile', alpha=0.05)
+dist = distfit(method='percentile', alpha=0.05, todf=True)
 # dist = distfit(method='quantile', alpha=0.05)
 dist.fit_transform(X)
 dist.plot()
@@ -261,7 +271,8 @@ dist.plot()
 dist.plot_summary()
 
 from tabulate import tabulate
-print(tabulate(dist.df, tablefmt="grid", headers="keys"))
+print(tabulate(dist.results['df'], tablefmt="grid", headers="keys"))
+
 
 # %% TODO
 
