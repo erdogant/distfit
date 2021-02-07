@@ -83,7 +83,7 @@ y = [-8,-6,0,1,2,3,4,5,6]
 
 Specify ``distfit`` parameters. In this example nothing is specied and that means that all parameters are set to default.
 ```python
-dist = distfit()
+dist = distfit(todf=True)
 dist.fit_transform(X)
 dist.plot()
 
@@ -144,11 +144,11 @@ The results of the prediction are stored in ``y_proba`` and ``y_pred``
 ```python
 
 # Show the predictions for y
-print(dist.y_pred)
+print(dist.results['y_pred'])
 # ['down' 'down' 'none' 'none' 'none' 'none' 'up' 'up' 'up']
 
 # Show the probabilities for y that belong with the predictions
-print(dist.y_proba)
+print(dist.results['y_proba'])
 # [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
  
 # All predicted information is also stored in a structured dataframe
