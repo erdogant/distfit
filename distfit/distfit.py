@@ -70,6 +70,8 @@ class distfit():
         Specified distribution or a set of distributions.
     multtest : str
         Specified multiple test correction method.
+    todf : Bool (default: False)
+        Output results in pandas dataframe (when True, note that this will slow down the code significantly)
 
     Example
     -------
@@ -96,7 +98,7 @@ class distfit():
     >>> dist.plot()
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000, todf=True):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -107,6 +109,7 @@ class distfit():
         self.multtest = multtest
         self.smooth = smooth
         self.n_perm = n_perm
+        self.todf = todf
 
     # Fit
     def fit(self, verbose=3):
@@ -292,7 +295,7 @@ class distfit():
             prediction of bounds [upper, lower] for input y, using the fitted distribution X.
         y_proba : list of float
             probability for response variable y.
-        df : pd.DataFrame
+        df : pd.DataFrame (only when set: todf=True)
             Dataframe containing the predictions in a structed manner.
 
         """
@@ -401,7 +404,7 @@ class distfit():
             return None, None
 
     # Save model
-    def save(self, filepath, verbose=3):
+    def save(self, filepath, overwrite=True, verbose=3):
         """Save learned model in pickle file.
 
         Parameters
@@ -436,7 +439,7 @@ class distfit():
                 if arg=='summary': out.update({arg : self.summary})
                 if arg=='y_pred': out.update({arg : self.y_pred})
 
-        status = pypickle.save(filepath, out, verbose=verbose)
+        status = pypickle.save(filepath, out, verbose=verbose, overwrite=overwrite)
         if verbose>=3: print('[distfit] >Saving.. %s' %(status))
 
     # Load model.
@@ -516,19 +519,14 @@ def _predict_parametric(self, y, verbose=3):
             y_pred[y<=self.model['CII_min_alpha']]='down'
 
     # Make structured output
-    df = pd.DataFrame()
-    df['y'] = y
-    df['y_proba'] = y_proba
-    df['y_pred'] = y_pred
-    df['P'] = Praw
-    # Store in object
-    self.df = df
     self.y_proba = y_proba
     self.y_pred = y_pred
-    out = {}
-    out['df'] = df
-    out['y_proba'] = y_proba
-    out['y_pred'] = y_pred
+    out = {'y_proba': y_proba, 'y_pred': y_pred}
+    if self.todf:
+        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float})
+        out['df'] = self.df
+
+    # Return
     return out
 
 
@@ -552,23 +550,15 @@ def _predict_quantile(self, y, verbose=3):
     # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
     Praw[np.isin(y_pred, ['down', 'up'])] = 0
 
-    # Make structured output
-    df = pd.DataFrame()
-    df['y'] = y
-    df['y_proba'] = Praw
-    df['y_pred'] = y_pred
-    df['P'] = Praw
-    df['teststat'] = teststat
-
-    # Store in object
-    self.df = df
+    # Store
     self.y_proba = Praw
     self.y_pred = y_pred
+    out = {'y_proba': Praw, 'y_pred': y_pred}
+    if self.todf:
+        self.df = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        out['df'] = self.df
 
-    out = {}
-    out['df'] = df
-    out['y_proba'] = Praw
-    out['y_pred'] = y_pred
+    # return
     return out
 
 
@@ -616,20 +606,14 @@ def _predict_percentile(self, y, verbose=3):
     y_proba = Praw
 
     # Make structured output
-    df = pd.DataFrame()
-    df['y'] = y
-    df['y_proba'] = y_proba
-    df['y_pred'] = y_pred
-    df['P'] = Praw
-    df['teststat'] = teststat
-    # Store in object
-    self.df = df
     self.y_proba = y_proba
     self.y_pred = y_pred
-    out = {}
-    out['df'] = df
-    out['y_proba'] = y_proba
-    out['y_pred'] = y_pred
+    out = {'y_proba': y_proba, 'y_pred': y_pred}
+    if self.todf:
+        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        out['df'] = self.df
+
+    # Store in object
     return out
 
 
