@@ -23,7 +23,7 @@ from distfit import distfit
 X = np.random.normal(0, 2, 5000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
-dist = distfit(distr='full')
+dist = distfit(distr='full', todf=False)
 model = dist.fit_transform(X)
 dist.plot()
 
@@ -35,7 +35,7 @@ dist.plot()
 dist.plot_summary()
 
 # Save
-dist.save(filepath='c:\\temp\\model.pkl')
+dist.save(filepath='c:\\temp\\model.pkl', overwrite=True)
 # Load
 dist.load(filepath='c:\\temp\\model.pkl')
 
