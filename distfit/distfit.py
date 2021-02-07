@@ -522,16 +522,16 @@ def _predict_parametric(self, y, verbose=3):
             y_pred[y<=self.model['CII_min_alpha']]='down'
 
     # Make structured output
-    self.y_proba = y_proba
-    self.y_pred = y_pred
-    out = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw}
+    self.y_proba = y_proba  # THIS WILL BE REMOVED
+    self.y_pred = y_pred  # THIS WILL BE REMOVED
+    self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw}
     if self.todf:
         # This approach is 3x faster then providing the dict to the dataframe
         self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float})
-        out['df'] = self.df
+        self.results['df'] = self.df
 
     # Return
-    return out
+    return self.results
 
 
 # %% _predict_quantile predict
@@ -555,15 +555,14 @@ def _predict_quantile(self, y, verbose=3):
     Praw[np.isin(y_pred, ['down', 'up'])] = 0
 
     # Store
-    self.y_proba = Praw
-    self.y_pred = y_pred
-    out = {'y': y, 'y_proba': Praw, 'y_pred': y_pred, 'teststat': teststat}
+    self.y_proba = Praw  # THIS WILL BE REMOVED
+    self.y_pred = y_pred  # THIS WILL BE REMOVED
+    self.results = {'y': y, 'y_proba': Praw, 'y_pred': y_pred, 'teststat': teststat}
     if self.todf:
-        self.df = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
-        out['df'] = self.df
+        self.results['df'] = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
 
     # return
-    return out
+    return self.results
 
 
 # %% percentile predict
@@ -610,15 +609,14 @@ def _predict_percentile(self, y, verbose=3):
     y_proba = Praw
 
     # Make structured output
-    self.y_proba = y_proba
-    self.y_pred = y_pred
-    out = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'teststat': teststat}
+    self.y_proba = y_proba # THIS WILL BE REMOVED
+    self.y_pred = y_pred  # THIS WILL BE REMOVED
+    self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'teststat': teststat}
     if self.todf:
-        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
-        out['df'] = self.df
+        self.results['df'] = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
 
     # Return
-    return out
+    return self.results
 
 
 # Plot
