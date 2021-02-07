@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Parametric &mdash; distfit distfit documentation</title>
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -29,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -51,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> distfit
+            <a href="index.html" class="icon icon-home"> distfit
           
 
           
@@ -170,6 +172,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -181,7 +185,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/Parametric.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -254,10 +258,10 @@ The distributions options are
 <div><table class="docutils align-default">
 <colgroup>
 <col style="width: 18%" />
-<col style="width: 23%" />
+<col style="width: 22%" />
 <col style="width: 18%" />
-<col style="width: 23%" />
-<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 21%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p>alpha</p></td>
@@ -288,7 +292,7 @@ The distributions options are
 <td><p>chi</p></td>
 <td><p>erlang</p></td>
 <td><p>f</p></td>
-<td><p>frechet_r</p></td>
+<td><p>frechet_r[x]</p></td>
 </tr>
 <tr class="row-even"><td><p>gilbrat</p></td>
 <td><p>gompertz</p></td>
@@ -336,7 +340,7 @@ The distributions options are
 <tr class="row-even"><td><p>wrapcauchy</p></td>
 <td><p>gengamma</p></td>
 <td><p>genlogistic</p></td>
-<td><p>frechet_l</p></td>
+<td><p>frechet_l[x]</p></td>
 <td><p>halfnorm</p></td>
 </tr>
 <tr class="row-odd"><td><p>genexpon</p></td>
@@ -366,7 +370,8 @@ The distributions options are
 </tbody>
 </table>
 </div></blockquote>
-<p>Note that levy_l and  levy_stable are removed from the full list because it is too slow.</p>
+<p>Note that levy_l and  levy_stable are removed from the full list because it is too slow.
+The distributions frechet_r and frechet_l are also not supported anymore.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize model and select all distributions</span>
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
 </pre></div>
@@ -391,9 +396,9 @@ Note that, due to multiple testing approaches, it can occur that samples can be 
 <p>The following output variables are available. More information can be found under <strong>return</strong> in the docstring.</p>
 <dl class="simple">
 <dt>dist.predict</dt><dd><ul class="simple">
-<li><p>dist.y_proba</p></li>
-<li><p>dist.y_pred</p></li>
-<li><p>dist.df</p></li>
+<li><p>dist.results[‘y_proba’]</p></li>
+<li><p>dist.results[‘y_pred’]</p></li>
+<li><p>dist.results[‘df’]</p></li>
 <li><p>dist.summary</p></li>
 </ul>
 </dd>
@@ -565,37 +570,29 @@ Instead of using the two functions seperately, it can also be performed with <co
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Quantile.html" class="btn btn-neutral float-right" title="Quantiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="Installation.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="Quantile.html" class="btn btn-neutral float-right" title="Quantiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Installation.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Erdogan Taskesen
+        &#169; Copyright 2020, Erdogan Taskesen.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

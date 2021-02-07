@@ -93,7 +93,7 @@ outside the confidence interval but not marked as significant. See section Algor
     from distfit import distfit
 
     # Initialize
-    dist = distfit()
+    dist = distfit(todf=True)
 
     # Search for best theoretical fit on your empirical data
     dist.fit_transform(X)
@@ -104,8 +104,9 @@ outside the confidence interval but not marked as significant. See section Algor
     # The plot function will now also include the predictions of y
     dist.plot()
 
-``out`` is a dictionary containing ``y_proba``, ``y_pred`` and ``df``. 
-The output values has the same order as input value ``y``
+``out`` is a dictionary containing ``y``, ``y_proba``, ``y_pred`` and ``P``. 
+The output values has the same order as input value ``y`` 
+Note that dataframe ``df`` is included when using the todf=True paramter.
 
 .. code:: python
 
@@ -159,7 +160,8 @@ Extract results
 
 In the previous example, we showed that the output can be captured ``results`` and ``out`` but the results are also stored in the object itself. 
 In our examples it is the ``dist`` object.
-The same variable names are used;  ``y_proba``, ``y_pred`` and ``df``.
+The same variable names are used; ``y``, ``y_proba``, ``y_pred`` and ``P``.
+Note that dataframe ``df`` is included when using the todf=True paramter.
 
 
 .. code:: python
@@ -171,15 +173,15 @@ The same variable names are used;  ``y_proba``, ``y_pred`` and ``df``.
     dist.model
 
     # Show the predictions for y
-    print(dist.y_pred)
+    print(dist.results['y_pred'])
     # ['down' 'down' 'none' 'none' 'none' 'none' 'up' 'up' 'up']
 
     # Show the probabilities for y that belong with the predictions
-    print(dist.y_proba)
+    print(dist.results['y_proba'])
     # [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
  
-    # All predicted information is also stored in a structured dataframe
-    print(dist.df)
+    # All predicted information is also stored in a structured dataframe (only when setting the todf=True)
+    print(dist.results['df'])
 
 +----+-----+------------+----------+------------+
 |    |   y |    y_proba | y_pred   |          P |

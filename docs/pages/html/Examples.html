@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Fit distribution &mdash; distfit distfit documentation</title>
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -29,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -51,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> distfit
+            <a href="index.html" class="icon icon-home"> distfit
           
 
           
@@ -162,6 +164,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -173,7 +177,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/Examples.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -265,7 +269,7 @@ outside the confidence interval but not marked as significant. See section Algor
 <span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 
 <span class="c1"># Initialize</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Search for best theoretical fit on your empirical data</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -277,8 +281,9 @@ outside the confidence interval but not marked as significant. See section Algor
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">out</span></code> is a dictionary containing <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">df</span></code>.
-The output values has the same order as input value <code class="docutils literal notranslate"><span class="pre">y</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">out</span></code> is a dictionary containing <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+The output values has the same order as input value <code class="docutils literal notranslate"><span class="pre">y</span></code>
+Note that dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> is included when using the todf=True paramter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print probabilities</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
 <span class="c1"># &gt; [0.02702734, 0.04908335, 0.08492715, 0.13745288, 0.49567466, 0.41288701, 0.3248188 , 0.02260135, 0.00636084]</span>
@@ -379,7 +384,8 @@ The output values has the same order as input value <code class="docutils litera
 <h1>Extract results<a class="headerlink" href="#extract-results" title="Permalink to this headline">¶</a></h1>
 <p>In the previous example, we showed that the output can be captured <code class="docutils literal notranslate"><span class="pre">results</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> but the results are also stored in the object itself.
 In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
-The same variable names are used;  <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">df</span></code>.</p>
+The same variable names are used; <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+Note that dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> is included when using the todf=True paramter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># All scores of the tested distributions</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
 
@@ -387,15 +393,15 @@ The same variable names are used;  <code class="docutils literal notranslate"><s
 <span class="n">dist</span><span class="o">.</span><span class="n">model</span>
 
 <span class="c1"># Show the predictions for y</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">y_pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
 <span class="c1"># [&#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39; &#39;up&#39;]</span>
 
 <span class="c1"># Show the probabilities for y that belong with the predictions</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">y_proba</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
 <span class="c1"># [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]</span>
 
-<span class="c1"># All predicted information is also stored in a structured dataframe</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<span class="c1"># All predicted information is also stored in a structured dataframe (only when setting the todf=True)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -478,37 +484,29 @@ The same variable names are used;  <code class="docutils literal notranslate"><s
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Coding%20quality.html" class="btn btn-neutral float-right" title="Coding quality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="Save%20and%20Load.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="Coding%20quality.html" class="btn btn-neutral float-right" title="Coding quality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Save%20and%20Load.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, Erdogan Taskesen
+        &#169; Copyright 2020, Erdogan Taskesen.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

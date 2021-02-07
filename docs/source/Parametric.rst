@@ -51,43 +51,44 @@ The ``popular`` set of PDFs contains the following set of distributions and can 
  
 The ``full`` set contains the following set of distributions:
 
-	+------------+---------------+------------+---------------+------------+  
-	| alpha      | betaprime     | chi2       | expon         | fatiguelife|  
-	+------------+---------------+------------+---------------+------------+  
-	| anglit     | bradford      | cosine     | exponnorm     | fisk       |  
-	+------------+---------------+------------+---------------+------------+  
-	| arcsine    | burr          | dgamma     | exponweib     | foldcauchy |  
-	+------------+---------------+------------+---------------+------------+  
-	| arcsine    | cauchy        | dweibull   | exponpow      | foldnorm   |  
-	+------------+---------------+------------+---------------+------------+  
-	| beta       | chi           | erlang     | f             | frechet_r  |  
-	+------------+---------------+------------+---------------+------------+  
-	|gilbrat     | gompertz      | gumbel_r   | gumbel_l      | halfcauchy |
-	+------------+---------------+------------+---------------+------------+  
-	| halfgennorm| hypsecant     | invgamma   | invgauss      | invweibull |
-	+------------+---------------+------------+---------------+------------+  
-	| laplace    | levy          | levy_l [X] | levy_stable[X]| logistic   |
-	+------------+---------------+------------+---------------+------------+  
-	+ lognorm    | lomax         | maxwell    | mielke        | nakagami   |
-	+------------+---------------+------------+---------------+------------+  
-	| pearson3   | powerlaw      |powerlognorm| powernorm     | rdist      |
-	+------------+---------------+------------+---------------+------------+  
-	| rice       | recipinvgauss |semicircular| t             | triang     |
-	+------------+---------------+------------+---------------+------------+  
-	|tukeylambda | uniform       | vonmises   | vonmises_line | wald       |
-	+------------+---------------+------------+---------------+------------+  
-	| wrapcauchy | gengamma      |genlogistic | frechet_l     | halfnorm   |
-	+------------+---------------+------------+---------------+------------+  
-	| genexpon   | genextreme    | gennorm    | gausshyper    | genpareto  | 
-	+------------+---------------+------------+---------------+------------+
-	| gamma      |genhalflogistic|halflogistic| johnsonsb     | johnsonsu  |
-	+------------+---------------+------------+---------------+------------+
-	| loggamma   | loglaplace    | norm       | pareto        | rayleigh   |
-	+------------+---------------+------------+---------------+------------+
-	| reciprocal | truncexpon    | truncnorm  | weibull_min   | weibull_max|
-	+------------+---------------+------------+---------------+------------+
+	+------------+---------------+------------+---------------+--------------+  
+	| alpha      | betaprime     | chi2       | expon         | fatiguelife  |  
+	+------------+---------------+------------+---------------+--------------+  
+	| anglit     | bradford      | cosine     | exponnorm     | fisk         |  
+	+------------+---------------+------------+---------------+--------------+  
+	| arcsine    | burr          | dgamma     | exponweib     | foldcauchy   |  
+	+------------+---------------+------------+---------------+--------------+  
+	| arcsine    | cauchy        | dweibull   | exponpow      | foldnorm     |  
+	+------------+---------------+------------+---------------+--------------+  
+	| beta       | chi           | erlang     | f             | frechet_r[x] |  
+	+------------+---------------+------------+---------------+--------------+  
+	|gilbrat     | gompertz      | gumbel_r   | gumbel_l      | halfcauchy   |
+	+------------+---------------+------------+---------------+--------------+  
+	| halfgennorm| hypsecant     | invgamma   | invgauss      | invweibull   |
+	+------------+---------------+------------+---------------+--------------+  
+	| laplace    | levy          | levy_l [X] | levy_stable[X]| logistic     |
+	+------------+---------------+------------+---------------+--------------+  
+	+ lognorm    | lomax         | maxwell    | mielke        | nakagami     |
+	+------------+---------------+------------+---------------+--------------+  
+	| pearson3   | powerlaw      |powerlognorm| powernorm     | rdist        |
+	+------------+---------------+------------+---------------+--------------+  
+	| rice       | recipinvgauss |semicircular| t             | triang       |
+	+------------+---------------+------------+---------------+--------------+  
+	|tukeylambda | uniform       | vonmises   | vonmises_line | wald         |
+	+------------+---------------+------------+---------------+--------------+  
+	| wrapcauchy | gengamma      |genlogistic | frechet_l[x]  | halfnorm     |
+	+------------+---------------+------------+---------------+--------------+  
+	| genexpon   | genextreme    | gennorm    | gausshyper    | genpareto    | 
+	+------------+---------------+------------+---------------+--------------+
+	| gamma      |genhalflogistic|halflogistic| johnsonsb     | johnsonsu    |
+	+------------+---------------+------------+---------------+--------------+
+	| loggamma   | loglaplace    | norm       | pareto        | rayleigh     |
+	+------------+---------------+------------+---------------+--------------+
+	| reciprocal | truncexpon    | truncnorm  | weibull_min   | weibull_max  |
+	+------------+---------------+------------+---------------+--------------+
 
 Note that levy_l and  levy_stable are removed from the full list because it is too slow.
+The distributions frechet_r and frechet_l are also not supported anymore.
 
 .. code:: python
 
@@ -120,9 +121,9 @@ Note that, due to multiple testing approaches, it can occur that samples can be 
 The following output variables are available. More information can be found under **return** in the docstring.
 
 dist.predict
-	* dist.y_proba
-	* dist.y_pred
-	* dist.df
+	* dist.results['y_proba']
+	* dist.results['y_pred']
+	* dist.results['df']
 	* dist.summary
 
 The output variable ``y_proba`` is by default corrected for multiple testing using the false discovery rate (fdr).
