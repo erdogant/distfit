@@ -56,24 +56,24 @@ def test_distfit():
     out1 = distfit(distr='norm',  bound='up')
     out1.fit_transform(X, verbose=0)
     out1.predict(y, verbose=0)
-    assert np.all(np.isin(np.unique(out1.df['y_pred']), ['none','up']))
+    assert np.all(np.isin(np.unique(out1.results['y_pred']), ['none','up']))
 
     out2 = distfit(distr='norm',  bound='down')
     out2.fit_transform(X, verbose=0)
     out2.predict(y, verbose=0)
-    assert np.all(np.isin(np.unique(out2.df['y_pred']), ['none','down']))
+    assert np.all(np.isin(np.unique(out2.results['y_pred']), ['none','down']))
 
     out3 = distfit(distr='norm',  bound='down')
     out3.fit_transform(X, verbose=0)
     out3.predict(y, verbose=0)
-    assert np.all(np.isin(np.unique(out3.df['y_pred']), ['none','down','up']))
+    assert np.all(np.isin(np.unique(out3.results['y_pred']), ['none','down','up']))
 
     # TEST 8: Check different sizes array
     X = np.random.normal(0, 2, [10,100])
     dist = distfit(distr='norm',  bound='up')
     dist.fit_transform(X, verbose=0)
     dist.predict(y, verbose=0)
-    assert np.all(np.isin(np.unique(dist.df['y_pred']), ['none','up']))
+    assert np.all(np.isin(np.unique(dist.results['y_pred']), ['none','up']))
 
     # TEST 9
     data_random = np.random.normal(0, 2, 1000)
@@ -84,7 +84,7 @@ def test_distfit():
     # TEST 10 Check number of output probabilities
     dist.fit_transform(X, verbose=0)
     dist.predict(y)
-    assert dist.y_proba.shape[0]==len(y)
+    assert dist.results['y_proba'].shape[0]==len(y)
     
     # TEST 11: Check whether alpha responds on results
     out1 = distfit(alpha=0.05)
@@ -96,9 +96,9 @@ def test_distfit():
     out2.predict(y)
 
     assert np.all(out1.y_proba==out2.y_proba)
-    assert not np.all(out1.y_pred==out2.y_pred)
-    assert np.all(out1.df['P'].values==out2.df['P'].values)
-    assert sum(out1.y_pred=='none')>sum(out2.y_pred=='none')
+    assert not np.all(out1.results['y_pred']==out2.results['y_pred'])
+    assert np.all(out1.results['P']==out2.results['P'])
+    assert sum(out1.results['y_pred']=='none')>sum(out2.results['y_pred']=='none')
 
     # TEST 12: Check different sizes array
     X = np.random.normal(0, 2, [10,100])
@@ -107,7 +107,7 @@ def test_distfit():
     dist = distfit(bound='up')
     dist.fit_transform(X, verbose=0)
     dist.predict(y)
-    assert np.all(np.isin(np.unique(dist.y_pred), ['none','up']))
+    assert np.all(np.isin(np.unique(dist.results['y_pred']), ['none','up']))
 
     # TEST 13: Precentile
     X = np.random.normal(0, 2, [10,100])
@@ -115,10 +115,10 @@ def test_distfit():
     dist = distfit(method='percentile')
     dist.fit_transform(X, verbose=0)
     results=dist.predict(y)
-    assert np.all(np.isin([*results.keys()], ['df', 'y_proba', 'y_pred']))
+    assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'teststat']))
 
     # TEST 14: Quantile
     dist = distfit(method='quantile')
     dist.fit_transform(X, verbose=0)
     results=dist.predict(y)
-    assert np.all(np.isin([*results.keys()], ['df', 'y_proba', 'y_pred']))
+    assert np.all(np.isin([*results.keys()],  ['y', 'y_proba', 'y_pred', 'teststat']))
