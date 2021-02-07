@@ -152,7 +152,7 @@ print(dist.y_proba)
 # [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
  
 # All predicted information is also stored in a structured dataframe
-print(dist.df)
+print(dist.results['df'])
 #    y   y_proba y_pred         P
 # 0 -8  0.000028   down  0.000003
 # 1 -6  0.002747   down  0.000610
