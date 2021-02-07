@@ -15,6 +15,7 @@ import warnings
 warnings.filterwarnings('ignore')
 import scipy.stats as st
 from scipy.interpolate import make_interp_spline
+import time
 
 import numpy as np
 import pandas as pd
@@ -98,7 +99,7 @@ class distfit():
     >>> dist.plot()
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000, todf=True):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000, todf=False):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -521,8 +522,9 @@ def _predict_parametric(self, y, verbose=3):
     # Make structured output
     self.y_proba = y_proba
     self.y_pred = y_pred
-    out = {'y_proba': y_proba, 'y_pred': y_pred}
+    out = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw}
     if self.todf:
+        # This approach is 3x faster then providing the dict to the dataframe
         self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float})
         out['df'] = self.df
 
@@ -553,7 +555,7 @@ def _predict_quantile(self, y, verbose=3):
     # Store
     self.y_proba = Praw
     self.y_pred = y_pred
-    out = {'y_proba': Praw, 'y_pred': y_pred}
+    out = {'y': y, 'y_proba': Praw, 'y_pred': y_pred, 'teststat': teststat}
     if self.todf:
         self.df = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
         out['df'] = self.df
@@ -608,12 +610,12 @@ def _predict_percentile(self, y, verbose=3):
     # Make structured output
     self.y_proba = y_proba
     self.y_pred = y_pred
-    out = {'y_proba': y_proba, 'y_pred': y_pred}
+    out = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'teststat': teststat}
     if self.todf:
         self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
         out['df'] = self.df
 
-    # Store in object
+    # Return
     return out
 
 
@@ -827,20 +829,21 @@ def _get_hist_params(X, bins, mhist='numpy'):
 
 # %% Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
-    out = []
     model = {}
     model['distr'] = st.norm
     model['params'] = (0.0, 1.0)
     best_RSS = np.inf
-    out = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'RSS', 'LLE', 'loc', 'scale', 'arg'])
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'RSS', 'LLE', 'loc', 'scale', 'arg'])
     max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
         logLik = 0
 
-        # Try to fit the dist. However this can result in an error so therefore you need to try-catch
+        # Fit the distribution. However this can result in an error so therefore you need to try-except
         try:
+            start_time = time.time()
+
             # Ignore warnings from data that can't be fit
             with warnings.catch_warnings():
                 # fit dist to data
@@ -868,12 +871,12 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
                 #     logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
 
                 # Store results
-                out.values[i, 0] = distribution.name
-                out.values[i, 1] = RSS
-                out.values[i, 2] = logLik
-                out.values[i, 3] = loc
-                out.values[i, 4] = scale
-                out.values[i, 5] = arg
+                df.values[i, 0] = distribution.name
+                df.values[i, 1] = RSS
+                df.values[i, 2] = logLik
+                df.values[i, 3] = loc
+                df.values[i, 4] = scale
+                df.values[i, 5] = arg
 
                 # identify if this distribution is better
                 if best_RSS > RSS > 0:
@@ -886,7 +889,11 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
                     model['scale'] = scale
                     model['arg'] = arg
 
-            if verbose>=3: print("[distfit] >[%s%s] [RSS: %.7f] [loc=%.3f scale=%.3f] " %(distribution.name, ' ' * (max_name_len - len(distribution.name)), RSS, loc, scale))
+            if verbose>=3:
+                spaces_1 = ' ' * (max_name_len - len(distribution.name))
+                scores = ('[RSS: %.7f] [loc=%.3f scale=%.3f]' %(RSS, loc, scale))
+                time_spent = time.time() - start_time
+                print("[distfit] >[%s%s] [%.4s sec] %s" %(distribution.name, spaces_1, time_spent, scores))
 
         except Exception:
             pass
@@ -894,10 +901,10 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
             # if verbose>=1: print(e)
 
     # Sort the output
-    out = out.sort_values('RSS')
-    out.reset_index(drop=True, inplace=True)
+    df = df.sort_values('RSS')
+    df.reset_index(drop=True, inplace=True)
     # Return
-    return(out, model)
+    return(df, model)
 
 
 # %% Determine confidence intervals on the best fitting distribution
