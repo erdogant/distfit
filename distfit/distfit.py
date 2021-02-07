@@ -427,7 +427,7 @@ class distfit():
                 if arg=='alpha': out.update({arg : self.alpha})
                 if arg=='bins': out.update({arg : self.bins})
                 if arg=='bound': out.update({arg : self.bound})
-                if arg=='df': out.update({arg : self.df})
+                if arg=='df': out.update({arg : self.df}) # TODO REMOVE
                 if arg=='distr': out.update({arg : self.distr})
                 if arg=='distributions': out.update({arg : self.distributions})
                 if arg=='histdata': out.update({arg : self.histdata})
@@ -559,7 +559,8 @@ def _predict_quantile(self, y, verbose=3):
     self.y_pred = y_pred  # THIS WILL BE REMOVED
     self.results = {'y': y, 'y_proba': Praw, 'y_pred': y_pred, 'teststat': teststat}
     if self.todf:
-        self.results['df'] = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        self.df = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        self.results['df'] = self.df
 
     # return
     return self.results
@@ -613,7 +614,8 @@ def _predict_percentile(self, y, verbose=3):
     self.y_pred = y_pred  # THIS WILL BE REMOVED
     self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'teststat': teststat}
     if self.todf:
-        self.results['df'] = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        self.results['df'] = self.df
 
     # Return
     return self.results
