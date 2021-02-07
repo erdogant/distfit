@@ -420,7 +420,7 @@ class distfit():
         object
 
         """
-        args = ['alpha','bins','bound','df','distr','distributions','histdata','method','model','multtest','n_perm','size','smooth','summary','y_pred']
+        args = ['alpha','bins','bound','df','distr','distributions','histdata','method','model','multtest','n_perm','size','smooth','summary','y_pred','results']
         out = {}
         for arg in args:
             if hasattr(self, arg):
@@ -439,6 +439,7 @@ class distfit():
                 if arg=='smooth': out.update({arg : self.smooth})
                 if arg=='summary': out.update({arg : self.summary})
                 if arg=='y_pred': out.update({arg : self.y_pred})
+                if arg=='results': out.update({arg : self.results})
 
         status = pypickle.save(filepath, out, verbose=verbose, overwrite=overwrite)
         if verbose>=3: print('[distfit] >Saving.. %s' %(status))
@@ -478,6 +479,7 @@ class distfit():
         # Predict
         if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
         if out.get('df', None) is not None: self.df = out['df']
+        if out.get('results', None) is not None: self.results = out['results']
 
 
 # %%
