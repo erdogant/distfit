@@ -9,18 +9,21 @@
 
 
 # %% Libraries
+import time
 import pypickle
+import numpy as np
+import pandas as pd
+
+from scipy.stats import binom
+from scipy.optimize import curve_fit
+
+from scipy.interpolate import make_interp_spline
+import statsmodels.stats.multitest as multitest
+import matplotlib.pyplot as plt
+import scipy.stats as st
 
 import warnings
 warnings.filterwarnings('ignore')
-import scipy.stats as st
-from scipy.interpolate import make_interp_spline
-import time
-
-import numpy as np
-import pandas as pd
-import statsmodels.stats.multitest as multitest
-import matplotlib.pyplot as plt
 
 
 # %% Class dist
@@ -35,7 +38,7 @@ class distfit():
     Parameters
     ----------
     method : str, default: 'parametric'
-        Specify the method type: 'parametric','quantile','percentile'
+        Specify the method type: 'parametric','quantile','percentile','discrete'
     alpha : float, default: 0.05
         Significance alpha.
     multtest : str, default: 'fdr_bh'
@@ -134,7 +137,6 @@ class distfit():
             self.distributions = _get_distributions(self.distr)
         elif self.method=='discrete':
             pass
-            # TODO: https://stackoverflow.com/questions/62360325/determining-best-fit-distributions-by-sse-python-3-8/62489856#62489856
         elif self.method=='quantile':
             pass
         elif self.method=='percentile':
@@ -206,6 +208,8 @@ class distfit():
             self.model = model
             self.summary = out_summary
         elif self.method=='discrete':
+            # Compute best distribution fit on the empirical X
+            out_summary, model = fit_transform_binom(X, X_bins, y_obs, self.distributions, verbose=verbose)
             pass
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
@@ -420,7 +424,7 @@ class distfit():
         object
 
         """
-        args = ['alpha','bins','bound','df','distr','distributions','histdata','method','model','multtest','n_perm','size','smooth','summary','y_pred','results']
+        args = ['alpha', 'bins', 'bound', 'df', 'distr', 'distributions', 'histdata', 'method', 'model', 'multtest', 'n_perm', 'size', 'smooth', 'summary', 'y_pred', 'results']
         out = {}
         for arg in args:
             if hasattr(self, arg):
@@ -527,7 +531,7 @@ def _predict_parametric(self, y, verbose=3):
     self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw}
     if self.todf:
         # This approach is 3x faster then providing the dict to the dataframe
-        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float})
+        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float, 'y_proba': float, 'y_pred': str, 'P': float})
         self.results['df'] = self.df
 
     # Return
@@ -559,7 +563,7 @@ def _predict_quantile(self, y, verbose=3):
     self.y_pred = y_pred  # THIS WILL BE REMOVED IN NEWER VERSIONS
     self.results = {'y': y, 'y_proba': Praw, 'y_pred': y_pred, 'teststat': teststat}
     if self.todf:
-        self.df = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        self.df = pd.DataFrame(data=np.c_[y, Praw, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float, 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
         self.results['df'] = self.df
 
     # return
@@ -610,11 +614,11 @@ def _predict_percentile(self, y, verbose=3):
     y_proba = Praw
 
     # Make structured output
-    self.y_proba = y_proba # THIS WILL BE REMOVED IN NEWER VERSIONS
+    self.y_proba = y_proba  # THIS WILL BE REMOVED IN NEWER VERSIONS
     self.y_pred = y_pred  # THIS WILL BE REMOVED  IN NEWER VERSIONS
     self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'teststat': teststat}
     if self.todf:
-        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float , 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
+        self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw, teststat], columns=['y', 'y_proba', 'y_pred', 'P', 'teststat']).astype({'y': float, 'y_proba': float, 'y_pred': str, 'P': float, 'teststat': float})
         self.results['df'] = self.df
 
     # Return
@@ -808,7 +812,7 @@ def _get_distributions(distr):
             out_distr = [getattr(st, distr)]
         except:
             print('[distfit] >Error: [%s] does not exist! <skipping>' %(distr))
-    
+
     if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
     return(out_distr)
 
@@ -996,11 +1000,11 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
 
 def smoothline(xs, ys=None, interpol=3, window=1, verbose=3):
     """Smoothing 1D vector.
-    
+
     Description
     -----------
     Smoothing a 1d vector can be challanging if the number of data is low sampled.
-    This smoothing function therefore contains two steps. First interpolation of the 
+    This smoothing function therefore contains two steps. First interpolation of the
     input line followed by a convolution.
 
     Parameters
@@ -1037,7 +1041,7 @@ def smoothline(xs, ys=None, interpol=3, window=1, verbose=3):
         # First smoothing on the raw input data
         ynew=None
         if ys is not None:
-            ys = _smooth(ys,window)
+            ys = _smooth(ys, window)
             # Interpolate ys line
             spl = make_interp_spline(range(0, len(ys)), ys, k=3)
             ynew = spl(extpoints)
@@ -1051,3 +1055,135 @@ def _smooth(X, window):
     box = np.ones(window) / window
     X_smooth = np.convolve(X, box, mode='same')
     return X_smooth
+
+# %% Binomial
+class BinomPMF:
+    """Wrapper so that integer parameters don't occur as function arguments."""
+    def __init__(self, n):
+        self.n = n
+    def __call__(self, ks, p):
+        return binom(self.n, p).pmf(ks)
+
+def fit_binom(hist, plot=True, weighted=True, f=1.5, verbose=False):
+    """Fit histogram to binomial distribution.
+
+    Parameters
+    ----------
+    hist : TYPE
+        histogram as int array with counts, array index as bin..
+    plot : TYPE, optional
+        whether to plot. The default is True.
+    weighted : TYPE, optional
+        whether to fit assuming Poisson statistics in each bin. The default is True.
+    f : TYPE, optional
+        try to fit n in range n0/f to n0*f where n0 is the initial estimate.. The default is 1.5.
+    verbose : TYPE, optional
+        DESCRIPTION. The default is False.
+
+    Returns
+    -------
+    histf : TYPE
+        fitted histogram as int array, same length as hist..
+    n_fit : TYPE
+        binomial n value (int).
+    p_fit : TYPE
+        binomial p value (float).
+    chi2r : TYPE
+        rchi2: reduced chi-squared. This number should be around 1. Large values indicate a bad fit; small values indicate 'too good to be true' data..
+
+    """
+    hist = np.array(hist, dtype=int).ravel()  # force 1D int array
+    Ydata = hist / hist.sum()  # probability mass function
+    nk = len(hist)
+    if weighted:
+        sigmas = np.sqrt(hist + 0.25) / hist.sum()
+    else:
+        sigmas = np.full(nk, 1 / np.sqrt(nk * hist.sum()))
+    Xdata = np.arange(nk)
+
+    mean = (Ydata * Xdata).sum()
+    variance = ((Xdata - mean)**2 * Ydata).sum()
+
+    # initial estimate for p and search range for n
+    nest = max(1, int(mean**2 /(mean - variance) + 0.5))
+    nmin = max(1, int(np.floor(nest / f)))
+    nmax = max(nmin, int(np.ceil(nest * f)))
+    nvals = np.arange(nmin, nmax + 1)
+    num_n = nmax - nmin + 1
+    verbose and print(f'Initial estimate: n={nest}, p={mean/nest:.3g}')
+
+    # store fit results for each n
+    pvals, sses = np.zeros(num_n), np.zeros(num_n)
+    for nval in nvals:
+        # fit and plot
+        p_guess = max(0, min(1, mean / nval))
+        fitparams, _ = curve_fit(BinomPMF(nval), Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
+        # fitparams, _ = curve_fit(binom(nval, p).pmf(Xdata), Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
+        # fitparams, _ = curve_fit(binom1, Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
+
+        p = fitparams[0]
+        sse = (((Ydata - BinomPMF(nval)(Xdata, p)) / sigmas)**2).sum()
+        verbose and print(f'  Trying n={nval} -> p={p:.3g} (initial: {p_guess:.3g}),' f' sse={sse:.3g}')
+        pvals[nval - nmin] = p
+        sses[nval - nmin] = sse
+
+    n_fit = np.argmin(sses) + nmin
+    p_fit = pvals[n_fit - nmin]
+    sse = sses[n_fit - nmin]
+    chi2r = sse / (nk - 2) if nk > 2 else np.nan
+    if verbose:
+        print(f'  Found n={n_fit}, p={p_fit:.6g} sse={sse:.3g},' f' reduced chi^2={chi2r:.3g}')
+
+    model = {}
+    model['name'] = 'binomial'
+    model['n'] = n_fit
+    model['p'] = p_fit
+
+    figdata = {}
+    figdata['sses'] = sses
+    figdata['Xdata'] = Xdata
+    figdata['hist'] = hist
+    figdata['nvals'] = nvals
+
+    summary = {}
+    summary['chi2r'] = chi2r
+    summary['sse'] = sse
+
+    out = {}
+    out['model'] = model
+    out['figdata'] = figdata
+    out['summary'] = summary
+
+    return out
+
+def transform_binom(X, f=1.5, weighted=True, verbose=True):
+    """Convert array of samples (nonnegative ints) to histogram"""
+    X = np.array(X, dtype=int)
+    kmax = X.max()
+    hist, _ = np.histogram(X, np.arange(kmax + 2) - 0.5)
+    return hist
+
+def fit_transform_binom(X, f=1.5, weighted=True, verbose=True):
+    """Convert array of samples (nonnegative ints) to histogram and fit."""
+    hist = transform_binom(X, f=f, weighted=weighted, verbose=verbose)
+    model = fit_binom(hist, f=f, weighted=weighted, verbose=verbose)
+    return model
+
+def plot_binom(out):
+    n_fit = out['model']['n']
+    p_fit = out['model']['p']
+    histf = BinomPMF(n_fit)(out['figdata']['Xdata'], p_fit) * out['figdata']['hist'].sum()
+
+    fig, ax = plt.subplots(2, 1, figsize=(4, 4))
+    ax[0].plot(out['figdata']['Xdata'], out['figdata']['hist'], 'ro', label='input data')
+    ax[0].step(out['figdata']['Xdata'], histf, 'b', where='mid', label=f'fit: n={n_fit}, p={p_fit:.3f}')
+    ax[0].set_xlabel('k')
+    ax[0].axhline(0, color='k')
+    ax[0].set_ylabel('Counts')
+    ax[0].legend()
+    ax[1].set_xlabel('n')
+    ax[1].set_ylabel('sse')
+    plotfunc = ax[1].semilogy if out['figdata']['sses'].max()>20 * out['figdata']['sses'].min()>0 else ax[1].plot
+    plotfunc(out['figdata']['nvals'], out['figdata']['sses'], 'k-', label='SSE over n scan')
+    ax[1].legend()
+    fig.show()
