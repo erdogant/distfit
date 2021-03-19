@@ -1,8 +1,9 @@
-#conda create -n env_distfit python=3.6
+#conda create -n env_distfit python=3.8
 #conda activate env_distfit
 matplotlib
 numpy
 pandas
 tqdm
 statsmodels
+scipy
 pypickle
