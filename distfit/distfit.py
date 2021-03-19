@@ -14,7 +14,6 @@ import pypickle
 import numpy as np
 import pandas as pd
 
-from scipy.stats import binom
 from scipy.optimize import curve_fit
 
 from scipy.interpolate import make_interp_spline
@@ -52,6 +51,7 @@ class distfit():
     distr : str, default: 'popular'
         The (set) of distribution to test. A set of distributions can be tested by:
         'popular', 'full', or specify the theoretical distribution: 'norm', 't'.
+        for discrete distributions; binomial.
         See docs for more information about 'popular' and 'full'.
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
@@ -102,7 +102,7 @@ class distfit():
     >>> dist.plot()
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000, todf=False):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -114,6 +114,8 @@ class distfit():
         self.smooth = smooth
         self.n_perm = n_perm
         self.todf = todf
+        self.f = f  # Only for discrete
+        self.weighted = weighted  # Only for discrete
 
     # Fit
     def fit(self, verbose=3):
@@ -136,6 +138,7 @@ class distfit():
         if self.method=='parametric':
             self.distributions = _get_distributions(self.distr)
         elif self.method=='discrete':
+            # self.distributions = [st.binom]
             pass
         elif self.method=='quantile':
             pass
@@ -194,9 +197,9 @@ class distfit():
         self.size = len(X)
 
         # Get histogram of original X
-        [X_bins, y_obs] = _get_hist_params(X, self.bins)
+        X_bins, y_obs = _get_hist_params(X, self.bins)
         # Smoothing by interpolation
-        [X_bins, y_obs] = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
+        X_bins, y_obs = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
         self.histdata = (y_obs, X_bins)
 
         if self.method=='parametric':
@@ -209,8 +212,10 @@ class distfit():
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
-            out_summary, model = fit_transform_binom(X, X_bins, y_obs, self.distributions, verbose=verbose)
-            pass
+            model, summary = fit_transform_binom(X, f=self.f, weighted=True, verbose=verbose)
+            # self.histdata = (y_obs, X_bins)
+            self.model = model
+            self.summary = summary
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, X, verbose=verbose)
@@ -271,6 +276,8 @@ class distfit():
                          self.size,
                          self.smooth,
                          self.summary,
+                         self.weighted,
+                         self.f,
                          )
         # Return
         return results
@@ -349,7 +356,7 @@ class distfit():
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='discrete'):
-            pass
+            fig, ax = plot_binom(self.summary, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='quantile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='percentile'):
@@ -761,7 +768,7 @@ def _format_data(data):
     return(data)
 
 
-def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary):
+def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f):
     out = {}
     out['model'] = model
     out['summary'] = summary
@@ -775,6 +782,8 @@ def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm,
     out['multtest'] = multtest
     out['n_perm'] = n_perm
     out['smooth'] = smooth
+    out['weighted'] = weighted
+    out['f'] = f
     # Return
     return out
 
@@ -820,7 +829,7 @@ def _get_distributions(distr):
 # %% Get histogram of original data
 def _get_hist_params(X, bins, mhist='numpy'):
     if mhist=='numpy':
-        [histvals, binedges] = np.histogram(X, bins=bins, density=True)
+        histvals, binedges = np.histogram(X, bins=bins, density=True)
         binedges = (binedges + np.roll(binedges, -1))[:-1] / 2.0
         # binedges[-1] += 10**-6
     else:
@@ -1056,15 +1065,20 @@ def _smooth(X, window):
     X_smooth = np.convolve(X, box, mode='same')
     return X_smooth
 
+
 # %% Binomial
 class BinomPMF:
     """Wrapper so that integer parameters don't occur as function arguments."""
+
     def __init__(self, n):
         self.n = n
-    def __call__(self, ks, p):
-        return binom(self.n, p).pmf(ks)
 
-def fit_binom(hist, plot=True, weighted=True, f=1.5, verbose=False):
+    def __call__(self, ks, p):
+        """Compute binomial."""
+        return st.binom(self.n, p).pmf(ks)
+
+
+def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
     """Fit histogram to binomial distribution.
 
     Parameters
@@ -1110,80 +1124,96 @@ def fit_binom(hist, plot=True, weighted=True, f=1.5, verbose=False):
     nmax = max(nmin, int(np.ceil(nest * f)))
     nvals = np.arange(nmin, nmax + 1)
     num_n = nmax - nmin + 1
-    verbose and print(f'Initial estimate: n={nest}, p={mean/nest:.3g}')
+    if verbose>=4: print(f'[distfit] >Initial estimate: n={nest}, p={mean/nest:.3g}')
 
     # store fit results for each n
     pvals, sses = np.zeros(num_n), np.zeros(num_n)
     for nval in nvals:
-        # fit and plot
+        # Make quess for P
         p_guess = max(0, min(1, mean / nval))
+        # Fit
         fitparams, _ = curve_fit(BinomPMF(nval), Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
-        # fitparams, _ = curve_fit(binom(nval, p).pmf(Xdata), Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
-        # fitparams, _ = curve_fit(binom1, Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
-
+        # Determine SSE
         p = fitparams[0]
         sse = (((Ydata - BinomPMF(nval)(Xdata, p)) / sigmas)**2).sum()
-        verbose and print(f'  Trying n={nval} -> p={p:.3g} (initial: {p_guess:.3g}),' f' sse={sse:.3g}')
+        # Store
         pvals[nval - nmin] = p
         sses[nval - nmin] = sse
+        if verbose>=4: print(f'[distfit] >Trying n={nval} -> p={p:.3g} (initial: {p_guess:.3g}),' f' sse={sse:.3g}')
 
     n_fit = np.argmin(sses) + nmin
     p_fit = pvals[n_fit - nmin]
     sse = sses[n_fit - nmin]
     chi2r = sse / (nk - 2) if nk > 2 else np.nan
-    if verbose:
-        print(f'  Found n={n_fit}, p={p_fit:.6g} sse={sse:.3g},' f' reduced chi^2={chi2r:.3g}')
-
-    model = {}
-    model['name'] = 'binomial'
-    model['n'] = n_fit
-    model['p'] = p_fit
+    if verbose>=3: print(f'[distfit] >Best fit: n={n_fit}, p={p_fit:.6g} sse={sse:.3g},' f' reduced chi^2={chi2r:.3g}')
 
     figdata = {}
     figdata['sses'] = sses
     figdata['Xdata'] = Xdata
     figdata['hist'] = hist
+    figdata['Ydata'] = Ydata  # probability mass function
     figdata['nvals'] = nvals
 
     summary = {}
     summary['chi2r'] = chi2r
     summary['sse'] = sse
+    summary['name'] = 'binomial'
+    summary['n_fit'] = n_fit
+    summary['p_fit'] = p_fit
+    summary['figdata'] = figdata
 
-    out = {}
-    out['model'] = model
-    out['figdata'] = figdata
-    out['summary'] = summary
+    model = st.binom(n_fit, p_fit)
 
-    return out
+    return model, summary
 
-def transform_binom(X, f=1.5, weighted=True, verbose=True):
-    """Convert array of samples (nonnegative ints) to histogram"""
+
+def fit_binom(X):
+    """Transform array of samples (nonnegative ints) to histogram."""
     X = np.array(X, dtype=int)
     kmax = X.max()
     hist, _ = np.histogram(X, np.arange(kmax + 2) - 0.5)
     return hist
 
-def fit_transform_binom(X, f=1.5, weighted=True, verbose=True):
+
+def fit_transform_binom(X, f=1.5, weighted=True, verbose=3):
     """Convert array of samples (nonnegative ints) to histogram and fit."""
-    hist = transform_binom(X, f=f, weighted=weighted, verbose=verbose)
-    model = fit_binom(hist, f=f, weighted=weighted, verbose=verbose)
-    return model
+    if verbose>=3: print('[distfit] >Fit using binomial distribution..')
+    hist = fit_binom(X)
+    model, summary = transform_binom(hist, f=f, weighted=weighted, verbose=verbose)
+    return model, summary
 
-def plot_binom(out):
-    n_fit = out['model']['n']
-    p_fit = out['model']['p']
-    histf = BinomPMF(n_fit)(out['figdata']['Xdata'], p_fit) * out['figdata']['hist'].sum()
 
-    fig, ax = plt.subplots(2, 1, figsize=(4, 4))
-    ax[0].plot(out['figdata']['Xdata'], out['figdata']['hist'], 'ro', label='input data')
-    ax[0].step(out['figdata']['Xdata'], histf, 'b', where='mid', label=f'fit: n={n_fit}, p={p_fit:.3f}')
+def plot_binom(summary, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+    """Plot discrete results.
+
+    Parameters
+    ----------
+    model : dict
+        Results derived from the fit_transform function.
+
+    """
+    n_fit = summary['n_fit']
+    p_fit = summary['p_fit']
+    histf = BinomPMF(n_fit)(summary['figdata']['Xdata'], p_fit) * summary['figdata']['hist'].sum()
+
+    fig, ax = plt.subplots(2, 1, figsize=figsize)
+    # First image
+    ax[0].plot(summary['figdata']['Xdata'], summary['figdata']['hist'], 'ro', label='input data')
+    ax[0].step(summary['figdata']['Xdata'], histf, 'b', where='mid', label=f'fit: n={n_fit}, p={p_fit:.3f}')
     ax[0].set_xlabel('k')
     ax[0].axhline(0, color='k')
     ax[0].set_ylabel('Counts')
     ax[0].legend()
+    ax[0].grid(True)
+    # Second image
     ax[1].set_xlabel('n')
     ax[1].set_ylabel('sse')
-    plotfunc = ax[1].semilogy if out['figdata']['sses'].max()>20 * out['figdata']['sses'].min()>0 else ax[1].plot
-    plotfunc(out['figdata']['nvals'], out['figdata']['sses'], 'k-', label='SSE over n scan')
+    plotfunc = ax[1].semilogy if summary['figdata']['sses'].max()>20 * summary['figdata']['sses'].min()>0 else ax[1].plot
+    plotfunc(summary['figdata']['nvals'], summary['figdata']['sses'], 'k-', label='SSE over n scan')
+    ax[1].vlines(summary['n_fit'], 0, summary['figdata']['sses'].max(), 'r', linestyles='dashed')
+    ax[1].hlines(summary['sse'], summary['figdata']['nvals'].min(), summary['figdata']['nvals'].max(), 'r', linestyles='dashed', label="Best SSE: %.3g" %(summary['sse']))
     ax[1].legend()
+    ax[1].grid(True)
     fig.show()
+
+    return fig, ax
