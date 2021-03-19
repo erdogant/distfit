@@ -15,7 +15,7 @@ from distfit import distfit
 from scipy.stats import binom
 X = binom(15, 0.5).rvs(1000)
 
-dist = distfit(method='discrete', f=2.5, weighted=False)
+dist = distfit(method='discrete', f=1.5, weighted=True)
 model = dist.fit_transform(X, verbose=4)
 dist.plot()
 

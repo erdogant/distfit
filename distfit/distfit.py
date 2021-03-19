@@ -1068,7 +1068,13 @@ def _smooth(X, window):
 
 # %% Binomial
 class BinomPMF:
-    """Wrapper so that integer parameters don't occur as function arguments."""
+    """Wrapper so that integer parameters don't occur as function arguments.
+
+    References
+    ----------
+    Some parts of the binomial fitting is authored by Han-Kwang Nienhuys (2020); copying: CC-BY-SA.
+    * https://stackoverflow.com/a/62365555/6228891
+    """
 
     def __init__(self, n):
         self.n = n
