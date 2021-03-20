@@ -212,10 +212,11 @@ class distfit():
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
-            model, summary = fit_transform_binom(X, f=self.f, weighted=True, verbose=verbose)
-            # self.histdata = (y_obs, X_bins)
+            model, figdata = fit_transform_binom(X, f=self.f, weighted=True, verbose=verbose)
+            model = _compute_cii(self, model, verbose=verbose)
+            # self.histdata = (figdata['Xdata'], figdata['hist'])
             self.model = model
-            self.summary = summary
+            self.summary = figdata
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, X, verbose=verbose)
@@ -317,15 +318,15 @@ class distfit():
         if verbose>=3: print('[distfit] >predict..')
 
         if self.method=='parametric':
-            out = _predict_parametric(self, y, verbose=verbose)
+            out = _predict(self, y, verbose=verbose)
         elif self.method=='discrete':
-            pass
+            out = _predict(self, y, verbose=verbose)
         elif self.method=='quantile':
             out = _predict_quantile(self, y, verbose=verbose)
         elif self.method=='percentile':
             out = _predict_percentile(self, y, verbose=verbose)
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
+            raise Exception('[distfit] >Error: method parameter can only be "parametric", "quantile" or "percentile".')
         # Return
         return out
 
@@ -356,7 +357,7 @@ class distfit():
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='discrete'):
-            fig, ax = plot_binom(self.summary, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+            fig, ax = plot_binom(self.model, self.summary, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='quantile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='percentile'):
@@ -494,19 +495,23 @@ class distfit():
 
 
 # %%
-def _predict_parametric(self, y, verbose=3):
+def _predict(self, y, verbose=3):
     # Check which distribution fits best to the data
     if verbose>=4: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
     if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
 
-    # Get distribution and the parameters
-    getdist = self.model['distr']
-    arg = self.model['params'][:-2]
-    loc = self.model['params'][-2]
-    scale = self.model['params'][-1]
-
-    # Compute P-value for data based on null-distribution
-    getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.pdf(y, loc, scale)
+    if self.method=='discrete':
+        getdist = self.model['distr']
+        # Compute P-value for data based on null-distribution
+        getP = getdist.cdf(y)
+    else:
+        # Get distribution and the parameters
+        getdist = self.model['distr']
+        arg = self.model['params'][:-2]
+        loc = self.model['params'][-2]
+        scale = self.model['params'][-1]
+        # Compute P-value for data based on null-distribution
+        getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.pdf(y, loc, scale)
 
     # Determine P based on upper/lower/no bounds
     if self.bound=='up' or self.bound=='right' or self.bound=='high':
@@ -939,6 +944,13 @@ def _compute_cii(self, model, verbose=3):
                 CIIdown = dist.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - self.alpha, loc=loc, scale=scale)
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
                 CIIup = dist.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(self.alpha, loc=loc, scale=scale)
+    elif self.method=='discrete':
+        dist = model['distr']
+        if self.alpha is not None:
+            if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
+                CIIdown = dist.ppf(1 - self.alpha)
+            if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
+                CIIup = dist.ppf(self.alpha)
     elif self.method=='quantile':
         X = model
         model = {}
@@ -960,7 +972,7 @@ def _compute_cii(self, model, verbose=3):
         # Store
         # model['samples'] = samples
     else:
-        raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
+        raise Exception('[distfit] >Error: method parameter can only be "parametric", "quantile" or "percentile".')
 
     # Store
     model['CII_min_alpha'] = CIIup
@@ -1145,32 +1157,32 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
         # Store
         pvals[nval - nmin] = p
         sses[nval - nmin] = sse
-        if verbose>=4: print(f'[distfit] >Trying n={nval} -> p={p:.3g} (initial: {p_guess:.3g}),' f' sse={sse:.3g}')
+        if verbose>=4: print(f'[distfit] >[binomial] Trying n={nval} -> p={p:.3g} (initial: {p_guess:.3g}),' f' sse={sse:.3g}')
 
     n_fit = np.argmin(sses) + nmin
     p_fit = pvals[n_fit - nmin]
     sse = sses[n_fit - nmin]
     chi2r = sse / (nk - 2) if nk > 2 else np.nan
-    if verbose>=3: print(f'[distfit] >Best fit: n={n_fit}, p={p_fit:.6g} sse={sse:.3g},' f' reduced chi^2={chi2r:.3g}')
+    # if verbose>=3: print(f'[distfit] >[binomial] [SSE: {sse:.3g}] [n: {n_fit}] [p: {p_fit:.6g}] ' f' [chi^2={chi2r:.3g}]')
+    if verbose>=3: print('[distfit] >[binomial] [SSE: %.3g] [n: %.2g] [p: %.6g] [chi^2: %.3g]' %(sse, n_fit, p_fit, chi2r))
 
+    # Store
+    model = {}
+    model['distr'] = st.binom(n_fit, p_fit)
+    model['params'] = (n_fit, p_fit)
+    model['name'] = 'binom'
+    model['SSE'] = sse
+    model['chi2r'] = chi2r
+    model['n'] = n_fit
+    model['p'] = p_fit
     figdata = {}
     figdata['sses'] = sses
     figdata['Xdata'] = Xdata
     figdata['hist'] = hist
     figdata['Ydata'] = Ydata  # probability mass function
     figdata['nvals'] = nvals
-
-    summary = {}
-    summary['chi2r'] = chi2r
-    summary['sse'] = sse
-    summary['name'] = 'binomial'
-    summary['n_fit'] = n_fit
-    summary['p_fit'] = p_fit
-    summary['figdata'] = figdata
-
-    model = st.binom(n_fit, p_fit)
-
-    return model, summary
+    # Return
+    return model, figdata
 
 
 def fit_binom(X):
@@ -1185,11 +1197,11 @@ def fit_transform_binom(X, f=1.5, weighted=True, verbose=3):
     """Convert array of samples (nonnegative ints) to histogram and fit."""
     if verbose>=3: print('[distfit] >Fit using binomial distribution..')
     hist = fit_binom(X)
-    model, summary = transform_binom(hist, f=f, weighted=weighted, verbose=verbose)
-    return model, summary
+    model, figdata = transform_binom(hist, f=f, weighted=weighted, verbose=verbose)
+    return model, figdata
 
 
-def plot_binom(summary, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+def plot_binom(model, figdata, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
     """Plot discrete results.
 
     Parameters
@@ -1198,14 +1210,14 @@ def plot_binom(summary, title='', figsize=(10, 8), xlim=None, ylim=None, verbose
         Results derived from the fit_transform function.
 
     """
-    n_fit = summary['n_fit']
-    p_fit = summary['p_fit']
-    histf = BinomPMF(n_fit)(summary['figdata']['Xdata'], p_fit) * summary['figdata']['hist'].sum()
+    n_fit = model['n']
+    p_fit = model['p']
+    histf = BinomPMF(n_fit)(figdata['Xdata'], p_fit) * figdata['hist'].sum()
 
     fig, ax = plt.subplots(2, 1, figsize=figsize)
     # First image
-    ax[0].plot(summary['figdata']['Xdata'], summary['figdata']['hist'], 'ro', label='input data')
-    ax[0].step(summary['figdata']['Xdata'], histf, 'b', where='mid', label=f'fit: n={n_fit}, p={p_fit:.3f}')
+    ax[0].plot(figdata['Xdata'], figdata['hist'], 'ro', label='input data')
+    ax[0].step(figdata['Xdata'], histf, 'b', where='mid', label=f'fit: n={n_fit}, p={p_fit:.3f}')
     ax[0].set_xlabel('k')
     ax[0].axhline(0, color='k')
     ax[0].set_ylabel('Counts')
@@ -1214,10 +1226,10 @@ def plot_binom(summary, title='', figsize=(10, 8), xlim=None, ylim=None, verbose
     # Second image
     ax[1].set_xlabel('n')
     ax[1].set_ylabel('sse')
-    plotfunc = ax[1].semilogy if summary['figdata']['sses'].max()>20 * summary['figdata']['sses'].min()>0 else ax[1].plot
-    plotfunc(summary['figdata']['nvals'], summary['figdata']['sses'], 'k-', label='SSE over n scan')
-    ax[1].vlines(summary['n_fit'], 0, summary['figdata']['sses'].max(), 'r', linestyles='dashed')
-    ax[1].hlines(summary['sse'], summary['figdata']['nvals'].min(), summary['figdata']['nvals'].max(), 'r', linestyles='dashed', label="Best SSE: %.3g" %(summary['sse']))
+    plotfunc = ax[1].semilogy if figdata['sses'].max()>20 * figdata['sses'].min()>0 else ax[1].plot
+    plotfunc(figdata['nvals'], figdata['sses'], 'k-', label='SSE over n scan')
+    ax[1].vlines(n_fit, 0, figdata['sses'].max(), 'r', linestyles='dashed')
+    ax[1].hlines(model['SSE'], figdata['nvals'].min(), figdata['nvals'].max(), 'r', linestyles='dashed', label="Best SSE: %.3g" %(model['SSE']))
     ax[1].legend()
     ax[1].grid(True)
     fig.show()

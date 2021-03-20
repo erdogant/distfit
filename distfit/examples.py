@@ -13,11 +13,28 @@ import distfit
 # %%
 from distfit import distfit
 from scipy.stats import binom
+# Generate random numbers
 X = binom(15, 0.5).rvs(1000)
 
 dist = distfit(method='discrete', f=1.5, weighted=True)
-model = dist.fit_transform(X, verbose=4)
+model = dist.fit_transform(X, verbose=3)
 dist.plot()
+
+# Make prediction
+results = dist.predict([2, 3, 4, 10, 11, 12])
+
+# %%
+n=15
+p=0.5
+x = np.arange(binom.ppf(0.01, n, p),
+              binom.ppf(0.99, n, p))
+plt.plot(x, binom.pmf(x, n, p), 'bo', ms=8, label='binom pmf')
+plt.vlines(x, 0, binom.pmf(x, n, p), colors='b', lw=5, alpha=0.5)
+
+
+dist = model['model']['distr']
+prob = dist.cdf(x, n, p)
+np.allclose(x, binom.ppf(prob, n, p))
 
 # %%
 # dist = BinomPMF()
