@@ -122,3 +122,23 @@ def test_distfit():
     dist.fit_transform(X, verbose=0)
     results=dist.predict(y)
     assert np.all(np.isin([*results.keys()],  ['y', 'y_proba', 'y_pred', 'teststat']))
+
+    # TEST 15: Discrete
+    import random
+    random.seed(10)
+    from scipy.stats import binom
+    # Generate random numbers
+    X = binom(8, 0.5).rvs(10000)
+
+    dist = distfit(method='discrete', f=1.5, weighted=True)
+    dist.fit_transform(X, verbose=3)
+    assert dist.model['n']==8
+    assert np.round(dist.model['p'], decimals=1)==0.5
+
+    # check output is unchanged
+    assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
+    # TEST 15A
+    assert [*dist.model.keys()]==['distr', 'params', 'name', 'SSE', 'chi2r', 'n', 'p', 'CII_min_alpha', 'CII_max_alpha']
+    # TEST 15B
+    results = dist.predict([0, 1, 10, 11, 12])
+    assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P']))
