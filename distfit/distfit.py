@@ -31,8 +31,7 @@ class distfit():
 
     Description
     -----------
-    Probability density fitting across 89 univariate distributions to
-    non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.
+    Probability density fitting across 89 univariate distributions to non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.
 
     Parameters
     ----------
