@@ -165,7 +165,7 @@ model.plot_summary()
 # %% Show some results
 print(model.results['y_proba'])
 print(model.results['y_pred'])
-print(model.results['df'])
+# print(model.results['df'])
 print(model.summary)
 
 
@@ -288,5 +288,4 @@ dist.plot_summary()
 # from tabulate import tabulate
 # print(tabulate(dist.results['df'], tablefmt="grid", headers="keys"))
 
-
-
+# %%
