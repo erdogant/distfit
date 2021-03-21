@@ -50,12 +50,17 @@ class distfit():
     distr : str, default: 'popular'
         The (set) of distribution to test. A set of distributions can be tested by:
         'popular', 'full', or specify the theoretical distribution: 'norm', 't'.
-        for discrete distributions; binomial.
-        See docs for more information about 'popular' and 'full'.
+        for discrete distributions; binomial is used.
+        See docs for more information about 'popular' and 'full'. https://erdogant.github.io/distfit
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "quantile"
+    weighted : Bool, (default: True)
+        Only used in discrete fitting. In principle, the most best fit will be obtained if you set weighted=True.
+        However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.
+    f : float, (default: 1.5)
+        Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
 
     Returns
     -------
@@ -1097,30 +1102,42 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
 
     Parameters
     ----------
-    hist : TYPE
-        histogram as int array with counts, array index as bin..
-    plot : TYPE, optional
-        whether to plot. The default is True.
-    weighted : TYPE, optional
-        whether to fit assuming Poisson statistics in each bin. The default is True.
-    f : TYPE, optional
-        try to fit n in range n0/f to n0*f where n0 is the initial estimate.. The default is 1.5.
-    verbose : TYPE, optional
-        DESCRIPTION. The default is False.
+    hist : array-like
+        histogram as int array with counts, array index as bin.
+    weighted : Bool, (default: True)
+        In principle, the most best fit will be obtained if you set weighted=True.
+        However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.
+    f : float, (default: 1.5)
+        try to fit n in range n0/f to n0*f where n0 is the initial estimate.
 
     Returns
     -------
-    histf : TYPE
-        fitted histogram as int array, same length as hist..
-    n_fit : TYPE
-        binomial n value (int).
-    p_fit : TYPE
-        binomial p value (float).
-    chi2r : TYPE
-        rchi2: reduced chi-squared. This number should be around 1. Large values indicate a bad fit; small values indicate 'too good to be true' data..
+    model : dict
+        distr : Object
+            fitted binomial model.
+        name : String
+            Name of the fitted distribution.
+        SSE : float
+            Best SSE score
+        n : int
+            binomial n value.
+        p : float
+            binomial p value.
+        chi2r : float
+            rchi2: reduced chi-squared. This number should be around 1. Large values indicate a bad fit; small values indicate 'too good to be true' data..
 
+    figdata : dict
+        sses : array-like
+            The computed SSE scores accompanyin the various n.
+        Xdata : array-like
+            Input data.
+        hist : array-like
+            fitted histogram as int array, same length as hist.
+        Ydata : array-like
+            Probability mass function.
+        nvals : array-like
+            Evaluated n's.
     """
-    hist = np.array(hist, dtype=int).ravel()  # force 1D int array
     Ydata = hist / hist.sum()  # probability mass function
     nk = len(hist)
     if weighted:
