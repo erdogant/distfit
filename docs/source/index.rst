@@ -32,6 +32,7 @@ Content
   Parametric
   Quantile
   Percentile
+  Discrete
 
 .. toctree::
   :maxdepth: 3

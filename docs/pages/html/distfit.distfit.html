@@ -98,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Performance</span></p>
 <ul>
@@ -194,15 +195,25 @@
 <span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this headline">¶</a></h1>
 <p>Compute best fit to your empirical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
 <dl class="py class">
+<dt id="distfit.distfit.BinomPMF">
+<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">BinomPMF</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.BinomPMF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper so that integer parameters don’t occur as function arguments.</p>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Some parts of the binomial fitting is authored by Han-Kwang Nienhuys (2020); copying: CC-BY-SA.</p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/a/62365555/6228891">https://stackoverflow.com/a/62365555/6228891</a></p></li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
 <dt id="distfit.distfit.distfit">
-<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">'popular'</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">todf</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">distfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'parametric'</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">multtest</span><span class="o">=</span><span class="default_value">'fdr_bh'</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">bound</span><span class="o">=</span><span class="default_value">'both'</span></em>, <em class="sig-param"><span class="n">distr</span><span class="o">=</span><span class="default_value">'popular'</span></em>, <em class="sig-param"><span class="n">smooth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_perm</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">todf</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">weighted</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">1.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Probability density function fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), making plots, and hypothesis testing.</p>
-<p>Probability density fitting across 89 univariate distributions to
-non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
+<p>Probability density fitting across 89 univariate distributions to non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default: 'parametric'</em>) – Specify the method type: ‘parametric’,’quantile’,’percentile’</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default: 'parametric'</em>) – Specify the method type: ‘parametric’,’quantile’,’percentile’,’discrete’</p></li>
 <li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>default: 0.05</em>) – Significance alpha.</p></li>
 <li><p><strong>multtest</strong> (<em>str</em><em>, </em><em>default: 'fdr_bh'</em>) – None, ‘bonferroni’, ‘sidak’, ‘holm-sidak’, ‘holm’, ‘simes-hochberg’,
 ‘hommel’, ‘fdr_bh’, ‘fdr_by’, ‘fdr_tsbh’, ‘fdr_tsbky’</p></li>
@@ -211,9 +222,13 @@ non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.</p>
 Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down’, ‘low’ or ‘left’</p></li>
 <li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
 ‘popular’, ‘full’, or specify the theoretical distribution: ‘norm’, ‘t’.
-See docs for more information about ‘popular’ and ‘full’.</p></li>
+for discrete distributions; binomial is used.
+See docs for more information about ‘popular’ and ‘full’. <a class="reference external" href="https://erdogant.github.io/distfit">https://erdogant.github.io/distfit</a></p></li>
 <li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.</p></li>
 <li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “quantile”</p></li>
+<li><p><strong>weighted</strong> (<em>Bool</em><em>, </em><em>(</em><em>default: True</em><em>)</em>) – Only used in discrete fitting. In principle, the most best fit will be obtained if you set weighted=True.
+However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.</p></li>
+<li><p><strong>f</strong> (<em>float</em><em>, </em><em>(</em><em>default: 1.5</em><em>)</em>) – Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -459,6 +474,29 @@ arg : arg function parameter</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt id="distfit.distfit.fit_binom">
+<code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">fit_binom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.fit_binom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform array of samples (nonnegative ints) to histogram.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="distfit.distfit.fit_transform_binom">
+<code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">fit_transform_binom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">1.5</span></em>, <em class="sig-param"><span class="n">weighted</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.fit_transform_binom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert array of samples (nonnegative ints) to histogram and fit.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="distfit.distfit.plot_binom">
+<code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">plot_binom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">(10, 8)</span></em>, <em class="sig-param"><span class="n">xlim</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ylim</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.plot_binom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot discrete results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>dict</em>) – Results derived from the fit_transform function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="distfit.distfit.smoothline">
 <code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">smoothline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xs</span></em>, <em class="sig-param"><span class="n">ys</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interpol</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">window</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.smoothline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smoothing 1D vector.</p>
@@ -479,6 +517,57 @@ input line followed by a convolution.</p>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>xnew</strong> (<em>array-like</em>) – Data points for the x-axis.</p></li>
 <li><p><strong>ynew</strong> (<em>array-like</em>) – Data points for the y-axis.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="distfit.distfit.transform_binom">
+<code class="sig-prename descclassname">distfit.distfit.</code><code class="sig-name descname">transform_binom</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hist</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">weighted</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">f</span><span class="o">=</span><span class="default_value">1.5</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.transform_binom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit histogram to binomial distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<em>array-like</em>) – histogram as int array with counts, array index as bin.</p></li>
+<li><p><strong>weighted</strong> (<em>Bool</em><em>, </em><em>(</em><em>default: True</em><em>)</em>) – In principle, the most best fit will be obtained if you set weighted=True.
+However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.</p></li>
+<li><p><strong>f</strong> (<em>float</em><em>, </em><em>(</em><em>default: 1.5</em><em>)</em>) – try to fit n in range n0/f to n0*f where n0 is the initial estimate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>model</strong> (<em>dict</em>) –</p>
+<dl class="simple">
+<dt>distr<span class="classifier">Object</span></dt><dd><p>fitted binomial model.</p>
+</dd>
+<dt>name<span class="classifier">String</span></dt><dd><p>Name of the fitted distribution.</p>
+</dd>
+<dt>SSE<span class="classifier">float</span></dt><dd><p>Best SSE score</p>
+</dd>
+<dt>n<span class="classifier">int</span></dt><dd><p>binomial n value.</p>
+</dd>
+<dt>p<span class="classifier">float</span></dt><dd><p>binomial p value.</p>
+</dd>
+<dt>chi2r<span class="classifier">float</span></dt><dd><p>rchi2: reduced chi-squared. This number should be around 1. Large values indicate a bad fit; small values indicate ‘too good to be true’ data..</p>
+</dd>
+</dl>
+</li>
+<li><p><strong>figdata</strong> (<em>dict</em>) –</p>
+<dl class="simple">
+<dt>sses<span class="classifier">array-like</span></dt><dd><p>The computed SSE scores accompanyin the various n.</p>
+</dd>
+<dt>Xdata<span class="classifier">array-like</span></dt><dd><p>Input data.</p>
+</dd>
+<dt>hist<span class="classifier">array-like</span></dt><dd><p>fitted histogram as int array, same length as hist.</p>
+</dd>
+<dt>Ydata<span class="classifier">array-like</span></dt><dd><p>Probability mass function.</p>
+</dd>
+<dt>nvals<span class="classifier">array-like</span></dt><dd><p>Evaluated n’s.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
 </dd>
