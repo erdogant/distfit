@@ -189,7 +189,7 @@ print(X)
 #  4 6 7 6 2 4 3 3 5 3 5 3 4 4 4 7 5 4 5 3 4 3 3 4 3 3 6 3 3 5 4 4 2 3 2 5 7
 #  5 4 8 3 4 3 5 4 3 5 5 2 5 6 7 4 5 5 5 4 4 3 4 5 6 2...]
 
-# Initialize distfit for discrete distribution (only binomial is currently implemented) 
+# Initialize distfit for discrete distribution for which the binomial distribution is used. 
 dist = distfit(method='discrete')
 
 # Run distfit to and determine whether we can find the parameters from the data.
