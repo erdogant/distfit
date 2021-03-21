@@ -1203,6 +1203,8 @@ def fit_binom(X):
     X = np.array(X, dtype=int)
     kmax = X.max()
     hist, _ = np.histogram(X, np.arange(kmax + 2) - 0.5)
+    # force 1D int array
+    hist = np.array(hist, dtype=int).ravel()
     return hist
 
 
