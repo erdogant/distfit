@@ -1198,7 +1198,7 @@ def fit_transform_binom(X, f=1.5, weighted=True, verbose=3):
     return model, figdata
 
 
-def plot_binom(model, figdata, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
     """Plot discrete results.
 
     Parameters
@@ -1207,6 +1207,20 @@ def plot_binom(model, figdata, title='', figsize=(10, 8), xlim=None, ylim=None, 
         Results derived from the fit_transform function.
 
     """
+    # Store output and function parameters
+    Param = {}
+    Param['title'] = title
+    Param['figsize'] = figsize
+    Param['xlim'] = xlim
+    Param['ylim'] = ylim
+
+    # Make figure
+    # dist = self.model['distr']
+    best_fit_name = self.model['name']
+    best_fit_param = self.model['params']
+
+    model = self.model
+    figdata = self.summary
     n_fit = model['n']
     p_fit = model['p']
     histf = BinomPMF(n_fit)(figdata['Xdata'], p_fit) * figdata['hist'].sum()
@@ -1220,6 +1234,44 @@ def plot_binom(model, figdata, title='', figsize=(10, 8), xlim=None, ylim=None, 
     ax[0].set_ylabel('Counts')
     ax[0].legend()
     ax[0].grid(True)
+
+    # Plot vertical line to stress the cut-off point
+    if self.model['CII_min_alpha'] is not None:
+        label = 'CII low ' + '(' + str(self.alpha) + ')'
+        ax[0].axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+    if self.model['CII_max_alpha'] is not None:
+        label = 'CII high ' + '(' + str(self.alpha) + ')'
+        ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+
+    # Make text for plot
+    param_str = ', '.join(['{}={:0.2g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
+    ax[0].set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
+
+    # Limit axis
+    if Param['xlim'] is not None:
+        ax[0].set_xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
+    if Param['ylim'] is not None:
+        ax[0].set_ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
+
+    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+    if hasattr(self, 'results'):
+        # Plot significant hits
+        if self.alpha is None: self.alpha=1
+        idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
+        if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
+        for i in idxIN:
+            ax[0].axvline(x=self.results['y'][i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
+        # Plot the samples that are not signifcant after multiple test.
+        if np.any(idxIN):
+            ax[0].scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+        # Plot the samples that are not signifcant after multiple test.
+        idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
+        if np.any(idxOUT):
+            ax[0].scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+
+    ax[0].legend()
+    ax[0].grid(True)
+
     # Second image
     ax[1].set_xlabel('n')
     ax[1].set_ylabel('sse')
@@ -1231,4 +1283,5 @@ def plot_binom(model, figdata, title='', figsize=(10, 8), xlim=None, ylim=None, 
     ax[1].grid(True)
     fig.show()
 
+    if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return fig, ax
