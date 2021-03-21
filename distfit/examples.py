@@ -14,36 +14,16 @@ import distfit
 from distfit import distfit
 from scipy.stats import binom
 # Generate random numbers
-X = binom(15, 0.5).rvs(1000)
+X = binom(8, 0.5).rvs(1000)
 
 dist = distfit(method='discrete', f=1.5, weighted=True)
 model = dist.fit_transform(X, verbose=3)
 dist.plot()
 
 # Make prediction
-results = dist.predict([2, 3, 4, 10, 11, 12])
+results = dist.predict([0, 1, 10, 11, 12])
+dist.plot()
 
-# %%
-n=15
-p=0.5
-x = np.arange(binom.ppf(0.01, n, p),
-              binom.ppf(0.99, n, p))
-plt.plot(x, binom.pmf(x, n, p), 'bo', ms=8, label='binom pmf')
-plt.vlines(x, 0, binom.pmf(x, n, p), colors='b', lw=5, alpha=0.5)
-
-
-dist = model['model']['distr']
-prob = dist.cdf(x, n, p)
-np.allclose(x, binom.ppf(prob, n, p))
-
-# %%
-# dist = BinomPMF()
-# dist.fit_transform(10, 0.2, 500, f=2.5, weighted=True)
-# dist.fit_transform(10, 0.3, 500, weighted=weighted)
-# dist.fit_transform(10, 0.8, 10000, weighted)
-# dist.fit_transform(1, 0.3, 100, weighted) # equivalent to Bernoulli distribution
-
-# dist.fit_binom_samples(binom(15, 0.5).rvs(100), weighted=weighted)
 
 # %% Import class
 from distfit import distfit
@@ -54,16 +34,17 @@ from distfit import distfit
 
 
 # %%
+from distfit import distfit
 X = np.random.normal(0, 2, 5000)
 y = [-8,-6,0,1,2,3,4,5,6]
 
-dist = distfit(distr='full', todf=False)
+dist = distfit(distr='popular', todf=False)
 model = dist.fit_transform(X)
-results = dist.predict(y)
 dist.plot()
 
-dist = distfit(distr='full', todf=True)
+dist = distfit(distr='popular', todf=True)
 dist.fit_transform(X)
+dist.plot()
 
 # Make prediction
 results = dist.predict(y)
@@ -294,8 +275,8 @@ X = np.random.normal(10, 3, 2000)
 y = [3,4,5,6,10,11,12,18,20]
 
 # Initialize
-dist = distfit(method='percentile', alpha=0.05, todf=True)
-# dist = distfit(method='quantile', alpha=0.05)
+dist = distfit(method='percentile', alpha=0.05, todf=False)
+# dist = distfit(method='quantile', alpha=0.05, todf=False)
 dist.fit_transform(X)
 dist.plot()
 
@@ -304,8 +285,8 @@ dist.predict(y)
 dist.plot()
 dist.plot_summary()
 
-from tabulate import tabulate
-print(tabulate(dist.results['df'], tablefmt="grid", headers="keys"))
+# from tabulate import tabulate
+# print(tabulate(dist.results['df'], tablefmt="grid", headers="keys"))
 
 
 
