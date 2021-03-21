@@ -357,7 +357,7 @@ class distfit():
         if (self.method=='parametric'):
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='discrete'):
-            fig, ax = plot_binom(self.model, self.summary, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='quantile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='percentile'):
@@ -647,18 +647,18 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbos
     ax.axvline(self.model['CII_max_alpha'], linestyle='--', c='r', label='CII high')
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if hasattr(self, 'df'):
-        for i in range(0, len(self.df['y'])):
+    if hasattr(self, 'results'):
+        for i in range(0, len(self.results['y'])):
             # if self.df['y_proba'].iloc[i]<=self.alpha and self.df['y_pred'].iloc[i] != 'none':
-            if self.df['y_pred'].iloc[i] != 'none':
-                ax.axvline(self.df['y'].iloc[i], c='g', linestyle='--', linewidth=0.8)
+            if self.results['y_pred'][i] != 'none':
+                ax.axvline(self.results['y'][i], c='g', linestyle='--', linewidth=0.8)
 
-        idxIN = np.logical_or(self.df['y_pred']=='down', self.df['y_pred']=='up')
+        idxIN = np.logical_or(self.results['y_pred']=='down', self.results['y_pred']=='up')
         if np.any(idxIN):
-            ax.scatter(self.df['y'].values[idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Outside boundaries')
-        idxOUT = self.df['y_pred']=='none'
+            ax.scatter(self.results['y'][idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Outside boundaries')
+        idxOUT = self.results['y_pred']=='none'
         if np.any(idxOUT):
-            ax.scatter(self.df['y'].values[idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Inside boundaries')
+            ax.scatter(self.results['y'][idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Inside boundaries')
 
     # Limit axis
     if xlim is not None:
@@ -736,23 +736,20 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
         plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if hasattr(self, 'df'):
+    if hasattr(self, 'results'):
         # Plot significant hits
         if self.alpha is None: self.alpha=1
-
-        idxIN=np.where(self.df['y_proba'].values<=self.alpha)[0]
+        idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
         if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
         for i in idxIN:
-            ax.axvline(x=self.df['y'].iloc[i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
-
+            ax.axvline(x=self.results['y'][i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
         # Plot the samples that are not signifcant after multiple test.
         if np.any(idxIN):
-            ax.scatter(self.df['y'].iloc[idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
-
+            ax.scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
         # Plot the samples that are not signifcant after multiple test.
-        idxOUT = np.where(self.df['y_proba'].values>self.alpha)[0]
+        idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
         if np.any(idxOUT):
-            ax.scatter(self.df['y'].values[idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+            ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     ax.legend()
     ax.grid(True)
