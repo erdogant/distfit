@@ -6,14 +6,14 @@ def test_distfit():
     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
     # Initialize
     dist = distfit()
-    assert np.all(np.isin(['method', 'alpha', 'bins', 'distr','multtest','n_perm'], dir(dist)))
+    assert np.all(np.isin(['method', 'alpha', 'bins', 'distr', 'multtest', 'n_perm'], dir(dist)))
     # Fit and transform data
     dist.fit_transform(X, verbose=3)
-    
+
     # TEST 1: check output is unchanged
     assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
     # TEST 2: Check model output is unchanged
-    assert [*dist.model.keys()]==['distr', 'params', 'name', 'RSS', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
+    assert [*dist.model.keys()]==['distr', 'stats', 'params', 'name', 'score', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
 
     # TEST 3: Check specific distribution
     dist = distfit(distr='t')

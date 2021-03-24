@@ -2,7 +2,7 @@ from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '1.2.7'
+__version__ = '1.2.8'
 
 
 # module level doc-string
@@ -13,7 +13,7 @@ distfit
 Description
 -----------
 Probability density function fitting across 89 univariate distributions to non-censored
-data by residual sum of squares (RSS), making plots, and hypothesis testing.
+data by residual scoring statistis such as sum of squares (RSS), making plots, and hypothesis testing.
 
 Example
 -------

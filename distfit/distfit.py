@@ -27,11 +27,11 @@ warnings.filterwarnings('ignore')
 
 # %% Class dist
 class distfit():
-    """Probability density function fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), making plots, and hypothesis testing.
+    """Probability density function fitting across 89 univariate distributions to non-censored data by scoring statistics such as residual sum of squares (RSS), making plots, and hypothesis testing.
 
     Description
     -----------
-    Probability density fitting across 89 univariate distributions to non-censored data by Residual Sum of Squares (RSS), and hypothesis testing.
+    Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics such as Residual Sum of Squares (RSS), and hypothesis testing.
 
     Parameters
     ----------
@@ -54,6 +54,9 @@ class distfit():
         See docs for more information about 'popular' and 'full'. https://erdogant.github.io/distfit
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
+    stats : str, default: 'RSS'
+        Specify the scoring statistics: 'RSS', 'wasserstein', 'ks', 'energy'.
+        ks stands for Kolmogorov-Smirnov statistic
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "quantile"
     weighted : Bool, (default: True)
@@ -106,7 +109,7 @@ class distfit():
     >>> dist.plot()
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', stats='RSS', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -118,6 +121,7 @@ class distfit():
         self.smooth = smooth
         self.n_perm = n_perm
         self.todf = todf
+        self.stats = stats
         self.f = f  # Only for discrete
         self.weighted = weighted  # Only for discrete
 
@@ -160,8 +164,8 @@ class distfit():
         The input data X can be modellend in two manners:
 
         **parametric**
-            In the parametric case, the best fit on the data is determined using the
-            Residual Sum of Squares approach (RSS) for the specified distributions. Based on
+            In the parametric case, the best fit on the data is determined using the scoring statistic
+            such as Residual Sum of Squares approach (RSS) for the specified distributions. Based on
             the best distribution-fit, the confidence intervals (CII) can be determined
             for later usage in the :func:`predict` function.
         **quantile**
@@ -179,7 +183,7 @@ class distfit():
         Object.
         model : dict
             dict containing keys with distribution parameters
-            RSS : Residual Sum of Squares
+            score : scoring statistic
             name : distribution name
             distr : distribution function
             params : all kind of parameters
@@ -208,7 +212,7 @@ class distfit():
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, verbose=verbose)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, verbose=verbose)
             # Determine confidence intervals on the best fitting distribution
             model = _compute_cii(self, model, verbose=verbose)
             # Store
@@ -249,7 +253,7 @@ class distfit():
         dict.
         model : dict
             dict containing keys with distribution parameters
-            RSS : Residual Sum of Squares
+            score : Scoring statistic
             name : distribution name
             distr : distribution function
             params : all kind of parameters
@@ -270,6 +274,7 @@ class distfit():
         self.transform(X, verbose=verbose)
         # Store
         results = _store(self.alpha,
+                         self.stats,
                          self.bins,
                          self.bound,
                          self.distr,
@@ -395,9 +400,9 @@ class distfit():
         if verbose>=3: print('[distfit] >plot summary..')
         if self.method=='parametric':
             if n_top is None:
-                n_top = len(self.summary['RSS'])
+                n_top = len(self.summary['score'])
 
-            x = self.summary['RSS'][0:n_top]
+            x = self.summary['score'][0:n_top]
             labels = self.summary['distr'].values[0:n_top]
             fig, ax = plt.subplots(figsize=figsize)
             plt.plot(x)
@@ -409,7 +414,7 @@ class distfit():
             plt.subplots_adjust(bottom=0.15)
             ax.grid(True)
             plt.xlabel('Distribution name')
-            plt.ylabel('RSS (lower is better)')
+            plt.ylabel(('%s (lower is better)' %(self.stats)))
             plt.title('Best fit: %s' %(self.model['name']))
             if ylim is not None:
                 plt.ylim(ymin=ylim[0], ymax=ylim[1])
@@ -774,13 +779,14 @@ def _format_data(data):
     return(data)
 
 
-def _store(alpha, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f):
+def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f):
     out = {}
     out['model'] = model
     out['summary'] = summary
     out['histdata'] = histdata
     out['size'] = size
     out['alpha'] = alpha
+    out['stats'] = stats
     out['bins'] = bins
     out['bound'] = bound
     out['distr'] = distr
@@ -849,12 +855,13 @@ def _get_hist_params(X, bins, mhist='numpy'):
 
 
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3):
     model = {}
     model['distr'] = st.norm
+    model['stats'] = stats
     model['params'] = (0.0, 1.0)
-    best_RSS = np.inf
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'RSS', 'LLE', 'loc', 'scale', 'arg'])
+    best_score = np.inf
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'LLE', 'loc', 'scale', 'arg'])
     max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
@@ -879,7 +886,15 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
                 # Calculate fitted PDF and error with fit in distribution
                 pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
                 # Compute RSS
-                RSS = np.sum(np.power(y_obs - pdf, 2.0))
+                if stats=='RSS':
+                    score = np.sum(np.power(y_obs - pdf, 2.0))
+                if stats=='wasserstein':
+                    score = st.wasserstein_distance(y_obs, pdf)
+                if stats=='energy':
+                    score = st.energy_distance(y_obs, pdf)
+                if stats=='ks':
+                    score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
+
                 logLik = np.nan
 
                 # try:
@@ -893,26 +908,26 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
 
                 # Store results
                 df.values[i, 0] = distribution.name
-                df.values[i, 1] = RSS
+                df.values[i, 1] = score
                 df.values[i, 2] = logLik
                 df.values[i, 3] = loc
                 df.values[i, 4] = scale
                 df.values[i, 5] = arg
 
                 # identify if this distribution is better
-                if best_RSS > RSS > 0:
-                    best_RSS = RSS
+                if best_score > score > 0:
+                    best_score = score
                     model['name'] = distribution.name
                     model['distr'] = distribution
                     model['params'] = params
-                    model['RSS'] = RSS
+                    model['score'] = score
                     model['loc'] = loc
                     model['scale'] = scale
                     model['arg'] = arg
 
             if verbose>=3:
                 spaces_1 = ' ' * (max_name_len - len(distribution.name))
-                scores = ('[RSS: %.7f] [loc=%.3f scale=%.3f]' %(RSS, loc, scale))
+                scores = ('[%s: %.7f] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
                 time_spent = time.time() - start_time
                 print("[distfit] >[%s%s] [%.4s sec] %s" %(distribution.name, spaces_1, time_spent, scores))
 
@@ -922,7 +937,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, verbose=3):
             # if verbose>=1: print(e)
 
     # Sort the output
-    df = df.sort_values('RSS')
+    df = df.sort_values('score')
     df.reset_index(drop=True, inplace=True)
     # Return
     return(df, model)

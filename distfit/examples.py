@@ -12,6 +12,19 @@ import distfit
 
 # %%
 from distfit import distfit
+X = np.random.normal(0, 2, 5000)
+y = [-8,-6,0,1,2,3,4,5,6]
+# dist = distfit(stats='RSS')
+# dist = distfit(stats='wasserstein')
+# dist = distfit(stats='energy')
+dist = distfit(stats='ks')
+dist.fit_transform(X)
+dist.plot_summary()
+dist.plot()
+
+
+# %%
+from distfit import distfit
 from scipy.stats import binom
 # Generate random numbers
 X = binom(8, 0.5).rvs(1000)
@@ -32,6 +45,13 @@ from distfit import distfit
 # from sklearn.datasets.samples_generator import make_blobs
 # [data, labels_true] = make_blobs(n_samples=10000, centers=3, n_features=1, cluster_std=0.3, random_state=0)
 
+# %%
+from distfit import distfit
+X = np.random.normal(0, 2, 5000)
+y = [-8,-6,0,1,2,3,4,5,6]
+dist = distfit(distr='loggamma')
+dist.fit_transform(X)
+dist.plot()
 
 # %%
 from distfit import distfit
@@ -141,7 +161,7 @@ ax.legend()
 X = np.random.beta(5, 8, [100,100])
 y = [-1,-0.8,-0.6,0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.1,1.5]
 
-dist = distfit()
+dist = distfit(stats='wasserstein')
 dist.fit()
 dist.transform(X)
 dist.plot()
