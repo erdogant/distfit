@@ -16,11 +16,11 @@ X = np.random.normal(0, 2, 5000)
 y = [-8,-6,0,1,2,3,4,5,6]
 # dist = distfit(stats='RSS')
 # dist = distfit(stats='wasserstein')
-# dist = distfit(stats='energy')
-dist = distfit(stats='ks')
+dist = distfit(stats='energy')
+# dist = distfit(stats='ks')
 dist.fit_transform(X)
 dist.plot_summary()
-dist.plot()
+# dist.plot()
 
 
 # %%
