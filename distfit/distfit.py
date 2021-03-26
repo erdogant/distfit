@@ -350,6 +350,19 @@ class distfit():
         # Return
         return out
 
+    def generate(self, n, random_state=None, verbose=3):
+        """Generate new samples based on the fitted distribution."""
+        if not hasattr(self, 'model'): raise Exception('[distfit] Error in generate: A model is required. Try fitting first on your data using fit_transform(X)')
+        if verbose>=3: print('[distfit] >Generate %s %s distributed samples with fitted %s params.' %(n, self.model['name'], str(self.model['params'])))
+        X = None
+
+        if (self.method=='parametric') or (self.method=='discrete'):
+            X = self.model['model'].rvs(size=n, random_state=random_state)
+        else:
+            if verbose>=3: print('[distfit] >Warning: nothing to generate. Method should be of type: "parametric" or "discrete"')
+        # Return
+        return X
+
     # Plot
     def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
         """Make plot.
