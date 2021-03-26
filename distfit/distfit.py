@@ -268,6 +268,8 @@ class distfit():
             total number of elements in for data X
 
         """
+        # Clean readily fitted models to ensure correct results.
+        self._clean(verbose=verbose)
         # Fit model to get list of distributions to check
         self.fit(verbose=verbose)
         # Transform X based on functions
@@ -291,6 +293,15 @@ class distfit():
                          )
         # Return
         return results
+
+    def _clean(self, verbose=3):
+        # Clean readily fitted models to ensure correct results.
+        if hasattr(self, 'model'):
+            if verbose>=3: print('[distfit] >Cleaning previous fitted model results..')
+            if hasattr(self, 'histdata'): del self.histdata
+            if hasattr(self, 'model'): del self.model
+            if hasattr(self, 'summary'): del self.summary
+            if hasattr(self, 'size'): del self.size
 
     def predict(self, y, verbose=3):
         """Compute probability for response variables y, using the specified method.
