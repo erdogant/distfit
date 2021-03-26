@@ -1136,7 +1136,7 @@ class BinomPMF:
         return st.binom(self.n, p).pmf(ks)
 
 
-def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
+def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=3):
     """Fit histogram to binomial distribution.
 
     Parameters
@@ -1145,7 +1145,7 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
         histogram as int array with counts, array index as bin.
     weighted : Bool, (default: True)
         In principle, the most best fit will be obtained if you set weighted=True.
-        However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.
+        However, using different measures, such as minimum residual sum of squares (RSS) as a metric; you can set weighted=False.
     f : float, (default: 1.5)
         try to fit n in range n0/f to n0*f where n0 is the initial estimate.
 
@@ -1156,8 +1156,8 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
             fitted binomial model.
         name : String
             Name of the fitted distribution.
-        SSE : float
-            Best SSE score
+        RSS : float
+            Best RSS score
         n : int
             binomial n value.
         p : float
@@ -1167,7 +1167,7 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
 
     figdata : dict
         sses : array-like
-            The computed SSE scores accompanyin the various n.
+            The computed RSS scores accompanyin the various n.
         Xdata : array-like
             Input data.
         hist : array-like
@@ -1197,41 +1197,51 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, verbose=3):
     if verbose>=4: print(f'[distfit] >Initial estimate: n={nest}, p={mean/nest:.3g}')
 
     # store fit results for each n
-    pvals, sses = np.zeros(num_n), np.zeros(num_n)
+    pvals, scores = np.zeros(num_n), np.zeros(num_n)
     for nval in nvals:
         # Make quess for P
         p_guess = max(0, min(1, mean / nval))
         # Fit
-        fitparams, _ = curve_fit(BinomPMF(nval), Xdata, Ydata, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
-        # Determine SSE
+        fitparams, _ = curve_fit(BinomPMF(nval), Xdata, y_obs, p0=p_guess, bounds=[0., 1.], sigma=sigmas, absolute_sigma=True)
+        # Determine RSS
         p = fitparams[0]
-        sse = (((Ydata - BinomPMF(nval)(Xdata, p)) / sigmas)**2).sum()
+        pdf = BinomPMF(nval)(Xdata, p)
+
+        if stats=='RSS':
+            score = (((y_obs - pdf) / sigmas)**2).sum()
+        if stats=='wasserstein':
+            score = st.wasserstein_distance(y_obs, pdf)
+        if stats=='energy':
+            score = st.energy_distance(y_obs, pdf)
+        if stats=='ks':
+            score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
+
         # Store
         pvals[nval - nmin] = p
-        sses[nval - nmin] = sse
-        if verbose>=4: print(f'[distfit] >[binomial] Trying n={nval} -> p={p:.3g} (initial: {p_guess:.3g}),' f' sse={sse:.3g}')
+        scores[nval - nmin] = score
+        if verbose>=4: print('[distfit] >[binomial] [%s=%.3g] Trying n=%s -> p=%.3g, (initial=%.3g)' %(stats, score, nval, p, p_guess))
 
-    n_fit = np.argmin(sses) + nmin
+    n_fit = np.argmin(scores) + nmin
     p_fit = pvals[n_fit - nmin]
-    sse = sses[n_fit - nmin]
-    chi2r = sse / (nk - 2) if nk > 2 else np.nan
-    # if verbose>=3: print(f'[distfit] >[binomial] [SSE: {sse:.3g}] [n: {n_fit}] [p: {p_fit:.6g}] ' f' [chi^2={chi2r:.3g}]')
-    if verbose>=3: print('[distfit] >[binomial] [SSE: %.3g] [n: %.2g] [p: %.6g] [chi^2: %.3g]' %(sse, n_fit, p_fit, chi2r))
+    score = scores[n_fit - nmin]
+    chi2r = score / (nk - 2) if nk > 2 else np.nan
+    if verbose>=3: print('[distfit] >[binomial] [%s=%.3g] [n=%.2g] [p=%.6g] [chi^2=%.3g]' %(stats, score, n_fit, p_fit, chi2r))
 
     # Store
     model = {}
-    model['distr'] = st.binom(n_fit, p_fit)
-    model['params'] = (n_fit, p_fit)
     model['name'] = 'binom'
-    model['SSE'] = sse
+    model['distr'] = st.binom
+    model['model'] = st.binom(n_fit, p_fit)
+    model['params'] = (n_fit, p_fit)
+    model['score'] = score
     model['chi2r'] = chi2r
     model['n'] = n_fit
     model['p'] = p_fit
     figdata = {}
-    figdata['sses'] = sses
+    figdata['scores'] = scores
     figdata['Xdata'] = Xdata
     figdata['hist'] = hist
-    figdata['Ydata'] = Ydata  # probability mass function
+    figdata['Ydata'] = y_obs  # probability mass function
     figdata['nvals'] = nvals
     # Return
     return model, figdata
@@ -1247,11 +1257,11 @@ def fit_binom(X):
     return hist
 
 
-def fit_transform_binom(X, f=1.5, weighted=True, verbose=3):
+def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS', verbose=3):
     """Convert array of samples (nonnegative ints) to histogram and fit."""
     if verbose>=3: print('[distfit] >Fit using binomial distribution..')
     hist = fit_binom(X)
-    model, figdata = transform_binom(hist, f=f, weighted=weighted, verbose=verbose)
+    model, figdata = transform_binom(hist, f=f, weighted=weighted, stats=stats, verbose=verbose)
     return model, figdata
 
 
@@ -1331,11 +1341,11 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
 
     # Second image
     ax[1].set_xlabel('n')
-    ax[1].set_ylabel('sse')
-    plotfunc = ax[1].semilogy if figdata['sses'].max()>20 * figdata['sses'].min()>0 else ax[1].plot
-    plotfunc(figdata['nvals'], figdata['sses'], 'k-', label='SSE over n scan')
-    ax[1].vlines(n_fit, 0, figdata['sses'].max(), 'r', linestyles='dashed')
-    ax[1].hlines(model['SSE'], figdata['nvals'].min(), figdata['nvals'].max(), 'r', linestyles='dashed', label="Best SSE: %.3g" %(model['SSE']))
+    ax[1].set_ylabel(self.stats)
+    plotfunc = ax[1].semilogy if figdata['scores'].max()>20 * figdata['scores'].min()>0 else ax[1].plot
+    plotfunc(figdata['nvals'], figdata['scores'], 'k-', label=('%s over n scan' %self.stats))
+    ax[1].vlines(n_fit, 0, figdata['scores'].max(), 'r', linestyles='dashed')
+    ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), 'r', linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
     ax[1].legend()
     ax[1].grid(True)
     fig.show()
