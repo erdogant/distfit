@@ -50,7 +50,7 @@ class distfit():
     distr : str, default: 'popular'
         The (set) of distribution to test. A set of distributions can be tested by:
         'popular', 'full', or specify the theoretical distribution: 'norm', 't'.
-        for discrete distributions; binomial is used.
+        if method="discrete", then binomial is used.
         See docs for more information about 'popular' and 'full'. https://erdogant.github.io/distfit
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
@@ -82,7 +82,7 @@ class distfit():
     multtest : str
         Specified multiple test correction method.
     todf : Bool (default: False)
-        Output results in pandas dataframe (when True, note that this will slow down the code significantly)
+        Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!
 
     Example
     -------
@@ -220,7 +220,7 @@ class distfit():
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
-            model, figdata = fit_transform_binom(X, f=self.f, weighted=True, verbose=verbose)
+            model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats, verbose=verbose)
             model = _compute_cii(self, model, verbose=verbose)
             # self.histdata = (figdata['Xdata'], figdata['hist'])
             self.model = model
@@ -337,10 +337,11 @@ class distfit():
         if 'numpy.ndarray' not in str(type(y)): raise Exception('y should be of type np.array or list')
         if verbose>=3: print('[distfit] >predict..')
 
-        if self.method=='parametric':
+        if (self.method=='parametric') or (self.method=='discrete'):
+        # if self.method=='parametric':
             out = _predict(self, y, verbose=verbose)
-        elif self.method=='discrete':
-            out = _predict(self, y, verbose=verbose)
+        # elif self.method=='discrete':
+            # out = _predict(self, y, verbose=verbose)
         elif self.method=='quantile':
             out = _predict_quantile(self, y, verbose=verbose)
         elif self.method=='percentile':
@@ -533,26 +534,26 @@ def _predict(self, y, verbose=3):
     if verbose>=4: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
     if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
 
-    if self.method=='discrete':
-        getdist = self.model['distr']
-        # Compute P-value for data based on null-distribution
-        getP = getdist.cdf(y)
-    else:
-        # Get distribution and the parameters
-        getdist = self.model['distr']
-        arg = self.model['params'][:-2]
-        loc = self.model['params'][-2]
-        scale = self.model['params'][-1]
-        # Compute P-value for data based on null-distribution
-        getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.pdf(y, loc, scale)
+    # if (self.method=='parametric') or (self.method=='discrete'):
+        # getdist = self.model['model']
+    # Compute P-value for data based on null-distribution
+    Pvalues = self.model['model'].cdf(y)
+    # else:
+    #     # Get distribution and the parameters
+    #     getdist = self.model['distr']
+    #     arg = self.model['params'][:-2]
+    #     loc = self.model['params'][-2]
+    #     scale = self.model['params'][-1]
+    #     # Compute P-value for data based on null-distribution
+    #     getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.cdf(y, loc, scale)
 
     # Determine P based on upper/lower/no bounds
     if self.bound=='up' or self.bound=='right' or self.bound=='high':
-        Praw = 1 - getP
+        Praw = 1 - Pvalues
     elif self.bound=='down' or self.bound=='left' or self.bound=='low':
-        Praw = getP
+        Praw = Pvalues
     elif self.bound=='both':
-        Praw = np.min([1 - getP, getP], axis=0)
+        Praw = np.min([1 - Pvalues, Pvalues], axis=0)
     else:
         raise Exception('[distfit] >Error in predict: "bounds" is not set correctly! Options are: up/down/right/left/high/low/both.')
         Praw=[]
@@ -921,15 +922,6 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
 
                 logLik = np.nan
 
-                # try:
-                #     logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
-                # except Exception:
-                #     pass
-                # if len(params)>2:
-                #     logLik = -np.sum( distribution.logpdf(y_obs, arg=arg, loc=loc, scale=scale) )
-                # else:
-                #     logLik = -np.sum( distribution.logpdf(y_obs, loc=loc, scale=scale) )
-
                 # Store results
                 df.values[i, 0] = distribution.name
                 df.values[i, 1] = score
@@ -943,6 +935,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
                     best_score = score
                     model['name'] = distribution.name
                     model['distr'] = distribution
+                    model['model'] = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
                     model['params'] = params
                     model['score'] = score
                     model['loc'] = loc
@@ -971,26 +964,32 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
 def _compute_cii(self, model, verbose=3):
     if verbose>=3: print("[distfit] >Compute confidence interval [%s]" %(self.method))
     CIIup, CIIdown = None, None
-    if self.method=='parametric':
+
+    if (self.method=='parametric') or (self.method=='discrete'):
         # Separate parts of parameters
-        arg = model['params'][:-2]
-        loc = model['params'][-2]
-        scale = model['params'][-1]
+        # arg = model['params'][:-2]
+        # loc = model['params'][-2]
+        # scale = model['params'][-1]
+        # dist = getattr(st, model['name'])
+        # dist = model['distr']
+        # Get fitted model
+        # distr = model['model']
 
         # Determine %CII
-        dist = getattr(st, model['name'])
         if self.alpha is not None:
             if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
-                CIIdown = dist.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(1 - self.alpha, loc=loc, scale=scale)
+                # CIIdown = distr.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(1 - self.alpha, loc=loc, scale=scale)
+                CIIdown = model['model'].ppf(1 - self.alpha)
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
-                CIIup = dist.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else dist.ppf(self.alpha, loc=loc, scale=scale)
-    elif self.method=='discrete':
-        dist = model['distr']
-        if self.alpha is not None:
-            if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
-                CIIdown = dist.ppf(1 - self.alpha)
-            if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
-                CIIup = dist.ppf(self.alpha)
+                # CIIup = distr.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(self.alpha, loc=loc, scale=scale)
+                CIIup = model['model'].ppf(self.alpha)
+    # elif self.method=='discrete':
+    #     distr = model['model']
+    #     if self.alpha is not None:
+    #         if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
+    #             CIIdown = distr.ppf(1 - self.alpha)
+    #         if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
+    #             CIIup = distr.ppf(self.alpha)
     elif self.method=='quantile':
         X = model
         model = {}
@@ -1012,7 +1011,7 @@ def _compute_cii(self, model, verbose=3):
         # Store
         # model['samples'] = samples
     else:
-        raise Exception('[distfit] >Error: method parameter can only be "parametric", "quantile" or "percentile".')
+        raise Exception('[distfit] >Error: method parameter can only be of type: "parametric", "quantile", "percentile" or "discrete".')
 
     # Store
     model['CII_min_alpha'] = CIIup
@@ -1177,7 +1176,7 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=
         nvals : array-like
             Evaluated n's.
     """
-    Ydata = hist / hist.sum()  # probability mass function
+    y_obs = hist / hist.sum()  # probability mass function
     nk = len(hist)
     if weighted:
         sigmas = np.sqrt(hist + 0.25) / hist.sum()
@@ -1185,8 +1184,8 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=
         sigmas = np.full(nk, 1 / np.sqrt(nk * hist.sum()))
     Xdata = np.arange(nk)
 
-    mean = (Ydata * Xdata).sum()
-    variance = ((Xdata - mean)**2 * Ydata).sum()
+    mean = (y_obs * Xdata).sum()
+    variance = ((Xdata - mean)**2 * y_obs).sum()
 
     # initial estimate for p and search range for n
     nest = max(1, int(mean**2 /(mean - variance) + 0.5))

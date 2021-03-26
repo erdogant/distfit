@@ -13,7 +13,7 @@ def test_distfit():
     # TEST 1: check output is unchanged
     assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
     # TEST 2: Check model output is unchanged
-    assert [*dist.model.keys()]==['distr', 'stats', 'params', 'name', 'score', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
+    assert [*dist.model.keys()]==['distr', 'stats', 'params', 'name', 'model', 'score', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
 
     # TEST 3: Check specific distribution
     dist = distfit(distr='t')
@@ -85,7 +85,7 @@ def test_distfit():
     dist.fit_transform(X, verbose=0)
     dist.predict(y)
     assert dist.results['y_proba'].shape[0]==len(y)
-    
+
     # TEST 11: Check whether alpha responds on results
     out1 = distfit(alpha=0.05)
     out1.fit_transform(X, verbose=0)
@@ -138,7 +138,7 @@ def test_distfit():
     # check output is unchanged
     assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
     # TEST 15A
-    assert [*dist.model.keys()]==['distr', 'params', 'name', 'SSE', 'chi2r', 'n', 'p', 'CII_min_alpha', 'CII_max_alpha']
+    assert [*dist.model.keys()]==['name', 'distr', 'model', 'params', 'score', 'chi2r', 'n', 'p', 'CII_min_alpha', 'CII_max_alpha']
     # TEST 15B
     results = dist.predict([0, 1, 10, 11, 12])
     assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P']))

@@ -10,31 +10,48 @@ import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
 
-# %%
-from distfit import distfit
-X = np.random.normal(0, 2, 5000)
-y = [-8,-6,0,1,2,3,4,5,6]
-# dist = distfit(stats='RSS')
-# dist = distfit(stats='wasserstein')
-dist = distfit(stats='energy')
-# dist = distfit(stats='ks')
-dist.fit_transform(X)
-dist.plot_summary()
-# dist.plot()
-
-
-# %%
+# %% Discrete example
 from distfit import distfit
 from scipy.stats import binom
 # Generate random numbers
 X = binom(8, 0.5).rvs(1000)
 
-dist = distfit(method='discrete', f=1.5, weighted=True)
+dist = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
 model = dist.fit_transform(X, verbose=3)
 dist.plot()
 
 # Make prediction
 results = dist.predict([0, 1, 10, 11, 12])
+dist.plot()
+
+# Generate samples
+Xgen = dist.generate(n=1000)
+dist.fit_transform(Xgen)
+results = dist.predict([0, 1, 10, 11, 12])
+dist.plot()
+
+# %%
+from distfit import distfit
+X = np.random.normal(0, 2, 10000)
+y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
+dist = distfit(stats='RSS')
+# dist = distfit(stats='wasserstein')
+# dist = distfit(stats='energy')
+# dist = distfit(stats='ks')
+
+# Fit
+dist.fit_transform(X)
+dist.predict(y)
+
+dist.plot_summary()
+dist.plot()
+
+# Generate samples
+Xgen = dist.generate(n=10000)
+dist.fit_transform(Xgen)
+
+# Plot
+dist.plot_summary()
 dist.plot()
 
 
