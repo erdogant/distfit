@@ -250,6 +250,27 @@ df_results = pd.DataFrame(pd.DataFrame(results))
 </p>
 
 
+#### Example to generate samples based on the fitted distribution:
+
+```python
+
+# import library
+from distfit import distfit
+
+# Generate random normal distributed data
+X = np.random.normal(0, 2, 10000)
+dist = distfit()
+
+# Fit
+dist.fit_transform(X)
+
+# The fitted distribution can now be used to generate new samples.
+# Generate samples
+Xgenerate = dist.generate(n=1000)
+
+
+```
+
 ### Citation
 Please cite distfit in your publications if this is useful for your research. Here is an example BibTeX entry:
 ```BibTeX

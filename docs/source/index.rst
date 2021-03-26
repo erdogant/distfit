@@ -36,6 +36,12 @@ Content
 
 .. toctree::
   :maxdepth: 3
+  :caption: Generate samples
+
+  Generate
+
+.. toctree::
+  :maxdepth: 3
   :caption: Performance
 
   Performance

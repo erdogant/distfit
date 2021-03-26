@@ -34,7 +34,7 @@ dist.plot()
 from distfit import distfit
 X = np.random.normal(0, 2, 10000)
 y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
-dist = distfit(stats='RSS')
+dist = distfit(stats='RSS', distr='full')
 # dist = distfit(stats='wasserstein')
 # dist = distfit(stats='energy')
 # dist = distfit(stats='ks')

@@ -354,7 +354,7 @@ class distfit():
     def generate(self, n, random_state=None, verbose=3):
         """Generate new samples based on the fitted distribution."""
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in generate: A model is required. Try fitting first on your data using fit_transform(X)')
-        if verbose>=3: print('[distfit] >Generate %s %s distributed samples with fitted %s params.' %(n, self.model['name'], str(self.model['params'])))
+        if verbose>=3: print('[distfit] >Generate %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
         X = None
 
         if (self.method=='parametric') or (self.method=='discrete'):
