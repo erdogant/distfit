@@ -10,6 +10,13 @@ import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
 
+# %% Multiple distributions as input
+from distfit import distfit
+X = np.random.normal(0, 2, 10000)
+y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
+dist = distfit(stats='RSS', distr=['norm', 't', 'gamma'])
+results = dist.fit_transform(X)
+
 # %% Discrete example
 from distfit import distfit
 from scipy.stats import binom

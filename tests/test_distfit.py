@@ -26,6 +26,11 @@ def test_distfit():
     assert dist.model['CII_min_alpha'] is not None
     assert dist.model['CII_max_alpha'] is not None
 
+    # TEST 4A: Check multiple distribution
+    dist = distfit(distr=['norm', 't', 'gamma'])
+    results = dist.fit_transform(X)
+    assert np.all(np.isin(results['summary']['distr'].values, ['gamma', 't', 'norm']))
+
     # TEST 5: Bound check
     dist = distfit(distr='t', bound='up', alpha=0.05)
     dist.fit_transform(X, verbose=0)

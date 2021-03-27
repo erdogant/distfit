@@ -158,7 +158,8 @@ print(dist.results['df'])
 # 8  6  0.008893     up  0.002964
 ```
 
-#### Example if you want to test one specific distribution, such as the normal distribution:
+#### Example if you want to test one specific distributions, such as the normal distribution:
+The full list of distributions is listed here: https://erdogant.github.io/distfit/pages/html/Parametric.html
 
 ```python
 dist = distfit(distr='norm')
@@ -169,7 +170,25 @@ dist.fit_transform(X)
 # [distfit] >[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]
 
 dist.plot()
+
 ```
+
+#### Example if you want to test multiple distributions, such as the normal and t distribution:
+The full list of distributions is listed here: https://erdogant.github.io/distfit/pages/html/Parametric.html
+
+```python
+dist = distfit(distr=['norm', 't', 'uniform'])
+results = dist.fit_transform(X)
+
+# [distfit] >fit..
+# [distfit] >transform..
+# [distfit] >[norm   ] [0.00 sec] [RSS: 0.0012337] [loc=0.005 scale=1.982]
+# [distfit] >[t      ] [0.12 sec] [RSS: 0.0012336] [loc=0.005 scale=1.982]
+# [distfit] >[uniform] [0.00 sec] [RSS: 0.2505846] [loc=-6.583 scale=15.076]
+# [distfit] >Compute confidence interval [parametric]
+
+```
+
 
 #### Example to fit for discrete distribution:
 
