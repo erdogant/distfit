@@ -185,44 +185,49 @@ For demonstration purposes, lets generate random integer values from a uniform d
 
 .. code:: python
 
-	import matplotlib.pyplot as plt
-	from tqdm import tqdm
-	import pandas as pd
+    import matplotlib.pyplot as plt
+    from tqdm import tqdm
+    import pandas as pd
+    import numpy as np
+    from distfit import distfit
 
-	# Sample sizes
-	samples = np.arange(250, 20000, 250)
-	# Smooting windows
-	smooth_window=[None, 2, 4, 6, 8, 10]
-	
-	# Figure
-	plt.figure(figsize=(15,10))
-	
-	# Iterate over smooting window
-	for smooth in tqdm(smooth_window):
-        # Fit only for the uniform distribution
-	    dist = distfit(distr='uniform', smooth=smooth)
-	    # Estimate paramters for the number of samples
-	    out = []
+    # Sample sizes
+    samples = np.arange(250, 20000, 250)
+    # Smooting windows
+    smooth_window=[None, 2, 4, 6, 8, 10]
 
-	    # Iterate over sample sizes
-	    for s in samples:
-    		X = np.random.randint(0, 100, s)
-    		dist.fit_transform(X, verbose=0)
-    		out.append([dist.model['RSS'], dist.model['name'], s])
+    # Figure
+    plt.figure(figsize=(15,10))
 
-	    df = pd.DataFrame(out, columns=['RSS','name','samples'])
-	    ax=df['RSS'].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df['RSS'].mean()))
+    # Iterate over smooting window
+    for smooth in tqdm(smooth_window):
+    # Fit only for the uniform distribution
+        dist = distfit(distr='uniform', smooth=smooth, stats='RSS')
+        # Estimate paramters for the number of samples
+        out = []
 
-	ax.set_xlabel('Nr.Samples')
-	ax.set_ylabel('RSS')
-	ax.set_xticks(np.arange(0,len(samples)))
-	ax.set_xticklabels(samples.astype(str))
-	ax.set_ylim([0, 0.001])
-	ax.legend()
+        # Iterate over sample sizes
+        for s in samples:
+            X = np.random.randint(0, 100, s)
+            dist.fit_transform(X, verbose=0)
+            out.append([dist.model['score'], dist.model['name'], s])
 
-The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. As an example, smooting does **not** improve the fitting anymore in case of more then *7000* samples. Note that this number may be different across data sets. The conlusion is that smooting seems only usefull for small(er) samples sizes. Similar results were also seen for continuous data.
+        df = pd.DataFrame(out, columns=[dist.stats,'name','samples'])
+        ax=df[dist.stats].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df[dist.stats].mean()))
+
+    ax.set_xlabel('Nr.Samples')
+    ax.set_ylabel('RSS')
+    ax.set_xticks(np.arange(0,len(samples)))
+    ax.set_xticklabels(samples.astype(str))
+    ax.set_ylim([0, 0.001])
+    ax.legend()
+
+The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. As an example, smooting does **not** improve the fitting anymore in case of more then *7000* samples. Note that this number may be different across data sets. 
 
 .. _int_smooth_samples_sizes:
 
 .. figure:: ../figs/int_smooth_sample_sizes.png
     :scale: 80%
+
+The conlusion is that smooting seems only usefull for small(er) samples sizes. Similar results were also seen for continuous data.
+
