@@ -1,0 +1,535 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Fit distribution &mdash; distfit distfit documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Coding quality" href="Coding%20quality.html" />
+    <link rel="prev" title="Saving" href="Save%20and%20Load.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> distfit
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Background</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Abstract.html">Abstract</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Generate samples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Generate.html">Generate samples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Save and Load</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html">Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html#loading">Loading</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fit distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#specify-distribution">Specify distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#make-predictions">Make predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#extract-results">Extract results</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">distfit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Fit distribution</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <hr class="docutils" id="code-directive" />
+<div class="section" id="fit-distribution">
+<h1>Fit distribution<a class="headerlink" href="#fit-distribution" title="Permalink to this headline">¶</a></h1>
+<p>Specify distfit parameters. In this example nothing is specied and that means that all parameters are set to default.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Example data</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
+
+<span class="c1"># From the distfit library import the class distfit</span>
+<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+
+<span class="c1"># Initialize</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+
+<span class="c1"># Search for best theoretical fit on your empirical data</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils align-center" id="id1">
+<caption><span class="caption-text">Distribution fit</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/example_fig1a.png"><img alt="fig1a" src="_images/example_fig1a.png" style="width: 430.5px; height: 368.2px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the best fit should be [normal], as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see gamma and beta distribution as these are the “barba-pappas” among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plot</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils align-center" id="id2">
+<caption><span class="caption-text">Summary of fitted theoretical Distributions</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/fig1_summary.png"><img alt="fig1summary" src="_images/fig1_summary.png" style="width: 532.8px; height: 319.2px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="specify-distribution">
+<h1>Specify distribution<a class="headerlink" href="#specify-distribution" title="Permalink to this headline">¶</a></h1>
+<p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
+<span class="c1"># Fit on data</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># [distfit] &gt;fit..</span>
+<span class="c1"># [distfit] &gt;transform..</span>
+<span class="c1"># [distfit] &gt;[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]</span>
+
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-predictions">
+<h1>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> function will compute the probability of samples in the fitted <em>PDF</em>.
+Note that, due to multiple testing approaches, it can occur that samples can be located
+outside the confidence interval but not marked as significant. See section Algorithm -&gt; Multiple testing for more information.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example data</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
+
+<span class="c1"># From the distfit library import the class distfit</span>
+<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+
+<span class="c1"># Initialize</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Search for best theoretical fit on your empirical data</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Make prediction on new datapoints based on the fit</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># The plot function will now also include the predictions of y</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">out</span></code> is a dictionary containing <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+The output values has the same order as input value <code class="docutils literal notranslate"><span class="pre">y</span></code>
+Note that dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> is included when using the todf=True paramter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print probabilities</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
+<span class="c1"># &gt; [0.02702734, 0.04908335, 0.08492715, 0.13745288, 0.49567466, 0.41288701, 0.3248188 , 0.02260135, 0.00636084]</span>
+
+<span class="c1"># Print the labels with respect to the confidence intervals</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
+<span class="c1"># &gt; [&#39;down&#39; &#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39;]</span>
+
+<span class="c1"># Print the dataframe containing the total information</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 28%" />
+<col style="width: 23%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>y</p></th>
+<th class="head"><p>y_proba</p></th>
+<th class="head"><p>y_pred</p></th>
+<th class="head"><p>P</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>3</p></td>
+<td><p>0.0270273</p></td>
+<td><p>down</p></td>
+<td><p>0.00900911</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>0.0490833</p></td>
+<td><p>down</p></td>
+<td><p>0.0218148</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>5</p></td>
+<td><p>0.0849271</p></td>
+<td><p>down</p></td>
+<td><p>0.0471817</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>6</p></td>
+<td><p>0.137453</p></td>
+<td><p>none</p></td>
+<td><p>0.0916353</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>10</p></td>
+<td><p>0.495675</p></td>
+<td><p>none</p></td>
+<td><p>0.495675</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>11</p></td>
+<td><p>0.412887</p></td>
+<td><p>none</p></td>
+<td><p>0.367011</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>12</p></td>
+<td><p>0.324819</p></td>
+<td><p>none</p></td>
+<td><p>0.252637</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>18</p></td>
+<td><p>0.0226014</p></td>
+<td><p>up</p></td>
+<td><p>0.00502252</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>20</p></td>
+<td><p>0.00636084</p></td>
+<td><p>up</p></td>
+<td><p>0.00070676</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-center" id="id3">
+<caption><span class="caption-text">Plot distribution with predictions</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/example_fig1b.png"><img alt="fig1b" src="_images/example_fig1b.png" style="width: 430.5px; height: 368.2px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="extract-results">
+<h1>Extract results<a class="headerlink" href="#extract-results" title="Permalink to this headline">¶</a></h1>
+<p>In the previous example, we showed that the output can be captured <code class="docutils literal notranslate"><span class="pre">results</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> but the results are also stored in the object itself.
+In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
+The same variable names are used; <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+Note that dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> is included when using the todf=True paramter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># All scores of the tested distributions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+
+<span class="c1"># Distribution parameters for best fit</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">model</span>
+
+<span class="c1"># Show the predictions for y</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
+<span class="c1"># [&#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39; &#39;up&#39;]</span>
+
+<span class="c1"># Show the probabilities for y that belong with the predictions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
+<span class="c1"># [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]</span>
+
+<span class="c1"># All predicted information is also stored in a structured dataframe (only when setting the todf=True)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 28%" />
+<col style="width: 23%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>y</p></th>
+<th class="head"><p>y_proba</p></th>
+<th class="head"><p>y_pred</p></th>
+<th class="head"><p>P</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>3</p></td>
+<td><p>0.0270273</p></td>
+<td><p>down</p></td>
+<td><p>0.00900911</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>0.0490833</p></td>
+<td><p>down</p></td>
+<td><p>0.0218148</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>5</p></td>
+<td><p>0.0849271</p></td>
+<td><p>down</p></td>
+<td><p>0.0471817</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>6</p></td>
+<td><p>0.137453</p></td>
+<td><p>none</p></td>
+<td><p>0.0916353</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>10</p></td>
+<td><p>0.495675</p></td>
+<td><p>none</p></td>
+<td><p>0.495675</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>11</p></td>
+<td><p>0.412887</p></td>
+<td><p>none</p></td>
+<td><p>0.367011</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>12</p></td>
+<td><p>0.324819</p></td>
+<td><p>none</p></td>
+<td><p>0.252637</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>18</p></td>
+<td><p>0.0226014</p></td>
+<td><p>up</p></td>
+<td><p>0.00502252</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>20</p></td>
+<td><p>0.00636084</p></td>
+<td><p>up</p></td>
+<td><p>0.00070676</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Coding%20quality.html" class="btn btn-neutral float-right" title="Coding quality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Save%20and%20Load.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Erdogan Taskesen.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
