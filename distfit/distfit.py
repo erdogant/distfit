@@ -444,7 +444,6 @@ class distfit():
             if ylim is not None:
                 plt.ylim(ymin=ylim[0], ymax=ylim[1])
 
-            plt.show()
             return(fig, ax)
         else:
             print('[distfit] This function works only in case of method is "parametric"')
@@ -705,7 +704,6 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbos
     ax.set_ylabel('Frequency')
     ax.set_title(title)
     ax.legend()
-    plt.show()
 
     return fig, ax
 
@@ -787,7 +785,6 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
 
     ax.legend()
     ax.grid(True)
-    plt.show()
 
     if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return (fig, ax)
