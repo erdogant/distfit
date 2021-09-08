@@ -1,0 +1,21 @@
+# YAML 1.2
+---
+authors: 
+  -
+    family-names: Taskesen
+    given-names: Erdogan
+    orcid: "https://orcid.org/0000-0002-3430-9618"
+cff-version: "1.1.0"
+date-released: 2020-01-02
+keywords: 
+  - "probability-distribution"
+  - "hypothesis-testing"
+  - "probability-statistics"
+  - "density-functions"
+  - "fitting-curve"
+license: "MIT"
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/erdogant/distfit"
+title: "distfit - Probability density fitting"
+version: "1.4.0"
+...
