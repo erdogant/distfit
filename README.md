@@ -291,14 +291,7 @@ Xgenerate = dist.generate(n=1000)
 ```
 
 ### Citation
-Please cite distfit in your publications if this is useful for your research. Here is an example BibTeX entry:
-```BibTeX
-@misc{erdogant2019distfit,
-  title={distfit},
-  author={Erdogan Taskesen},
-  year={2019},
-  howpublished={\url{https://github.com/erdogant/distfit}},
-}
+Please cite distfit in your publications if this is useful for your research. See right top panel for the citation entry.
 ```
 
 ### Maintainer
