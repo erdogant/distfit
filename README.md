@@ -6,7 +6,7 @@
 [![Github Forks](https://img.shields.io/github/forks/erdogant/distfit.svg)](https://github.com/erdogant/distfit/network)
 [![GitHub Open Issues](https://img.shields.io/github/issues/erdogant/distfit.svg)](https://github.com/erdogant/distfit/issues)
 [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit/month)
+[![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit)
 [![Downloads](https://pepy.tech/badge/distfit)](https://pepy.tech/project/distfit)
 [![Sphinx](https://img.shields.io/badge/Sphinx-Docs-Green)](https://erdogant.github.io/distfit/)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/erdogant/distfit/blob/master/notebooks/distfit.ipynb)
