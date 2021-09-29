@@ -365,7 +365,7 @@ class distfit():
         return X
 
     # Plot
-    def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+    def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=None, ax=None, verbose=3):
         """Make plot.
 
         Parameters
@@ -378,6 +378,10 @@ class distfit():
             Limit figure in x-axis.
         ylim : Float, optional (default: None)
             Limit figure in y-axis.
+        fig : Figure, optional (default: None)
+            Matplotlib figure (Note - ignored when method is `discrete`)
+        ax : Axes, optional (default: None)
+            Matplotlib Axes object (Note - ignored when method is `discrete`)
         verbose : Int [1-5], optional (default: 3)
             Print information to screen.
 
@@ -389,13 +393,13 @@ class distfit():
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, verbose=verbose)
         elif (self.method=='discrete'):
             fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='quantile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, verbose=verbose)
         elif (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, verbose=verbose)
         else:
             if verbose>=3: print('[distfit] >Warning: nothing to plot. Method not yet implemented for %s' %(self.method))
             fig, ax = None, None
@@ -403,7 +407,7 @@ class distfit():
         return fig, ax
 
     # Plot summary
-    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, verbose=3):
+    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, fig=None, ax=None, verbose=3):
         """Plot summary results.
 
         Parameters
@@ -414,6 +418,10 @@ class distfit():
             The figure size.
         ylim : Float, optional (default: None)
             Limit figure in y-axis.
+        fig : Figure, optional (default: None)
+            Matplotlib figure
+        ax : Axes, optional (default: None)
+            Matplotlib Axes object
         verbose : Int [1-5], optional (default: 3)
             Print information to screen.
 
@@ -429,7 +437,9 @@ class distfit():
 
             x = self.summary['score'][0:n_top]
             labels = self.summary['distr'].values[0:n_top]
-            fig, ax = plt.subplots(figsize=figsize)
+            if ax is None:
+                fig, ax = plt.subplots(figsize=figsize)
+
             plt.plot(x)
             # You can specify a rotation for the tick labels in degrees or with keywords.
             plt.xticks(np.arange(len(x)), labels, rotation='vertical')
@@ -671,8 +681,10 @@ def _predict_percentile(self, y, verbose=3):
 
 
 # Plot
-def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbose=3):
-    fig, ax = plt.subplots(figsize=figsize)
+def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, verbose=3):
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+
     # Plot empirical data
     ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='empirical distribution')
     # add CII
@@ -694,10 +706,10 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbos
             ax.scatter(self.results['y'][idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Inside boundaries')
 
     # Limit axis
-    if xlim is not None:
-        plt.xlim(xmin=xlim[0], xmax=xlim[1])
-    if ylim is not None:
-        plt.ylim(ymin=ylim[0], ymax=ylim[1])
+    if xlim is not None:        
+        ax.set_xlim(xlim[0], xlim[1])
+    if ylim is not None:        
+        ax.set_ylim(ylim[0], ylim[1])
 
     ax.grid(True)
     ax.set_xlabel('Values')
@@ -709,7 +721,7 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, verbos
 
 
 # %% Plot
-def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=None, ax=None, verbose=3):
     # Store output and function parameters
     model = self.model
     Param = {}
@@ -740,7 +752,9 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     y = distline.pdf(x, loc=loc, scale=scale, *arg)
     # ymax=max(self.histdata[0])
 
-    fig, ax = plt.subplots(figsize=figsize)
+    if ax is None:
+        fig, ax = plt.subplots(figsize=figsize)
+
     # Plot empirical data
     ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='empirical distribution')
     # Plot pdf
@@ -762,10 +776,10 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, verb
     ax.set_ylabel('Frequency')
 
     # Limit axis
-    if Param['xlim'] is not None:
-        plt.xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
-    if Param['ylim'] is not None:
-        plt.ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
+    if Param['xlim'] is not None:        
+        ax.set_xlim(Param['xlim'][0], Param['xlim'][1])
+    if Param['ylim'] is not None:        
+        ax.set_ylim(Param['ylim'][0], Param['ylim'][1])
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
     if hasattr(self, 'results'):
