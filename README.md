@@ -148,7 +148,6 @@ print(dist.results['y_proba'])
 # [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
  
 # All predicted information is also stored in a structured dataframe (only when setting the todf=True). The results are stored in a dict containing the following keys:
-
 # y: input values
 # y_proba: corrected P-values after multiple test correction (default: fdr_bh).
 # y_pred: True in case y_proba<=alpha
