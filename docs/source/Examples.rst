@@ -99,14 +99,15 @@ outside the confidence interval but not marked as significant. See section Algor
     dist.fit_transform(X)
 
     # Make prediction on new datapoints based on the fit
-    out = dist.predict(y)
+    results = dist.predict(y)
 
     # The plot function will now also include the predictions of y
     dist.plot()
 
-``out`` is a dictionary containing ``y``, ``y_proba``, ``y_pred`` and ``P``. 
-The output values has the same order as input value ``y`` 
-Note that dataframe ``df`` is included when using the todf=True paramter.
+``results`` is a dictionary containing ``y``, ``y_proba``, ``y_pred`` and ``P`` for which the output values has the same order as input value ``y``.
+The "P" stands for the RAW P-values and "y_proba" are the corrected P-values after multiple test correction (default: fdr_bh).
+In case you want to use the "P" values, set "multtest" to None during initialization.
+Note that dataframe ``df`` is included when using the **todf=True** parameter.
 
 .. code:: python
 
@@ -181,6 +182,11 @@ Note that dataframe ``df`` is included when using the todf=True paramter.
     # [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
  
     # All predicted information is also stored in a structured dataframe (only when setting the todf=True)
+    # y: input values
+    # y_proba: corrected P-values after multiple test correction (default: fdr_bh).
+    # y_pred: True in case y_proba<=alpha
+    # P: raw P-values
+
     print(dist.results['df'])
 
 +----+-----+------------+----------+------------+
