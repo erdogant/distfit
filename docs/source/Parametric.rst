@@ -234,7 +234,7 @@ dist.summary
     # 9      pareto    0.634924  ...    1.42095                    (0.5384782616155881,)
 
 
-**dist.distributions** is a list containing the extracted pdfs from ``scripy``
+**dist.distributions** is a list containing the extracted pdfs from ``scipy``
 	The collected distributions.
 
 **dist.model** contains information regarding the best scoring pdf:
