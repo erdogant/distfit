@@ -8,17 +8,25 @@
 [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Downloads](https://pepy.tech/badge/distfit/month)](https://pepy.tech/project/distfit)
 [![Downloads](https://pepy.tech/badge/distfit)](https://pepy.tech/project/distfit)
+[![DOI](https://zenodo.org/badge/231843440.svg)](https://zenodo.org/badge/latestdoi/231843440)
 [![Sphinx](https://img.shields.io/badge/Sphinx-Docs-Green)](https://erdogant.github.io/distfit/)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/erdogant/distfit/blob/master/notebooks/distfit.ipynb)
-[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)
-[![DOI](https://zenodo.org/badge/231843440.svg)](https://zenodo.org/badge/latestdoi/231843440)
+<!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
-	Star it if you like it!
 
-### Background
 ``distfit`` is a python package for probability density fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), and hypothesis testing.
 Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. ``distfit`` scores each of the 89 different distributions for the fit wih the empirical distribution and return the best scoring distribution.
+
+###
+**Star this repo if you like it! ⭐️**
+### 
+
+
+### Documentation
+
+* [**distfit documentation pages (Sphinx)**](https://erdogant.github.io/distfit/)
+
 
 ### Functionalities
 The ``distfit`` library is created with classes to ensure simplicity in usage.
