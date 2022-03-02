@@ -79,8 +79,6 @@ Quick install
    pip install distfit
 
 
-
-
 Source code and issue tracker
 ------------------------------
 
@@ -92,6 +90,16 @@ Citing *distfit*
 
 The bibtex can be found in the right side menu at the `github page <https://github.com/erdogant/distfit/>`_.
 
+
+Sponsor this project
+------------------------------
+
+If you like this project, **star** this repo and become a **sponsor**!
+Read more why this is important on my sponsor page!
+
+.. raw:: html
+
+	<iframe src="https://github.com/sponsors/erdogant/button" title="Sponsor erdogant" height="35" width="116" style="border: 0;"></iframe>
 
 
 Indices and tables

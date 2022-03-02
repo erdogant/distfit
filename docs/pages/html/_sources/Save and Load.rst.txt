@@ -40,3 +40,12 @@ Loading a learned model can be done using the function :func:`dist.load`:
 
     # Load model
     dist.load('my_first_model.pkl')
+
+
+.. raw:: html
+
+	<hr>
+	<center>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+	</center>
+	<hr>
