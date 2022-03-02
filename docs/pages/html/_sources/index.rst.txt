@@ -85,6 +85,7 @@ Source code and issue tracker
 `Github distfit <https://github.com/erdogant/distfit/>`_.
 Please report bugs, issues and feature extensions there.
 
+
 Citing *distfit*
 ----------------
 
