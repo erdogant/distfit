@@ -12,4 +12,4 @@ Github
 '''''''''''''''''''''
 
 .. tip::
-	`Github d3graph <https://github.com/erdogant/distfit/>`_
+	`Github distfit <https://github.com/erdogant/distfit/>`_
