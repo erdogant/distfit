@@ -25,11 +25,21 @@ body {
   color: #fff;
 }
 
-#carbonads span {
-  display: block;
 
+#carbonads>span {
+  display: block;
+  position: relative;
   overflow: hidden;
+  padding: 23px;
+
+  border-radius: 4px;
+  background-color: #1e2021;
+  box-shadow:
+    0 0 1px 1px hsla(0, 0%, 0%, .05),
+    0 0 2px 2px hsla(0, 0%, 0%, .05),
+    0 0 4px 4px hsla(0, 0%, 0%, .05);
 }
+
 
 .carbon-img {
   display: block;
@@ -61,12 +71,10 @@ body {
   bottom: 0;
   left: 0;
   padding: 8px 6px;
-
   font-size: 8px;
-  font-weight: 600;
   line-height: 1;
   letter-spacing: .5px;
   text-transform: uppercase;
-  color: #aaa !important;
+  color: #aaa;
   background-color: hsl(0, 0%, 10%);
 }
