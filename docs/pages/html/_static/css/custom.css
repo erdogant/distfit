@@ -2,79 +2,74 @@ body {
   background-color: #111;
 }
 
+#carbonads * {
+  margin: initial;
+  padding: initial;
+}
+
+#carbonads {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+}
+
 #carbonads {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, Helvetica, Arial, sans-serif;
-  width: 275px;
-  height: 215px;
-  text-align: center;
+  max-width: 330px;
   background-color: hsl(0, 0%, 10%);
   box-shadow: 0 0 1px hsla(0, 0%, 0%, 0.5);
 }
 
 #carbonads a {
-  color: #eee;
+  color: #ddd;
   text-decoration: none;
 }
 
 #carbonads a:hover {
-  color: #eee;
+  color: #ddd;
 }
 
-
-#carbonads>span {
-  display: block;
+#carbonads span {
   position: relative;
+  display: block;
   overflow: hidden;
-  padding: 15px;
-
-  border-radius: 4px;
-  background-color: #1e2021;
-  box-shadow:
-    0 0 1px 1px hsla(0, 0%, 0%, .05),
-    0 0 2px 2px hsla(0, 0%, 0%, .05),
-    0 0 4px 4px hsla(0, 0%, 0%, .05);
 }
 
+#carbonads .carbon-wrap {
+  display: flex;
+}
 
-.carbon-img {
+#carbonads .carbon-img {
   display: block;
-  margin: 0 0 8px;
-
+  margin: 0;
   line-height: 1;
 }
 
-.carbon-img img {
-  width: 150px;
-  max-width: 150px !important;
-  height: auto;
+#carbonads .carbon-img img {
+  display: block;
 }
 
-.carbon-text {
-  display: block;
-  margin-bottom: 8px;
-  padding: 0 10px;
+#carbonads .carbon-text {
+  padding: 10px;
+  text-align: left;
   font-size: 13px;
-  font-weight: 500;
-  line-height: 1.35;
-  font-weight: normal;
-  }
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
 
-.carbon-poweredby {
+#carbonads .carbon-poweredby {
   display: block;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 5px 6px;
+  padding: 6px 8px;
+  background: #1e2021;
+  color: #aaa;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
   font-size: 8px;
   line-height: 1;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: #aaa;
-  background-color: hsl(0, 0%, 10%);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-top-left-radius: 6px;
 }
