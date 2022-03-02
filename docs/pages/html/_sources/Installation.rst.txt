@@ -68,3 +68,13 @@ If you want to remove your ``distfit`` installation with your environment, it ca
 
    # List all the active environments. distfit should be absent.
    conda env list
+
+
+.. raw:: html
+
+	<hr>
+	<center>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+	</center>
+	<hr>
+

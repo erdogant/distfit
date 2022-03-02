@@ -210,3 +210,13 @@ Note that dataframe ``df`` is included when using the todf=True paramter.
 +----+-----+------------+----------+------------+
 |  8 |  20 | 0.00636084 | up       | 0.00070676 |
 +----+-----+------------+----------+------------+
+
+
+.. raw:: html
+
+	<hr>
+	<center>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+	</center>
+	<hr>
+

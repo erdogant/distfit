@@ -231,3 +231,11 @@ The code above results in the underneath figure, where we have varying sample si
 
 The conlusion is that smooting seems only usefull for small(er) samples sizes. Similar results were also seen for continuous data.
 
+.. raw:: html
+
+	<hr>
+	<center>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+	</center>
+	<hr>
+

@@ -82,3 +82,13 @@ The method **percentile** simply computes the confidence intervals based on the 
 +-----+-----------+----------+-----+------------+
 |  20 |         0 | up       |   0 |  14.3984   |
 +-----+-----------+----------+-----+------------+
+
+
+.. raw:: html
+
+	<hr>
+	<center>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+	</center>
+	<hr>
+
