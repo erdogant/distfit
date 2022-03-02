@@ -62,7 +62,7 @@ Content
 
 .. toctree::
   :maxdepth: 2
-  :caption: Code Documentation
+  :caption: Documentation
   
   Blog
   Coding quality
