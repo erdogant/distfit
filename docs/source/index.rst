@@ -61,14 +61,12 @@ Content
 
 
 .. toctree::
-  :maxdepth: 1
+  :maxdepth: 2
   :caption: Code Documentation
   
   Blog
   Coding quality
   distfit.distfit
-
-* :ref:`genindex`
 
 * :ref:`genindex`
 
@@ -91,13 +89,8 @@ Please report bugs, issues and feature extensions there.
 
 Citing *distfit*
 ----------------
-Here is an example BibTeX entry:
 
-	@misc{erdogant2019distfit,
-	  title={distfit},
-	  author={Erdogan Taskesen},
-	  year={2019},
-	  howpublished={\url{https://github.com/erdogant/distfit}}}
+The bibtex can be found in the right side menu at the `github page <https://github.com/erdogant/distfit/>`_.
 
 
 
