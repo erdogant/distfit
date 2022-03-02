@@ -68,6 +68,9 @@ Content
   Coding quality
   distfit.distfit
 
+* :ref:`genindex`
+
+* :ref:`genindex`
 
 
 Quick install
