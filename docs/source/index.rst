@@ -115,7 +115,16 @@ Indices and tables
 
 	<hr>
 	<center>
-		<script src="https://erdogant.github.io/carbon_ads/carbon_ads.js"></script>
+		<script src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></script>
 	</center>
 	<hr>
 
+
+.. raw:: html
+
+	<hr>
+	<center>
+		<iframe src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></iframe>
+	</center>
+	<hr>
+	
