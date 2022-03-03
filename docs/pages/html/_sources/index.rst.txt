@@ -111,5 +111,7 @@ Indices and tables
 * :ref:`search`
 
 
-<script src="https://erdogant.github.io/carbon_ads/carbon_ads.js"></script>
+.. raw:: html
+
+	<script src="https://erdogant.github.io/carbon_ads/carbon_ads.js"></script>
 
