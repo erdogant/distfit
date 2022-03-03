@@ -110,21 +110,11 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-
 .. raw:: html
 
 	<hr>
 	<center>
-		<script src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></script>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
 	</center>
 	<hr>
 
-
-.. raw:: html
-
-	<hr>
-	<center>
-		<iframe src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></iframe>
-	</center>
-	<hr>
-	
