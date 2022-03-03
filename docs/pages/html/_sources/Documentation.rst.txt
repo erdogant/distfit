@@ -5,7 +5,7 @@
 Blog
 '''''''''''''''''''''
 
-.. tip::
+.. note::
 	`Medium Blog: Coming soon (Wishfull thinking) <https://towardsdatascience.com/creating-beautiful-stand-alone-interactive-d3-charts-with-python-804117cb95a7>`_
 
 Github
@@ -15,10 +15,18 @@ Github
 	`Source code of distfit can be found at Github <https://github.com/erdogant/distfit/>`_
 
 
+Colab Notebook
+''''''''''''''''''''''''''''''''''''''''''
+.. note::
+	Experiment with fitting distributions using the `Colab notebook`_.
+
+.. _Colab notebook: https://colab.research.google.com/github/erdogant/distfit/blob/master/notebooks/distfit.ipynb
+
+
 Sponsor this project
 '''''''''''''''''''''
 
-.. note::
+.. tip::
 	If you like this project, star this repo at the github page and become a sponsor!
 	Read more why this is important on my sponsor page. The sponsor button will direct you to the sponsor github page.
 

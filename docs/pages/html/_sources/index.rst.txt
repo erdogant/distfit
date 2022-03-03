@@ -3,7 +3,7 @@ distfit's documentation!
 
 ``distfit`` is a python package for probability density fitting of univariate distributions on non-censored data. With the Residual Sum of Squares (RSS) we determine the best fit across 89 theoretical distributions for which the best fitted theoretical distribution is returned with the loc, scale, arg parameters. The probability of new data-points can then be assed for significance.
 
-.. note::
+.. tip::
 	**distfit** vs. **fitdist**
 	The ``fitdist`` library is directly build on the ``distfit`` library so there are no changes between the two except for naming. If you desire to use the ``fitdist`` library thats great! Just change all the examples in this documentation into ``fitdist``. Thats it. Have fun!
 
@@ -64,7 +64,7 @@ Content
   :maxdepth: 2
   :caption: Documentation
   
-  Blog
+  Documentation
   Coding quality
   distfit.distfit
 
@@ -72,7 +72,7 @@ Content
 
 
 Quick install
--------------
+---------------
 
 .. code-block:: console
 
@@ -111,11 +111,5 @@ Indices and tables
 * :ref:`search`
 
 
-.. raw:: html
-
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
+<script src="https://erdogant.github.io/carbon_ads/carbon_ads.js"></script>
 
