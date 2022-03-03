@@ -92,7 +92,7 @@ Citing *distfit*
 The bibtex can be found in the right side menu at the `github page <https://github.com/erdogant/distfit/>`_.
 
 
-Sponsor this project
+Sponsor
 ------------------------------
 
 If you like this project, **star** this repo and become a **sponsor**!
@@ -115,3 +115,7 @@ Indices and tables
 
 	<script src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></script>
 
+
+.. raw:: html
+	
+	<iframe src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></iframe>
