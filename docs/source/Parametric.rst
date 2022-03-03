@@ -1,6 +1,3 @@
-.. _code_directive:
---------------------
-
 Parametric
 '''''''''''
 

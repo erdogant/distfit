@@ -113,5 +113,5 @@ Indices and tables
 
 .. raw:: html
 
-	<script src="https://erdogant.github.io/carbon_ads/carbon_ads.js"></script>
+	<script src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></script>
 

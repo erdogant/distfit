@@ -1,13 +1,8 @@
-.. _code_directive:
-
--------------------------------------
-
+Parameter fitting
+''''''''''''''''''''''
 
 The **performance** of ``distfit`` can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf). 
 
-
-Parameter fitting
-''''''''''''''''''''''
 Lets evalute the performance of ``distfit`` of the detected parameters when we draw random samples from a normal (Gaussian) distribution with *mu*=0 and *std*=2. We would expect to find *mu* and *std* very close to the input values.
 
 .. code:: python
@@ -161,7 +156,7 @@ Lets evaluate the effect of this parameter.
 Here we are going to combine the number of samples with the smoothing parameter.
 It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average *mu*. We see that all smooting windows jump up-and-down the mu=2. However, the more samples, the smaller the variation becomes. The smooting parameter seems to be only effective in very low sample sizes.
 
-.. _perf_sampling_mu_smoothing:
+.. _perf_sampling_mu_smoothing_1:
 
 .. figure:: ../figs/perf_sampling_mu_smoothing.png
     :scale: 80%
@@ -170,7 +165,7 @@ Lets analyze the RSS score acorss the varying sample sizes and smooting windows.
 
 
 
-.. _perf_sampling_mu_smoothing:
+.. _perf_sampling_mu_smoothing_2:
 
 .. figure:: ../figs/normal_smooth_sample_sizes.png
     :scale: 80%

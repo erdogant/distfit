@@ -12,7 +12,7 @@ Github
 '''''''''''''''''''''
 
 .. note::
-	`Source code of distfit can be found at Github <https://github.com/erdogant/distfit/>`_
+	Source code of distfit can be found at `Github <https://github.com/erdogant/distfit/>`_
 
 
 Colab Notebook
