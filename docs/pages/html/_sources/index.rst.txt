@@ -113,9 +113,9 @@ Indices and tables
 
 .. raw:: html
 
-	<script src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></script>
+	<hr>
+	<center>
+		<script src="https://erdogant.github.io/carbon_ads/carbon_ads.js"></script>
+	</center>
+	<hr>
 
-
-.. raw:: html
-	
-	<iframe src="https://erdogant.github.io/carbon_ads/carbon_ads.html"></iframe>
