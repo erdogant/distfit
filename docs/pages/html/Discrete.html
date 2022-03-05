@@ -217,7 +217,8 @@ Typically, with 500 samples, you get a fit that looks OK by eye, but which does 
 </section>
 <section id="make-predictions">
 <h2>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline"></a></h2>
-<p>With the fitted model we can start making predictions on new unseen data</p>
+<p>With the fitted model we can start making predictions on new unseen data.
+Note that <em>P</em> stands for the RAW P-values and <em>y_proba</em> are the corrected P-values after multiple test correction (default: fdr_bh). Final decisions are made on y_proba. In case you want to use the <em>P</em> values, set <em>multtest</em> to <strong>None</strong> during initialization.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Some data points for which we want to examine their significance.</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>

@@ -104,7 +104,8 @@ Plot
 Make predictions
 ******************************************************
 
-With the fitted model we can start making predictions on new unseen data
+With the fitted model we can start making predictions on new unseen data.
+Note that *P* stands for the RAW P-values and *y_proba* are the corrected P-values after multiple test correction (default: fdr_bh). Final decisions are made on y_proba. In case you want to use the *P* values, set *multtest* to **None** during initialization. 
 
 .. code:: python
     
