@@ -1,5 +1,5 @@
 Discrete
-'''''''''''
+##########
 
 The method **discrete** computes the best fit using the *binomial* distribution when using discrete integer data.
 The questions can be summarized as following: given a list of nonnegative integers, can we fit a probability distribution for a discrete distribution, and compare the quality of the fit?
@@ -9,8 +9,9 @@ As far as discrete distributions go, the PMF for one list of integers is of the 
 Note that if the best fit is obtained for n=1, then it is a Bernoulli distribution. In addition, for sufficiently large n, a binomial distribution and a Gaussian will appear similar according to B(k, p, n) =  G(x=k, mu=p*n, sigma=sqrt(p*(1-p)*n)).
 With ``distfit`` you can also easily fit a Gaussian distribution if desired.
 
-Binomial fitting
-^^^^^^^^^^^^^^^^^
+Binomial distribution
+******************************************************
+
 In order to find the optimal integer n value, you need to vary n, fit p for each n, and pick the n, p combination with the best fit.
 In the implementation, I estimate n and p from the relation with the mean and sigma value above and search around that value.
 In principle, the most best fit will be obtained if you set weighted=True (default). However, different evaluation metrics may require setting weighted=False.
@@ -18,6 +19,9 @@ In principle, the most best fit will be obtained if you set weighted=True (defau
 It turns out that it is difficult to fit a binomial distribution unless you have a lot of data.
 Typically, with 500 samples, you get a fit that looks OK by eye, but which does not recover the actual n and p values correctly, although the product n*p is quite accurate. In those cases, the SSE curve has a broad minimum, which is a giveaway that there are several reasonable fits.
 
+
+Generate random discrete data
+******************************************************
 
 Lets see how the fitting works. For this example, I will generate some random numbers:
 
@@ -37,6 +41,9 @@ Lets see how the fitting works. For this example, I will generate some random nu
     #  4 6 7 6 2 4 3 3 5 3 5 3 4 4 4 7 5 4 5 3 4 3 3 4 3 3 6 3 3 5 4 4 2 3 2 5 7
     #  5 4 8 3 4 3 5 4 3 5 5 2 5 6 7 4 5 5 5 4 4 3 4 5 6 2...]
 
+
+Fit model
+******************************************************
 
 Initialize distfit for discrete distribution for which the binomial distribution is used. Now we want to fit data *X*, and determine whether we can retrieve best *n* and *p*.
 
@@ -73,7 +80,12 @@ Initialize distfit for discrete distribution for which the binomial distribution
     # Best fitted n=8 and p=0.4999 which is great because the input was n=8 and p=0.5
     dist.model['n']
     dist.model['p']
-    
+
+Plot
+******************************************************
+
+.. code:: python
+
     # Make plot
     dist.plot()
 
@@ -88,6 +100,9 @@ Initialize distfit for discrete distribution for which the binomial distribution
    | |fig_binom1|    |
    +-----------------+
 
+
+Make predictions
+******************************************************
 
 With the fitted model we can start making predictions on new unseen data
 
