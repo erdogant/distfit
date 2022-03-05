@@ -96,6 +96,11 @@ Suppose you want to test for one specific distribution, such as the normal distr
 
 .. code:: python
 
+    # Create random data
+    X = np.random.normal(10, 3, 2000)
+    y = [3,4,5,6,10,11,12,18,20]
+
+    # Initialize
     dist = distfit(distr='norm')
     # Fit on data
     results = dist.fit_transform(X)
@@ -115,7 +120,13 @@ Suppose you want to test multiple distributions:
 
 .. code:: python
 
+	# Create random data
+	X = np.random.normal(10, 3, 2000)
+	y = [3,4,5,6,10,11,12,18,20]
+
+	# Initialize
 	dist = distfit(distr=['norm', 't', 'uniform'])
+	# Fit on data
 	results = dist.fit_transform(X)
 
 	# [distfit] >fit..
