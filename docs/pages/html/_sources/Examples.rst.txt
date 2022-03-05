@@ -1,12 +1,11 @@
-.. _code_directive:
+Quick start to find best fitting distribution
+##################################################
 
--------------------------------------
+Specify ``distfit`` parameters. In this example nothing is specied and that means that all parameters are set to default.
 
-Fit distribution
-''''''''''''''''''''
 
-Specify distfit parameters. In this example nothing is specied and that means that all parameters are set to default.
-
+Generate random data
+*************************
 
 .. code:: python
 
@@ -17,14 +16,43 @@ Specify distfit parameters. In this example nothing is specied and that means th
     X = np.random.normal(10, 3, 2000)
     y = [3,4,5,6,10,11,12,18,20]
 
-    # From the distfit library import the class distfit
-    from distfit import distfit
 
-    # Initialize
-    dist = distfit()
+Fit distributions
+**********************************
 
-    # Search for best theoretical fit on your empirical data
-    results = dist.fit_transform(X)
+A series of distributions are fitted on the emperical data and for each a RSS is determined. The distribution with the best fit (lowest RSS) is the best fitting distribution.
+
+.. code:: python
+
+	# From the distfit library import the class distfit
+	from distfit import distfit
+
+	# Initialize
+	dist = distfit(todf=True)
+
+	# Search for best theoretical fit on your empirical data
+	results = dist.fit_transform(X)
+
+	# [distfit] >fit..
+	# [distfit] >transform..
+	# [distfit] >[norm      ] [0.00 sec] [RSS: 0.0036058] [loc=10.035 scale=2.947]
+	# [distfit] >[expon     ] [0.00 sec] [RSS: 0.1821936] [loc=-0.496 scale=10.531]
+	# [distfit] >[pareto    ] [0.12 sec] [RSS: 0.1821326] [loc=-699709.530 scale=699709.035]
+	# [distfit] >[dweibull  ] [0.02 sec] [RSS: 0.0059431] [loc=10.001 scale=2.541]
+	# [distfit] >[t         ] [0.09 sec] [RSS: 0.0036059] [loc=10.035 scale=2.947]
+	# [distfit] >[genextreme] [0.27 sec] [RSS: 0.7053157] [loc=17.658 scale=2.731]
+	# [distfit] >[gamma     ] [0.07 sec] [RSS: 0.0036036] [loc=-326.130 scale=0.026]
+	# [distfit] >[lognorm   ] [0.15 sec] [RSS: 0.0036144] [loc=-187.018 scale=197.039]
+	# [distfit] >[beta      ] [0.05 sec] [RSS: 0.0036176] [loc=-16.974 scale=51.538]
+	# [distfit] >[uniform   ] [0.00 sec] [RSS: 0.1162497] [loc=-0.496 scale=19.280]
+	# [distfit] >[loggamma  ] [0.07 sec] [RSS: 0.0036382] [loc=-493.477 scale=77.133]
+	# [distfit] >Compute confidence interval [parametric]
+
+
+Plot distribution fit
+**********************************
+
+.. code:: python
 
     # Plot
     dist.plot()
@@ -39,7 +67,10 @@ Specify distfit parameters. In this example nothing is specied and that means th
    | |fig1a| |
    +---------+
 
-Note that the best fit should be [normal], as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see gamma and beta distribution as these are the "barba-pappas" among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.
+Plot RSS
+**********************************
+
+Note that the best fit should be **normal**, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see gamma and beta distribution as these are the "barba-pappas" among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.
 
 .. code:: python
 
@@ -57,8 +88,9 @@ Note that the best fit should be [normal], as this was also the input data. Howe
    +---------------+
 
 
-Specify distribution
-''''''''''''''''''''''
+Specify specific distributions
+####################################
+
 
 Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:
 
@@ -77,17 +109,30 @@ Suppose you want to test for one specific distribution, such as the normal distr
 
 
 Make predictions
-''''''''''''''''''''''
+######################
+
 
 The ``predict`` function will compute the probability of samples in the fitted *PDF*. 
 Note that, due to multiple testing approaches, it can occur that samples can be located 
 outside the confidence interval but not marked as significant. See section Algorithm -> Multiple testing for more information.
+
+
+Generate random data
+*************************
 
 .. code:: python
 
     # Example data
     X = np.random.normal(10, 3, 2000)
     y = [3,4,5,6,10,11,12,18,20]
+
+
+Fit all distribution
+**********************************
+
+A series of distributions are fitted on the emperical data and for each a *RSS* is determined. The distribution with the best fit (lowest RSS) is the best fitting distribution.
+
+.. code:: python
 
     # From the distfit library import the class distfit
     from distfit import distfit
@@ -101,8 +146,20 @@ outside the confidence interval but not marked as significant. See section Algor
     # Make prediction on new datapoints based on the fit
     results = dist.predict(y)
 
+
+Plot predictions
+**********************************
+
+The best fitted distribution is plotted over the emperical data with it confidence intervals.
+
+.. code:: python
+
     # The plot function will now also include the predictions of y
     dist.plot()
+
+
+Examine results
+**********************************
 
 ``results`` is a dictionary containing ``y``, ``y_proba``, ``y_pred`` and ``P`` for which the output values has the same order as input value ``y``.
 The "P" stands for the RAW P-values and "y_proba" are the corrected P-values after multiple test correction (default: fdr_bh).
@@ -156,8 +213,8 @@ Note that dataframe ``df`` is included when using the **todf=True** parameter.
    +---------+
 
 
-Extract results
-''''''''''''''''''''''
+Output
+**********************************
 
 In the previous example, we showed that the output can be captured ``results`` and ``out`` but the results are also stored in the object itself. 
 In our examples it is the ``dist`` object.
