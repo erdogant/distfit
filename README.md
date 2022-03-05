@@ -63,10 +63,6 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 
 ### Examples
 
-```python
-from distfit import distfit
-```
-
 # 
 
 ##### [Example: Quick start to find best fit for your input data](https://erdogant.github.io/distfit/pages/html/Examples.html#)
