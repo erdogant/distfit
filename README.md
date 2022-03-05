@@ -63,20 +63,8 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 
 ### Examples
 
-A structured overview of all examples are now available on the [documentation pages](https://erdogant.github.io/distfit/).
-
 ```python
 from distfit import distfit
-```
-
-# 
-
-##### Create random data:
-
-```python
-import numpy as np
-X = np.random.normal(0, 2, [100,10])
-y = [-8,-6,0,1,2,3,4,5,6]
 ```
 
 # 
