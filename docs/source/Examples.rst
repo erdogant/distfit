@@ -70,7 +70,7 @@ Plot distribution fit
 Plot RSS
 **********************************
 
-Note that the best fit should be **normal**, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see gamma and beta distribution as these are the "barba-pappas" among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.
+Note that the best fit should be **normal**, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see *gamma* and *beta* distribution as these are the "barba-pappas" among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.
 
 .. code:: python
 
@@ -88,8 +88,8 @@ Note that the best fit should be **normal**, as this was also the input data. Ho
    +---------------+
 
 
-Specify specific distributions
-####################################
+Specify one specific distribution to fit
+##########################################
 
 
 Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:
@@ -106,6 +106,26 @@ Suppose you want to test for one specific distribution, such as the normal distr
 
     dist.plot()
 
+
+Specify multiple distributions to fit
+######################################
+
+
+Suppose you want to test multiple distributions:
+
+.. code:: python
+
+	dist = distfit(distr=['norm', 't', 'uniform'])
+	results = dist.fit_transform(X)
+
+	# [distfit] >fit..
+	# [distfit] >transform..
+	# [distfit] >[norm   ] [0.00 sec] [RSS: 0.0012337] [loc=0.005 scale=1.982]
+	# [distfit] >[t      ] [0.12 sec] [RSS: 0.0012336] [loc=0.005 scale=1.982]
+	# [distfit] >[uniform] [0.00 sec] [RSS: 0.2505846] [loc=-6.583 scale=15.076]
+	# [distfit] >Compute confidence interval [parametric]
+
+	dist.plot()
 
 
 Make predictions

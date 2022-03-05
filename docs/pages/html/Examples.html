@@ -82,7 +82,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#plot-rss">Plot RSS</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#specify-specific-distributions">Specify specific distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#specify-one-specific-distribution-to-fit">Specify one specific distribution to fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#specify-multiple-distributions-to-fit">Specify multiple distributions to fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#make-predictions">Make predictions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">Generate random data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fit-all-distribution">Fit all distribution</a></li>
@@ -190,7 +191,7 @@
 </section>
 <section id="plot-rss">
 <h2>Plot RSS<a class="headerlink" href="#plot-rss" title="Permalink to this headline"></a></h2>
-<p>Note that the best fit should be <strong>normal</strong>, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see gamma and beta distribution as these are the “barba-pappas” among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.</p>
+<p>Note that the best fit should be <strong>normal</strong>, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see <em>gamma</em> and <em>beta</em> distribution as these are the “barba-pappas” among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plot</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
 </pre></div>
@@ -207,8 +208,8 @@
 </table>
 </section>
 </section>
-<section id="specify-specific-distributions">
-<h1>Specify specific distributions<a class="headerlink" href="#specify-specific-distributions" title="Permalink to this headline"></a></h1>
+<section id="specify-one-specific-distribution-to-fit">
+<h1>Specify one specific distribution to fit<a class="headerlink" href="#specify-one-specific-distribution-to-fit" title="Permalink to this headline"></a></h1>
 <p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
 <span class="c1"># Fit on data</span>
@@ -217,6 +218,23 @@
 <span class="c1"># [distfit] &gt;fit..</span>
 <span class="c1"># [distfit] &gt;transform..</span>
 <span class="c1"># [distfit] &gt;[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]</span>
+
+<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="specify-multiple-distributions-to-fit">
+<h1>Specify multiple distributions to fit<a class="headerlink" href="#specify-multiple-distributions-to-fit" title="Permalink to this headline"></a></h1>
+<p>Suppose you want to test multiple distributions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;uniform&#39;</span><span class="p">])</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># [distfit] &gt;fit..</span>
+<span class="c1"># [distfit] &gt;transform..</span>
+<span class="c1"># [distfit] &gt;[norm   ] [0.00 sec] [RSS: 0.0012337] [loc=0.005 scale=1.982]</span>
+<span class="c1"># [distfit] &gt;[t      ] [0.12 sec] [RSS: 0.0012336] [loc=0.005 scale=1.982]</span>
+<span class="c1"># [distfit] &gt;[uniform] [0.00 sec] [RSS: 0.2505846] [loc=-6.583 scale=15.076]</span>
+<span class="c1"># [distfit] &gt;Compute confidence interval [parametric]</span>
 
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
