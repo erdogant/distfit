@@ -69,7 +69,7 @@ from distfit import distfit
 
 # 
 
-##### [Example: Quick start to find best fitting distribution](https://erdogant.github.io/distfit/pages/html/Examples.html#)
+##### [Example: Quick start to find best fit for your input data](https://erdogant.github.io/distfit/pages/html/Examples.html#)
 
 ```python
 
