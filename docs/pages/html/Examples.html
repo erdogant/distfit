@@ -82,8 +82,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#plot-rss">Plot RSS</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#specify-one-specific-distribution-to-fit">Specify one specific distribution to fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#specify-multiple-distributions-to-fit">Specify multiple distributions to fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#fit-for-one-specific-distribution">Fit for one specific distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#fit-for-multiple-distributions">Fit for multiple distributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#make-predictions">Make predictions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">Generate random data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fit-all-distribution">Fit all distribution</a></li>
@@ -208,8 +208,8 @@
 </table>
 </section>
 </section>
-<section id="specify-one-specific-distribution-to-fit">
-<h1>Specify one specific distribution to fit<a class="headerlink" href="#specify-one-specific-distribution-to-fit" title="Permalink to this headline"></a></h1>
+<section id="fit-for-one-specific-distribution">
+<h1>Fit for one specific distribution<a class="headerlink" href="#fit-for-one-specific-distribution" title="Permalink to this headline"></a></h1>
 <p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
 <span class="c1"># Fit on data</span>
@@ -223,8 +223,8 @@
 </pre></div>
 </div>
 </section>
-<section id="specify-multiple-distributions-to-fit">
-<h1>Specify multiple distributions to fit<a class="headerlink" href="#specify-multiple-distributions-to-fit" title="Permalink to this headline"></a></h1>
+<section id="fit-for-multiple-distributions">
+<h1>Fit for multiple distributions<a class="headerlink" href="#fit-for-multiple-distributions" title="Permalink to this headline"></a></h1>
 <p>Suppose you want to test multiple distributions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;uniform&#39;</span><span class="p">])</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>

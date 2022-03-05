@@ -88,7 +88,7 @@ Note that the best fit should be **normal**, as this was also the input data. Ho
    +---------------+
 
 
-Specify one specific distribution to fit
+Fit for one specific distribution
 ##########################################
 
 
@@ -107,7 +107,7 @@ Suppose you want to test for one specific distribution, such as the normal distr
     dist.plot()
 
 
-Specify multiple distributions to fit
+Fit for multiple distributions
 ######################################
 
 
