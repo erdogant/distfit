@@ -139,8 +139,8 @@ Note that *P* stands for the RAW P-values and *y_proba* are the corrected P-valu
     
     
 
-References
------------
+*References*
+
     * Some parts of the binomial fitting is authored by Han-Kwang Nienhuys (2020); copying: CC-BY-SA.
     * https://stackoverflow.com/a/62365555/6228891
 
