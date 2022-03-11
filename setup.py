@@ -22,7 +22,7 @@ setuptools.setup(
      description="Python package for probability density function fitting and hypothesis testing.",
      long_description=long_description,
      long_description_content_type="text/markdown",
-     url="https://github.com/erdogant/distfit",
+     url="https://erdogant.github.io/distfit",
 	 download_url = 'https://github.com/erdogant/distfit/archive/'+new_version+'.tar.gz',
      packages=setuptools.find_packages(), # Searches throughout all dirs for files to include
      include_package_data=True, # Must be true to include files depicted in MANIFEST.in

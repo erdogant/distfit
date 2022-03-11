@@ -15,7 +15,7 @@ keywords:
   - "fitting-curve"
 license: "MIT"
 message: "If you use this software, please cite it using these metadata."
-repository-code: "https://github.com/erdogant/distfit"
+repository-code: "https://erdogant.github.io/distfit"
 title: "distfit - Probability density fitting"
 version: "1.4.0"
 ...
