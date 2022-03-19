@@ -85,7 +85,7 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 ```
 
 <p align="left">
-  <a href="https://erdogant.github.io/findpeaks/pages/html/Examples.html#find-peaks-in-low-sampled-dataset">
+  <a href="https://erdogant.github.io/distfit/pages/html/Examples.html#make-predictions">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="450" />
   </a>
 </p>
@@ -201,7 +201,7 @@ print(X)
 * All kinds of contributions are welcome!
 
 ### Citation
-Please cite d3graph in your publications if this is useful for your research. See column right for citation information.
+Please cite ``distfit`` in your publications if this is useful for your research. See column right for citation information.
 
 ### Maintainer
 * Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
