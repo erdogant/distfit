@@ -85,7 +85,7 @@ dist.plot()             # Plot the best fitted distribution (y is included if pr
 ```
 
 <p align="left">
-  <a href="https://erdogant.github.io/findpeaks/pages/html/Examples.html#find-peaks-in-low-sampled-dataset">
+  <a href="https://erdogant.github.io/distfit/pages/html/Examples.html#make-predictions">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="450" />
   </a>
 </p>
