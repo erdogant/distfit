@@ -303,7 +303,7 @@ class distfit():
             if hasattr(self, 'summary'): del self.summary
             if hasattr(self, 'size'): del self.size
 
-    def predict(self, y, verbose=3):
+    def predict(self, y, alpha=None, verbose=3):
         """Compute probability for response variables y, using the specified method.
 
         Description
@@ -318,6 +318,8 @@ class distfit():
             Values to be predicted.
         model : dict, default : None
             The model created by the .fit() function.
+        alpha : float, default: None
+            Significance alpha is inherited from self if None.
         verbose : int [1-5], default: 3
             Print information to screen. A higher number will print more.
 
@@ -335,6 +337,10 @@ class distfit():
         if 'list' in str(type(y)): y=np.array(y)
         if 'float' in str(type(y)): y=np.array([y])
         if 'numpy.ndarray' not in str(type(y)): raise Exception('y should be of type np.array or list')
+        if alpha is not None:
+            self.alpha = alpha
+            if verbose>=3: print('[distfit] >Alpha is set to [%g]' %(self.alpha))
+
         if verbose>=3: print('[distfit] >predict..')
 
         if (self.method=='parametric') or (self.method=='discrete'):
@@ -584,7 +590,7 @@ def _predict(self, y, verbose=3):
     self.y_proba = y_proba  # THIS WILL BE REMOVED IN NEWER VERSIONS
     self.y_pred = y_pred  # THIS WILL BE REMOVED IN NEWER VERSIONS
     self.y_bool = y_proba<=self.alpha
-    self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'y_logic': self.y_bool}
+    self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'y_bool': self.y_bool}
     if self.todf:
         # This approach is 3x faster then providing the dict to the dataframe
         self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float, 'y_proba': float, 'y_pred': str, 'P': float})
