@@ -583,7 +583,8 @@ def _predict(self, y, verbose=3):
     # Make structured output
     self.y_proba = y_proba  # THIS WILL BE REMOVED IN NEWER VERSIONS
     self.y_pred = y_pred  # THIS WILL BE REMOVED IN NEWER VERSIONS
-    self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw}
+    self.y_bool = y_proba<=self.alpha
+    self.results = {'y': y, 'y_proba': y_proba, 'y_pred': y_pred, 'P': Praw, 'y_logic': self.y_bool}
     if self.todf:
         # This approach is 3x faster then providing the dict to the dataframe
         self.df = pd.DataFrame(data=np.c_[y, y_proba, y_pred, Praw], columns=['y', 'y_proba', 'y_pred', 'P']).astype({'y': float, 'y_proba': float, 'y_pred': str, 'P': float})
