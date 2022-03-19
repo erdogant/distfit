@@ -713,9 +713,9 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
             ax.scatter(self.results['y'][idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Inside boundaries')
 
     # Limit axis
-    if xlim is not None:        
+    if xlim is not None:
         ax.set_xlim(xlim[0], xlim[1])
-    if ylim is not None:        
+    if ylim is not None:
         ax.set_ylim(ylim[0], ylim[1])
 
     ax.grid(True)
@@ -777,15 +777,15 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=
 
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
-    param_str = ', '.join(['{}={:0.2f}'.format(k, v) for k, v in zip(param_names, best_fit_param)])
+    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, best_fit_param)])
     ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
 
     # Limit axis
-    if Param['xlim'] is not None:        
+    if Param['xlim'] is not None:
         ax.set_xlim(Param['xlim'][0], Param['xlim'][1])
-    if Param['ylim'] is not None:        
+    if Param['ylim'] is not None:
         ax.set_ylim(Param['ylim'][0], Param['ylim'][1])
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
@@ -1328,7 +1328,7 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
         ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
 
     # Make text for plot
-    param_str = ', '.join(['{}={:0.2g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
+    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
     ax[0].set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
 
     # Limit axis
