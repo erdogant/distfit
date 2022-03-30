@@ -962,7 +962,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
 
             if verbose>=3:
                 spaces_1 = ' ' * (max_name_len - len(distribution.name))
-                scores = ('[%s: %.7f] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
+                scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
                 time_spent = time.time() - start_time
                 print("[distfit] >[%s%s] [%.4s sec] %s" %(distribution.name, spaces_1, time_spent, scores))
 
