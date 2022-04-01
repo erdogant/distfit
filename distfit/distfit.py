@@ -109,7 +109,7 @@ class distfit():
     >>> dist.plot()
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', stats='RSS', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5):
+    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', stats='RSS', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5, mhist='numpy'):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -124,6 +124,7 @@ class distfit():
         self.stats = stats
         self.f = f  # Only for discrete
         self.weighted = weighted  # Only for discrete
+        self.mhist = mhist
 
     # Fit
     def fit(self, verbose=3):
@@ -205,7 +206,7 @@ class distfit():
         self.size = len(X)
 
         # Get histogram of original X
-        X_bins, y_obs = _get_hist_params(X, self.bins)
+        X_bins, y_obs = _get_hist_params(X, self.bins, mhist=self.mhist)
         # Smoothing by interpolation
         X_bins, y_obs = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
         self.histdata = (y_obs, X_bins)
@@ -892,7 +893,7 @@ def _get_hist_params(X, bins, mhist='numpy'):
         snsout = sns.distplot(X, bins=bins, norm_hist=False).get_lines()[0].get_data()
         histvals = snsout[1]
         binedges = snsout[0]
-        binedges = np.append(binedges, 10**-6)
+        # binedges = np.append(binedges, 10**-6)
 
     return(binedges, histvals)
 
