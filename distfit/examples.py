@@ -1,14 +1,57 @@
-# --------------------------------------------------
-# Name        : examples.py
-# Author      : E.Taskesen
-# Contact     : erdogant@gmail.com
-# github      : https://github.com/erdogant/distfit
-# --------------------------------------------------
-
 import numpy as np
 import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
+
+
+# %% Multiple distributions as input
+from distfit import distfit
+X = np.random.normal(0, 2, 1000)
+y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
+dist = distfit(stats='ks', distr=['expon', 't', 'gamma', 'lognorm'])
+# dist = distfit(stats='ks', distr=['lognorm'])
+results = dist.fit_transform(X)
+
+dist.plot()
+# dist.plot_summary()
+
+results = dist.predict(y, alpha=0.01)
+
+print(dist.model)
+
+# %% Multiple distributions as input
+from distfit import distfit
+import scipy.stats as st
+import pandas as pd
+
+ranking = []
+b_pareto = [0.75, 1, 2, 3, 4, 5]
+size = [100, 1000, 10000]
+bins = [50, 100, 200]
+stats = ['RSS', 'wasserstein']
+
+for stat in stats:
+    for bs in bins:
+        for b in b_pareto:
+            for s in size:
+                X = st.pareto.rvs(b, size=s)
+                dist = distfit(todf=True, stats=stat, bins=bs)
+                dist.fit_transform(X)
+                r = np.where(dist.summary['distr']=='pareto')[0][0]
+                ranking.append([r, b, s, bs, stat])
+
+df = pd.DataFrame(ranking, columns=['rank','b','sample size', 'bins', 'stats'])
+
+np.sum(df['rank']==0) / df.shape[0]
+np.sum(df['rank']<=1) / df.shape[0]
+np.sum(df['rank']<=2) / df.shape[0]
+np.sum(df['rank']<=3) / df.shape[0]
+
+# Other distr. have better scores under these conditions
+df.loc[df['rank']>=3, :]
+
+dist.plot_summary()
+# results['model']
 
 # %% Multiple distributions as input
 from distfit import distfit
@@ -66,14 +109,6 @@ dist.fit_transform(Xgen)
 # Plot
 dist.plot_summary()
 dist.plot()
-
-
-# %% Import class
-from distfit import distfit
-
-# %%
-# from sklearn.datasets.samples_generator import make_blobs
-# [data, labels_true] = make_blobs(n_samples=10000, centers=3, n_features=1, cluster_std=0.3, random_state=0)
 
 # %%
 from distfit import distfit
