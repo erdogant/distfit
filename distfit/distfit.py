@@ -779,7 +779,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
     param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, best_fit_param)])
-    ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
+    ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + '(' + param_str + ')'))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
 
@@ -910,7 +910,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
 
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
-        logLik = 0
+        logLik = np.nan
 
         # Fit the distribution. However this can result in an error so therefore you need to try-except
         try:
@@ -929,17 +929,8 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
 
                 # Calculate fitted PDF and error with fit in distribution
                 pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
-                # Compute RSS
-                if stats=='RSS':
-                    score = np.sum(np.power(y_obs - pdf, 2.0))
-                if stats=='wasserstein':
-                    score = st.wasserstein_distance(y_obs, pdf)
-                if stats=='energy':
-                    score = st.energy_distance(y_obs, pdf)
-                if stats=='ks':
-                    score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
-
-                logLik = np.nan
+                # Compute score based on fit
+                score = _compute_fit_score(stats, y_obs, pdf)
 
                 # Store results
                 df.values[i, 0] = distribution.name
@@ -977,6 +968,23 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
     df.reset_index(drop=True, inplace=True)
     # Return
     return(df, model)
+
+
+# %% Compute fit score
+def _compute_fit_score(stats, y_obs, pdf):
+    if stats=='RSS':
+        score = np.sum(np.power(y_obs - pdf, 2.0))
+        # score = (((y_obs - pdf) / sigmas)**2).sum()
+    elif stats=='wasserstein':
+        score = st.wasserstein_distance(y_obs, pdf)
+    elif stats=='energy':
+        score = st.energy_distance(y_obs, pdf)
+    elif stats=='ks':
+        score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
+        # score = -np.log10(st.kstest(y_obs, pdf)[1])
+    else:
+        raise Exception('[%] statistic not implemented.', stats)
+    return score
 
 
 # %% Determine confidence intervals on the best fitting distribution
@@ -1224,16 +1232,8 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=
         # Determine RSS
         p = fitparams[0]
         pdf = BinomPMF(nval)(Xdata, p)
-
-        if stats=='RSS':
-            score = (((y_obs - pdf) / sigmas)**2).sum()
-        if stats=='wasserstein':
-            score = st.wasserstein_distance(y_obs, pdf)
-        if stats=='energy':
-            score = st.energy_distance(y_obs, pdf)
-        if stats=='ks':
-            score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
-
+        # Compute fit score
+        score = _compute_fit_score(stats, y_obs, pdf)
         # Store
         pvals[nval - nmin] = p
         scores[nval - nmin] = score
