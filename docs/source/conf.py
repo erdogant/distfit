@@ -14,6 +14,20 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
 
+
+# -- Download rst file -----------------------------------------------------
+try:
+	from urllib.request import urlretrieve
+	sponsor_url_rst = 'https://erdogant.github.io/docs/rst/sponsor.rst'
+	sponsor_file = "sponsor.rst"
+	if os.path.isfile(sponsor_file):
+		os.remove(sponsor_file)
+		print('Update sponsor rst file.')
+	urlretrieve (sponsor_url_rst, sponsor_file)
+except:
+	print('Downloading sponsor.rst file failed.')
+
+
 # -- Project information -----------------------------------------------------
 
 project = 'distfit'

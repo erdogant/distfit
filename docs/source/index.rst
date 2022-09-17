@@ -8,6 +8,18 @@ distfit's documentation!
 	The ``fitdist`` library is directly build on the ``distfit`` library so there are no changes between the two except for naming. If you desire to use the ``fitdist`` library thats great! Just change all the examples in this documentation into ``fitdist``. Thats it. Have fun!
 
 
+Star is important
+======================
+If you ❤️ this project, **star** this repo at the `github page <https://github.com/erdogant/distfit/>`_!
+
+
+Github
+======
+Please report bugs, issues and feature extensions at `github <https://github.com/erdogant/distfit/>`_.
+
+
+
+
 Content
 =======
 
@@ -71,36 +83,6 @@ Content
 * :ref:`genindex`
 
 
-Quick install
----------------
-
-.. code-block:: console
-
-   pip install distfit
-
-
-Source code and issue tracker
-------------------------------
-
-`Github distfit <https://github.com/erdogant/distfit/>`_.
-Please report bugs, issues and feature extensions there.
-
-
-Citing *distfit*
-----------------
-
-The bibtex can be found in the right side menu at the `github page <https://github.com/erdogant/distfit/>`_.
-
-
-Sponsor
-------------------------------
-
-If you like this project, **star** this repo and become a **sponsor**!
-Read more why this is important on my sponsor page!
-
-.. raw:: html
-
-	<iframe src="https://github.com/sponsors/erdogant/button" title="Sponsor erdogant" height="35" width="116" style="border: 0;"></iframe>
 
 
 Indices and tables

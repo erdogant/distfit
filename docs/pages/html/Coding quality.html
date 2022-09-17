@@ -15,12 +15,13 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API References" href="distfit.distfit.html" />
-    <link rel="prev" title="Blog" href="Documentation.html" /> 
+    <link rel="prev" title="Sponsor" href="Documentation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -82,10 +83,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#medium-blog">Medium Blog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor-this-project">Sponsor this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Coding quality</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#library">library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#style">Style</a></li>
@@ -124,14 +126,14 @@
              
   <hr class="docutils" id="code-directive" />
 <section id="coding-quality">
-<h1>Coding quality<a class="headerlink" href="#coding-quality" title="Permalink to this headline"></a></h1>
+<h1>Coding quality<a class="headerlink" href="#coding-quality" title="Permalink to this heading"></a></h1>
 <p>Higher quality software has fewer defects, better security, and better performance, which leads to happier users who can work more effectively.
 Code reviews are an effective method for improving software quality. McConnell (2004) suggests that unit testing finds approximately 25% of defects, function testing 35%, integration testing 45%, and code review 55-60%.
 While this means that none of these methods is good enough on their own and that they should be combined, clearly code review is an essential tool here.</p>
 <p>This library is therefore developed with several techniques, such as code styling, low complexity, docstrings, reviews, and unit tests.
 Such conventions are helpfull to improve the quality, make the code cleaner and more understandable but alos to trace future bugs, and spot syntax errors.</p>
 <section id="library">
-<h2>library<a class="headerlink" href="#library" title="Permalink to this headline"></a></h2>
+<h2>library<a class="headerlink" href="#library" title="Permalink to this heading"></a></h2>
 <p>The file structure of the generated package looks like:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>path/to/distfit/
 ├── .gitignore
@@ -155,13 +157,13 @@ Such conventions are helpfull to improve the quality, make the code cleaner and 
 </div>
 </section>
 <section id="style">
-<h2>Style<a class="headerlink" href="#style" title="Permalink to this headline"></a></h2>
+<h2>Style<a class="headerlink" href="#style" title="Permalink to this heading"></a></h2>
 <p>This library is compliant with the PEP-8 standards.
 PEP stands for Python Enhancement Proposal and sets a baseline for the readability of Python code.
 Each public function contains a docstring that is based on numpy standards.</p>
 </section>
 <section id="complexity">
-<h2>Complexity<a class="headerlink" href="#complexity" title="Permalink to this headline"></a></h2>
+<h2>Complexity<a class="headerlink" href="#complexity" title="Permalink to this heading"></a></h2>
 <p>This library has been developed by using measures that help decreasing technical debt.
 Version 1.1.0 of the <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library scored, according the code analyzer: <strong>2.25</strong>, for which values &gt; 0 are good and 10 is a maximum score.
 Developing software with low(er) technical depth (a higher code analyser score) may take extra development time, but has many advantages:</p>
@@ -173,7 +175,7 @@ Developing software with low(er) technical depth (a higher code analyser score) 
 </ul>
 </section>
 <section id="unit-tests">
-<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline"></a></h2>
+<h2>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this heading"></a></h2>
 <p>The use of unit tests is essential to garantee a consistent output of developed functions.
 The following tests are secured using <code class="xref py py-func docutils literal notranslate"><span class="pre">tests.test_distfit()</span></code>:</p>
 <ul class="simple">
@@ -210,7 +212,7 @@ tests/test_distfit.py::test_distfit
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Documentation.html" class="btn btn-neutral float-left" title="Blog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Documentation.html" class="btn btn-neutral float-left" title="Sponsor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="distfit.distfit.html" class="btn btn-neutral float-right" title="API References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

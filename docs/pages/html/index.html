@@ -15,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -81,10 +82,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#medium-blog">Medium Blog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor-this-project">Sponsor this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
 </ul>
@@ -116,7 +118,7 @@
            <div itemprop="articleBody">
              
   <section id="distfit-s-documentation">
-<h1>distfit’s documentation!<a class="headerlink" href="#distfit-s-documentation" title="Permalink to this headline"></a></h1>
+<h1>distfit’s documentation!<a class="headerlink" href="#distfit-s-documentation" title="Permalink to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">distfit</span></code> is a python package for probability density fitting of univariate distributions on non-censored data. With the Residual Sum of Squares (RSS) we determine the best fit across 89 theoretical distributions for which the best fitted theoretical distribution is returned with the loc, scale, arg parameters. The probability of new data-points can then be assed for significance.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -124,8 +126,16 @@
 The <code class="docutils literal notranslate"><span class="pre">fitdist</span></code> library is directly build on the <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library so there are no changes between the two except for naming. If you desire to use the <code class="docutils literal notranslate"><span class="pre">fitdist</span></code> library thats great! Just change all the examples in this documentation into <code class="docutils literal notranslate"><span class="pre">fitdist</span></code>. Thats it. Have fun!</p>
 </div>
 </section>
+<section id="star-is-important">
+<h1>Star is important<a class="headerlink" href="#star-is-important" title="Permalink to this heading"></a></h1>
+<p>If you ❤️ this project, <strong>star</strong> this repo at the <a class="reference external" href="https://github.com/erdogant/distfit/">github page</a>!</p>
+</section>
+<section id="github">
+<h1>Github<a class="headerlink" href="#github" title="Permalink to this heading"></a></h1>
+<p>Please report bugs, issues and feature extensions at <a class="reference external" href="https://github.com/erdogant/distfit/">github</a>.</p>
+</section>
 <section id="content">
-<h1>Content<a class="headerlink" href="#content" title="Permalink to this headline"></a></h1>
+<h1>Content<a class="headerlink" href="#content" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Background</span></p>
 <ul>
@@ -159,10 +169,7 @@ The <code class="docutils literal notranslate"><span class="pre">fitdist</span><
 <li class="toctree-l2"><a class="reference internal" href="Discrete.html#generate-random-discrete-data">Generate random discrete data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Discrete.html#fit-model">Fit model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Discrete.html#plot">Plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Discrete.html#make-predictions">Make predictions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Discrete.html#references">References</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="Discrete.html#make-predictions">Make predictions</a></li>
 </ul>
 </li>
 </ul>
@@ -202,10 +209,11 @@ The <code class="docutils literal notranslate"><span class="pre">fitdist</span><
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#medium-blog">Medium Blog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor-this-project">Sponsor this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Coding%20quality.html#library">library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Coding%20quality.html#style">Style</a></li>
@@ -219,29 +227,9 @@ The <code class="docutils literal notranslate"><span class="pre">fitdist</span><
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 </ul>
-<section id="quick-install">
-<h2>Quick install<a class="headerlink" href="#quick-install" title="Permalink to this headline"></a></h2>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install distfit</span>
-</pre></div>
-</div>
-</section>
-<section id="source-code-and-issue-tracker">
-<h2>Source code and issue tracker<a class="headerlink" href="#source-code-and-issue-tracker" title="Permalink to this headline"></a></h2>
-<p><a class="reference external" href="https://github.com/erdogant/distfit/">Github distfit</a>.
-Please report bugs, issues and feature extensions there.</p>
-</section>
-<section id="citing-distfit">
-<h2>Citing <em>distfit</em><a class="headerlink" href="#citing-distfit" title="Permalink to this headline"></a></h2>
-<p>The bibtex can be found in the right side menu at the <a class="reference external" href="https://github.com/erdogant/distfit/">github page</a>.</p>
-</section>
-<section id="sponsor">
-<h2>Sponsor<a class="headerlink" href="#sponsor" title="Permalink to this headline"></a></h2>
-<p>If you like this project, <strong>star</strong> this repo and become a <strong>sponsor</strong>!
-Read more why this is important on my sponsor page!</p>
-<iframe src="https://github.com/sponsors/erdogant/button" title="Sponsor erdogant" height="35" width="116" style="border: 0;"></iframe></section>
 </section>
 <section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h1>
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>

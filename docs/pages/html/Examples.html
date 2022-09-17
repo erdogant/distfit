@@ -15,11 +15,12 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Blog" href="Documentation.html" />
+    <link rel="next" title="Sponsor" href="Documentation.html" />
     <link rel="prev" title="Saving" href="Save%20and%20Load.html" /> 
 </head>
 
@@ -95,10 +96,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#medium-blog">Medium Blog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor-this-project">Sponsor this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
 </ul>
@@ -130,10 +132,10 @@
            <div itemprop="articleBody">
              
   <section id="quick-start-to-find-best-fitting-distribution">
-<h1>Quick start to find best fitting distribution<a class="headerlink" href="#quick-start-to-find-best-fitting-distribution" title="Permalink to this headline"></a></h1>
+<h1>Quick start to find best fitting distribution<a class="headerlink" href="#quick-start-to-find-best-fitting-distribution" title="Permalink to this heading"></a></h1>
 <p>Specify <code class="docutils literal notranslate"><span class="pre">distfit</span></code> parameters. In this example nothing is specied and that means that all parameters are set to default.</p>
 <section id="generate-random-data">
-<h2>Generate random data<a class="headerlink" href="#generate-random-data" title="Permalink to this headline"></a></h2>
+<h2>Generate random data<a class="headerlink" href="#generate-random-data" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -144,7 +146,7 @@
 </div>
 </section>
 <section id="fit-distributions">
-<h2>Fit distributions<a class="headerlink" href="#fit-distributions" title="Permalink to this headline"></a></h2>
+<h2>Fit distributions<a class="headerlink" href="#fit-distributions" title="Permalink to this heading"></a></h2>
 <p>A series of distributions are fitted on the emperical data and for each a RSS is determined. The distribution with the best fit (lowest RSS) is the best fitting distribution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the distfit library import the class distfit</span>
 <span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
@@ -173,7 +175,7 @@
 </div>
 </section>
 <section id="plot-distribution-fit">
-<h2>Plot distribution fit<a class="headerlink" href="#plot-distribution-fit" title="Permalink to this headline"></a></h2>
+<h2>Plot distribution fit<a class="headerlink" href="#plot-distribution-fit" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
@@ -190,7 +192,7 @@
 </table>
 </section>
 <section id="plot-rss">
-<h2>Plot RSS<a class="headerlink" href="#plot-rss" title="Permalink to this headline"></a></h2>
+<h2>Plot RSS<a class="headerlink" href="#plot-rss" title="Permalink to this heading"></a></h2>
 <p>Note that the best fit should be <strong>normal</strong>, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see <em>gamma</em> and <em>beta</em> distribution as these are the “barba-pappas” among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plot</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
@@ -209,7 +211,7 @@
 </section>
 </section>
 <section id="fit-for-one-specific-distribution">
-<h1>Fit for one specific distribution<a class="headerlink" href="#fit-for-one-specific-distribution" title="Permalink to this headline"></a></h1>
+<h1>Fit for one specific distribution<a class="headerlink" href="#fit-for-one-specific-distribution" title="Permalink to this heading"></a></h1>
 <p>Suppose you want to test for one specific distribution, such as the normal distribution. This can be done as following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create random data</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
@@ -229,7 +231,7 @@
 </div>
 </section>
 <section id="fit-for-multiple-distributions">
-<h1>Fit for multiple distributions<a class="headerlink" href="#fit-for-multiple-distributions" title="Permalink to this headline"></a></h1>
+<h1>Fit for multiple distributions<a class="headerlink" href="#fit-for-multiple-distributions" title="Permalink to this heading"></a></h1>
 <p>Suppose you want to test multiple distributions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create random data</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
@@ -252,12 +254,12 @@
 </div>
 </section>
 <section id="make-predictions">
-<h1>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline"></a></h1>
+<h1>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> function will compute the probability of samples in the fitted <em>PDF</em>.
 Note that, due to multiple testing approaches, it can occur that samples can be located
 outside the confidence interval but not marked as significant. See section Algorithm -&gt; Multiple testing for more information.</p>
 <section id="id1">
-<h2>Generate random data<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<h2>Generate random data<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example data</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
@@ -265,7 +267,7 @@ outside the confidence interval but not marked as significant. See section Algor
 </div>
 </section>
 <section id="fit-all-distribution">
-<h2>Fit all distribution<a class="headerlink" href="#fit-all-distribution" title="Permalink to this headline"></a></h2>
+<h2>Fit all distribution<a class="headerlink" href="#fit-all-distribution" title="Permalink to this heading"></a></h2>
 <p>A series of distributions are fitted on the emperical data and for each a <em>RSS</em> is determined. The distribution with the best fit (lowest RSS) is the best fitting distribution.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the distfit library import the class distfit</span>
 <span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
@@ -282,7 +284,7 @@ outside the confidence interval but not marked as significant. See section Algor
 </div>
 </section>
 <section id="plot-predictions">
-<h2>Plot predictions<a class="headerlink" href="#plot-predictions" title="Permalink to this headline"></a></h2>
+<h2>Plot predictions<a class="headerlink" href="#plot-predictions" title="Permalink to this heading"></a></h2>
 <p>The best fitted distribution is plotted over the emperical data with it confidence intervals.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The plot function will now also include the predictions of y</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -290,7 +292,7 @@ outside the confidence interval but not marked as significant. See section Algor
 </div>
 </section>
 <section id="examine-results">
-<h2>Examine results<a class="headerlink" href="#examine-results" title="Permalink to this headline"></a></h2>
+<h2>Examine results<a class="headerlink" href="#examine-results" title="Permalink to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">results</span></code> is a dictionary containing <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code> for which the output values has the same order as input value <code class="docutils literal notranslate"><span class="pre">y</span></code>.
 The “P” stands for the RAW P-values and “y_proba” are the corrected P-values after multiple test correction (default: fdr_bh).
 In case you want to use the “P” values, set “multtest” to None during initialization.
@@ -392,7 +394,7 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
 </table>
 </section>
 <section id="output">
-<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline"></a></h2>
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this heading"></a></h2>
 <p>In the previous example, we showed that the output can be captured <code class="docutils literal notranslate"><span class="pre">results</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> but the results are also stored in the object itself.
 In our examples it is the <code class="docutils literal notranslate"><span class="pre">dist</span></code> object.
 The same variable names are used; <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code>.
@@ -505,7 +507,7 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Save%20and%20Load.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Documentation.html" class="btn btn-neutral float-right" title="Blog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Documentation.html" class="btn btn-neutral float-right" title="Sponsor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
