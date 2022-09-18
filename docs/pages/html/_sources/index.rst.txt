@@ -10,7 +10,7 @@ distfit's documentation!
 
 You contribution is important
 ==============================
-If you ❤️ this project, **star** this repo at the `github page <https://github.com/erdogant/distfit/>`_ and have a look at the `sponser page <https://github.com/erdogant/distfit/pages/html/Documentation.html>`_!
+If you ❤️ this project, **star** this repo at the `github page <https://github.com/erdogant/distfit/>`_ and have a look at the `sponser page <https://erdogant.github.io/distfit/pages/html/Documentation.html>`_!
 
 
 
@@ -80,8 +80,6 @@ Content
   Documentation
   Coding quality
   distfit.distfit
-
-* :ref:`genindex`
 
 
 
