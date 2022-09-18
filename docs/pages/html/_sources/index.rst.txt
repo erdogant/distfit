@@ -8,9 +8,10 @@ distfit's documentation!
 	The ``fitdist`` library is directly build on the ``distfit`` library so there are no changes between the two except for naming. If you desire to use the ``fitdist`` library thats great! Just change all the examples in this documentation into ``fitdist``. Thats it. Have fun!
 
 
-Star is important
-======================
-If you ❤️ this project, **star** this repo at the `github page <https://github.com/erdogant/distfit/>`_!
+You contribution is important
+==============================
+If you ❤️ this project, **star** this repo at the `github page <https://github.com/erdogant/distfit/>`_ and have a look at the `sponser page <https://github.com/erdogant/distfit/pages/html/Documentation.html>`_!
+
 
 
 Github
