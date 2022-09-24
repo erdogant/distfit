@@ -27,11 +27,12 @@ warnings.filterwarnings('ignore')
 
 # %% Class dist
 class distfit():
-    """Probability density function fitting across 89 univariate distributions to non-censored data by scoring statistics such as residual sum of squares (RSS), making plots, and hypothesis testing.
+    """Probability density function.
 
     Description
     -----------
-    Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics such as Residual Sum of Squares (RSS), and hypothesis testing.
+    Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics
+    such as residual sum of squares (RSS), making plots, and hypothesis testing.
 
     Parameters
     ----------
