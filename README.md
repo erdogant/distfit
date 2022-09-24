@@ -31,9 +31,9 @@ On the [documentation pages](https://erdogant.github.io/distfit/) you can find d
 
 ### Installation
 
-##### Install bnlearn from PyPI
+##### Install distfit from PyPI
 ```bash
-pip install bnlearn
+pip install distfit
 ```
 
 ##### Install from github source (beta version)
