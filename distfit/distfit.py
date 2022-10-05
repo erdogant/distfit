@@ -52,7 +52,7 @@ class distfit():
         The (set) of distribution to test. A set of distributions can be tested by:
         'popular', 'full', or specify the theoretical distribution: 'norm', 't' or in a list ['norm', 't', ..']
         if method="discrete", then binomial is used.
-        See docs for more information about 'popular' and 'full': https://erdogant.github.io/distfit/pages/html/Parametric.html
+        See documentation for more information about 'popular' and 'full'.
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
     stats : str, default: 'RSS'
@@ -108,6 +108,11 @@ class distfit():
     >>> # Make prediction
     >>> results = dist.predict(y)
     >>> dist.plot()
+
+    References
+    ----------
+    * Documentation: https://erdogant.github.io/distfit/pages/html/Parametric.html
+
     """
 
     def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', stats='RSS', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5, mhist='numpy'):
