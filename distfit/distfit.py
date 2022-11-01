@@ -492,22 +492,22 @@ class distfit():
         out = {}
         for arg in args:
             if hasattr(self, arg):
-                if arg=='alpha': out.update({arg : self.alpha})
-                if arg=='bins': out.update({arg : self.bins})
-                if arg=='bound': out.update({arg : self.bound})
-                if arg=='df': out.update({arg : self.df}) # TODO REMOVE
-                if arg=='distr': out.update({arg : self.distr})
-                if arg=='distributions': out.update({arg : self.distributions})
-                if arg=='histdata': out.update({arg : self.histdata})
-                if arg=='method': out.update({arg : self.method})
-                if arg=='model': out.update({arg : self.model})
-                if arg=='multtest': out.update({arg : self.multtest})
-                if arg=='n_perm': out.update({arg : self.n_perm})
-                if arg=='size': out.update({arg : self.size})
-                if arg=='smooth': out.update({arg : self.smooth})
-                if arg=='summary': out.update({arg : self.summary})
-                if arg=='y_pred': out.update({arg : self.y_pred})
-                if arg=='results': out.update({arg : self.results})
+                if arg=='alpha': out.update({arg: self.alpha})
+                if arg=='bins': out.update({arg: self.bins})
+                if arg=='bound': out.update({arg: self.bound})
+                if arg=='df': out.update({arg: self.df})  # TODO REMOVE
+                if arg=='distr': out.update({arg: self.distr})
+                if arg=='distributions': out.update({arg: self.distributions})
+                if arg=='histdata': out.update({arg: self.histdata})
+                if arg=='method': out.update({arg: self.method})
+                if arg=='model': out.update({arg: self.model})
+                if arg=='multtest': out.update({arg: self.multtest})
+                if arg=='n_perm': out.update({arg: self.n_perm})
+                if arg=='size': out.update({arg: self.size})
+                if arg=='smooth': out.update({arg: self.smooth})
+                if arg=='summary': out.update({arg: self.summary})
+                if arg=='y_pred': out.update({arg: self.y_pred})
+                if arg=='results': out.update({arg: self.results})
 
         status = pypickle.save(filepath, out, verbose=verbose, overwrite=overwrite)
         if verbose>=3: print('[distfit] >Saving.. %s' %(status))
