@@ -385,13 +385,13 @@ model.plot()
 from distfit import distfit
 import numpy as np
 
-X = np.random.normal(10, 3, 2000)
+X = np.random.normal(10, 3, 10000)
 y = [3,4,5,6,10,11,12,18,20]
 
 # Initialize
 # dist = distfit(method='percentile', alpha=0.05, todf=False)
-# dist = distfit(method='quantile', alpha=0.05, todf=False)
-dist = distfit(method='parametric', alpha=0.05, todf=False)
+dist = distfit(method='quantile', alpha=0.05, todf=False)
+# dist = distfit(method='parametric', alpha=0.05, todf=False)
 dist.fit_transform(X)
 dist.plot()
 
