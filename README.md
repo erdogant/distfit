@@ -208,13 +208,8 @@ dist.fit_transform(X)
 
 <hr>
 
-Contributors
-=============
-
-Setting up and maintaining distfit has been possible thanks to users and contributors.
-
-Thanks to all:
-
+### Contributors
+Setting up and maintaining distfit has been possible thanks to users and contributors. Thanks:
 
 <p align="left">
   <a href="https://github.com/erdogant/distfit/graphs/contributors">
