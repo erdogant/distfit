@@ -4,7 +4,19 @@ import distfit
 # print(dir(distfit))
 
 
+# %% K distributions as input
+import scipy.stats as st
+from distfit import distfit
+X = np.random.normal(0, 2, 1000)
+y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
+dist = distfit(stats='ks', distr=['k','t','expon', 't', 'gamma', 'lognorm'])
+results = dist.fit_transform(X)
+
+dist.plot()
+dist.plot_summary()
+
 # %% Multiple distributions as input
+import scipy.stats as st
 from distfit import distfit
 X = np.random.normal(0, 2, 1000)
 y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
@@ -12,12 +24,30 @@ dist = distfit(stats='ks', distr=['expon', 't', 'gamma', 'lognorm'])
 # dist = distfit(stats='ks', distr=['lognorm'])
 results = dist.fit_transform(X)
 
-dist.plot()
+# dist.plot()
 # dist.plot_summary()
 
-results = dist.predict(y, alpha=0.01)
+# results = dist.predict(y, alpha=0.01)
 
 print(dist.model)
+# dist_t = st.t(dist.model['arg'], loc=dist.model['loc'], scale=dist.model['scale'])
+# dist_t = st.t(dist.model['params'])
+
+# dist.predict(y)['P']
+# dist_t.cdf(y)
+# dist.model['model'].cdf(y)
+
+# fit dist to data
+params = st.t.fit(X)
+# Separate parts of parameters
+arg = params[:-2]
+loc = params[-2]
+scale = params[-1]
+
+params==dist.model['params']
+
+# Calculate fitted PDF and error with fit in distribution
+# pdf = st.t.pdf(X, loc=loc, scale=scale, *arg)
 
 # %% Multiple distributions as input
 from distfit import distfit

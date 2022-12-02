@@ -857,10 +857,13 @@ def _get_distributions(distr):
     # Get specified list of distributions
     if isinstance(distr, list):
         for getdistr in distr:
-            try:
-                out_distr.append(getattr(st, getdistr))
-            except:
-                print('[distfit] >Error: [%s] does not exist! <skipping>' %(getdistr))
+            if getdistr=='k':
+                out_distr.append(k_distribution)
+            else:
+                try:
+                    out_distr.append(getattr(st, getdistr))
+                except:
+                    print('[distfit] >Error: [%s] does not exist! <skipping>' %(getdistr))
 
     elif distr=='full':
         # st.levy_l, st.levy_stable, st.frechet_r, st.frechet_l
@@ -912,8 +915,10 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
     model['params'] = (0.0, 1.0)
     best_score = np.inf
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'LLE', 'loc', 'scale', 'arg'])
-    max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
-
+    # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
+    max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
+    
+    
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
         logLik = np.nan
@@ -937,9 +942,12 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
                 pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
                 # Compute score based on fit
                 score = _compute_fit_score(stats, y_obs, pdf)
+                # Get name of the distribution
+                distr_name = distribution.name if isinstance(distribution.name, str) else distribution.name()
 
                 # Store results
-                df.values[i, 0] = distribution.name
+                # df.values[i, 0] = distribution.name
+                df.values[i, 0] = distr_name
                 df.values[i, 1] = score
                 df.values[i, 2] = logLik
                 df.values[i, 3] = loc
@@ -949,7 +957,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
                 # identify if this distribution is better
                 if best_score > score > 0:
                     best_score = score
-                    model['name'] = distribution.name
+                    model['name'] = distr_name
                     model['distr'] = distribution
                     model['model'] = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
                     model['params'] = params
@@ -959,10 +967,10 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
                     model['arg'] = arg
 
             if verbose>=3:
-                spaces_1 = ' ' * (max_name_len - len(distribution.name))
+                spaces_1 = ' ' * (max_name_len - len(distr_name))
                 scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
                 time_spent = time.time() - start_time
-                print("[distfit] >[%s%s] [%.4s sec] %s" %(distribution.name, spaces_1, time_spent, scores))
+                print("[distfit] >[%s%s] [%.4s sec] %s" %(distr_name, spaces_1, time_spent, scores))
 
         except Exception:
             pass
@@ -1376,3 +1384,50 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
 
     if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return fig, ax
+
+
+class k_distribution:
+    """K-Distribution."""
+
+    def __init__(self, loc=None, scale=None):
+        self.loc=loc
+        self.scale=scale
+
+    def fit(X):
+        """Fit for K-distribution.
+
+        Parameters
+        ----------
+        X : Vector
+            Numpy array containing data in vector form.
+
+        Returns
+        -------
+        loc : Loc parameter
+        scale : Scale parameter
+
+        References
+        ----------
+        * 1. Rangaswamy M, Weiner D, Ozturk A. Computer generation of correlated non-Gaussian radar clutter[J]. IEEE Transactions on Aerospace and Electronic Systems, 1995, 31(1): 106-116.
+        * 2. Lamont-Smith T. Translation to the normal distribution for radar clutter[J]. IEE Proceedings-Radar, Sonar and Navigation, 2000, 147(1): 17-22.
+        * 3. https://en.wikipedia.org/wiki/K-distribution
+        * 4. Redding N J. Estimating the parameters of the K distribution in the intensity domain[J]. 1999.
+
+        """
+        # K estimate
+        x_2 = np.mean(X**2)
+        x_4 = np.mean(X**4)
+        scale = (x_4 / (2 * (x_2)**2) - 1)**(-1)
+        loc = 0.5 * np.sqrt(x_2 / scale)
+        return loc, scale
+
+    def pdf(X, loc, scale):
+        """Compute Probability Denity Distribution."""
+        from scipy.special import gamma
+        from scipy.special import kv as besselk
+        f_k = 2 / (loc * gamma(scale)) * (X / (2 * loc))**scale * besselk(scale - 1, X / loc)
+        return f_k
+
+    def name():
+        """Name of distribution."""
+        return 'k'
