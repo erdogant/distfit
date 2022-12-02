@@ -1,5 +1,16 @@
-distfit's documentation!
-========================
+.. |fig1| image:: ../figs/distfit.png
+
+.. table::
+   :align: center
+
+   +----------+
+   | |fig1|   |
+   +----------+
+
+-----------------------------------
+
+|python| |pypi| |docs| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |colab| |DOI| |donate|
+
 
 ``distfit`` is a python package for probability density fitting of univariate distributions on non-censored data. With the Residual Sum of Squares (RSS) we determine the best fit across 89 theoretical distributions for which the best fitted theoretical distribution is returned with the loc, scale, arg parameters. The probability of new data-points can then be assed for significance.
 
@@ -8,21 +19,10 @@ distfit's documentation!
 	The ``fitdist`` library is directly build on the ``distfit`` library so there are no changes between the two except for naming. If you desire to use the ``fitdist`` library thats great! Just change all the examples in this documentation into ``fitdist``. Thats it. Have fun!
 
 
-You contribution is important
-==============================
-If you ❤️ this project, **star** this repo at the `github page <https://github.com/erdogant/distfit/>`_ and have a look at the `sponser page <https://erdogant.github.io/distfit/pages/html/Documentation.html>`_!
 
 
-
-Github
-======
-Please report bugs, issues and feature extensions at `github <https://github.com/erdogant/distfit/>`_.
-
-
-
-
-Content
-=======
+Contents
+========
 
 .. toctree::
    :maxdepth: 1
@@ -99,3 +99,56 @@ Indices and tables
 	</center>
 	<hr>
 
+
+
+.. |python| image:: https://img.shields.io/pypi/pyversions/distfit.svg
+    :alt: |Python
+    :target: https://erdogant.github.io/distfit/
+
+.. |pypi| image:: https://img.shields.io/pypi/v/distfit.svg
+    :alt: |Python Version
+    :target: https://pypi.org/project/distfit/
+
+.. |docs| image:: https://img.shields.io/badge/Sphinx-Docs-blue.svg
+    :alt: Sphinx documentation
+    :target: https://erdogant.github.io/distfit/
+
+.. |LOC| image:: https://sloc.xyz/github/erdogant/distfit/?category=code
+    :alt: lines of code
+    :target: https://github.com/erdogant/distfit
+
+.. |downloads_month| image:: https://static.pepy.tech/personalized-badge/distfit?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads/month
+    :alt: Downloads per month
+    :target: https://pepy.tech/project/distfit
+
+.. |downloads_total| image:: https://static.pepy.tech/personalized-badge/distfit?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=Downloads
+    :alt: Downloads in total
+    :target: https://pepy.tech/project/distfit
+
+.. |license| image:: https://img.shields.io/badge/license-MIT-green.svg
+    :alt: License
+    :target: https://github.com/erdogant/distfit/blob/master/LICENSE
+
+.. |forks| image:: https://img.shields.io/github/forks/erdogant/distfit.svg
+    :alt: Github Forks
+    :target: https://github.com/erdogant/distfit/network
+
+.. |open issues| image:: https://img.shields.io/github/issues/erdogant/distfit.svg
+    :alt: Open Issues
+    :target: https://github.com/erdogant/distfit/issues
+
+.. |project status| image:: http://www.repostatus.org/badges/latest/active.svg
+    :alt: Project Status
+    :target: http://www.repostatus.org/#active
+
+.. |donate| image:: https://img.shields.io/badge/Support%20this%20project-grey.svg?logo=github%20sponsors
+    :alt: donate
+    :target: https://erdogant.github.io/distfit/pages/html/Documentation.html#
+
+.. |colab| image:: https://colab.research.google.com/assets/colab-badge.svg
+    :alt: Colab example
+    :target: https://erdogant.github.io/distfit/pages/html/Documentation.html#colab-notebook
+
+.. |DOI| image:: https://zenodo.org/badge/231843440.svg
+    :alt: Cite
+    :target: https://zenodo.org/badge/latestdoi/231843440

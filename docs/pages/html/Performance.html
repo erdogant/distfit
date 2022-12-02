@@ -15,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -118,7 +119,7 @@
            <div itemprop="articleBody">
              
   <section id="parameter-fitting">
-<h1>Parameter fitting<a class="headerlink" href="#parameter-fitting" title="Permalink to this headline"></a></h1>
+<h1>Parameter fitting<a class="headerlink" href="#parameter-fitting" title="Permalink to this heading"></a></h1>
 <p>The <strong>performance</strong> of <code class="docutils literal notranslate"><span class="pre">distfit</span></code> can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf).</p>
 <p>Lets evalute the performance of <code class="docutils literal notranslate"><span class="pre">distfit</span></code> of the detected parameters when we draw random samples from a normal (Gaussian) distribution with <em>mu*=0 and *std*=2. We would expect to find *mu</em> and <em>std</em> very close to the input values.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
@@ -151,7 +152,7 @@
 </figure>
 </section>
 <section id="probability-density-function-fitting">
-<h1>Probability Density Function fitting<a class="headerlink" href="#probability-density-function-fitting" title="Permalink to this headline"></a></h1>
+<h1>Probability Density Function fitting<a class="headerlink" href="#probability-density-function-fitting" title="Permalink to this heading"></a></h1>
 <p>To measure the goodness of fit of <em>pdfs</em>, we will evaluate multiple <em>pdfs</em> using the <strong>RSS</strong> metrics. The goodness of fit scores are stored in <code class="docutils literal notranslate"><span class="pre">dist.summary</span></code>. In this example, we will <strong>not</strong> specify any distribution but only provide the empirical data to the model.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -179,7 +180,7 @@
 </figure>
 </section>
 <section id="varying-sample-sizes">
-<h1>Varying sample sizes<a class="headerlink" href="#varying-sample-sizes" title="Permalink to this headline"></a></h1>
+<h1>Varying sample sizes<a class="headerlink" href="#varying-sample-sizes" title="Permalink to this heading"></a></h1>
 <p>The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the <em>mu</em>, <em>std</em>. In this experiment we are generating random continuous values from a normal distribution. We will fixate fitting normal distribution and examine the loc, and scale parameters.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create random data with varying number of samples</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
@@ -210,7 +211,7 @@
 </table>
 </section>
 <section id="smoothing">
-<h1>Smoothing<a class="headerlink" href="#smoothing" title="Permalink to this headline"></a></h1>
+<h1>Smoothing<a class="headerlink" href="#smoothing" title="Permalink to this heading"></a></h1>
 <p>If the number of samples is very low, it can be difficult to get a good fit on your data.
 A solution is to play with the <code class="docutils literal notranslate"><span class="pre">bin</span></code> size, eg. increase bin size.
 Another manner is by smoothing the histogram with the <code class="docutils literal notranslate"><span class="pre">smooth</span></code> parameter. The default is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.
@@ -253,7 +254,7 @@ It is interesting to see that there is no clear contribution of the smoothing. T
 </figure>
 </section>
 <section id="integer-fitting">
-<h1>Integer fitting<a class="headerlink" href="#integer-fitting" title="Permalink to this headline"></a></h1>
+<h1>Integer fitting<a class="headerlink" href="#integer-fitting" title="Permalink to this heading"></a></h1>
 <p>In this example we will demonstrate the effect of fitting a distribution on integer values.
 For demonstration purposes, lets generate random integer values from a uniform distribution, and examine the RSS scores. We will iterate over sample sizes and smoothing windows to analyze the performance.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>

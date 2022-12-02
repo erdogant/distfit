@@ -15,6 +15,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -117,7 +118,7 @@
            <div itemprop="articleBody">
              
   <section id="module-distfit.distfit">
-<span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this headline"></a></h1>
+<span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this heading"></a></h1>
 <p>Compute best fit to your empirical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="distfit.distfit.BinomPMF">
@@ -149,7 +150,7 @@ Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down
 <li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
 ‘popular’, ‘full’, or specify the theoretical distribution: ‘norm’, ‘t’ or in a list [‘norm’, ‘t’, ..’]
 if method=”discrete”, then binomial is used.
-See docs for more information about ‘popular’ and ‘full’: <a class="reference external" href="https://erdogant.github.io/distfit/pages/html/Parametric.html">https://erdogant.github.io/distfit/pages/html/Parametric.html</a></p></li>
+See documentation for more information about ‘popular’ and ‘full’.</p></li>
 <li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.</p></li>
 <li><p><strong>stats</strong> (<em>str</em><em>, </em><em>default: 'RSS'</em>) – Specify the scoring statistics: ‘RSS’, ‘wasserstein’, ‘ks’, ‘energy’.
 ks stands for Kolmogorov-Smirnov statistic</p></li>
@@ -197,6 +198,10 @@ However, using different measures, such as minimum sum of squared errors (SSE) a
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Documentation: <a class="reference external" href="https://erdogant.github.io/distfit/pages/html/Parametric.html">https://erdogant.github.io/distfit/pages/html/Parametric.html</a></p></li>
+</ul>
 <dl class="py method">
 <dt class="sig sig-object py" id="distfit.distfit.distfit.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.fit" title="Permalink to this definition"></a></dt>
@@ -263,11 +268,8 @@ arg : arg function parameter</p></li>
 <li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Show message. A higher number gives more information. The default is 3.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Object.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -288,11 +290,8 @@ arg : arg function parameter</p></li>
 <li><p><strong>verbose</strong> (<em>Int</em><em> [</em><em>1-5</em><em>]</em><em>, </em><em>optional</em><em> (</em><em>default: 3</em><em>)</em>) – Print information to screen.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple (fig, ax)</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple (fig, ax)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -312,11 +311,8 @@ arg : arg function parameter</p></li>
 <li><p><strong>verbose</strong> (<em>Int</em><em> [</em><em>1-5</em><em>]</em><em>, </em><em>optional</em><em> (</em><em>default: 3</em><em>)</em>) – Print information to screen.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple (fig, ax)</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple (fig, ax)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -360,11 +356,8 @@ theoretical distribution in case method type is <code class="docutils literal no
 <li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Show message. A higher number gives more informatie. The default is 3.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -422,6 +415,61 @@ arg : arg function parameter</p></li>
 <dt class="sig sig-object py" id="distfit.distfit.fit_transform_binom">
 <span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">fit_transform_binom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RSS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.fit_transform_binom" title="Permalink to this definition"></a></dt>
 <dd><p>Convert array of samples (nonnegative ints) to histogram and fit.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="distfit.distfit.k_distribution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">k_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.k_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>K-Distribution.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="distfit.distfit.k_distribution.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.k_distribution.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Fit for K-distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>Vector</em>) – Numpy array containing data in vector form.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>loc</strong> (<em>Loc parameter</em>)</p></li>
+<li><p><strong>scale</strong> (<em>Scale parameter</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><ol class="arabic simple">
+<li><p>Rangaswamy M, Weiner D, Ozturk A. Computer generation of correlated non-Gaussian radar clutter[J]. IEEE Transactions on Aerospace and Electronic Systems, 1995, 31(1): 106-116.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>Lamont-Smith T. Translation to the normal distribution for radar clutter[J]. IEE Proceedings-Radar, Sonar and Navigation, 2000, 147(1): 17-22.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="3">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/K-distribution">https://en.wikipedia.org/wiki/K-distribution</a></p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="4">
+<li><p>Redding N J. Estimating the parameters of the K distribution in the intensity domain[J]. 1999.</p></li>
+</ol>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="distfit.distfit.k_distribution.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.k_distribution.name" title="Permalink to this definition"></a></dt>
+<dd><p>Name of distribution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="distfit.distfit.k_distribution.pdf">
+<span class="sig-name descname"><span class="pre">pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.k_distribution.pdf" title="Permalink to this definition"></a></dt>
+<dd><p>Compute Probability Denity Distribution.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">

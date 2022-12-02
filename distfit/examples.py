@@ -85,10 +85,9 @@ dist.plot_summary()
 
 # %% Multiple distributions as input
 from distfit import distfit
-X = np.random.normal(0, 2, 1000)
+X = np.random.normal(0, 2, 10000)
 y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
-dist = distfit(stats='RSS', distr=['expon', 't', 'gamma', 'lognorm'])
-dist = distfit(stats='RSS', distr=['lognorm'])
+dist = distfit(stats='RSS', distr=['norm','expon'])
 results = dist.fit_transform(X)
 dist.plot()
 

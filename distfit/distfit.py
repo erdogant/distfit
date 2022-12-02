@@ -917,8 +917,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'LLE', 'loc', 'scale', 'arg'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
-    
-    
+
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
         logLik = np.nan
