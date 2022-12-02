@@ -213,10 +213,16 @@ Contributors
 =============
 
 Setting up and maintaining distfit has been possible thanks to users and contributors.
+
 Thanks to all:
 
-.. image:: https://contrib.rocks/image?repo=erdogant/distfit
-    :target: https://github.com/erdogant/distfit/graphs/contributors
+
+<p align="left">
+  <a href="https://github.com/erdogant/distfit/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=erdogant/distfit" />
+  </a>
+</p>
+
 
 ### Citation
 Please cite ``distfit`` in your publications if this is useful for your research. See column right for citation information.
