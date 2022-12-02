@@ -209,8 +209,14 @@ dist.fit_transform(X)
 
 <hr>
 
-### Contribute
-* All kinds of contributions are welcome!
+Contributors
+=============
+
+Setting up and maintaining distfit has been possible thanks to users and contributors.
+Thanks to all:
+
+.. image:: https://contrib.rocks/image?repo=erdogant/distfit
+    :target: https://github.com/erdogant/distfit/graphs/contributors
 
 ### Citation
 Please cite ``distfit`` in your publications if this is useful for your research. See column right for citation information.
