@@ -133,30 +133,75 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="distfit.distfit.distfit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">distfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parametric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multtest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'popular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RSS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_perm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">todf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'numpy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">distfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parametric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multtest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'popular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'RSS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">todf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mhist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition"></a></dt>
 <dd><p>Probability density function.</p>
 <p>Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics
 such as residual sum of squares (RSS), making plots, and hypothesis testing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default: 'parametric'</em>) – Specify the method type: ‘parametric’,’quantile’,’percentile’,’discrete’</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default: 'parametric'</em>) – <dl class="simple">
+<dt>Specify the method type.</dt><dd><ul>
+<li><p>’parametric’</p></li>
+<li><p>’quantile’</p></li>
+<li><p>’percentile’</p></li>
+<li><p>’discrete’</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>default: 0.05</em>) – Significance alpha.</p></li>
-<li><p><strong>multtest</strong> (<em>str</em><em>, </em><em>default: 'fdr_bh'</em>) – None, ‘bonferroni’, ‘sidak’, ‘holm-sidak’, ‘holm’, ‘simes-hochberg’,
-‘hommel’, ‘fdr_bh’, ‘fdr_by’, ‘fdr_tsbh’, ‘fdr_tsbky’</p></li>
+<li><p><strong>multtest</strong> (<em>str</em><em>, </em><em>default: 'fdr_bh'</em>) – <dl class="simple">
+<dt>Multiple test correction.</dt><dd><ul>
+<li><p>None</p></li>
+<li><p>’bonferroni’</p></li>
+<li><p>’sidak’</p></li>
+<li><p>’holm-sidak’</p></li>
+<li><p>’holm’</p></li>
+<li><p>’simes-hochberg’</p></li>
+<li><p>’hommel’</p></li>
+<li><p>’fdr_bh’</p></li>
+<li><p>’fdr_by’</p></li>
+<li><p>’fdr_tsbh’</p></li>
+<li><p>’fdr_tsbky’</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 50</em>) – Bin size to determine the empirical historgram.</p></li>
-<li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – Set the directionality to test for significance.
-Upperbounds = ‘up’, ‘high’ or ‘right’, whereas lowerbounds = ‘down’, ‘low’ or ‘left’</p></li>
-<li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – The (set) of distribution to test. A set of distributions can be tested by:
-‘popular’, ‘full’, or specify the theoretical distribution: ‘norm’, ‘t’ or in a list [‘norm’, ‘t’, ..’]
-if method=”discrete”, then binomial is used.
-See documentation for more information about ‘popular’ and ‘full’.</p></li>
-<li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.</p></li>
-<li><p><strong>stats</strong> (<em>str</em><em>, </em><em>default: 'RSS'</em>) – Specify the scoring statistics: ‘RSS’, ‘wasserstein’, ‘ks’, ‘energy’.
-ks stands for Kolmogorov-Smirnov statistic</p></li>
+<li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – <dl class="simple">
+<dt>Set the directionality to test for significance.</dt><dd><ul>
+<li><p>’up’, ‘high’, ‘right’: Upperbounds</p></li>
+<li><p>’down’, ‘low’ or ‘left’: lowerbounds</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – <p>The (set) of distribution to test. A set of distributions can be tested by using a “popular” list or by specifying the theoretical distribution:
+In case using method=”discrete”, then binomial is used. See documentation for more information about ‘popular’ and ‘full’ (link reference below).</p>
+<blockquote>
+<div><ul>
+<li><p>’popular’</p></li>
+<li><p>’full’</p></li>
+<li><p>’norm’, ‘t’: Test for a specific distribution.</p></li>
+<li><p>[‘norm’, ‘t’, ..]: Test for a list with distributions.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.
+The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.</p></li>
+<li><p><strong>stats</strong> (<em>str</em><em>, </em><em>default: 'RSS'</em>) – <dl class="simple">
+<dt>Specify the scoring statistics.</dt><dd><ul>
+<li><p>’RSS’</p></li>
+<li><p>’wasserstein’</p></li>
+<li><p>’ks’: Kolmogorov-Smirnov statistic</p></li>
+<li><p>’energy’</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “quantile”</p></li>
-<li><p><strong>weighted</strong> (<em>Bool</em><em>, </em><em>(</em><em>default: True</em><em>)</em>) – Only used in discrete fitting. In principle, the most best fit will be obtained if you set weighted=True.
-However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.</p></li>
+<li><p><strong>weighted</strong> (<em>Bool</em><em>, </em><em>(</em><em>default: True</em><em>)</em>) – Only used in discrete fitting, method=”discrete”. In principle, the best fit will be obtained if you set weighted=True. However, when using stats=”RSS”, you can set weighted=False.</p></li>
 <li><p><strong>f</strong> (<em>float</em><em>, </em><em>(</em><em>default: 1.5</em><em>)</em>) – Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.</p></li>
 </ul>
 </dd>
