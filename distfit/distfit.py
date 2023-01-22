@@ -37,32 +37,52 @@ class distfit():
     Parameters
     ----------
     method : str, default: 'parametric'
-        Specify the method type: 'parametric','quantile','percentile','discrete'
+        Specify the method type.
+            * 'parametric'
+            * 'quantile'
+            * 'percentile'
+            * 'discrete'
     alpha : float, default: 0.05
         Significance alpha.
     multtest : str, default: 'fdr_bh'
-        None, 'bonferroni', 'sidak', 'holm-sidak', 'holm', 'simes-hochberg',
-        'hommel', 'fdr_bh', 'fdr_by', 'fdr_tsbh', 'fdr_tsbky'
+        Multiple test correction.
+            * None
+            * 'bonferroni'
+            * 'sidak'
+            * 'holm-sidak'
+            * 'holm'
+            * 'simes-hochberg'
+            * 'hommel'
+            * 'fdr_bh'
+            * 'fdr_by'
+            * 'fdr_tsbh'
+            * 'fdr_tsbky'
     bins : int, default: 50
         Bin size to determine the empirical historgram.
     bound : str, default: 'both'
         Set the directionality to test for significance.
-        Upperbounds = 'up', 'high' or 'right', whereas lowerbounds = 'down', 'low' or 'left'
+            * 'up', 'high', 'right': Upperbounds
+            * 'down', 'low' or 'left': lowerbounds
     distr : str, default: 'popular'
-        The (set) of distribution to test. A set of distributions can be tested by:
-        'popular', 'full', or specify the theoretical distribution: 'norm', 't' or in a list ['norm', 't', ..']
-        if method="discrete", then binomial is used.
-        See documentation for more information about 'popular' and 'full'.
+        The (set) of distribution to test. A set of distributions can be tested by using a "popular" list or by specifying the theoretical distribution:
+        In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
+            * 'popular'
+            * 'full'
+            * 'norm', 't': Test for a specific distribution.
+            * ['norm', 't', ..]: Test for a list with distributions.
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
+        The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.
     stats : str, default: 'RSS'
-        Specify the scoring statistics: 'RSS', 'wasserstein', 'ks', 'energy'.
-        ks stands for Kolmogorov-Smirnov statistic
+        Specify the scoring statistics.
+            * 'RSS'
+            * 'wasserstein'
+            * 'ks': Kolmogorov-Smirnov statistic
+            * 'energy'
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "quantile"
     weighted : Bool, (default: True)
-        Only used in discrete fitting. In principle, the most best fit will be obtained if you set weighted=True.
-        However, using different measures, such as minimum sum of squared errors (SSE) as a metric; you can set weighted=False.
+        Only used in discrete fitting, method="discrete". In principle, the best fit will be obtained if you set weighted=True. However, when using stats="RSS", you can set weighted=False.
     f : float, (default: 1.5)
         Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
 
