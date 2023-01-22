@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://erdogant.github.io/pca/">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="600" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="400" />
   </a>
 </p>
 
