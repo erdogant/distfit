@@ -1,4 +1,8 @@
-# distfit - Probability density fitting
+<p align="center">
+  <a href="https://erdogant.github.io/pca/">
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="600" />
+  </a>
+</p>
 
 [![Python](https://img.shields.io/pypi/pyversions/distfit)](https://img.shields.io/pypi/pyversions/distfit)
 [![Pypi](https://img.shields.io/pypi/v/distfit)](https://pypi.org/project/distfit/)
