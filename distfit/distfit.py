@@ -135,7 +135,20 @@ class distfit():
 
     """
 
-    def __init__(self, method='parametric', alpha=0.05, multtest='fdr_bh', bins=50, bound='both', distr='popular', stats='RSS', smooth=None, n_perm=10000, todf=False, weighted=True, f=1.5, mhist='numpy'):
+    def __init__(self, method='parametric',
+                 alpha: float = 0.05,
+                 multtest: str = 'fdr_bh',
+                 bins: int = 50,
+                 bound: str = 'both',
+                 distr: str = 'popular',
+                 stats: str = 'RSS',
+                 smooth: int = None,
+                 n_perm: int = 10000,
+                 todf: bool = False,
+                 weighted: bool = True,
+                 f: float = 1.5,
+                 mhist: str = 'numpy'
+                 ):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
         self.method = method
@@ -180,7 +193,7 @@ class distfit():
         elif self.method=='percentile':
             pass
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
+            raise Exception('[distfit] Error: method parameter can only be "parametric", "discrete", "quantile" or "percentile".')
 
     # Transform
     def transform(self, X, verbose=3):
@@ -234,7 +247,7 @@ class distfit():
         # Get histogram of original X
         X_bins, y_obs = _get_hist_params(X, self.bins, mhist=self.mhist)
         # Smoothing by interpolation
-        X_bins, y_obs = smoothline(X_bins, y_obs, window=self.smooth, interpol=1, verbose=verbose)
+        X_bins, y_obs = smoothline(X_bins, y_obs, interpol=1, window=self.smooth, verbose=verbose)
         self.histdata = (y_obs, X_bins)
 
         if self.method=='parametric':
@@ -937,7 +950,8 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'LLE', 'loc', 'scale', 'arg'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
-
+    
+    
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
         logLik = np.nan

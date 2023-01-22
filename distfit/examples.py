@@ -10,7 +10,7 @@ from distfit import distfit
 X = np.random.normal(0, 2, 1000)
 y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
 dist = distfit(stats='ks', distr=['k','t','expon', 't', 'gamma', 'lognorm'])
-results = dist.fit_transform(X)
+results = dist.fit_transform(X, verbose=0)
 
 dist.plot()
 dist.plot_summary()
