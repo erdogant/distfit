@@ -408,11 +408,33 @@ class distfit():
         return X
 
     # Plot
-    def plot(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=None, ax=None, verbose=3):
+    def plot(self,
+             title='',
+             emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'},
+             pdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
+             bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'},
+             figsize=(20, 15),
+             xlim=None,
+             ylim=None,
+             fig=None,
+             ax=None,
+             verbose=3):
         """Make plot.
 
         Parameters
         ----------
+        emp_properties : dict
+            The line properties of the emperical line.
+                * None: Do not plot.
+                * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'}: default
+        pdf_properties : dict
+            The line properties of the pdf.
+                * None: Do not plot.
+                * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
+        bar_properties : dict
+            bar properties of the histogram.
+                * None: Do not plot.
+                * {'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}: default
         title : String, optional (default: '')
             Title of the plot.
         figsize : tuple, optional (default: (10,8))
@@ -434,9 +456,10 @@ class distfit():
 
         """
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
+
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, verbose=verbose)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, verbose=verbose)
         elif (self.method=='discrete'):
             fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
         elif (self.method=='quantile'):
@@ -761,8 +784,29 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
     return fig, ax
 
 
+# %% Plot bar
+def _plot_bar(histdata, bar_properties, ax):
+    if bar_properties is not None:
+        bar_properties = {**{'color': '#ffffff', 'edgecolor': '#808080', 'linewidth': 1, 'align': 'edge', 'label': 'Histogram'}, **bar_properties}
+        ax.bar(histdata[1][:-1], histdata[0][:-1], width=np.diff(histdata[1]), **bar_properties)
+
+
+def _plot_pdf(x, y, label, line_properties, ax):
+    if line_properties is not None:
+        # Changing label of the pdf is not allowed.
+        if line_properties.get('label', None) is not None: line_properties.pop('label')
+        line_properties = {**{'linestyle': '-', 'color': '#004481', 'linewidth': 2}, **line_properties}
+        ax.plot(x, y, label=label, **line_properties)
+
+
+def _plot_emp(x, y, line_properties, ax):
+    if line_properties is not None:
+        line_properties = {**{'linestyle': '-', 'color': '#000000', 'linewidth': 1.3, 'label': 'Emperical distribution'}, **line_properties}
+        ax.plot(x, y, **line_properties)
+
+
 # %% Plot
-def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=None, ax=None, verbose=3):
+def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, verbose=3):
     # Store output and function parameters
     model = self.model
     Param = {}
@@ -773,7 +817,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=
 
     # Make figure
     best_dist = model['distr']
-    best_fit_name = model['name']
+    best_fit_name = model['name'].title()
     best_fit_param = model['params']
     arg = model['params'][:-2]
     loc = model['params'][-2]
@@ -796,18 +840,20 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=
     if ax is None:
         fig, ax = plt.subplots(figsize=figsize)
 
+    # Plot histogram empirical data
+    _plot_bar(self.histdata, bar_properties, ax)
     # Plot empirical data
-    ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='empirical distribution')
+    _plot_emp(self.histdata[1], self.histdata[0], emp_properties, ax)
     # Plot pdf
-    ax.plot(x, y, 'b-', linewidth=1, label=best_fit_name)
+    _plot_pdf(x, y, best_fit_name, pdf_properties, ax)
 
     # Plot vertical line to stress the cut-off point
     if self.model['CII_min_alpha'] is not None:
         label = 'CII low ' + '(' + str(self.alpha) + ')'
-        ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+        ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='#880808', linestyle='dashed', label=label)
     if self.model['CII_max_alpha'] is not None:
         label = 'CII high ' + '(' + str(self.alpha) + ')'
-        ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+        ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='#880808', linestyle='dashed', label=label)
 
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
@@ -1129,8 +1175,6 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
 def smoothline(xs, ys=None, interpol=3, window=1, verbose=3):
     """Smoothing 1D vector.
 
-    Description
-    -----------
     Smoothing a 1d vector can be challanging if the number of data is low sampled.
     This smoothing function therefore contains two steps. First interpolation of the
     input line followed by a convolution.
