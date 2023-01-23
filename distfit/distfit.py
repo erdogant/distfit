@@ -29,8 +29,6 @@ warnings.filterwarnings('ignore')
 class distfit():
     """Probability density function.
 
-    Description
-    -----------
     Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics
     such as residual sum of squares (RSS), making plots, and hypothesis testing.
 
@@ -42,6 +40,27 @@ class distfit():
             * 'quantile'
             * 'percentile'
             * 'discrete'
+    distr : str, default: 'popular'
+        The (set) of distribution to test. A set of distributions can be tested by using a "popular" list or by specifying the theoretical distribution:
+        In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
+            * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, st.oggamma]
+            * 'full'
+            * 'norm', 't': Test for a specific distribution.
+            * ['norm', 't', ..]: Test for a list with distributions.
+    stats : str, default: 'RSS'
+        Specify the scoring statistics for the goodness of fit test.
+            * 'RSS'
+            * 'wasserstein'
+            * 'ks': Kolmogorov-Smirnov statistic
+            * 'energy'
+    bins : int, default: 'auto'
+        Bin size to determine the empirical historgram.
+            * 'auto': Determine the bin size automatically.
+            * 50: Set specific bin size
+    bound : str, default: 'both'
+        Set the directionality to test for significance.
+            * 'up', 'high', 'right': Upperbounds
+            * 'down', 'low' or 'left': lowerbounds
     alpha : float, default: 0.05
         Significance alpha.
     multtest : str, default: 'fdr_bh'
@@ -57,28 +76,9 @@ class distfit():
             * 'fdr_by'
             * 'fdr_tsbh'
             * 'fdr_tsbky'
-    bins : int, default: 50
-        Bin size to determine the empirical historgram.
-    bound : str, default: 'both'
-        Set the directionality to test for significance.
-            * 'up', 'high', 'right': Upperbounds
-            * 'down', 'low' or 'left': lowerbounds
-    distr : str, default: 'popular'
-        The (set) of distribution to test. A set of distributions can be tested by using a "popular" list or by specifying the theoretical distribution:
-        In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
-            * 'popular'
-            * 'full'
-            * 'norm', 't': Test for a specific distribution.
-            * ['norm', 't', ..]: Test for a list with distributions.
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
         The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.
-    stats : str, default: 'RSS'
-        Specify the scoring statistics.
-            * 'RSS'
-            * 'wasserstein'
-            * 'ks': Kolmogorov-Smirnov statistic
-            * 'energy'
     n_perm : int, default: 10000
         Number of permutations to model null-distribution in case of method is "quantile"
     weighted : Bool, (default: True)
@@ -135,13 +135,14 @@ class distfit():
 
     """
 
-    def __init__(self, method='parametric',
-                 alpha: float = 0.05,
-                 multtest: str = 'fdr_bh',
-                 bins: int = 50,
-                 bound: str = 'both',
+    def __init__(self,
+                 method='parametric',
                  distr: str = 'popular',
                  stats: str = 'RSS',
+                 bins: int = 'auto',
+                 bound: str = 'both',
+                 alpha: float = 0.05,
+                 multtest: str = 'fdr_bh',
                  smooth: int = None,
                  n_perm: int = 10000,
                  todf: bool = False,
@@ -199,8 +200,6 @@ class distfit():
     def transform(self, X, verbose=3):
         """Determine best model for input data X.
 
-        Description
-        -----------
         The input data X can be modellend in two manners:
 
         **parametric**
@@ -346,8 +345,6 @@ class distfit():
     def predict(self, y, alpha=None, verbose=3):
         """Compute probability for response variables y, using the specified method.
 
-        Description
-        -----------
         Computes P-values for [y] based on the fitted distribution from X.
         The empirical distribution of X is used to estimate the loc/scale/arg parameters for a
         theoretical distribution in case method type is ``parametric``.
@@ -676,15 +673,12 @@ def _predict_quantile(self, y, verbose=3):
 def _predict_percentile(self, y, verbose=3):
     """Compute Probability based on quantiles.
 
-    Description
-    -----------
     Suppose you have 2 data sets with a unknown distribution and you want to test
     if some arbitrary statistic (e.g 7th percentile) is the same in the 2 data sets.
     An appropirate test statistic is the difference between the 7th percentile,
     and if we knew the null distribution of this statisic, we could test for the
     null hypothesis that the statistic = 0. Permuting the labels of the 2 data sets
     allows us to create the empirical null distribution.
-
 
     """
     # Set bounds
