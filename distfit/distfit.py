@@ -45,8 +45,8 @@ class distfit():
         In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
             * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, st.oggamma]
             * 'full'
-            * 'norm', 't': Test for a specific distribution.
-            * ['norm', 't', ..]: Test for a list with distributions.
+            * 'norm', 't', 'k': Test for one specific distribution.
+            * ['norm', 't', 'k', ...]: Test for a list of distributions.
     stats : str, default: 'RSS'
         Specify the scoring statistics for the goodness of fit test.
             * 'RSS'
@@ -416,6 +416,7 @@ class distfit():
              figsize=(20, 15),
              xlim=None,
              ylim=None,
+             grid=True,
              fig=None,
              ax=None,
              verbose=3):
@@ -443,6 +444,8 @@ class distfit():
             Limit figure in x-axis.
         ylim : Float, optional (default: None)
             Limit figure in y-axis.
+        grid : Bool, optional (default: True)
+            Show the grid on the figure.
         fig : Figure, optional (default: None)
             Matplotlib figure (Note - ignored when method is `discrete`)
         ax : Axes, optional (default: None)
@@ -459,13 +462,13 @@ class distfit():
 
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, verbose=verbose)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, verbose=verbose)
         elif (self.method=='discrete'):
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, verbose=verbose)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, verbose=verbose)
         elif (self.method=='quantile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, verbose=verbose)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, verbose=verbose)
         elif (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, verbose=verbose)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, verbose=verbose)
         else:
             if verbose>=3: print('[distfit] >Warning: nothing to plot. Method not yet implemented for %s' %(self.method))
             fig, ax = None, None
@@ -473,7 +476,7 @@ class distfit():
         return fig, ax
 
     # Plot summary
-    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, fig=None, ax=None, verbose=3):
+    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, fig=None, ax=None, grid=True, verbose=3):
         """Plot summary results.
 
         Parameters
@@ -513,7 +516,7 @@ class distfit():
             plt.margins(0.2)
             # Tweak spacing to prevent clipping of tick-labels
             plt.subplots_adjust(bottom=0.15)
-            ax.grid(True)
+            ax.grid(grid)
             plt.xlabel('Distribution name')
             plt.ylabel(('%s (lower is better)' %(self.stats)))
             plt.title('Best fit: %s' %(self.model['name']))
@@ -745,7 +748,7 @@ def _predict_percentile(self, y, verbose=3):
 
 
 # Plot
-def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, verbose=3):
+def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, verbose=3):
     if ax is None:
         fig, ax = plt.subplots(figsize=figsize)
 
@@ -775,7 +778,7 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
     if ylim is not None:
         ax.set_ylim(ylim[0], ylim[1])
 
-    ax.grid(True)
+    ax.grid(grid)
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
     ax.set_title(title)
@@ -785,10 +788,10 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
 
 
 # %% Plot bar
-def _plot_bar(histdata, bar_properties, ax):
+def _plot_bar(binedges, histvals, bar_properties, ax):
     if bar_properties is not None:
         bar_properties = {**{'color': '#ffffff', 'edgecolor': '#808080', 'linewidth': 1, 'align': 'edge', 'label': 'Histogram'}, **bar_properties}
-        ax.bar(histdata[1][:-1], histdata[0][:-1], width=np.diff(histdata[1]), **bar_properties)
+        ax.bar(binedges[:-1], histvals[:-1], width=np.diff(binedges), **bar_properties)
 
 
 def _plot_pdf(x, y, label, line_properties, ax):
@@ -801,12 +804,12 @@ def _plot_pdf(x, y, label, line_properties, ax):
 
 def _plot_emp(x, y, line_properties, ax):
     if line_properties is not None:
-        line_properties = {**{'linestyle': '-', 'color': '#000000', 'linewidth': 1.3, 'label': 'Emperical distribution'}, **line_properties}
+        line_properties = {**{'linestyle': '-', 'color': '#000000', 'linewidth': 1.5, 'label': 'Emperical distribution'}, **line_properties}
         ax.plot(x, y, **line_properties)
 
 
 # %% Plot
-def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, verbose=3):
+def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid=True, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, verbose=3):
     # Store output and function parameters
     model = self.model
     Param = {}
@@ -841,7 +844,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=
         fig, ax = plt.subplots(figsize=figsize)
 
     # Plot histogram empirical data
-    _plot_bar(self.histdata, bar_properties, ax)
+    _plot_bar(self.histdata[1], self.histdata[0], bar_properties, ax)
     # Plot empirical data
     _plot_emp(self.histdata[1], self.histdata[0], emp_properties, ax)
     # Plot pdf
@@ -885,7 +888,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, fig=
             ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     ax.legend()
-    ax.grid(True)
+    ax.grid(grid)
 
     if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return (fig, ax)
@@ -899,7 +902,7 @@ def _format_data(data):
     # Make sure its a vector
     data = data.ravel()
     data = data.astype(float)
-    return(data)
+    return data
 
 
 def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f):
@@ -1440,7 +1443,7 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
             ax[0].scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
 
     ax[0].legend()
-    ax[0].grid(True)
+    ax[0].grid(grid)
 
     # Second image
     ax[1].set_xlabel('n')
@@ -1450,7 +1453,7 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
     ax[1].vlines(n_fit, 0, figdata['scores'].max(), 'r', linestyles='dashed')
     ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), 'r', linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
     ax[1].legend()
-    ax[1].grid(True)
+    ax[1].grid(grid)
     fig.show()
 
     if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
