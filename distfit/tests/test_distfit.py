@@ -1,8 +1,49 @@
 import numpy as np
 from distfit import distfit
 import unittest
+from scipy.stats import binom
 
+def show_figures(dist):
+    dist.plot()
+    dist.plot(cii_properties=None, emp_properties={}, pdf_properties={}, bar_properties={})
+    dist.plot(cii_properties={}, emp_properties=None, pdf_properties={}, bar_properties={})
+    dist.plot(cii_properties={}, emp_properties={}, pdf_properties=None, bar_properties={})
+    dist.plot(cii_properties={}, emp_properties={}, pdf_properties={}, bar_properties=None)
+    dist.plot_summary()
+    
 class Test_DISTFIT(unittest.TestCase):
+
+    def test_figures(self):
+        # X = np.random.normal(0, 2, 1000)
+        # y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+        dist = distfit()
+        X = binom(8, 0.5).rvs(1000)
+        dist = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
+        model = dist.fit_transform(X, verbose=3)
+        show_figures(dist)
+
+        X = np.random.uniform(0, 1000, 10000)
+        dist = distfit(bound=None, distr='uniform')
+        results = dist.fit_transform(X)
+        show_figures(dist)
+        
+        X = np.random.exponential(0.5, 10000)
+        dist = distfit(bound=None, distr='expon')
+        results = dist.fit_transform(X)
+        dist.plot(figsize=(15, 12), grid=False)
+        show_figures(dist)
+        
+        X = np.random.normal(0, 2, 10000)
+        dist = distfit(bound=None, distr='norm')
+        results = dist.fit_transform(X)
+        show_figures(dist)
+        
+        dist.plot(bar_properties={'color': '#808080', 'label': None},
+                  pdf_properties={'color': 'r'},
+                  emp_properties={'color': '#000000', 'linewidth': 3},
+                  cii_properties={'color': 'b'})
+        
+
 
     def test_distfit(self):
         X = np.random.normal(0, 2, 1000)

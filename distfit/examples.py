@@ -1,15 +1,80 @@
 import numpy as np
+from scipy.stats import binom
 import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
+
+# %% Quantile approach
+from distfit import distfit
+import numpy as np
+
+X = np.random.normal(10, 3, 10000)
+y = [3,4,5,6,10,11,12,18,20]
+
+# Initialize
+# dist = distfit(method='percentile', alpha=0.05, todf=False)
+# dist = distfit(method='quantile', alpha=0.05, todf=False)
+dist = distfit(method='parametric', alpha=0.05, todf=False)
+dist.fit_transform(X)
+# dist.plot()
+
+# Make prediction
+dist.predict(y)
+dist.plot()
+dist.plot_summary()
+
+
+# %% Multiple distributions as input
+from distfit import distfit
+X = np.random.normal(0, 2, 10000)
+y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
+dist = distfit(stats='RSS', distr=['norm','expon'])
+results = dist.fit_transform(X)
+dist.plot(cii_properties={'size': 50})
+
+results = dist.predict(y, alpha=0.01)
+dist.plot(cii_properties={'size': 20, 'marker': 'x', 'linewidth':2})
+
+print(dist.model)
+
+
+from distfit import distfit
+X = binom(8, 0.5).rvs(1000)
+dist = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
+model = dist.fit_transform(X, verbose=3)
+dist.plot(figsize=(15, 12), grid=True)
+
+
+from distfit import distfit
+X = np.random.uniform(0, 1000, 10000)
+dist = distfit(bound=None, distr='uniform')
+results = dist.fit_transform(X)
+dist.plot(figsize=(15, 12), grid=False)
+
+from distfit import distfit
+X = np.random.exponential(0.5, 10000)
+dist = distfit(bound=None, distr='expon')
+results = dist.fit_transform(X)
+dist.plot(figsize=(15, 12), grid=False)
+# dist.plot_summary()
+
+from distfit import distfit
+X = np.random.normal(0, 2, 10000)
+dist = distfit(bound=None, distr='norm')
+results = dist.fit_transform(X)
+dist.plot(figsize=(15, 12), grid=False)
+
+dist.plot(bar_properties={'color': 'r', 'label': None}, pdf_properties={'color': 'k'}, emp_properties={'color': 'k', 'linewidth': 3})
+dist.plot(bar_properties=None, pdf_properties=None)
+dist.plot(bar_properties={}, pdf_properties=None, emp_properties={})
+dist.plot(bar_properties={}, pdf_properties={}, emp_properties=None)
 
 
 # %% K distributions as input
 import scipy.stats as st
 from distfit import distfit
 X = np.random.normal(0, 2, 1000)
-y = [-8, -6, 0, 1, 2, 3, 4, 5, 6]
-dist = distfit(stats='ks', distr=['k','t','expon', 't', 'gamma', 'lognorm'])
+dist = distfit(stats='ks', distr=['k','t','expon', 'gamma', 'lognorm'], bins=50)
 results = dist.fit_transform(X, verbose=0)
 
 dist.plot()
@@ -92,6 +157,7 @@ results = dist.fit_transform(X)
 dist.plot()
 
 results = dist.predict(y, alpha=0.01)
+dist.plot()
 
 print(dist.model)
 
@@ -106,7 +172,7 @@ model = dist.fit_transform(X, verbose=3)
 dist.plot()
 
 # Make prediction
-results = dist.predict([0, 1, 10, 11, 12])
+results = dist.predict([0, 1, 3, 4, 10, 11, 12])
 dist.plot()
 
 # Generate samples

@@ -413,6 +413,7 @@ class distfit():
              emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'},
              pdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
              bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'},
+             cii_properties={'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
              figsize=(20, 15),
              xlim=None,
              ylim=None,
@@ -436,6 +437,10 @@ class distfit():
             bar properties of the histogram.
                 * None: Do not plot.
                 * {'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}: default
+        cii_properties : dict
+            bar properties of the histogram.
+                * None: Do not plot.
+                * {'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}: default
         title : String, optional (default: '')
             Title of the plot.
         figsize : tuple, optional (default: (10,8))
@@ -459,16 +464,18 @@ class distfit():
 
         """
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
+        if cii_properties is not None: cii_properties = {**{'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
+        if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'}, **emp_properties}
+        if pdf_properties is not None: pdf_properties = {**{'color': '#004481', 'linewidth': 2, 'linestyle': '-'}, **pdf_properties}
+        if bar_properties is not None: bar_properties = {**{'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}, **bar_properties}
 
         if verbose>=3: print('[distfit] >plot..')
         if (self.method=='parametric'):
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, verbose=verbose)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, verbose=verbose)
         elif (self.method=='discrete'):
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, verbose=verbose)
-        elif (self.method=='quantile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, verbose=verbose)
-        elif (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, verbose=verbose)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, verbose=verbose)
+        elif (self.method=='quantile') or (self.method=='percentile'):
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties, verbose=verbose)
         else:
             if verbose>=3: print('[distfit] >Warning: nothing to plot. Method not yet implemented for %s' %(self.method))
             fig, ax = None, None
@@ -523,7 +530,7 @@ class distfit():
             if ylim is not None:
                 plt.ylim(ymin=ylim[0], ymax=ylim[1])
 
-            return(fig, ax)
+            return (fig, ax)
         else:
             print('[distfit] This function works only in case of method is "parametric"')
             return None, None
@@ -747,30 +754,69 @@ def _predict_percentile(self, y, verbose=3):
     return self.results
 
 
-# Plot
-def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, verbose=3):
-    if ax is None:
-        fig, ax = plt.subplots(figsize=figsize)
+# %% Plot bar
+def _plot_bar(binedges, histvals, bar_properties, ax):
+    if bar_properties is not None:
+        ax.bar(binedges[:-1], histvals[:-1], width=np.diff(binedges), **bar_properties)
 
+
+def _plot_pdf(x, y, label, pdf_properties, ax):
+    if pdf_properties is not None:
+        # Changing label of the pdf is not allowed.
+        if pdf_properties.get('label', None) is not None: pdf_properties.pop('label')
+        ax.plot(x, y, label=label, **pdf_properties)
+
+
+def _plot_emp(x, y, line_properties, ax):
+    if line_properties is not None:
+        ax.plot(x, y, **line_properties)
+
+
+def _get_cii_properties(cii_properties):
+    cii_color = {}
+    if cii_properties is not None:
+        for p in ['color_sign_multipletest', 'color_sign', 'color_general', 'color', 'marker', 'size']:
+            cii_color[p] = cii_properties.get(p)
+            cii_properties.pop(p)
+    cii_color = {**{'color': '#880808', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}, **cii_color}
+    return cii_properties, cii_color
+
+
+def _plot_cii_quantile(model, results, cii_properties, ax):
+    if cii_properties is not None:
+        # Extract cii properties
+        cii_properties, cii_colors = _get_cii_properties(cii_properties)
+        # add CII
+        ax.axvline(model['CII_min_alpha'], c=cii_colors['color'], label='CII low', **cii_properties)
+        ax.axvline(model['CII_max_alpha'], c=cii_colors['color'], label='CII high', **cii_properties)
+
+        # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+        if results is not None:
+            for i in range(0, len(results['y'])):
+                if results['y_pred'][i] != 'none':
+                    ax.axvline(results['y'][i], c=cii_colors['color_sign'], **cii_properties)
+
+            idxIN = np.logical_or(results['y_pred']=='down', results['y_pred']=='up')
+            if np.any(idxIN):
+                cii_properties['label']='Outside boundaries'
+                ax.scatter(results['y'][idxIN], np.zeros(sum(idxIN)), color=cii_colors['color'], marker=cii_colors['marker'], **cii_properties)
+            idxOUT = results['y_pred']=='none'
+            if np.any(idxOUT):
+                cii_properties['label']='Inside boundaries'
+                ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_colors['color'], marker=cii_colors['marker'], **cii_properties)
+
+
+# %% Plot
+def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}, verbose=3):
+    if ax is None: fig, ax = plt.subplots(figsize=figsize)
+    if not hasattr(self, 'results'): self.results=None
+
+    # Plot histogram empirical data
+    _plot_bar(self.histdata[1], self.histdata[0], bar_properties, ax)
     # Plot empirical data
-    ax.plot(self.histdata[1], self.histdata[0], color='k', linewidth=1, label='empirical distribution')
-    # add CII
-    ax.axvline(self.model['CII_min_alpha'], linestyle='--', c='r', label='CII low')
-    ax.axvline(self.model['CII_max_alpha'], linestyle='--', c='r', label='CII high')
-
-    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if hasattr(self, 'results'):
-        for i in range(0, len(self.results['y'])):
-            # if self.df['y_proba'].iloc[i]<=self.alpha and self.df['y_pred'].iloc[i] != 'none':
-            if self.results['y_pred'][i] != 'none':
-                ax.axvline(self.results['y'][i], c='g', linestyle='--', linewidth=0.8)
-
-        idxIN = np.logical_or(self.results['y_pred']=='down', self.results['y_pred']=='up')
-        if np.any(idxIN):
-            ax.scatter(self.results['y'][idxIN], np.zeros(sum(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Outside boundaries')
-        idxOUT = self.results['y_pred']=='none'
-        if np.any(idxOUT):
-            ax.scatter(self.results['y'][idxOUT], np.zeros(sum(idxOUT)), color='r', marker='x', alpha=0.8, linewidth=1.5, label='Inside boundaries')
+    _plot_emp(self.histdata[1], self.histdata[0], emp_properties, ax)
+    # Plot CII
+    _plot_cii_quantile(self.model, self.results, cii_properties, ax)
 
     # Limit axis
     if xlim is not None:
@@ -782,34 +828,13 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
     ax.set_title(title)
-    ax.legend()
+    ax.legend(loc='upper right')
 
     return fig, ax
 
 
-# %% Plot bar
-def _plot_bar(binedges, histvals, bar_properties, ax):
-    if bar_properties is not None:
-        bar_properties = {**{'color': '#ffffff', 'edgecolor': '#808080', 'linewidth': 1, 'align': 'edge', 'label': 'Histogram'}, **bar_properties}
-        ax.bar(binedges[:-1], histvals[:-1], width=np.diff(binedges), **bar_properties)
-
-
-def _plot_pdf(x, y, label, line_properties, ax):
-    if line_properties is not None:
-        # Changing label of the pdf is not allowed.
-        if line_properties.get('label', None) is not None: line_properties.pop('label')
-        line_properties = {**{'linestyle': '-', 'color': '#004481', 'linewidth': 2}, **line_properties}
-        ax.plot(x, y, label=label, **line_properties)
-
-
-def _plot_emp(x, y, line_properties, ax):
-    if line_properties is not None:
-        line_properties = {**{'linestyle': '-', 'color': '#000000', 'linewidth': 1.5, 'label': 'Emperical distribution'}, **line_properties}
-        ax.plot(x, y, **line_properties)
-
-
 # %% Plot
-def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid=True, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, verbose=3):
+def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid=True, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, cii_properties={}, verbose=3):
     # Store output and function parameters
     model = self.model
     Param = {}
@@ -817,6 +842,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     Param['figsize'] = figsize
     Param['xlim'] = xlim
     Param['ylim'] = ylim
+    cii_properties, cii_colors = _get_cii_properties(cii_properties)
 
     # Make figure
     best_dist = model['distr']
@@ -838,10 +864,8 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     # Build pdf and turn into pandas Series
     x = np.linspace(getmin, getmax, self.size)
     y = distline.pdf(x, loc=loc, scale=scale, *arg)
-    # ymax=max(self.histdata[0])
 
-    if ax is None:
-        fig, ax = plt.subplots(figsize=figsize)
+    if ax is None: fig, ax = plt.subplots(figsize=figsize)
 
     # Plot histogram empirical data
     _plot_bar(self.histdata[1], self.histdata[0], bar_properties, ax)
@@ -849,14 +873,6 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     _plot_emp(self.histdata[1], self.histdata[0], emp_properties, ax)
     # Plot pdf
     _plot_pdf(x, y, best_fit_name, pdf_properties, ax)
-
-    # Plot vertical line to stress the cut-off point
-    if self.model['CII_min_alpha'] is not None:
-        label = 'CII low ' + '(' + str(self.alpha) + ')'
-        ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='#880808', linestyle='dashed', label=label)
-    if self.model['CII_max_alpha'] is not None:
-        label = 'CII high ' + '(' + str(self.alpha) + ')'
-        ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='#880808', linestyle='dashed', label=label)
 
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
@@ -871,23 +887,39 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     if Param['ylim'] is not None:
         ax.set_ylim(Param['ylim'][0], Param['ylim'][1])
 
+    if cii_properties is not None:
+        # Plot vertical line to stress the cut-off point
+        if self.model['CII_min_alpha'] is not None:
+            cii_properties['label'] = 'CII low ' + '(' + str(self.alpha) + ')'
+            ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+        if self.model['CII_max_alpha'] is not None:
+            cii_properties['label'] = 'CII high ' + '(' + str(self.alpha) + ')'
+            ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+        if cii_properties.get('label'): cii_properties.pop('label')
+
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if hasattr(self, 'results'):
-        # Plot significant hits
+    if hasattr(self, 'results') and (cii_properties is not None):
         if self.alpha is None: self.alpha=1
         idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
         if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
+
+        # Plot significant hits
         for i in idxIN:
-            ax.axvline(x=self.results['y'][i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
+            if cii_properties.get('label'): cii_properties.pop('label')
+            ax.axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign_multipletest'], **cii_properties)
+
         # Plot the samples that are not signifcant after multiple test.
         if np.any(idxIN):
-            ax.scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
+            cii_properties['label'] = 'Significant'
+            ax.scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), s=50, marker=cii_colors['marker'], color=cii_colors['color_sign'], **cii_properties)
+
         # Plot the samples that are not signifcant after multiple test.
         idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
         if np.any(idxOUT):
-            ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
+            cii_properties['label'] = 'Not significant'
+            ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_colors['marker'], color=cii_colors['color_general'], **cii_properties)
 
-    ax.legend()
+    ax.legend(loc='upper right')
     ax.grid(grid)
 
     if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
@@ -1083,15 +1115,6 @@ def _compute_cii(self, model, verbose=3):
     CIIup, CIIdown = None, None
 
     if (self.method=='parametric') or (self.method=='discrete'):
-        # Separate parts of parameters
-        # arg = model['params'][:-2]
-        # loc = model['params'][-2]
-        # scale = model['params'][-1]
-        # dist = getattr(st, model['name'])
-        # dist = model['distr']
-        # Get fitted model
-        # distr = model['model']
-
         # Determine %CII
         if self.alpha is not None:
             if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
@@ -1100,40 +1123,26 @@ def _compute_cii(self, model, verbose=3):
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
                 # CIIup = distr.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(self.alpha, loc=loc, scale=scale)
                 CIIup = model['model'].ppf(self.alpha)
-    # elif self.method=='discrete':
-    #     distr = model['model']
-    #     if self.alpha is not None:
-    #         if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
-    #             CIIdown = distr.ppf(1 - self.alpha)
-    #         if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
-    #             CIIup = distr.ppf(self.alpha)
     elif self.method=='quantile':
         X = model
         model = {}
         CIIdown = np.quantile(X, 1 - self.alpha)
         CIIup = np.quantile(X, self.alpha)
-        # model['model'] = model
     elif self.method=='percentile':
         X = model
         model = {}
         # Set Confidence intervals
-        # ps = np.array([np.random.permutation(len(X)) for i in range(self.n_perm)])
-        # xp = X[ps[:, :10]]
-        # yp = X[ps[:, 10:]]
-        # samples = np.percentile(xp, 7, axis=1) - np.percentile(yp, 7, axis=1)
         cii_high = (0 + (self.alpha / 2)) * 100
         cii_low = (1 - (self.alpha / 2)) * 100
         CIIup = np.percentile(X, cii_high)
         CIIdown = np.percentile(X, cii_low)
-        # Store
-        # model['samples'] = samples
     else:
         raise Exception('[distfit] >Error: method parameter can only be of type: "parametric", "quantile", "percentile" or "discrete".')
 
     # Store
     model['CII_min_alpha'] = CIIup
     model['CII_max_alpha'] = CIIdown
-    return(model)
+    return model
 
 
 # Multiple test correction
@@ -1172,7 +1181,7 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
         Padj=Praw
 
     Padj = np.clip(Padj, 0, 1)
-    return(Padj)
+    return Padj
 
 
 def smoothline(xs, ys=None, interpol=3, window=1, verbose=3):
@@ -1371,7 +1380,17 @@ def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS', verbose=3):
     return model, figdata
 
 
-def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3):
+def plot_binom(self,
+               emp_properties={},
+               pdf_properties={},
+               bar_properties={},
+               cii_properties={},
+               title='',
+               figsize=(10, 8),
+               xlim=None,
+               ylim=None,
+               grid=True,
+               verbose=3):
     """Plot discrete results.
 
     Parameters
@@ -1386,11 +1405,11 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
     Param['figsize'] = figsize
     Param['xlim'] = xlim
     Param['ylim'] = ylim
-
     # Make figure
     # dist = self.model['distr']
-    best_fit_name = self.model['name']
+    best_fit_name = self.model['name'].title()
     best_fit_param = self.model['params']
+    cii_properties, cii_colors = _get_cii_properties(cii_properties)
 
     model = self.model
     figdata = self.summary
@@ -1398,51 +1417,62 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
     p_fit = model['p']
     histf = BinomPMF(n_fit)(figdata['Xdata'], p_fit) * figdata['hist'].sum()
 
+    # Init figure
     fig, ax = plt.subplots(2, 1, figsize=figsize)
-    # First image
-    ax[0].plot(figdata['Xdata'], figdata['hist'], 'ro', label='input data')
-    ax[0].step(figdata['Xdata'], histf, 'b', where='mid', label=f'fit: n={n_fit}, p={p_fit:.3f}')
-    ax[0].set_xlabel('k')
-    ax[0].axhline(0, color='k')
-    ax[0].set_ylabel('Counts')
-    ax[0].legend()
-    ax[0].grid(True)
 
-    # Plot vertical line to stress the cut-off point
-    if self.model['CII_min_alpha'] is not None:
-        label = 'CII low ' + '(' + str(self.alpha) + ')'
-        ax[0].axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
-    if self.model['CII_max_alpha'] is not None:
-        label = 'CII high ' + '(' + str(self.alpha) + ')'
-        ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, linewidth=1.3, color='r', linestyle='dashed', label=label)
+    # plot Emperical data
+    if emp_properties is not None:
+        ax[0].plot(figdata['Xdata'], figdata['hist'], 'o', color=emp_properties['color'], label=emp_properties['label'])
 
-    # Make text for plot
-    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
-    ax[0].set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
+    # plot PDF
+    if pdf_properties is not None:
+        pdf_properties['label'] = 'Binomial'
+        ax[0].step(figdata['Xdata'], histf, where='mid', **pdf_properties)
+        ax[0].axhline(0, color=pdf_properties['color'])
+
+    # Plot CII
+    if cii_properties is not None:
+        # Plot vertical line to stress the cut-off point
+        if self.model['CII_min_alpha'] is not None:
+            cii_properties['label'] = 'CII low ' + '(' + str(self.alpha) + ')'
+            ax[0].axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+        if self.model['CII_max_alpha'] is not None:
+            cii_properties['label'] = 'CII high ' + '(' + str(self.alpha) + ')'
+            ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+
+        # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+        if hasattr(self, 'results'):
+            # Plot significant hits with multiple test
+            if self.alpha is None: self.alpha=1
+            idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
+            if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
+            if cii_properties.get('label'): cii_properties.pop('label')
+            for i in idxIN:
+                ax[0].axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign_multipletest'], **cii_properties)
+
+            # Plot the samples that signifcant without multiple test.
+            if np.any(idxIN):
+                cii_properties['label']='Significant'
+                ax[0].scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), size=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign'], **cii_properties)
+
+            # Plot the samples that are not signifcant.
+            idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
+            if np.any(idxOUT):
+                cii_properties['label']='Not significant'
+                ax[0].scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), size=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_general'], **cii_properties)
 
     # Limit axis
     if Param['xlim'] is not None:
         ax[0].set_xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
     if Param['ylim'] is not None:
         ax[0].set_ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
-
-    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if hasattr(self, 'results'):
-        # Plot significant hits
-        if self.alpha is None: self.alpha=1
-        idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
-        if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
-        for i in idxIN:
-            ax[0].axvline(x=self.results['y'][i], ymin=0, ymax=1, linewidth=1, color='g', linestyle='--', alpha=0.8)
-        # Plot the samples that are not signifcant after multiple test.
-        if np.any(idxIN):
-            ax[0].scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), color='g', marker='x', alpha=0.8, linewidth=1.5, label='Significant')
-        # Plot the samples that are not signifcant after multiple test.
-        idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
-        if np.any(idxOUT):
-            ax[0].scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), color='orange', marker='x', alpha=0.8, linewidth=1.5, label='Not significant')
-
-    ax[0].legend()
+    ax[0].set_xlabel('k')
+    ax[0].set_ylabel('Counts')
+    ax[0].legend(loc='upper right')
+    ax[0].grid(grid)
+    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
+    ax[0].set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
+    ax[0].legend(loc='upper right')
     ax[0].grid(grid)
 
     # Second image
@@ -1450,9 +1480,9 @@ def plot_binom(self, title='', figsize=(10, 8), xlim=None, ylim=None, verbose=3)
     ax[1].set_ylabel(self.stats)
     plotfunc = ax[1].semilogy if figdata['scores'].max()>20 * figdata['scores'].min()>0 else ax[1].plot
     plotfunc(figdata['nvals'], figdata['scores'], 'k-', label=('%s over n scan' %self.stats))
-    ax[1].vlines(n_fit, 0, figdata['scores'].max(), 'r', linestyles='dashed')
-    ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), 'r', linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
-    ax[1].legend()
+    ax[1].vlines(n_fit, 0, figdata['scores'].max(), color=cii_colors['color'], linestyles='dashed')
+    ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), color=cii_colors['color'], linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
+    ax[1].legend(loc='upper right')
     ax[1].grid(grid)
     fig.show()
 
