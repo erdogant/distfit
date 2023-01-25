@@ -1,14 +1,98 @@
 import numpy as np
-from scipy.stats import binom
+from scipy.stats import binom, poisson
 import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
+
+
+X = np.random.poisson(10, 10000)
+
+# %%
+from distfit import distfit
+dist = distfit()
+d = dist.get_distributions('popular')
+
+# %% Figure 1
+
+# Load library
+from distfit import distfit
+
+# Random Exponential data
+X = np.random.uniform(0, 1000, 10000)
+# initialize with uniform distribution
+dist = distfit(distr='uniform')
+# Fit and plot
+results = dist.fit_transform(X)
+dist.plot(grid=False, cii_properties=None)
+
+# Random exponential data
+X = np.random.exponential(0.5, 10000)
+# initialize with exponential distribution
+dist = distfit(distr='expon')
+# Fit and plot
+results = dist.fit_transform(X)
+dist.plot(grid=False, cii_properties=None)
+
+# Random normal distribution
+X = np.random.normal(0, 2, 10000)
+dist = distfit(distr='norm')
+# Fit and plot
+results = dist.fit_transform(X)
+dist.plot(figsize=(15, 12), grid=False)
+
+# Random bimodal distribution
+X1 = list(np.random.normal(10, 3, 10000))
+X2 = list(np.random.normal(0, 2, 2000))
+X = np.array(X1+X2)
+dist = distfit()
+# Fit and plot
+results = dist.fit_transform(X)
+dist.plot(figsize=(15, 12), grid=False, cii_properties=None, pdf_properties=None)
+
+# %% Figure 2
+# Random normal distribution
+X = np.random.normal(2, 4, 10000)
+y = [-8, -2, 1, 3, 5, 15]
+dist = distfit(distr='norm')
+# dist = distfit(method='quantile')
+# Fit and plot
+dist.fit_transform(X)
+dist.model
+
+dist.predict(y)
+dist.plot(figsize=(15, 12), grid=True)
+dist.plot_summary()
+
+# Create random normal data with mean=2 and std=4
+X = np.random.normal(2, 4, 10000)
+# Load library
+from distfit import distfit
+# Initialize using the quantile or percentile approach.
+model = distfit(method='quantile') # percentile
+# Fit model on input data X and detect the best theoretical distribution.
+model.fit_transform(X)
+# Make prediction for new data points.
+y = [-8, -2, 1, 3, 5, 15]
+model.predict(y)
+# Plot the results
+model.plot()
+
+
+# Random discrete data
+X = binom(8, 0.5).rvs(1000)
+dist = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
+dist = distfit(method='discrete')
+# Fit and plot
+model = dist.fit_transform(X, verbose=3)
+dist.plot(figsize=(15, 12), grid=True)
 
 # %% Quantile approach
 from distfit import distfit
 import numpy as np
 
-X = np.random.normal(10, 3, 10000)
+X1 = list(np.random.normal(10, 3, 10000))
+X2 = list(np.random.normal(0, 2, 2000))
+X = np.array(X1+X2)
 y = [3,4,5,6,10,11,12,18,20]
 
 # Initialize
@@ -16,7 +100,7 @@ y = [3,4,5,6,10,11,12,18,20]
 # dist = distfit(method='quantile', alpha=0.05, todf=False)
 dist = distfit(method='parametric', alpha=0.05, todf=False)
 dist.fit_transform(X)
-# dist.plot()
+dist.plot(figsize=(15, 12), cii_properties=None, pdf_properties=None, grid=False)
 
 # Make prediction
 dist.predict(y)
