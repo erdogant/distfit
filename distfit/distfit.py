@@ -1013,47 +1013,6 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     return out
 
 
-# %% Get the distributions based on user input
-def _get_distributions(distr):
-    out_distr=[]
-
-    # Get specified list of distributions
-    if isinstance(distr, list):
-        for getdistr in distr:
-            if getdistr=='k':
-                out_distr.append(k_distribution)
-            else:
-                try:
-                    out_distr.append(getattr(st, getdistr))
-                except:
-                    print('[distfit] >Error: [%s] does not exist! <skipping>' %(getdistr))
-
-    elif distr=='full':
-        # st.levy_l, st.levy_stable, st.frechet_r, st.frechet_l
-        out_distr = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
-                         st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm, st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk,
-                         st.foldcauchy, st.foldnorm, st.genlogistic, st.genpareto, st.gennorm, st.genexpon,
-                         st.genextreme, st.gausshyper, st.gamma, st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r,
-                         st.gumbel_l, st.halfcauchy, st.halflogistic, st.halfnorm, st.halfgennorm, st.hypsecant, st.invgamma, st.invgauss,
-                         st.invweibull, st.johnsonsb, st.johnsonsu, st.laplace, st.levy,
-                         st.logistic, st.loggamma, st.loglaplace, st.lognorm, st.lomax, st.maxwell, st.mielke, st.nakagami,
-                         st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm, st.rdist, st.reciprocal,
-                         st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t, st.triang, st.truncexpon, st.truncnorm, st.tukeylambda,
-                         st.uniform, st.vonmises, st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
-
-    elif distr=='popular':
-        out_distr = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform, st.loggamma]
-    else:
-        # Collect distributions
-        try:
-            out_distr = [getattr(st, distr)]
-        except:
-            print('[distfit] >Error: [%s] does not exist! <skipping>' %(distr))
-
-    if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
-    return(out_distr)
-
-
 # %% Get histogram of original data
 def _get_hist_params(X, bins, mhist='numpy'):
     if mhist=='numpy':
