@@ -185,7 +185,7 @@ class distfit():
         if verbose>=3: print('[distfit] >fit..')
         # Get the desired distributions.
         if self.method=='parametric':
-            self.distributions = _get_distributions(self.distr)
+            self.distributions = self.get_distributions(self.distr)
         elif self.method=='discrete':
             # self.distributions = [st.binom]
             pass
@@ -611,6 +611,61 @@ class distfit():
         if out.get('y_pred', None) is not None: self.y_pred = out['y_pred']
         if out.get('df', None) is not None: self.df = out['df']
         if out.get('results', None) is not None: self.results = out['results']
+
+    # Get the distributions based on user input
+    def get_distributions(self, distr='full'):
+        """Return the distributions.
+
+        Parameters
+        ----------
+        distr : str.
+            Distributions to return.
+                * 'full': all available distributions.
+                * 'popular': Most common distributions.
+                * 'norm', 't', 'k' or any other distribution name.
+                * ['norm', 't', 'k']: list of distributions.
+
+        Returns
+        -------
+        List with distributions.
+
+        """
+        out_distr=[]
+
+        # Get specified list of distributions
+        if isinstance(distr, list):
+            for getdistr in distr:
+                if getdistr=='k':
+                    out_distr.append(k_distribution)
+                else:
+                    try:
+                        out_distr.append(getattr(st, getdistr))
+                    except:
+                        print('[distfit] >Error: [%s] does not exist! <skipping>' %(getdistr))
+
+        elif distr=='full':
+            # st.levy_l, st.levy_stable, st.frechet_r, st.frechet_l
+            out_distr = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
+                             st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm, st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk,
+                             st.foldcauchy, st.foldnorm, st.genlogistic, st.genpareto, st.gennorm, st.genexpon,
+                             st.genextreme, st.gausshyper, st.gamma, st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r,
+                             st.gumbel_l, st.halfcauchy, st.halflogistic, st.halfnorm, st.halfgennorm, st.hypsecant, st.invgamma, st.invgauss,
+                             st.invweibull, st.johnsonsb, st.johnsonsu, st.laplace, st.levy,
+                             st.logistic, st.loggamma, st.loglaplace, st.lognorm, st.lomax, st.maxwell, st.mielke, st.nakagami,
+                             st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm, st.rdist, st.reciprocal,
+                             st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t, st.triang, st.truncexpon, st.truncnorm, st.tukeylambda,
+                             st.uniform, st.vonmises, st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
+    
+        elif distr=='popular':
+            out_distr = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform, st.loggamma]
+        else:
+            try:
+                out_distr = [getattr(st, distr)]
+            except:
+                print('[distfit] >Error: [%s] does not exist! <skipping>' %(distr))
+
+        if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
+        return out_distr
 
 
 # %%
