@@ -516,7 +516,7 @@ class distfit():
             if ax is None:
                 fig, ax = plt.subplots(figsize=figsize)
 
-            plt.plot(x)
+            plt.plot(x, color='#004481', linewidth=2)
             # You can specify a rotation for the tick labels in degrees or with keywords.
             plt.xticks(np.arange(len(x)), labels, rotation='vertical')
             # Pad margins so that markers don't get clipped by the axes
@@ -524,7 +524,7 @@ class distfit():
             # Tweak spacing to prevent clipping of tick-labels
             plt.subplots_adjust(bottom=0.15)
             ax.grid(grid)
-            plt.xlabel('Distribution name')
+            plt.xlabel('Distribution')
             plt.ylabel(('%s (lower is better)' %(self.stats)))
             plt.title('Best fit: %s' %(self.model['name']))
             if ylim is not None:
@@ -854,11 +854,11 @@ def _plot_cii_quantile(model, results, cii_properties, ax):
             idxIN = np.logical_or(results['y_pred']=='down', results['y_pred']=='up')
             if np.any(idxIN):
                 cii_properties['label']='Outside boundaries'
-                ax.scatter(results['y'][idxIN], np.zeros(sum(idxIN)), color=cii_colors['color'], marker=cii_colors['marker'], **cii_properties)
+                ax.scatter(results['y'][idxIN], np.zeros(sum(idxIN)), color=cii_colors['color_sign'], marker=cii_colors['marker'], **cii_properties)
             idxOUT = results['y_pred']=='none'
             if np.any(idxOUT):
                 cii_properties['label']='Inside boundaries'
-                ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_colors['color'], marker=cii_colors['marker'], **cii_properties)
+                ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_colors['color_general'], marker=cii_colors['marker'], **cii_properties)
 
 
 # %% Plot
@@ -932,7 +932,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     # Make text for plot
     param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
     param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, best_fit_param)])
-    ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + '(' + param_str + ')'))
+    ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + ' (' + param_str + ')'))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
 
@@ -1477,11 +1477,14 @@ def plot_binom(self,
 
     # plot Emperical data
     if emp_properties is not None:
+        bar_properties['align']='center'
+        bar_properties['label']='Histogram'
+        ax[0].bar(figdata['Xdata'], figdata['hist'], **bar_properties)
         ax[0].plot(figdata['Xdata'], figdata['hist'], 'o', color=emp_properties['color'], label=emp_properties['label'])
 
     # plot PDF
     if pdf_properties is not None:
-        pdf_properties['label'] = 'Binomial'
+        pdf_properties['label'] = 'PMF (binomial)'
         ax[0].step(figdata['Xdata'], histf, where='mid', **pdf_properties)
         ax[0].axhline(0, color=pdf_properties['color'])
 
