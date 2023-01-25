@@ -1077,14 +1077,13 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
     model['stats'] = stats
     model['params'] = (0.0, 1.0)
     best_score = np.inf
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'LLE', 'loc', 'scale', 'arg'])
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
     
     
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
-        logLik = np.nan
 
         # Fit the distribution. However this can result in an error so therefore you need to try-except
         try:
@@ -1109,13 +1108,11 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
                 distr_name = distribution.name if isinstance(distribution.name, str) else distribution.name()
 
                 # Store results
-                # df.values[i, 0] = distribution.name
                 df.values[i, 0] = distr_name
                 df.values[i, 1] = score
-                df.values[i, 2] = logLik
-                df.values[i, 3] = loc
-                df.values[i, 4] = scale
-                df.values[i, 5] = arg
+                df.values[i, 2] = loc
+                df.values[i, 3] = scale
+                df.values[i, 4] = arg
 
                 # identify if this distribution is better
                 if best_score > score > 0:
