@@ -21,8 +21,20 @@
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
 
-``distfit`` is a python package for probability density fitting across 89 univariate distributions to non-censored data by residual sum of squares (RSS), and hypothesis testing.
-Probability density fitting is the fitting of a probability distribution to a series of data concerning the repeated measurement of a variable phenomenon. ``distfit`` scores each of the 89 different distributions for the fit wih the empirical distribution and return the best scoring distribution.
+``distfit`` is a python package for probability density fitting of univariate distributions for random variables.
+With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.
+
+* For the parametric approach, the distfit library can determine the best fit across 89 theoretical distributions.
+  To score the fit, one of the scoring statistics for the good-of-fitness test can be used used, such as RSS/SSE, Wasserstein,
+  Kolmogorov-Smirnov (KS), or Energy. After finding the best-fitted theoretical distribution, the loc, scale,
+  and arg parameters are returned, such as mean and standard deviation for normal distribution.
+
+* For the non-parametric approach, the distfit library contains two methods, the quantile and percentile method.
+  Both methods assume that the data does not follow a specific probability distribution. In the case of the quantile method,
+  the quantiles of the data are modeled whereas for the percentile method, the percentiles are modeled.
+
+* In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
+  The best fit is then derived using the binomial distribution.
 
 # 
 **⭐️ Star this repo if you like it ⭐️**
