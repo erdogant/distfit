@@ -19,7 +19,7 @@ setuptools.setup(
      version=new_version,
      author="Erdogan Taskesen",
      author_email="erdogant@gmail.com",
-     description="Python package for probability density function fitting and hypothesis testing.",
+     description="distfit is a python library for probability density function fitting.",
      long_description=long_description,
      long_description_content_type="text/markdown",
      url="https://erdogant.github.io/distfit",
