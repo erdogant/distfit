@@ -16,6 +16,6 @@ keywords:
 license: "MIT"
 message: "If you use this software, please cite it using these metadata."
 repository-code: "https://erdogant.github.io/distfit"
-title: "distfit is a python library for probability density function fitting."
+title: "distfit is a python library for probability density fitting."
 version: "1.4.0"
 ...
