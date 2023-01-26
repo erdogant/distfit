@@ -1,4 +1,4 @@
-"""Compute best fit to your empirical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates."""
+"""distfit is a python package for probability density fitting."""
 # --------------------------------------------------
 # Name        : distfit.py
 # Author      : E.Taskesen
@@ -29,8 +29,20 @@ warnings.filterwarnings('ignore')
 class distfit():
     """Probability density function.
 
-    Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics
-    such as residual sum of squares (RSS), making plots, and hypothesis testing.
+    distfit is a python package for probability density fitting of univariate distributions for random variables.
+    With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.
+
+        * For the parametric approach, the distfit library can determine the best fit across 89 theoretical distributions.
+          To score the fit, one of the scoring statistics for the good-of-fitness test can be used used, such as RSS/SSE, Wasserstein,
+          Kolmogorov-Smirnov (KS), or Energy. After finding the best-fitted theoretical distribution, the loc, scale,
+          and arg parameters are returned, such as mean and standard deviation for normal distribution.
+
+        * For the non-parametric approach, the distfit library contains two methods, the quantile and percentile method.
+          Both methods assume that the data does not follow a specific probability distribution. In the case of the quantile method,
+          the quantiles of the data are modeled whereas for the percentile method, the percentiles are modeled.
+
+        * In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
+          The best fit is then derived using the binomial distribution.
 
     Parameters
     ----------
