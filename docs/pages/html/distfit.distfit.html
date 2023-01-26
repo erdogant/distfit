@@ -119,7 +119,7 @@
              
   <section id="module-distfit.distfit">
 <span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this heading"></a></h1>
-<p>Compute best fit to your empirical distribution for 89 different theoretical distributions using the Residual Sum of Squares (RSS) estimates.</p>
+<p>distfit is a python package for probability density fitting.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="distfit.distfit.BinomPMF">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">BinomPMF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.BinomPMF" title="Permalink to this definition"></a></dt>
@@ -133,10 +133,23 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="distfit.distfit.distfit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">distfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parametric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multtest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'popular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'RSS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">todf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mhist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">distfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'parametric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'popular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'RSS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multtest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fdr_bh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">todf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mhist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit" title="Permalink to this definition"></a></dt>
 <dd><p>Probability density function.</p>
-<p>Probability density fitting across 89 univariate distributions to non-censored data by scoring statistics
-such as residual sum of squares (RSS), making plots, and hypothesis testing.</p>
+<p>distfit is a python package for probability density fitting of univariate distributions for random variables.
+With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For the parametric approach, the distfit library can determine the best fit across 89 theoretical distributions.
+To score the fit, one of the scoring statistics for the good-of-fitness test can be used used, such as RSS/SSE, Wasserstein,
+Kolmogorov-Smirnov (KS), or Energy. After finding the best-fitted theoretical distribution, the loc, scale,
+and arg parameters are returned, such as mean and standard deviation for normal distribution.</p></li>
+<li><p>For the non-parametric approach, the distfit library contains two methods, the quantile and percentile method.
+Both methods assume that the data does not follow a specific probability distribution. In the case of the quantile method,
+the quantiles of the data are modeled whereas for the percentile method, the percentiles are modeled.</p></li>
+<li><p>In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
+The best fit is then derived using the binomial distribution.</p></li>
+</ul>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -146,6 +159,43 @@ such as residual sum of squares (RSS), making plots, and hypothesis testing.</p>
 <li><p>’quantile’</p></li>
 <li><p>’percentile’</p></li>
 <li><p>’discrete’</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – <p>The (set) of distribution to test. A set of distributions can be tested by using a “popular” list or by specifying the theoretical distribution:
+In case using method=”discrete”, then binomial is used. See documentation for more information about ‘popular’ and ‘full’ (link reference below).</p>
+<blockquote>
+<div><ul>
+<li><p>’popular’ : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, st.oggamma]</p></li>
+<li><p>’full’</p></li>
+<li><p>’norm’, ‘t’, ‘k’: Test for one specific distribution.</p></li>
+<li><p>[‘norm’, ‘t’, ‘k’, …]: Test for a list of distributions.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>stats</strong> (<em>str</em><em>, </em><em>default: 'RSS'</em>) – <dl class="simple">
+<dt>Specify the scoring statistics for the goodness of fit test.</dt><dd><ul>
+<li><p>’RSS’</p></li>
+<li><p>’wasserstein’</p></li>
+<li><p>’ks’: Kolmogorov-Smirnov statistic</p></li>
+<li><p>’energy’</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 'auto'</em>) – <dl class="simple">
+<dt>Bin size to determine the empirical historgram.</dt><dd><ul>
+<li><p>’auto’: Determine the bin size automatically.</p></li>
+<li><p>50: Set specific bin size</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – <dl class="simple">
+<dt>Set the directionality to test for significance.</dt><dd><ul>
+<li><p>’up’, ‘high’, ‘right’: Upperbounds</p></li>
+<li><p>’down’, ‘low’ or ‘left’: lowerbounds</p></li>
 </ul>
 </dd>
 </dl>
@@ -168,38 +218,8 @@ such as residual sum of squares (RSS), making plots, and hypothesis testing.</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>bins</strong> (<em>int</em><em>, </em><em>default: 50</em>) – Bin size to determine the empirical historgram.</p></li>
-<li><p><strong>bound</strong> (<em>str</em><em>, </em><em>default: 'both'</em>) – <dl class="simple">
-<dt>Set the directionality to test for significance.</dt><dd><ul>
-<li><p>’up’, ‘high’, ‘right’: Upperbounds</p></li>
-<li><p>’down’, ‘low’ or ‘left’: lowerbounds</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>distr</strong> (<em>str</em><em>, </em><em>default: 'popular'</em>) – <p>The (set) of distribution to test. A set of distributions can be tested by using a “popular” list or by specifying the theoretical distribution:
-In case using method=”discrete”, then binomial is used. See documentation for more information about ‘popular’ and ‘full’ (link reference below).</p>
-<blockquote>
-<div><ul>
-<li><p>’popular’</p></li>
-<li><p>’full’</p></li>
-<li><p>’norm’, ‘t’: Test for a specific distribution.</p></li>
-<li><p>[‘norm’, ‘t’, ..]: Test for a list with distributions.</p></li>
-</ul>
-</div></blockquote>
-</p></li>
 <li><p><strong>smooth</strong> (<em>int</em><em>, </em><em>default: None</em>) – Smoothing the histogram can help to get a better fit when there are only few samples available.
 The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.</p></li>
-<li><p><strong>stats</strong> (<em>str</em><em>, </em><em>default: 'RSS'</em>) – <dl class="simple">
-<dt>Specify the scoring statistics.</dt><dd><ul>
-<li><p>’RSS’</p></li>
-<li><p>’wasserstein’</p></li>
-<li><p>’ks’: Kolmogorov-Smirnov statistic</p></li>
-<li><p>’energy’</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
 <li><p><strong>n_perm</strong> (<em>int</em><em>, </em><em>default: 10000</em>) – Number of permutations to model null-distribution in case of method is “quantile”</p></li>
 <li><p><strong>weighted</strong> (<em>Bool</em><em>, </em><em>(</em><em>default: True</em><em>)</em>) – Only used in discrete fitting, method=”discrete”. In principle, the best fit will be obtained if you set weighted=True. However, when using stats=”RSS”, you can set weighted=False.</p></li>
 <li><p><strong>f</strong> (<em>float</em><em>, </em><em>(</em><em>default: 1.5</em><em>)</em>) – Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.</p></li>
@@ -303,6 +323,29 @@ arg : arg function parameter</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="distfit.distfit.distfit.get_distributions">
+<span class="sig-name descname"><span class="pre">get_distributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.get_distributions" title="Permalink to this definition"></a></dt>
+<dd><p>Return the distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distr</strong> (<em>str.</em>) – <dl class="simple">
+<dt>Distributions to return.</dt><dd><ul class="simple">
+<li><p>’full’: all available distributions.</p></li>
+<li><p>’popular’: Most common distributions.</p></li>
+<li><p>’norm’, ‘t’, ‘k’ or any other distribution name.</p></li>
+<li><p>[‘norm’, ‘t’, ‘k’]: list of distributions.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List with distributions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="distfit.distfit.distfit.load">
 <span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.load" title="Permalink to this definition"></a></dt>
 <dd><p>Load learned model.</p>
@@ -321,15 +364,48 @@ arg : arg function parameter</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="distfit.distfit.distfit.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'color':</span> <span class="pre">'#000000',</span> <span class="pre">'label':</span> <span class="pre">'Emperical</span> <span class="pre">distribution',</span> <span class="pre">'linestyle':</span> <span class="pre">'-',</span> <span class="pre">'linewidth':</span> <span class="pre">1.3}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'color':</span> <span class="pre">'#004481',</span> <span class="pre">'linestyle':</span> <span class="pre">'-',</span> <span class="pre">'linewidth':</span> <span class="pre">2}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'align':</span> <span class="pre">'edge',</span> <span class="pre">'color':</span> <span class="pre">'#ffffff',</span> <span class="pre">'edgecolor':</span> <span class="pre">'#808080',</span> <span class="pre">'linewidth':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cii_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'color':</span> <span class="pre">'#880808',</span> <span class="pre">'color_general':</span> <span class="pre">'r',</span> <span class="pre">'color_sign':</span> <span class="pre">'g',</span> <span class="pre">'color_sign_multipletest':</span> <span class="pre">'g',</span> <span class="pre">'linestyle':</span> <span class="pre">'dashed',</span> <span class="pre">'linewidth':</span> <span class="pre">2,</span> <span class="pre">'marker':</span> <span class="pre">'x',</span> <span class="pre">'size':</span> <span class="pre">20}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Make plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>emp_properties</strong> (<em>dict</em>) – <dl class="simple">
+<dt>The line properties of the emperical line.</dt><dd><ul>
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#000000’, ‘linewidth’: 1.3, ‘linestyle’: ‘-’, ‘label’: ‘Emperical distribution’}: default</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>pdf_properties</strong> (<em>dict</em>) – <dl class="simple">
+<dt>The line properties of the pdf.</dt><dd><ul>
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#004481’, ‘linewidth’: 2, ‘linestyle’: ‘-‘}: default</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>bar_properties</strong> (<em>dict</em>) – <dl class="simple">
+<dt>bar properties of the histogram.</dt><dd><ul>
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#ffffff’, ‘linewidth’: 1, ‘edgecolor’: ‘#808080’, ‘align’: ‘edge’}: default</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>cii_properties</strong> (<em>dict</em>) – <dl class="simple">
+<dt>bar properties of the histogram.</dt><dd><ul>
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#880808’, ‘linewidth’: 2, ‘linestyle’: ‘dashed’, ‘marker’: ‘x’, ‘size’: 20, ‘color_sign_multipletest’: ‘g’, ‘color_sign’: ‘g’, ‘color_general’: ‘r’}: default</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>title</strong> (<em>String</em><em>, </em><em>optional</em><em> (</em><em>default: ''</em><em>)</em>) – Title of the plot.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em><em> (</em><em>default:</em><em> (</em><em>10</em><em>,</em><em>8</em><em>)</em><em>)</em>) – The figure size.</p></li>
 <li><p><strong>xlim</strong> (<em>Float</em><em>, </em><em>optional</em><em> (</em><em>default: None</em><em>)</em>) – Limit figure in x-axis.</p></li>
 <li><p><strong>ylim</strong> (<em>Float</em><em>, </em><em>optional</em><em> (</em><em>default: None</em><em>)</em>) – Limit figure in y-axis.</p></li>
+<li><p><strong>grid</strong> (<em>Bool</em><em>, </em><em>optional</em><em> (</em><em>default: True</em><em>)</em>) – Show the grid on the figure.</p></li>
 <li><p><strong>fig</strong> (<em>Figure</em><em>, </em><em>optional</em><em> (</em><em>default: None</em><em>)</em>) – Matplotlib figure (Note - ignored when method is <cite>discrete</cite>)</p></li>
 <li><p><strong>ax</strong> (<em>Axes</em><em>, </em><em>optional</em><em> (</em><em>default: None</em><em>)</em>) – Matplotlib Axes object (Note - ignored when method is <cite>discrete</cite>)</p></li>
 <li><p><strong>verbose</strong> (<em>Int</em><em> [</em><em>1-5</em><em>]</em><em>, </em><em>optional</em><em> (</em><em>default: 3</em><em>)</em>) – Print information to screen.</p></li>
@@ -343,7 +419,7 @@ arg : arg function parameter</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="distfit.distfit.distfit.plot_summary">
-<span class="sig-name descname"><span class="pre">plot_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.plot_summary" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.distfit.plot_summary" title="Permalink to this definition"></a></dt>
 <dd><p>Plot summary results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -519,7 +595,7 @@ arg : arg function parameter</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="distfit.distfit.plot_binom">
-<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">plot_binom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.plot_binom" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">plot_binom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emp_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cii_properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.plot_binom" title="Permalink to this definition"></a></dt>
 <dd><p>Plot discrete results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
