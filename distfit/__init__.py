@@ -2,14 +2,13 @@ from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '1.4.6'
+__version__ = '1.5.0'
 
 
 # module level doc-string
 __doc__ = """
 distfit
 =====================================================================
-
 distfit is a python package for probability density fitting of univariate distributions for random variables.
 With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.
 
