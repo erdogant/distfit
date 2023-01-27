@@ -429,7 +429,40 @@ class distfit():
         return out
 
     def generate(self, n, random_state=None, verbose=3):
-        """Generate new samples based on the fitted distribution."""
+        """Generate new samples based on the fitted distribution.
+
+        Parameters
+        ----------
+        n : int
+            Number of samples to generate.
+        random_state : int, optional
+            Random state.
+        verbose : int, optional
+            Messaging. The default is 3.
+
+        Returns
+        -------
+        X : np.array
+            Numpy array with generated data.
+
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>>
+        >>> # Initialize
+        >>> dist = distfit(todf=True)
+        >>> # Fit
+        >>> dist.fit_transform(X)
+        >>>
+        >>> # Create syntethic data using fitted distribution.
+        >>> Xnew = dist.generate(10)
+        >>>
+        """
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in generate: A model is required. Try fitting first on your data using fit_transform(X)')
         if verbose>=3: print('[distfit] >Generate %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
         X = None
