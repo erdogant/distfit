@@ -1443,11 +1443,13 @@ def plot_binom(self,
     # Init figure
     fig, ax = plt.subplots(2, 1, figsize=figsize)
 
-    # plot Emperical data
-    if emp_properties is not None:
+    # plot bar
+    if bar_properties is not None:
         bar_properties['align']='center'
         bar_properties['label']='Histogram'
         ax[0].bar(figdata['Xdata'], figdata['hist'], **bar_properties)
+    # plot Emperical data
+    if emp_properties is not None:
         ax[0].plot(figdata['Xdata'], figdata['hist'], 'o', color=emp_properties['color'], label=emp_properties['label'])
 
     # plot PDF
