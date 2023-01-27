@@ -117,8 +117,8 @@ class distfit():
     todf : Bool (default: False)
         Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!
 
-    Example
-    -------
+    Examples
+    --------
     >>> from distfit import distfit
     >>> import numpy as np
     >>>
@@ -126,15 +126,18 @@ class distfit():
     >>> X = np.random.normal(0, 2, 1000)
     >>> y = [-8,-6,0,1,2,3,4,5,6]
     >>>
-    >>> # Set parameters
-    >>> # Default method is set to parameteric models
+    >>> # Default method is parameteric models
     >>> dist = distfit()
+    >>>
     >>> # In case of quantile
     >>> dist = distfit(method='quantile')
-    >>> # In case of quantile
+    >>>
+    >>> # In case of percentile
     >>> dist = distfit(method='percentile')
+    >>>
     >>> # Fit using method
     >>> model_results = dist.fit_transform(X)
+    >>>
     >>> dist.plot()
     >>>
     >>> # Make prediction
@@ -382,6 +385,25 @@ class distfit():
         df : pd.DataFrame (only when set: todf=True)
             Dataframe containing the predictions in a structed manner.
 
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>>
+        >>> # Initialize
+        >>> dist = distfit(todf=True)
+        >>> # Fit
+        >>> model_results = dist.fit_transform(X)
+        >>>
+        >>> # Make prediction
+        >>> results = dist.predict(y)
+        >>> print(results['df'])
+        >>>
+        >>> dist.plot()
         """
         if 'list' in str(type(y)): y=np.array(y)
         if 'float' in str(type(y)): y=np.array([y])
