@@ -1,16 +1,19 @@
 import numpy as np
 from scipy.stats import binom, poisson
+import matplotlib.pyplot as plt
+
 import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
-
-
-X = np.random.poisson(10, 10000)
 
 # %%
 from distfit import distfit
 dist = distfit()
 d = dist.get_distributions('popular')
+
+X = np.random.normal(0, 1, 1000)
+bins, density = dist.density(X)
+plt.figure(); plt.plot(bins, density)
 
 # %% Figure 1
 
@@ -18,20 +21,21 @@ d = dist.get_distributions('popular')
 from distfit import distfit
 
 # Random Exponential data
+X = np.random.poisson(10, 10000)
 X = np.random.uniform(0, 1000, 10000)
 # initialize with uniform distribution
 dist = distfit(distr='uniform')
 # Fit and plot
-results = dist.fit_transform(X)
-dist.plot(grid=False, cii_properties=None)
+results = dist.fit_transform(X, verbose='warning')
+dist.plot(grid=False, cii_properties=None);
 
 # Random exponential data
 X = np.random.exponential(0.5, 10000)
 # initialize with exponential distribution
 dist = distfit(distr='expon')
 # Fit and plot
-results = dist.fit_transform(X)
-dist.plot(grid=False, cii_properties=None)
+results = dist.fit_transform(X, verbose='debug')
+dist.plot(grid=False, cii_properties=None, verbose=10);
 
 # Random normal distribution
 X = np.random.normal(0, 2, 10000)
@@ -56,11 +60,11 @@ y = [-8, -2, 1, 3, 5, 15]
 dist = distfit(distr='norm')
 # dist = distfit(method='quantile')
 # Fit and plot
-dist.fit_transform(X)
+dist.fit_transform(X);
 dist.model
 
-dist.predict(y)
-dist.plot(figsize=(15, 12), grid=True)
+dist.predict(y);
+dist.plot(figsize=(15, 12), grid=True);
 dist.plot_summary()
 
 # Create random normal data with mean=2 and std=4
@@ -70,7 +74,7 @@ from distfit import distfit
 # Initialize using the quantile or percentile approach.
 model = distfit(method='quantile') # percentile
 # Fit model on input data X and detect the best theoretical distribution.
-model.fit_transform(X)
+model.fit_transform(X);
 # Make prediction for new data points.
 y = [-8, -2, 1, 3, 5, 15]
 model.predict(y)
@@ -99,13 +103,13 @@ y = [3,4,5,6,10,11,12,18,20]
 # dist = distfit(method='percentile', alpha=0.05, todf=False)
 # dist = distfit(method='quantile', alpha=0.05, todf=False)
 dist = distfit(method='parametric', alpha=0.05, todf=False)
-dist.fit_transform(X)
+dist.fit_transform(X);
 dist.plot(figsize=(15, 12), cii_properties=None, pdf_properties=None, grid=False)
 
 # Make prediction
-dist.predict(y)
-dist.plot()
-dist.plot_summary()
+dist.predict(y);
+dist.plot();
+dist.plot_summary();
 
 
 # %% Multiple distributions as input

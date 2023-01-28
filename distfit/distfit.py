@@ -4,7 +4,7 @@
 # Author      : E.Taskesen
 # Contact     : erdogant@gmail.com
 # github      : https://github.com/erdogant/distfit
-# Licence     : MIT
+# Licence     : See licences
 # --------------------------------------------------
 
 
@@ -20,9 +20,19 @@ from scipy.interpolate import make_interp_spline
 import statsmodels.stats.multitest as multitest
 import matplotlib.pyplot as plt
 import scipy.stats as st
+import logging
 
 import warnings
 warnings.filterwarnings('ignore')
+
+logger = logging.getLogger('')
+for handler in logger.handlers[:]:
+    logger.removeHandler(handler)
+console = logging.StreamHandler()
+formatter = logging.Formatter('[distfit] >%(levelname)s> %(message)s')
+console.setFormatter(formatter)
+logger.addHandler(console)
+logger = logging.getLogger(__name__)
 
 
 # %% Class dist
@@ -97,6 +107,13 @@ class distfit():
         Only used in discrete fitting, method="discrete". In principle, the best fit will be obtained if you set weighted=True. However, when using stats="RSS", you can set weighted=False.
     f : float, (default: 1.5)
         Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
+    verbose : [str, int], default is 'info' or 20
+        Set the verbose messages using string or integer values.
+            * 0, 60, None, 'silent', 'off', 'no']: No message.
+            * 10, 'debug': Messages from debug level and higher.
+            * 20, 'info': Messages from info level and higher.
+            * 30, 'warning': Messages from warning level and higher.
+            * 50, 'critical': Messages from critical level and higher.
 
     Returns
     -------
@@ -163,7 +180,8 @@ class distfit():
                  todf: bool = False,
                  weighted: bool = True,
                  f: float = 1.5,
-                 mhist: str = 'numpy'
+                 mhist: str = 'numpy',
+                 verbose: [str, int] = 'info',
                  ):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
@@ -180,15 +198,13 @@ class distfit():
         self.f = f  # Only for discrete
         self.weighted = weighted  # Only for discrete
         self.mhist = mhist
+        self.verbose = verbose
+        # Set the logger
+        set_logger(verbose=verbose)
 
     # Fit
-    def fit(self, verbose=3):
+    def fit(self, verbose=None):
         """Collect the required distribution functions.
-
-        Parameters
-        ----------
-        verbose : int [1-5], default: 3
-            Print information to screen. A higher number will print more.
 
         Returns
         -------
@@ -197,7 +213,8 @@ class distfit():
             list of functions containing distributions.
 
         """
-        if verbose>=3: print('[distfit] >fit..')
+        if verbose is not None: set_logger(verbose)
+        logger.info('fit')
         # Get the desired distributions.
         if self.method=='parametric':
             self.distributions = self.get_distributions(self.distr)
@@ -212,7 +229,7 @@ class distfit():
             raise Exception('[distfit] Error: method parameter can only be "parametric", "discrete", "quantile" or "percentile".')
 
     # Transform
-    def transform(self, X, verbose=3):
+    def transform(self, X, verbose=None):
         """Determine best model for input data X.
 
         The input data X can be modellend in two manners:
@@ -229,8 +246,13 @@ class distfit():
         ----------
         X : array-like
             The Null distribution or background data is build from X.
-        verbose : int [1-5], default: 3
-            Print information to screen. A higher number will print more.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
 
         Returns
         -------
@@ -252,55 +274,61 @@ class distfit():
             total number of elements in for data X
 
         """
+        if verbose is not None: set_logger(verbose)
         if len(X)<1: raise Exception('[distfit] >Error: Input X is empty!')
-        if verbose>=3: print('[distfit] >transform..')
+        logger.info('transform')
         # Format the X
         X = _format_data(X)
         self.size = len(X)
 
         # Get histogram of original X
-        X_bins, y_obs = _get_hist_params(X, self.bins, mhist=self.mhist)
+        X_bins, y_obs = self.density(X, self.bins, mhist=self.mhist)
         # Smoothing by interpolation
-        X_bins, y_obs = smoothline(X_bins, y_obs, interpol=1, window=self.smooth, verbose=verbose)
+        X_bins, y_obs = smoothline(X_bins, y_obs, interpol=1, window=self.smooth)
         self.histdata = (y_obs, X_bins)
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, verbose=verbose)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats)
             # Determine confidence intervals on the best fitting distribution
-            model = _compute_cii(self, model, verbose=verbose)
+            model = _compute_cii(self, model)
             # Store
             self.model = model
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
-            model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats, verbose=verbose)
-            model = _compute_cii(self, model, verbose=verbose)
+            model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats)
+            model = _compute_cii(self, model)
             # self.histdata = (figdata['Xdata'], figdata['hist'])
             self.model = model
             self.summary = figdata
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, X, verbose=verbose)
+            self.model = _compute_cii(self, X)
             self.summary = None
         elif self.method=='percentile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, X, verbose=verbose)
+            self.model = _compute_cii(self, X)
             self.percentile = np.percentile(X, 7)
             self.summary = None
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric", "quantile" or "percentile".')
+            raise Exception(logger.error('Method parameter can only be "parametric", "quantile" or "percentile".'))
 
-    # Fit and transform in one go
-    def fit_transform(self, X, verbose=3):
+    # Fit and transform in one go.
+    def fit_transform(self, X, verbose=None):
         """Fit best scoring theoretical distribution to the empirical data (X).
 
         Parameters
         ----------
         X : array-like
             Set of values belonging to the data
-        verbose : int [1-5], default: 3
-            Print information to screen. A higher number will print more.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
 
         Returns
         -------
@@ -322,12 +350,13 @@ class distfit():
             total number of elements in for data X
 
         """
+        if verbose is not None: set_logger(verbose)
         # Clean readily fitted models to ensure correct results.
-        self._clean(verbose=verbose)
+        self._clean()
         # Fit model to get list of distributions to check
-        self.fit(verbose=verbose)
+        self.fit()
         # Transform X based on functions
-        self.transform(X, verbose=verbose)
+        self.transform(X)
         # Store
         results = _store(self.alpha,
                          self.stats,
@@ -348,16 +377,16 @@ class distfit():
         # Return
         return results
 
-    def _clean(self, verbose=3):
+    def _clean(self):
         # Clean readily fitted models to ensure correct results.
         if hasattr(self, 'model'):
-            if verbose>=3: print('[distfit] >Cleaning previous fitted model results..')
+            logger.info('Cleaning previous fitted model results.')
             if hasattr(self, 'histdata'): del self.histdata
             if hasattr(self, 'model'): del self.model
             if hasattr(self, 'summary'): del self.summary
             if hasattr(self, 'size'): del self.size
 
-    def predict(self, y, alpha=None, verbose=3):
+    def predict(self, y, alpha=None, verbose=None):
         """Compute probability for response variables y, using the specified method.
 
         Computes P-values for [y] based on the fitted distribution from X.
@@ -372,8 +401,13 @@ class distfit():
             The model created by the .fit() function.
         alpha : float, default: None
             Significance alpha is inherited from self if None.
-        verbose : int [1-5], default: 3
-            Print information to screen. A higher number will print more.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
 
         Returns
         -------
@@ -405,30 +439,27 @@ class distfit():
         >>>
         >>> dist.plot()
         """
+        if verbose is not None: set_logger(verbose)
         if 'list' in str(type(y)): y=np.array(y)
         if 'float' in str(type(y)): y=np.array([y])
         if 'numpy.ndarray' not in str(type(y)): raise Exception('y should be of type np.array or list')
         if alpha is not None:
             self.alpha = alpha
-            if verbose>=3: print('[distfit] >Alpha is set to [%g]' %(self.alpha))
-
-        if verbose>=3: print('[distfit] >predict..')
+            logger.info('Alpha is set to [%g]' %(self.alpha))
+        logger.info('Compute significance for %d samples.' %(len(y)))
 
         if (self.method=='parametric') or (self.method=='discrete'):
-        # if self.method=='parametric':
-            out = _predict(self, y, verbose=verbose)
-        # elif self.method=='discrete':
-            # out = _predict(self, y, verbose=verbose)
+            out = _predict(self, y)
         elif self.method=='quantile':
-            out = _predict_quantile(self, y, verbose=verbose)
+            out = _predict_quantile(self, y)
         elif self.method=='percentile':
-            out = _predict_percentile(self, y, verbose=verbose)
+            out = _predict_percentile(self, y)
         else:
             raise Exception('[distfit] >Error: method parameter can only be "parametric", "quantile" or "percentile".')
         # Return
         return out
 
-    def generate(self, n, random_state=None, verbose=3):
+    def generate(self, n, random_state=None, verbose=None):
         """Generate new samples based on the fitted distribution.
 
         Parameters
@@ -437,8 +468,13 @@ class distfit():
             Number of samples to generate.
         random_state : int, optional
             Random state.
-        verbose : int, optional
-            Messaging. The default is 3.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
 
         Returns
         -------
@@ -463,23 +499,80 @@ class distfit():
         >>> Xnew = dist.generate(10)
         >>>
         """
+        if verbose is not None: set_logger(verbose)
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in generate: A model is required. Try fitting first on your data using fit_transform(X)')
-        if verbose>=3: print('[distfit] >Generate %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
+        logger.info('Generate %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
         X = None
 
         if (self.method=='parametric') or (self.method=='discrete'):
             X = self.model['model'].rvs(size=n, random_state=random_state)
         else:
-            if verbose>=3: print('[distfit] >Warning: nothing to generate. Method should be of type: "parametric" or "discrete"')
+            logger.warning('Nothing to generate. Method should be of type: "parametric" or "discrete"')
         # Return
         return X
+
+    # Get histogram density and bins.
+    def density(self, X, bins='auto', mhist='numpy'):
+        """Compute density based on input data and number of bins.
+
+        Parameters
+        ----------
+        X : array-like
+            Set of values belonging to the data
+        bins : int, default: 'auto'
+            Bin size to determine the empirical historgram.
+                * 'auto': Determine the bin size automatically.
+                * 50: Set specific bin size
+        mhist : str, (default: 'numpy')
+            The density extraction method.
+                * 'numpy'
+                * 'seaborn'
+
+        Returns
+        -------
+        binedges : array-like
+            Array with the bin edges.
+        histvals : array-like
+            Array with the histogram density values.
+
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>>
+        >>> # Initialize
+        >>> dist = distfit()
+        >>>
+        >>> # Compute bins and density
+        >>> bins, density = dist.density(X)
+        >>>
+        >>> # Make plot
+        >>> plt.figure(); plt.plot(bins, density)
+        >>>
+        """
+        if mhist=='numpy':
+            histvals, binedges = np.histogram(X, bins=bins, density=True)
+            binedges = (binedges + np.roll(binedges, -1))[:-1] / 2.0
+            # binedges[-1] += 10**-6
+        else:
+            import seaborn as sns
+            snsout = sns.distplot(X, bins=bins, norm_hist=False).get_lines()[0].get_data()
+            histvals = snsout[1]
+            binedges = snsout[0]
+            # binedges = np.append(binedges, 10**-6)
+
+        return (binedges, histvals)
 
     # Plot
     def plot(self,
              title='',
              emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'},
              pdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
-             bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'},
+             bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'center'},
              cii_properties={'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
              figsize=(20, 15),
              xlim=None,
@@ -487,7 +580,7 @@ class distfit():
              grid=True,
              fig=None,
              ax=None,
-             verbose=3):
+             verbose=None):
         """Make plot.
 
         Parameters
@@ -522,35 +615,41 @@ class distfit():
             Matplotlib figure (Note - ignored when method is `discrete`)
         ax : Axes, optional (default: None)
             Matplotlib Axes object (Note - ignored when method is `discrete`)
-        verbose : Int [1-5], optional (default: 3)
-            Print information to screen.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
 
         Returns
         -------
         tuple (fig, ax)
 
         """
+        if verbose is not None: set_logger(verbose)
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
         if cii_properties is not None: cii_properties = {**{'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
         if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'}, **emp_properties}
         if pdf_properties is not None: pdf_properties = {**{'color': '#004481', 'linewidth': 2, 'linestyle': '-'}, **pdf_properties}
         if bar_properties is not None: bar_properties = {**{'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}, **bar_properties}
 
-        if verbose>=3: print('[distfit] >plot..')
+        logger.info('Create plot for the %s method.' %(self.method))
         if (self.method=='parametric'):
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, verbose=verbose)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties)
         elif (self.method=='discrete'):
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, verbose=verbose)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties)
         elif (self.method=='quantile') or (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties, verbose=verbose)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties)
         else:
-            if verbose>=3: print('[distfit] >Warning: nothing to plot. Method not yet implemented for %s' %(self.method))
+            logger.warning('Nothing to plot. Method not yet implemented for %s' %(self.method))
             fig, ax = None, None
         # Return
         return fig, ax
 
     # Plot summary
-    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, fig=None, ax=None, grid=True, verbose=3):
+    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, fig=None, ax=None, grid=True, verbose=None):
         """Plot summary results.
 
         Parameters
@@ -565,15 +664,21 @@ class distfit():
             Matplotlib figure
         ax : Axes, optional (default: None)
             Matplotlib Axes object
-        verbose : Int [1-5], optional (default: 3)
-            Print information to screen.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
 
         Returns
         -------
         tuple (fig, ax)
 
         """
-        if verbose>=3: print('[distfit] >plot summary..')
+        if verbose is not None: set_logger(verbose)
+        logger.info('Ploting Summary.')
         if self.method=='parametric':
             if n_top is None:
                 n_top = len(self.summary['score'])
@@ -599,11 +704,11 @@ class distfit():
 
             return (fig, ax)
         else:
-            print('[distfit] This function works only in case of method is "parametric"')
+            logger.info('This function works only in case of method is "parametric"')
             return None, None
 
     # Save model
-    def save(self, filepath, overwrite=True, verbose=3):
+    def save(self, filepath, overwrite=True):
         """Save learned model in pickle file.
 
         Parameters
@@ -639,11 +744,11 @@ class distfit():
                 if arg=='y_pred': out.update({arg: self.y_pred})
                 if arg=='results': out.update({arg: self.results})
 
-        status = pypickle.save(filepath, out, verbose=verbose, overwrite=overwrite)
-        if verbose>=3: print('[distfit] >Saving.. %s' %(status))
+        status = pypickle.save(filepath, out, overwrite=overwrite)
+        logger.info('Saving %s' %(status))
 
     # Load model.
-    def load(self, filepath, verbose=3):
+    def load(self, filepath):
         """Load learned model.
 
         Parameters
@@ -658,7 +763,7 @@ class distfit():
         Object.
 
         """
-        out = pypickle.load(filepath, verbose=verbose)
+        out = pypickle.load(filepath)
         # Model Fit
         if out.get('model', None) is not None: self.model = out['model']
         if out.get('summary', None) is not None: self.summary = out['summary']
@@ -708,37 +813,39 @@ class distfit():
                     try:
                         out_distr.append(getattr(st, getdistr))
                     except:
-                        print('[distfit] >Error: [%s] does not exist! <skipping>' %(getdistr))
+                        logger.error('[%s] does not exist! <skipping>' %(getdistr))
 
         elif distr=='full':
             # st.levy_l, st.levy_stable, st.frechet_r, st.frechet_l
-            out_distr = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy, st.chi, st.chi2, st.cosine,
-                             st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm, st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk,
-                             st.foldcauchy, st.foldnorm, st.genlogistic, st.genpareto, st.gennorm, st.genexpon,
-                             st.genextreme, st.gausshyper, st.gamma, st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r,
-                             st.gumbel_l, st.halfcauchy, st.halflogistic, st.halfnorm, st.halfgennorm, st.hypsecant, st.invgamma, st.invgauss,
-                             st.invweibull, st.johnsonsb, st.johnsonsu, st.laplace, st.levy,
-                             st.logistic, st.loggamma, st.loglaplace, st.lognorm, st.lomax, st.maxwell, st.mielke, st.nakagami,
-                             st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm, st.rdist, st.reciprocal,
-                             st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t, st.triang, st.truncexpon, st.truncnorm, st.tukeylambda,
-                             st.uniform, st.vonmises, st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
-    
+            out_distr = [st.alpha, st.anglit, st.arcsine, st.beta, st.betaprime, st.bradford, st.burr, st.cauchy,
+                         st.chi, st.chi2, st.cosine, st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm,
+                         st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk, st.foldcauchy, st.foldnorm,
+                         st.genlogistic, st.genpareto, st.gennorm, st.genexpon, st.genextreme, st.gausshyper, st.gamma,
+                         st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r, st.gumbel_l,
+                         st.halfcauchy, st.halflogistic, st.halfnorm, st.halfgennorm, st.hypsecant, st.invgamma,
+                         st.invgauss, st.invweibull, st.johnsonsb, st.johnsonsu, st.laplace, st.levy,
+                         st.logistic, st.loggamma, st.loglaplace, st.lognorm, st.lomax, st.maxwell, st.mielke,
+                         st.nakagami, st.norm, st.pareto, st.pearson3, st.powerlaw, st.powerlognorm, st.powernorm,
+                         st.rdist, st.reciprocal, st.rayleigh, st.rice, st.recipinvgauss, st.semicircular, st.t,
+                         st.triang, st.truncexpon, st.truncnorm, st.tukeylambda, st.uniform, st.vonmises,
+                         st.vonmises_line, st.wald, st.weibull_min, st.weibull_max, st.wrapcauchy]
+
         elif distr=='popular':
             out_distr = [st.norm, st.expon, st.pareto, st.dweibull, st.t, st.genextreme, st.gamma, st.lognorm, st.beta, st.uniform, st.loggamma]
         else:
             try:
                 out_distr = [getattr(st, distr)]
             except:
-                print('[distfit] >Error: [%s] does not exist! <skipping>' %(distr))
+                logger.error('[%s] does not exist! <skipping>' %(distr))
 
         if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
         return out_distr
 
 
 # %%
-def _predict(self, y, verbose=3):
+def _predict(self, y):
     # Check which distribution fits best to the data
-    if verbose>=4: print('[distfit] >Compute significance for y for the fitted theoretical distribution...')
+    logger.debug('Compute significance for y for the fitted theoretical distribution.')
     if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
 
     # if (self.method=='parametric') or (self.method=='discrete'):
@@ -768,7 +875,7 @@ def _predict(self, y, verbose=3):
     # Set all values in range[0..1]
     Praw = np.clip(Praw, 0, 1)
     # Multiple test correction
-    y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
+    y_proba = _do_multtest(Praw, self.multtest)
     # up/down based on threshold
     y_pred = np.repeat('none', len(y))
     if not isinstance(self.model['CII_max_alpha'], type(None)):
@@ -793,7 +900,7 @@ def _predict(self, y, verbose=3):
 
 
 # %% _predict_quantile predict
-def _predict_quantile(self, y, verbose=3):
+def _predict_quantile(self, y):
     """Predict based on quantiles."""
     # Set bounds
     teststat = np.ones_like(y) * np.nan
@@ -825,7 +932,7 @@ def _predict_quantile(self, y, verbose=3):
 
 
 # %% percentile predict
-def _predict_percentile(self, y, verbose=3):
+def _predict_percentile(self, y):
     """Compute Probability based on quantiles.
 
     Suppose you have 2 data sets with a unknown distribution and you want to test
@@ -856,7 +963,7 @@ def _predict_percentile(self, y, verbose=3):
         # getP = np.clip(getP, 0, 1)
         # Praw[i] = getP
         teststat[i] = getstat
-        if verbose >= 4: print("[%.0f] - p-value = %f" %(y[i], getstat))
+        logger.debug("[%.0f] - p-value = %f" %(y[i], getstat))
 
     Praw[np.isin(y_pred, ['down', 'up'])] = 0
 
@@ -929,7 +1036,7 @@ def _plot_cii_quantile(model, results, cii_properties, ax):
 
 
 # %% Plot
-def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}, verbose=3):
+def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
     if not hasattr(self, 'results'): self.results=None
 
@@ -956,7 +1063,7 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
 
 
 # %% Plot
-def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid=True, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, cii_properties={}, verbose=3):
+def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid=True, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, cii_properties={}):
     # Store output and function parameters
     model = self.model
     Param = {}
@@ -1023,7 +1130,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     if hasattr(self, 'results') and (cii_properties is not None):
         if self.alpha is None: self.alpha=1
         idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
-        if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
+        logger.info("Mark %d significant regions" %(len(idxIN)))
 
         # Plot significant hits
         for i in idxIN:
@@ -1044,7 +1151,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     ax.legend(loc='upper right')
     ax.grid(grid)
 
-    if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
+    logger.info("Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return (fig, ax)
 
 
@@ -1080,24 +1187,8 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     return out
 
 
-# %% Get histogram of original data
-def _get_hist_params(X, bins, mhist='numpy'):
-    if mhist=='numpy':
-        histvals, binedges = np.histogram(X, bins=bins, density=True)
-        binedges = (binedges + np.roll(binedges, -1))[:-1] / 2.0
-        # binedges[-1] += 10**-6
-    else:
-        import seaborn as sns
-        snsout = sns.distplot(X, bins=bins, norm_hist=False).get_lines()[0].get_data()
-        histvals = snsout[1]
-        binedges = snsout[0]
-        # binedges = np.append(binedges, 10**-6)
-
-    return(binedges, histvals)
-
-
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats):
     model = {}
     model['distr'] = st.norm
     model['stats'] = stats
@@ -1106,8 +1197,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
-    
-    
+
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
 
@@ -1119,7 +1209,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
             with warnings.catch_warnings():
                 # fit dist to data
                 params = distribution.fit(data)
-                if verbose>=5: print(params)
+                logger.debug(params)
 
                 # Separate parts of parameters
                 arg = params[:-2]
@@ -1152,22 +1242,22 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, verbose=3)
                     model['scale'] = scale
                     model['arg'] = arg
 
-            if verbose>=3:
-                spaces_1 = ' ' * (max_name_len - len(distr_name))
-                scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
-                time_spent = time.time() - start_time
-                print("[distfit] >[%s%s] [%.4s sec] %s" %(distr_name, spaces_1, time_spent, scores))
+            # Setup for the logger
+            spaces_1 = ' ' * (max_name_len - len(distr_name))
+            scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
+            time_spent = time.time() - start_time
+            logger.info("[%s%s] [%.4s sec] %s" %(distr_name, spaces_1, time_spent, scores))
 
         except Exception:
             pass
             # e = sys.exc_info()[0]
-            # if verbose>=1: print(e)
+            # logger.error(e)
 
     # Sort the output
     df = df.sort_values('score')
     df.reset_index(drop=True, inplace=True)
     # Return
-    return(df, model)
+    return (df, model)
 
 
 # %% Compute fit score
@@ -1188,8 +1278,8 @@ def _compute_fit_score(stats, y_obs, pdf):
 
 
 # %% Determine confidence intervals on the best fitting distribution
-def _compute_cii(self, model, verbose=3):
-    if verbose>=3: print("[distfit] >Compute confidence interval [%s]" %(self.method))
+def _compute_cii(self, model):
+    logger.info("Compute confidence interval [%s]" %(self.method))
     CIIup, CIIdown = None, None
 
     if (self.method=='parametric') or (self.method=='discrete'):
@@ -1224,7 +1314,7 @@ def _compute_cii(self, model, verbose=3):
 
 
 # Multiple test correction
-def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
+def _do_multtest(Praw, multtest='fdr_bh'):
     """Multiple test correction for input pvalues.
 
     Parameters
@@ -1233,17 +1323,17 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
         Pvalues.
     multtest : str, default: 'fdr_bh'
         Multiple testing method. Options are:
-            None : No multiple testing
-            'bonferroni' : one-step correction
-            'sidak' : one-step correction
-            'holm-sidak' : step down method using Sidak adjustments
-            'holm' : step-down method using Bonferroni adjustments
-            'simes-hochberg' : step-up method  (independent)
-            'hommel' : closed method based on Simes tests (non-negative)
-            'fdr_bh' : Benjamini/Hochberg  (non-negative)
-            'fdr_by' : Benjamini/Yekutieli (negative)
-            'fdr_tsbh' : two stage fdr correction (non-negative)
-            'fdr_tsbky' : two stage fdr correction (non-negative)
+            * None : No multiple testing
+            * 'bonferroni' : one-step correction
+            * 'sidak' : one-step correction
+            * 'holm-sidak' : step down method using Sidak adjustments
+            * 'holm' : step-down method using Bonferroni adjustments
+            * 'simes-hochberg' : step-up method  (independent)
+            * 'hommel' : closed method based on Simes tests (non-negative)
+            * 'fdr_bh' : Benjamini/Hochberg  (non-negative)
+            * 'fdr_by' : Benjamini/Yekutieli (negative)
+            * 'fdr_tsbh' : two stage fdr correction (non-negative)
+            * 'fdr_tsbky' : two stage fdr correction (non-negative)
 
     Returns
     -------
@@ -1252,8 +1342,8 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
 
     """
     if not isinstance(multtest, type(None)):
-        if verbose>=3: print("[distfit] >Multiple test correction..[%s]" %multtest)
-        if verbose>=5: print(Praw)
+        logger.info("Multiple test correction method applied: [%s]." %multtest)
+        logger.debug(Praw)
         Padj = multitest.multipletests(Praw, method=multtest)[1]
     else:
         Padj=Praw
@@ -1262,7 +1352,7 @@ def _do_multtest(Praw, multtest='fdr_bh', verbose=3):
     return Padj
 
 
-def smoothline(xs, ys=None, interpol=3, window=1, verbose=3):
+def smoothline(xs, ys=None, interpol=3, window=1, verbose=None):
     """Smoothing 1D vector.
 
     Smoothing a 1d vector can be challanging if the number of data is low sampled.
@@ -1290,8 +1380,9 @@ def smoothline(xs, ys=None, interpol=3, window=1, verbose=3):
         Data points for the y-axis.
 
     """
+    if verbose is not None: set_logger(verbose)
     if window is not None:
-        if verbose>=3: print('[smoothline] >Smoothing by interpolation..')
+        logger.info('[smoothline] >Smoothing by interpolation..')
         # Specify number of points to interpolate the data
         # Interpolate
         extpoints = np.linspace(0, len(xs), len(xs) * interpol)
@@ -1337,7 +1428,7 @@ class BinomPMF:
         return st.binom(self.n, p).pmf(ks)
 
 
-def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=3):
+def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS'):
     """Fit histogram to binomial distribution.
 
     Parameters
@@ -1395,7 +1486,7 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=
     nmax = max(nmin, int(np.ceil(nest * f)))
     nvals = np.arange(nmin, nmax + 1)
     num_n = nmax - nmin + 1
-    if verbose>=4: print(f'[distfit] >Initial estimate: n={nest}, p={mean/nest:.3g}')
+    logger.debug(f'[distfit] >Initial estimate: n={nest}, p={mean/nest:.3g}')
 
     # store fit results for each n
     pvals, scores = np.zeros(num_n), np.zeros(num_n)
@@ -1412,13 +1503,13 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS', verbose=
         # Store
         pvals[nval - nmin] = p
         scores[nval - nmin] = score
-        if verbose>=4: print('[distfit] >[binomial] [%s=%.3g] Trying n=%s -> p=%.3g, (initial=%.3g)' %(stats, score, nval, p, p_guess))
+        logger.debug('[binomial] [%s=%.3g] Trying n=%s -> p=%.3g, (initial=%.3g)' %(stats, score, nval, p, p_guess))
 
     n_fit = np.argmin(scores) + nmin
     p_fit = pvals[n_fit - nmin]
     score = scores[n_fit - nmin]
     chi2r = score / (nk - 2) if nk > 2 else np.nan
-    if verbose>=3: print('[distfit] >[binomial] [%s=%.3g] [n=%.2g] [p=%.6g] [chi^2=%.3g]' %(stats, score, n_fit, p_fit, chi2r))
+    logger.info('[distfit] >[binomial] [%s=%.3g] [n=%.2g] [p=%.6g] [chi^2=%.3g]' %(stats, score, n_fit, p_fit, chi2r))
 
     # Store
     model = {}
@@ -1450,11 +1541,11 @@ def fit_binom(X):
     return hist
 
 
-def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS', verbose=3):
+def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS'):
     """Convert array of samples (nonnegative ints) to histogram and fit."""
-    if verbose>=3: print('[distfit] >Fit using binomial distribution..')
+    logger.info('Fit using binomial distribution.')
     hist = fit_binom(X)
-    model, figdata = transform_binom(hist, f=f, weighted=weighted, stats=stats, verbose=verbose)
+    model, figdata = transform_binom(hist, f=f, weighted=weighted, stats=stats)
     return model, figdata
 
 
@@ -1468,7 +1559,7 @@ def plot_binom(self,
                xlim=None,
                ylim=None,
                grid=True,
-               verbose=3):
+               ):
     """Plot discrete results.
 
     Parameters
@@ -1528,7 +1619,7 @@ def plot_binom(self,
             # Plot significant hits with multiple test
             if self.alpha is None: self.alpha=1
             idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
-            if verbose>=4: print("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
+            logger.debug("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
             if cii_properties.get('label'): cii_properties.pop('label')
             for i in idxIN:
                 ax[0].axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign_multipletest'], **cii_properties)
@@ -1569,7 +1660,7 @@ def plot_binom(self,
     ax[1].grid(grid)
     fig.show()
 
-    if verbose>=4: print("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
+    logger.debug("[distfit] Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
     return fig, ax
 
 
@@ -1618,3 +1709,51 @@ class k_distribution:
     def name():
         """Name of distribution."""
         return 'k'
+
+
+# %%
+def set_logger(verbose: [str, int] = 'info'):
+    """Set the logger for verbosity messages.
+
+    Parameters
+    ----------
+    verbose : [str, int], default is 'info' or 20
+        Set the verbose messages using string or integer values.
+            * 0, 60, None, 'silent', 'off', 'no']: No message.
+            * 10, 'debug': Messages from debug level and higher.
+            * 20, 'info': Messages from info level and higher.
+            * 30, 'warning': Messages from warning level and higher.
+            * 50, 'critical': Messages from critical level and higher.
+
+    Returns
+    -------
+    None.
+
+    Examples
+    --------
+    >>> # Set the logger to warning
+    >>> set_logger(verbose='warning')
+    >>>
+    >>> # Test with different messages
+    >>> logger.debug("Hello debug")
+    >>> logger.info("Hello info")
+    >>> logger.warning("Hello warning")
+    >>> logger.critical("Hello critical")
+    >>>
+    """
+    # Set 0 and None as no messages.
+    if (verbose==0) or (verbose is None):
+        verbose=60
+    # Convert str to levels
+    if isinstance(verbose, str):
+        levels = {'silent': 60,
+                  'off': 60,
+                  'no': 60,
+                  'debug': 10,
+                  'info': 20,
+                  'warning': 30,
+                  'critical': 50}
+        verbose = levels[verbose]
+
+    # Show examples
+    logger.setLevel(verbose)
