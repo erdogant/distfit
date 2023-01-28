@@ -82,6 +82,9 @@ The goodness of fit will change according the number of samples that is provided
 
 .. code:: python
 
+    # Initialize without verbose.
+    dist = distfit(verbose=0)
+
     # Create random data with varying number of samples
     samples = np.arange(250, 10000, 250)
 
@@ -92,7 +95,7 @@ The goodness of fit will change according the number of samples that is provided
     for s in samples:
         print(s)
         X = np.random.normal(0, 2, s)
-        dist.fit_transform(X, verbose=0)
+        dist.fit_transform(X)
         out.append([dist.model['loc'], dist.model['scale'], dist.model['name'], s])
 
 When we plot the results, ``distfit`` nicely shows that by increasing the number of samples results in a better fit of the parameters. A convergence towards mu=2 and std=0 is clearly seen.
@@ -200,14 +203,14 @@ We will iterate over sample sizes and smoothing windows to analyze the performan
     # Iterate over smooting window
     for smooth in tqdm(smooth_window):
     # Fit only for the uniform distribution
-        dist = distfit(distr='uniform', smooth=smooth, stats='RSS')
+        dist = distfit(distr='uniform', smooth=smooth, stats='RSS', verbose=0)
         # Estimate paramters for the number of samples
         out = []
 
         # Iterate over sample sizes
         for s in samples:
             X = np.random.randint(0, 100, s)
-            dist.fit_transform(X, verbose=0)
+            dist.fit_transform(X)
             out.append([dist.model['score'], dist.model['name'], s])
 
         df = pd.DataFrame(out, columns=[dist.stats,'name','samples'])
