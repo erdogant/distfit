@@ -8,6 +8,25 @@ import distfit
 
 # %%
 from distfit import distfit
+# Set parameters for the test-case
+n = 8
+p = 0.5
+# Generate 10000 samples of the distribution of (n, p)
+X = binom(n, p).rvs(10000)
+
+# Initialize distfit for discrete distribution for which the binomial distribution is used. 
+dist = distfit(method='discrete')
+# Run distfit to and determine whether we can find the parameters from the data.
+results = dist.fit_transform(X)
+# Get the model and best fitted parameters.
+
+y = [0, 1, 10, 11, 12]
+
+results = dist.predict(y)
+dist.plot()
+
+# %%
+from distfit import distfit
 dist = distfit()
 d = dist.get_distributions('popular')
 
