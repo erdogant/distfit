@@ -349,6 +349,33 @@ class distfit():
         size : int
             total number of elements in for data X
 
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>>
+        >>> # Default method is parameteric models
+        >>> dist = distfit()
+        >>>
+        >>> # In case of quantile
+        >>> dist = distfit(method='quantile')
+        >>>
+        >>> # In case of percentile
+        >>> dist = distfit(method='percentile')
+        >>>
+        >>> # Fit using method
+        >>> model_results = dist.fit_transform(X)
+        >>>
+        >>> dist.plot()
+        >>>
+        >>> # Make prediction
+        >>> results = dist.predict(y)
+        >>> dist.plot()
+        >>>
         """
         if verbose is not None: set_logger(verbose)
         # Clean readily fitted models to ensure correct results.

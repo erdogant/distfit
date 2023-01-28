@@ -50,6 +50,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#installation">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Methods</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
@@ -255,8 +268,10 @@ It is interesting to see that there is no clear contribution of the smoothing. T
 </section>
 <section id="integer-fitting">
 <h1>Integer fitting<a class="headerlink" href="#integer-fitting" title="Permalink to this heading"></a></h1>
-<p>In this example we will demonstrate the effect of fitting a distribution on integer values.
-For demonstration purposes, lets generate random integer values from a uniform distribution, and examine the RSS scores. We will iterate over sample sizes and smoothing windows to analyze the performance.</p>
+<p>It is recommend to fit integers using the <code class="docutils literal notranslate"><span class="pre">method=discrete</span></code>.</p>
+<p>Here, I will demonstrate the effect of fitting a uniform distribution on integer values.
+lets generate random integer values from a uniform distribution, and examine the RSS scores.
+We will iterate over sample sizes and smoothing windows to analyze the performance.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -295,11 +310,11 @@ For demonstration purposes, lets generate random integer values from a uniform d
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples. As an example, smooting does <strong>not</strong> improve the fitting anymore in case of more then <em>7000</em> samples. Note that this number may be different across data sets.</p>
+<p>The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples. Smooting does <strong>not</strong> improve the fitting anymore in case of more then <em>7000</em> samples. Note that this number may be different across data sets.</p>
+<p>From these results we can conclude that smooting seems only usefull for small(er) samples sizes.</p>
 <figure class="align-default" id="int-smooth-samples-sizes">
 <a class="reference internal image-reference" href="_images/int_smooth_sample_sizes.png"><img alt="_images/int_smooth_sample_sizes.png" src="_images/int_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" /></a>
 </figure>
-<p>The conlusion is that smooting seems only usefull for small(er) samples sizes. Similar results were also seen for continuous data.</p>
 <hr>
 <center>
         <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
