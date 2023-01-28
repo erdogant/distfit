@@ -175,8 +175,11 @@ Lets analyze the RSS score acorss the varying sample sizes and smooting windows.
 Integer fitting
 ''''''''''''''''''''''''''''''''
 
-In this example we will demonstrate the effect of fitting a distribution on integer values.
-For demonstration purposes, lets generate random integer values from a uniform distribution, and examine the RSS scores. We will iterate over sample sizes and smoothing windows to analyze the performance.
+It is recommend to fit integers using the ``method=discrete``.
+
+Here, I will demonstrate the effect of fitting a uniform distribution on integer values.
+lets generate random integer values from a uniform distribution, and examine the RSS scores.
+We will iterate over sample sizes and smoothing windows to analyze the performance.
 
 .. code:: python
 
@@ -217,14 +220,15 @@ For demonstration purposes, lets generate random integer values from a uniform d
     ax.set_ylim([0, 0.001])
     ax.legend()
 
-The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. As an example, smooting does **not** improve the fitting anymore in case of more then *7000* samples. Note that this number may be different across data sets. 
+The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that **not** smooting shows the best fit by an increasing number of samples. Smooting does **not** improve the fitting anymore in case of more then *7000* samples. Note that this number may be different across data sets. 
+
+From these results we can conclude that smooting seems only usefull for small(er) samples sizes.
 
 .. _int_smooth_samples_sizes:
 
 .. figure:: ../figs/int_smooth_sample_sizes.png
     :scale: 80%
 
-The conlusion is that smooting seems only usefull for small(er) samples sizes. Similar results were also seen for continuous data.
 
 .. raw:: html
 

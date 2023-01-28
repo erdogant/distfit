@@ -61,6 +61,12 @@ Contents
    
    Installation
 
+.. toctree::
+  :maxdepth: 2
+  :caption: Functions
+
+  Functions
+
 
 .. toctree::
   :maxdepth: 3

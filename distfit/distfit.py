@@ -848,8 +848,6 @@ def _predict(self, y):
     logger.debug('Compute significance for y for the fitted theoretical distribution.')
     if not hasattr(self, 'model'): raise Exception('Error: Before making a prediction, a model must be fitted first using the function: fit_transform(X)')
 
-    # if (self.method=='parametric') or (self.method=='discrete'):
-        # getdist = self.model['model']
     # Compute P-value for data based on null-distribution
     Pvalues = self.model['model'].cdf(y)
     # else:
