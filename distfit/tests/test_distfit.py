@@ -14,8 +14,7 @@ def show_figures(dist):
 class Test_DISTFIT(unittest.TestCase):
 
     def test_figures(self):
-        # X = np.random.normal(0, 2, 1000)
-        # y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+        from distfit import distfit
         dist = distfit()
         X = binom(8, 0.5).rvs(1000)
         dist = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
@@ -23,29 +22,36 @@ class Test_DISTFIT(unittest.TestCase):
         show_figures(dist)
 
         X = np.random.uniform(0, 1000, 10000)
-        dist = distfit(bound=None, distr='uniform')
+        dist = distfit(distr='uniform')
+        y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dist.fit_transform(X)
+        dist.predict(y)
         show_figures(dist)
         
         X = np.random.exponential(0.5, 10000)
-        dist = distfit(bound=None, distr='expon')
+        dist = distfit(distr='expon')
+        y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dist.fit_transform(X)
         dist.plot(figsize=(15, 12), grid=False)
+        dist.predict(y)
         show_figures(dist)
         
         X = np.random.normal(0, 2, 10000)
-        dist = distfit(bound=None, distr='norm')
+        dist = distfit(distr='norm')
+        y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dist.fit_transform(X)
+        dist.predict(y)
         show_figures(dist)
         
         dist.plot(bar_properties={'color': '#808080', 'label': None},
                   pdf_properties={'color': 'r'},
                   emp_properties={'color': '#000000', 'linewidth': 3},
                   cii_properties={'color': 'b'})
-        
 
 
     def test_distfit(self):
+        from distfit import distfit
+
         X = np.random.normal(0, 2, 1000)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         # Initialize
@@ -191,3 +197,16 @@ class Test_DISTFIT(unittest.TestCase):
         # TEST 15B
         results = dist.predict([0, 1, 10, 11, 12])
         assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'y_bool']))
+
+        from distfit import distfit
+        # Set parameters for the test-case
+        X = binom(8, 0.5).rvs(10000)
+        # Initialize distfit for discrete distribution for which the binomial distribution is used. 
+        dist = distfit(method='discrete')
+        # Run distfit to and determine whether we can find the parameters from the data.
+        results = dist.fit_transform(X)
+        # Get the model and best fitted parameters.
+        y = [0, 1, 10, 11, 12]
+        results = dist.predict(y)
+        dist.plot()
+        
