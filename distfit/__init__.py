@@ -2,7 +2,7 @@ from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '1.5.0'
+__version__ = '1.5.1'
 
 
 # module level doc-string
