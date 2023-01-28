@@ -1039,25 +1039,25 @@ def _get_cii_properties(cii_properties):
 def _plot_cii_quantile(model, results, cii_properties, ax):
     if cii_properties is not None:
         # Extract cii properties
-        cii_properties, cii_colors = _get_cii_properties(cii_properties)
+        cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
         # add CII
-        ax.axvline(model['CII_min_alpha'], c=cii_colors['color'], label='CII low', **cii_properties)
-        ax.axvline(model['CII_max_alpha'], c=cii_colors['color'], label='CII high', **cii_properties)
+        ax.axvline(model['CII_min_alpha'], c=cii_properties_custom['color'], label='CII low', **cii_properties)
+        ax.axvline(model['CII_max_alpha'], c=cii_properties_custom['color'], label='CII high', **cii_properties)
 
         # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
         if results is not None:
             for i in range(0, len(results['y'])):
                 if results['y_pred'][i] != 'none':
-                    ax.axvline(results['y'][i], c=cii_colors['color_sign'], **cii_properties)
+                    ax.axvline(results['y'][i], c=cii_properties_custom['color_sign'], **cii_properties)
 
             idxIN = np.logical_or(results['y_pred']=='down', results['y_pred']=='up')
             if np.any(idxIN):
                 cii_properties['label']='Outside boundaries'
-                ax.scatter(results['y'][idxIN], np.zeros(sum(idxIN)), color=cii_colors['color_sign'], marker=cii_colors['marker'], **cii_properties)
+                ax.scatter(results['y'][idxIN], np.zeros(sum(idxIN)), color=cii_properties_custom['color_sign'], marker=cii_properties_custom['marker'], **cii_properties)
             idxOUT = results['y_pred']=='none'
             if np.any(idxOUT):
                 cii_properties['label']='Inside boundaries'
-                ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_colors['color_general'], marker=cii_colors['marker'], **cii_properties)
+                ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_properties_custom['color_general'], marker=cii_properties_custom['marker'], **cii_properties)
 
 
 # %% Plot
@@ -1096,7 +1096,7 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     Param['figsize'] = figsize
     Param['xlim'] = xlim
     Param['ylim'] = ylim
-    cii_properties, cii_colors = _get_cii_properties(cii_properties)
+    cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
 
     # Make figure
     best_dist = model['distr']
@@ -1145,10 +1145,10 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
         # Plot vertical line to stress the cut-off point
         if self.model['CII_min_alpha'] is not None:
             cii_properties['label'] = 'CII low ' + '(' + str(self.alpha) + ')'
-            ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+            ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
         if self.model['CII_max_alpha'] is not None:
             cii_properties['label'] = 'CII high ' + '(' + str(self.alpha) + ')'
-            ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+            ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
         if cii_properties.get('label'): cii_properties.pop('label')
 
     # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
@@ -1160,18 +1160,18 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
         # Plot significant hits
         for i in idxIN:
             if cii_properties.get('label'): cii_properties.pop('label')
-            ax.axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign_multipletest'], **cii_properties)
+            ax.axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_properties_custom['size'], marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign_multipletest'], **cii_properties)
 
         # Plot the samples that are not signifcant after multiple test.
         if np.any(idxIN):
             cii_properties['label'] = 'Significant'
-            ax.scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), s=50, marker=cii_colors['marker'], color=cii_colors['color_sign'], **cii_properties)
+            ax.scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign'], **cii_properties)
 
         # Plot the samples that are not signifcant after multiple test.
         idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
         if np.any(idxOUT):
             cii_properties['label'] = 'Not significant'
-            ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_colors['marker'], color=cii_colors['color_general'], **cii_properties)
+            ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
     ax.legend(loc='upper right')
     ax.grid(grid)
@@ -1603,7 +1603,7 @@ def plot_binom(self,
     # dist = self.model['distr']
     best_fit_name = self.model['name'].title()
     best_fit_param = self.model['params']
-    cii_properties, cii_colors = _get_cii_properties(cii_properties)
+    cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
 
     model = self.model
     figdata = self.summary
@@ -1634,10 +1634,10 @@ def plot_binom(self,
         # Plot vertical line to stress the cut-off point
         if self.model['CII_min_alpha'] is not None:
             cii_properties['label'] = 'CII low ' + '(' + str(self.alpha) + ')'
-            ax[0].axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+            ax[0].axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
         if self.model['CII_max_alpha'] is not None:
             cii_properties['label'] = 'CII high ' + '(' + str(self.alpha) + ')'
-            ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_colors['color'], **cii_properties)
+            ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
 
         # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
         if hasattr(self, 'results'):
@@ -1647,18 +1647,18 @@ def plot_binom(self,
             logger.debug("[distfit] >Plot Number of significant regions detected: %d" %(len(idxIN)))
             if cii_properties.get('label'): cii_properties.pop('label')
             for i in idxIN:
-                ax[0].axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign_multipletest'], **cii_properties)
+                ax[0].axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_properties_custom['size'], marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign_multipletest'], **cii_properties)
 
             # Plot the samples that signifcant without multiple test.
             if np.any(idxIN):
                 cii_properties['label']='Significant'
-                ax[0].scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), size=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_sign'], **cii_properties)
+                ax[0].scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), s=cii_properties_custom['size'], marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign'], **cii_properties)
 
             # Plot the samples that are not signifcant.
             idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
             if np.any(idxOUT):
                 cii_properties['label']='Not significant'
-                ax[0].scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), size=cii_colors['size'], marker=cii_colors['marker'], color=cii_colors['color_general'], **cii_properties)
+                ax[0].scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), s=cii_properties_custom['size'], marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
     # Limit axis
     if Param['xlim'] is not None:
@@ -1679,8 +1679,8 @@ def plot_binom(self,
     ax[1].set_ylabel(self.stats)
     plotfunc = ax[1].semilogy if figdata['scores'].max()>20 * figdata['scores'].min()>0 else ax[1].plot
     plotfunc(figdata['nvals'], figdata['scores'], 'k-', label=('%s over n scan' %self.stats))
-    ax[1].vlines(n_fit, 0, figdata['scores'].max(), color=cii_colors['color'], linestyles='dashed')
-    ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), color=cii_colors['color'], linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
+    ax[1].vlines(n_fit, 0, figdata['scores'].max(), color=cii_properties_custom['color'], linestyles='dashed')
+    ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), color=cii_properties_custom['color'], linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
     ax[1].legend(loc='upper right')
     ax[1].grid(grid)
     fig.show()
