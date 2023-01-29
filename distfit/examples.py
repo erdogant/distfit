@@ -8,6 +8,85 @@ import distfit
 
 # %%
 from distfit import distfit
+dist = distfit(verbose=20)
+
+# Random Exponential data
+X = np.random.exponential(0.5, 10000)
+# X = np.random.uniform(0, 1000, 10000)
+# X = np.random.normal(0, 1, 1000)
+dist = distfit(distr='popular')
+# Fit and plot
+dist.fit_transform(X)
+# dist.plot_cdf(n_top=10);
+fig, ax = dist.plot(chart='PDF', n_top=1);
+dist.plot(chart='CDF', n_top=1, fig=fig, ax=ax);
+# dist.plot_cdf()
+dist.plot_summary(n_top=10);
+
+
+# bins_count, count = dist.density(X)
+# # finding the PDF of the histogram using count values
+# pdf_emp = count / sum(count)
+# # using numpy np.cumsum to calculate the CDF
+# # We can also find using the PDF values by looping and adding
+# cdf_emp = np.cumsum(pdf_emp)
+# # plotting PDF and CDF
+# plt.figure()
+# # plt.plot(bins_count, pdf_emp, color="red", label="Emperical PDF")
+# plt.plot(bins_count, cdf_emp, label="Emperical CDF", marker='o')
+# # plt.show()
+
+# import scipy.stats as stats
+# import matplotlib.pyplot as plt
+# import numpy as np
+# # plt.figure()
+# # Create steps 
+# x = np.linspace(min(X), max(X), len(X))
+# # cdf = stats.binom.cdf
+# cdf = dist.model['model'].cdf
+# plt.plot(x, cdf(x), label="CDF", color='k')
+# # plt.plot(x,cdf(x, 50, 0.2))
+# # plt.show()
+# plt.legend()
+
+
+import scipy.stats as stats
+import pylab 
+# Calculate quantiles for a probability plot, and optionally show the plot.
+# Generates a probability plot of sample data against the quantiles of a specified theoretical distribution.
+# probplot optionally calculates a best-fit line for the data and plots the results using Matplotlib or a given plot function.
+fig, ax = plt.subplots(figsize=(15,10))
+out = stats.probplot(X, dist=dist.model['name'], sparams=dist.model['params'], plot=ax)
+ax.grid(True)
+
+import statsmodels.api as sm
+# Q-Q plot of the quantiles of x versus the quantiles/ppf of a distribution.
+fig, ax = plt.subplots(figsize=(15,10))
+sm.qqplot(X, line='45', dist=dist.model['model'], ax=ax)
+ax.grid(True)
+ax.set_title('QQ plot')
+
+# measurements = np.random.normal(loc = 20, scale = 5, size=100)   
+# stats.probplot(measurements, dist=dist.model['name'], plot=pylab)
+
+pylab.show()
+
+# %%
+# def QQPlot(cdf, fit):
+#     """Makes a QQPlot of the values from actual and fitted distributions.
+
+#     cdf: actual Cdf
+#     fit: model Cdf
+#     """
+#     ps = cdf.ps
+#     actual = cdf.xs
+#     fitted = [fit.Value(p) for p in ps]
+
+#     plt.plot(fitted, actual)
+    
+
+# %%
+from distfit import distfit
 # Set parameters for the test-case
 n = 8
 p = 0.5
