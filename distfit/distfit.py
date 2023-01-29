@@ -582,7 +582,7 @@ class distfit():
         >>>
         """
         if mhist=='numpy':
-            histvals, binedges = np.histogram(X, bins=bins, density=True)
+            histvals, binedges = np.histogram(X, bins=bins, density=True, normed=None)
             binedges = (binedges + np.roll(binedges, -1))[:-1] / 2.0
             # binedges[-1] += 10**-6
         else:
