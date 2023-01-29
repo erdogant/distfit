@@ -21,6 +21,7 @@ import statsmodels.stats.multitest as multitest
 import matplotlib.pyplot as plt
 import scipy.stats as st
 import logging
+import colourmap
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -596,26 +597,39 @@ class distfit():
 
     # Plot
     def plot(self,
+             chart='PDF',
+             n_top=1,
              title='',
-             emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'},
+             emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'},
              pdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
              bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'center'},
              cii_properties={'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
              figsize=(20, 15),
              xlim=None,
              ylim=None,
-             grid=True,
              fig=None,
              ax=None,
+             grid=True,
+             cmap='Set1',
              verbose=None):
         """Make plot.
 
         Parameters
         ----------
+        chart: str, default: 'PDF'
+            Chart to plot.
+                * 'PDF': Probability density function.
+                * 'CDF': Cumulative density function.
+                * 'QQ': Q-Q plot.
+                * 'probability': Probability plot.
+        n_top : int, optional
+            Show the top number of results. The default is 1.
+        title : String, optional (default: '')
+            Title of the plot.
         emp_properties : dict
             The line properties of the emperical line.
                 * None: Do not plot.
-                * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'}: default
+                * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'}: default
         pdf_properties : dict
             The line properties of the pdf.
                 * None: Do not plot.
@@ -628,20 +642,20 @@ class distfit():
             bar properties of the histogram.
                 * None: Do not plot.
                 * {'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}: default
-        title : String, optional (default: '')
-            Title of the plot.
         figsize : tuple, optional (default: (10,8))
             The figure size.
         xlim : Float, optional (default: None)
             Limit figure in x-axis.
         ylim : Float, optional (default: None)
             Limit figure in y-axis.
-        grid : Bool, optional (default: True)
-            Show the grid on the figure.
         fig : Figure, optional (default: None)
             Matplotlib figure (Note - ignored when method is `discrete`)
         ax : Axes, optional (default: None)
             Matplotlib Axes object (Note - ignored when method is `discrete`)
+        grid : Bool, optional (default: True)
+            Show the grid on the figure.
+        cmap : String, optional (default: 'Set1')
+            Colormap when plotting multiple the CDF in case n_top > 1.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -658,21 +672,144 @@ class distfit():
         if verbose is not None: set_logger(verbose)
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
         if cii_properties is not None: cii_properties = {**{'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
-        if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': 'Emperical distribution'}, **emp_properties}
+        if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': None}, **emp_properties}
         if pdf_properties is not None: pdf_properties = {**{'color': '#004481', 'linewidth': 2, 'linestyle': '-'}, **pdf_properties}
         if bar_properties is not None: bar_properties = {**{'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}, **bar_properties}
 
-        logger.info('Create plot for the %s method.' %(self.method))
-        if (self.method=='parametric'):
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties)
-        elif (self.method=='discrete'):
+        logger.info('Create %s plot for the %s method.' %(chart, self.method))
+        if chart.upper()=='PDF' and self.method=='parametric':
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, n_top=n_top, cmap=cmap)
+        elif chart.upper()=='PDF' and self.method=='discrete':
             fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties)
-        elif (self.method=='quantile') or (self.method=='percentile'):
+        elif chart.upper()=='PDF' and (self.method=='quantile') or (self.method=='percentile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties)
+        elif chart.upper()=='CDF' and self.method=='parametric':
+            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cmap=cmap)
+        elif chart.upper()=='QQ' and self.method=='parametric':
+            pass
+        elif chart.upper()=='PROBABILITY' and self.method=='parametric':
+            pass
         else:
-            logger.warning('Nothing to plot. Method not yet implemented for %s' %(self.method))
+            logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
             fig, ax = None, None
+
         # Return
+        return fig, ax
+
+    # Plot CDF
+    def plot_cdf(self,
+                 n_top=1,
+                 title='',
+                 figsize=(20, 15),
+                 xlim=None,
+                 ylim=None,
+                 fig=None,
+                 ax=None,
+                 grid=True,
+                 emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'},
+                 cdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
+                 cmap='Set1',
+                 verbose=None):
+        """Plot CDF results.
+
+        Parameters
+        ----------
+        n_top : int, optional
+            Show the top number of results. The default is 1.
+        title : String, optional (default: '')
+            Title of the plot.
+        figsize : tuple, optional (default: (10,8))
+            The figure size.
+        xlim : Float, optional (default: None)
+            Limit figure in x-axis.
+        ylim : Float, optional (default: None)
+            Limit figure in y-axis.
+        fig : Figure, optional (default: None)
+            Matplotlib figure (Note - ignored when method is `discrete`)
+        ax : Axes, optional (default: None)
+            Matplotlib Axes object (Note - ignored when method is `discrete`)
+        grid : Bool, optional (default: True)
+            Show the grid on the figure.
+        emp_properties : dict
+            The line properties of the emperical line.
+                * None: Do not plot.
+                * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'}: default
+        cdf_properties : dict
+            The line properties of the pdf.
+                * None: Do not plot.
+                * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
+        cmap : String, optional (default: 'Set1')
+            Colormap when plotting multiple the CDF in case n_top > 1.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
+
+        Returns
+        -------
+        tuple (fig, ax)
+
+        """
+        logger.info('Ploting CDF')
+        if verbose is not None: set_logger(verbose)
+        if n_top is None: n_top = 1
+
+        # Create figure
+        if self.method=='parametric':
+            # Create figure
+            if ax is None: fig, ax = plt.subplots(figsize=figsize)
+
+            # Plot Emperical CDF
+            count, bins_count = self.histdata
+            # finding the PDF of the histogram using count values
+            pdf_emp = count / sum(count)
+            # using numpy np.cumsum to calculate the CDF. We can also find using the PDF values by looping and adding
+            cdf_emp = np.cumsum(pdf_emp)
+            # plot
+            emp_properties['marker'] = 'o'
+            if emp_properties.get('label', None) is None: emp_properties['label'] = 'Emperical CDF'
+            ax.plot(bins_count, cdf_emp, **emp_properties)
+
+            # Plot Theoretical CDF
+            getmax = np.max(self.histdata[1])
+            getmin = np.min(self.histdata[1])
+            # Build pdf and turn into pandas Series
+            x = np.linspace(getmin, getmax, self.size)
+            if cdf_properties.get('label', None) is None: cdf_properties['label'] = self.model['name'] + " (best fit)"
+            cdf = self.model['model'].cdf
+            # Plot the best CDF
+            ax.plot(x, cdf(x), **cdf_properties)
+
+            # Plot other CDFs
+            if n_top>1:
+                n_top = n_top + 1
+                n_top = np.minimum(self.summary.shape[0], n_top)
+                ycolors = colourmap.generate(n_top, cmap=cmap, scheme='hex')
+                for i in range(1, n_top):
+                    # Plot cdf
+                    cdf = self.summary['model'].iloc[i].cdf
+                    ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': ycolors[i]})
+
+            # Limit axis
+            if xlim is not None:
+                ax.set_xlim(xlim[0], xlim[1])
+            if ylim is not None:
+                ax.set_ylim(ylim[0], ylim[1])
+
+            # Make text for plot
+            param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
+            param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
+            ax.set_title('%s\n%s\n%s' %(title, self.model['name'], self.stats + ' (' + param_str + ')'))
+            ax.set_xlabel('Values')
+            ax.set_ylabel('Frequency')
+            ax.legend(loc='upper right')
+            ax.grid(grid)
+        else:
+            logger.warning('This function works only in case of method is "parametric"')
+            return None, None
         return fig, ax
 
     # Plot summary
@@ -706,16 +843,20 @@ class distfit():
         """
         if verbose is not None: set_logger(verbose)
         logger.info('Ploting Summary.')
+
+        # Create figure
         if self.method=='parametric':
-            if n_top is None:
-                n_top = len(self.summary['score'])
-
+            # Collect scores
+            if n_top is None: n_top = len(self.summary['score'])
+            # Collect data
             x = self.summary['score'][0:n_top]
+            # Collect labels
             labels = self.summary['distr'].values[0:n_top]
-            if ax is None:
-                fig, ax = plt.subplots(figsize=figsize)
 
-            plt.plot(x, color='#004481', linewidth=2)
+            # Create figure
+            if ax is None: fig, ax = plt.subplots(figsize=figsize)
+            # Create plot
+            plt.plot(x, color='#004481', linewidth=2, marker='o')
             # You can specify a rotation for the tick labels in degrees or with keywords.
             plt.xticks(np.arange(len(x)), labels, rotation='vertical')
             # Pad margins so that markers don't get clipped by the axes
@@ -723,11 +864,10 @@ class distfit():
             # Tweak spacing to prevent clipping of tick-labels
             plt.subplots_adjust(bottom=0.15)
             ax.grid(grid)
-            plt.xlabel('Distribution')
-            plt.ylabel(('%s (lower is better)' %(self.stats)))
-            plt.title('Best fit: %s' %(self.model['name']))
-            if ylim is not None:
-                plt.ylim(ymin=ylim[0], ymax=ylim[1])
+            plt.xlabel('PDF name')
+            plt.ylabel(('%s (goodness-of-fit test)' %(self.stats)))
+            plt.title('Best fitting PDF: %s' %(self.model['name']))
+            if ylim is not None: plt.ylim(ymin=ylim[0], ymax=ylim[1])
 
             return (fig, ax)
         else:
@@ -1009,9 +1149,17 @@ def _predict_percentile(self, y):
 
 
 # %% Plot bar
-def _plot_bar(binedges, histvals, bar_properties, ax):
-    if bar_properties is not None:
-        ax.bar(binedges[:-1], histvals[:-1], width=np.diff(binedges), **bar_properties)
+def _plot_pdf_more(df, x, n_top, ax, cmap='Set1'):
+    if n_top is None: n_top = 1
+    if n_top>1:
+        n_top = n_top + 1
+        n_top = np.minimum(df.shape[0], n_top)
+        ycolors = colourmap.generate(n_top, cmap=cmap, scheme='hex')
+        for i in range(1, n_top):
+            # Plot pdf
+            tmp_distribution = getattr(st, df['distr'].iloc[i])
+            tmp_y = tmp_distribution.pdf(x, loc=df['loc'].iloc[i], scale=df['scale'].iloc[i], *df['arg'].iloc[i])
+            _plot_pdf(x, tmp_y, df['distr'].iloc[i], {'linewidth': 2, 'linestyle': '--', 'color': ycolors[i]}, ax)
 
 
 def _plot_pdf(x, y, label, pdf_properties, ax):
@@ -1019,6 +1167,11 @@ def _plot_pdf(x, y, label, pdf_properties, ax):
         # Changing label of the pdf is not allowed.
         if pdf_properties.get('label', None) is not None: pdf_properties.pop('label')
         ax.plot(x, y, label=label, **pdf_properties)
+
+
+def _plot_bar(binedges, histvals, bar_properties, ax):
+    if bar_properties is not None:
+        ax.bar(binedges[:-1], histvals[:-1], width=np.diff(binedges), **bar_properties)
 
 
 def _plot_emp(x, y, line_properties, ax):
@@ -1059,7 +1212,6 @@ def _plot_cii_quantile(model, results, cii_properties, ax):
                 cii_properties['label']='Inside boundaries'
                 ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_properties_custom['color_general'], marker=cii_properties_custom['marker'], **cii_properties)
 
-
 # %% Plot
 def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
@@ -1086,9 +1238,22 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
 
     return fig, ax
 
-
 # %% Plot
-def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid=True, fig=None, ax=None, emp_properties={}, pdf_properties={}, bar_properties={}, cii_properties={}):
+def _plot_parametric(self,
+                     n_top = 1,
+                     title='',
+                     figsize=(10, 8),
+                     xlim=None,
+                     ylim=None,
+                     grid=True,
+                     fig=None,
+                     ax=None,
+                     emp_properties={},
+                     pdf_properties={},
+                     bar_properties={},
+                     cii_properties={},
+                     cmap='Set1'):
+
     # Store output and function parameters
     model = self.model
     Param = {}
@@ -1096,28 +1261,27 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     Param['figsize'] = figsize
     Param['xlim'] = xlim
     Param['ylim'] = ylim
+    Param['n_top'] = np.minimum(self.summary.shape[0], n_top)
+    # Collect properties
     cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
 
     # Make figure
-    best_dist = model['distr']
     best_fit_name = model['name'].title()
-    best_fit_param = model['params']
     arg = model['params'][:-2]
     loc = model['params'][-2]
     scale = model['params'][-1]
-    distline = getattr(st, model['name'])
+    distribution = getattr(st, model['name'])
+    if emp_properties.get('label', None) is None: emp_properties['label'] = 'Emperical PDF'
 
     # Get pdf boundaries
-    getmin = distline.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.0000001, loc=loc, scale=scale)
-    getmax = distline.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distline.ppf(0.9999999, loc=loc, scale=scale)
-
+    getmin = distribution.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.0000001, loc=loc, scale=scale)
+    getmax = distribution.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.9999999, loc=loc, scale=scale)
     # Take maximum/minimum based on empirical data to avoid long theoretical distribution tails
     getmax = np.minimum(getmax, np.max(self.histdata[1]))
     getmin = np.maximum(getmin, np.min(self.histdata[1]))
-
     # Build pdf and turn into pandas Series
     x = np.linspace(getmin, getmax, self.size)
-    y = distline.pdf(x, loc=loc, scale=scale, *arg)
+    y = distribution.pdf(x, loc=loc, scale=scale, *arg)
 
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
 
@@ -1126,11 +1290,13 @@ def _plot_parametric(self, title='', figsize=(10, 8), xlim=None, ylim=None, grid
     # Plot empirical data
     _plot_emp(self.histdata[1], self.histdata[0], emp_properties, ax)
     # Plot pdf
-    _plot_pdf(x, y, best_fit_name, pdf_properties, ax)
+    _plot_pdf(x, y, best_fit_name + ' (best fit)', pdf_properties, ax)
+    # Plot top n pdf
+    _plot_pdf_more(self.summary, x, Param['n_top'], ax, cmap=cmap)
 
     # Make text for plot
-    param_names = (best_dist.shapes + ', loc, scale').split(', ') if best_dist.shapes else ['loc', 'scale']
-    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, best_fit_param)])
+    param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
+    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
     ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + ' (' + param_str + ')'))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
@@ -1219,7 +1385,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats):
     model['stats'] = stats
     model['params'] = (0.0, 1.0)
     best_score = np.inf
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg'])
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg', 'params', 'model'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
@@ -1254,6 +1420,8 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats):
                 df.values[i, 2] = loc
                 df.values[i, 3] = scale
                 df.values[i, 4] = arg
+                df.values[i, 5] = params
+                df.values[i, 6] = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
 
                 # identify if this distribution is better
                 if best_score > score > 0:
@@ -1304,7 +1472,7 @@ def _compute_fit_score(stats, y_obs, pdf):
 
 # %% Determine confidence intervals on the best fitting distribution
 def _compute_cii(self, model):
-    logger.info("Compute confidence interval [%s]" %(self.method))
+    logger.info("Compute confidence intervals [%s]" %(self.method))
     CIIup, CIIdown = None, None
 
     if (self.method=='parametric') or (self.method=='discrete'):
@@ -1736,6 +1904,12 @@ class k_distribution:
         return 'k'
 
 
+def scale_data(y):
+    ynorm = y
+    for i, value in enumerate(y):
+        ynorm[i] = (value - min(y)) / (max(y) - min(y))
+    return ynorm
+    
 # %%
 def set_logger(verbose: [str, int] = 'info'):
     """Set the logger for verbosity messages.
