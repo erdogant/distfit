@@ -67,10 +67,21 @@ Get Distributions
 -----------------------------------
 
 
-Plot
+Plot PDF/CDF
 ################################################################
 
 .. automodule:: distfit.distfit.distfit.plot
+    :members:
+    :undoc-members:
+
+
+-----------------------------------
+
+
+QQ-plot
+################################################################
+
+.. automodule:: distfit.distfit.distfit.qqplot
     :members:
     :undoc-members:
 
