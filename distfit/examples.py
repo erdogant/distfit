@@ -6,7 +6,36 @@ import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
 
-# %%
+from distfit import distfit
+
+dfit = distfit(method='parametric', todf=True)
+dfit.load(r'c:\temp\model.pkl')
+dfit.plot(chart='PDF')
+
+
+dfit.plot(chart='PDF', emp_properties=None, pdf_properties=None, bar_properties=None)
+dfit.qqplot(X)
+
+# %% QQ plot
+from distfit import distfit
+dist = distfit(verbose=20)
+
+# Random Exponential data
+# X = np.random.exponential(0.5, 10000)
+# X = np.random.uniform(0, 1000, 10000)
+X = np.random.normal(0, 1, 10000)
+dist = distfit(distr='popular')
+# Fit
+dist.fit_transform(X)
+# QQplot
+dist.qqplot(X)
+dist.qqplot(X, n_top=11, cmap='Set1')
+
+# fig, ax = dist.plot(chart='CDF', n_top=10);
+# dist.plot(chart='PDF', n_top=10, fig=fig, ax=ax);
+# dist.qqplot(X, n_top=10, fig=fig, ax=ax);
+
+# %% CDF plot
 from distfit import distfit
 dist = distfit(verbose=20)
 
@@ -18,8 +47,8 @@ dist = distfit(distr='popular')
 # Fit and plot
 dist.fit_transform(X)
 # dist.plot_cdf(n_top=10);
-fig, ax = dist.plot(chart='PDF', n_top=1);
-dist.plot(chart='CDF', n_top=1);
+fig, ax = dist.plot(chart='PDF', n_top=5, cmap='Set2');
+dist.plot(chart='CDF', n_top=10, cmap='Set2', ax=ax);
 # dist.plot_cdf()
 dist.plot_summary(n_top=10);
 
@@ -59,17 +88,6 @@ fig, ax = plt.subplots(figsize=(15,10))
 out = stats.probplot(X, dist=dist.model['name'], sparams=dist.model['params'], plot=ax)
 ax.grid(True)
 
-import statsmodels.api as sm
-# Q-Q plot of the quantiles of x versus the quantiles/ppf of a distribution.
-fig, ax = plt.subplots(figsize=(15,10))
-sm.qqplot(X, line='45', dist=dist.model['model'], ax=ax)
-ax.grid(True)
-ax.set_title('QQ plot')
-
-# measurements = np.random.normal(loc = 20, scale = 5, size=100)   
-# stats.probplot(measurements, dist=dist.model['name'], plot=pylab)
-
-pylab.show()
 
 # %%
 # def QQPlot(cdf, fit):
