@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from scipy.optimize import curve_fit
+import statsmodels.api as sm
 
 from scipy.interpolate import make_interp_spline
 import statsmodels.stats.multitest as multitest
@@ -108,6 +109,8 @@ class distfit():
         Only used in discrete fitting, method="discrete". In principle, the best fit will be obtained if you set weighted=True. However, when using stats="RSS", you can set weighted=False.
     f : float, (default: 1.5)
         Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
+    cmap : String, optional (default: 'Set1')
+        Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
     verbose : [str, int], default is 'info' or 20
         Set the verbose messages using string or integer values.
             * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -182,6 +185,7 @@ class distfit():
                  weighted: bool = True,
                  f: float = 1.5,
                  mhist: str = 'numpy',
+                 cmap: str = 'Set1',
                  verbose: [str, int] = 'info',
                  ):
         """Initialize distfit with user-defined parameters."""
@@ -199,6 +203,7 @@ class distfit():
         self.f = f  # Only for discrete
         self.weighted = weighted  # Only for discrete
         self.mhist = mhist
+        self.cmap = cmap
         self.verbose = verbose
         # Set the logger
         set_logger(verbose=verbose)
@@ -290,7 +295,7 @@ class distfit():
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap)
             # Determine confidence intervals on the best fitting distribution
             model = _compute_cii(self, model)
             # Store
@@ -489,7 +494,7 @@ class distfit():
         return out
 
     def generate(self, n, random_state=None, verbose=None):
-        """Generate new samples based on the fitted distribution.
+        """Generate synthetic data based on the fitted distribution.
 
         Parameters
         ----------
@@ -582,6 +587,7 @@ class distfit():
         >>> # Make plot
         >>> plt.figure(); plt.plot(bins, density)
         >>>
+
         """
         if mhist=='numpy':
             histvals, binedges = np.histogram(X, bins=bins, density=True, normed=None)
@@ -611,7 +617,7 @@ class distfit():
              fig=None,
              ax=None,
              grid=True,
-             cmap='Set1',
+             cmap=None,
              verbose=None):
         """Make plot.
 
@@ -653,8 +659,9 @@ class distfit():
             Matplotlib Axes object (Note - ignored when method is `discrete`)
         grid : Bool, optional (default: True)
             Show the grid on the figure.
-        cmap : String, optional (default: 'Set1')
-            Colormap when plotting multiple the CDF in case n_top > 1.
+        cmap : String, optional (default: None)
+            Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+            However, when cmap is set, the specified colormap is used.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -683,7 +690,7 @@ class distfit():
         elif chart.upper()=='PDF' and (self.method=='quantile') or (self.method=='percentile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties)
         elif chart.upper()=='CDF' and self.method=='parametric':
-            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cmap=cmap)
+            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cii_properties=cii_properties, cmap=cmap)
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
             fig, ax = None, None
@@ -703,9 +710,9 @@ class distfit():
                fig=None,
                ax=None,
                grid=True,
-               cmap='Set1',
                alpha=0.5,
                size=15,
+               cmap=None,
                verbose=None):
         """Plot CDF results.
 
@@ -734,16 +741,9 @@ class distfit():
             Matplotlib Axes object. If given, this subplot is used to plot in instead of a new figure being created.
         grid : Bool, optional (default: True)
             Show the grid on the figure.
-        # emp_properties : dict
-        #     The line properties of the emperical line.
-        #         * None: Do not plot.
-        #         * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'}: default
-        # cdf_properties : dict
-        #     The line properties of the pdf.
-        #         * None: Do not plot.
-        #         * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
-        cmap : String, optional (default: 'Set1')
-            Colormap when plotting multiple the CDF in case n_top > 1.
+        cmap : String, optional (default: None)
+            Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+            However, when cmap is set, the specified colormap is used.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -756,36 +756,49 @@ class distfit():
         -------
         tuple (fig, ax)
 
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>>
+        >>> # Initialize
+        >>> dist = distfit()
+        >>>
+        >>> # Fit
+        >>> dist.fit_transform(X)
+        >>>
+        >>> # Make qq-plot
+        >>> dist.qqplot(X)
+        >>>
+        >>> # Make qq-plot for top 10 best fitted models.
+        >>> dist.qqplot(X, n_top=10)
+        >>>
+
         """
-        import statsmodels.api as sm
+        n_top = np.minimum(self.summary.shape[0], n_top)
+        if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex')
         markeredgewidth = 0.5
+
         # Q-Q plot of the quantiles of x versus the quantiles/ppf of a distribution.
         if ax is None: fig, ax = plt.subplots(figsize=figsize)
-        # Show the fitted distribution line.
-        sm.qqplot(X,
-                  line=line,
-                  dist=self.model['model'],
-                  fit=False,
-                  ax=ax,
-                  label=self.model['name'] + ' (best fit)',
-                  markeredgewidth=markeredgewidth,
-                  markersize=size * 1.5,
-                  marker='.',
-                  markerfacecolor=self.summary['color'].iloc[0],
-                  markeredgecolor='#000000',
-                  alpha=np.minimum(1, alpha * 1.5))
-
-        # Plot other CDFs
-        if n_top>1:
-            n_top = np.minimum(self.summary.shape[0], n_top + 1)
-            for i in range(1, n_top):
-                sm.qqplot(X,
-                          line=line,
-                          dist=self.summary['model'].iloc[i],
-                          fit=False,
-                          **{'alpha': alpha, 'markersize': size, 'markerfacecolor': self.summary['color'].iloc[i], 'markeredgewidth': markeredgewidth, 'markeredgecolor': '#000000', 'marker': '.', 'label': self.summary['distr'].iloc[i]},
-                          ax=ax,
-                          )
+        # Plot n
+        for i in range(0, n_top):
+            sm.qqplot(X,
+                      line=line,
+                      dist=self.summary['model'].iloc[i],
+                      fit=False,
+                      ax=ax,
+                      **{'alpha': alpha,
+                         'markersize': size,
+                         'markerfacecolor': self.summary['color'].iloc[i],
+                         'markeredgewidth': markeredgewidth,
+                         'markeredgecolor': '#000000',
+                         'marker': '.',
+                         'label': self.summary['distr'].iloc[i]},
+                      )
 
         # Plot again to get the points at top.
         ax.grid(grid)
@@ -811,7 +824,8 @@ class distfit():
                  grid=True,
                  emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'},
                  cdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
-                 cmap='Set1',
+                 cii_properties={'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
+                 cmap=None,
                  verbose=None):
         """Plot CDF results.
 
@@ -841,8 +855,9 @@ class distfit():
             The line properties of the pdf.
                 * None: Do not plot.
                 * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
-        cmap : String, optional (default: 'Set1')
-            Colormap when plotting multiple the CDF in case n_top > 1.
+        cmap : String, optional (default: None)
+            Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+            However, when cmap is set, the specified colormap is used.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -855,6 +870,31 @@ class distfit():
         -------
         tuple (fig, ax)
 
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>>
+        >>> # Initialize
+        >>> dist = distfit()
+        >>>
+        >>> # Fit
+        >>> dist.fit_transform(X)
+        >>>
+        >>> # Make CDF plot
+        >>> fig, ax = dist.plot(chart='CDF')
+        >>>
+        >>> # Append the PDF plot
+        >>> dist.plot(chart='PDF', fig=fig, ax=ax)
+        >>>
+        >>> # Plot the CDF of the top 10 fitted distributions.
+        >>> fig, ax = dist.plot(chart='CDF', n_top=10)
+        >>> # Append the PDF plot
+        >>> dist.plot(chart='PDF', n_top=10, fig=fig, ax=ax)
+        >>>
         """
         logger.info('Ploting CDF')
         if verbose is not None: set_logger(verbose)
@@ -872,9 +912,10 @@ class distfit():
             # using numpy np.cumsum to calculate the CDF. We can also find using the PDF values by looping and adding
             cdf_emp = np.cumsum(pdf_emp)
             # plot
-            emp_properties['marker'] = 'o'
-            if emp_properties.get('label', None) is None: emp_properties['label'] = 'Emperical CDF'
-            ax.plot(bins_count, cdf_emp, **emp_properties)
+            if emp_properties is not None:
+                emp_properties['marker'] = 'o'
+                if emp_properties.get('label', None) is None: emp_properties['label'] = 'Emperical CDF'
+                ax.plot(bins_count, cdf_emp, **emp_properties)
 
             # Plot Theoretical CDF
             getmax = np.max(self.histdata[1])
@@ -889,12 +930,16 @@ class distfit():
             # Plot other CDFs
             if n_top>1:
                 n_top = np.minimum(self.summary.shape[0], n_top + 1)
-                ycolors = colourmap.generate(n_top, cmap=cmap, scheme='hex')
+                if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex')
                 for i in range(1, n_top):
                     # Plot cdf
                     cdf = self.summary['model'].iloc[i].cdf
                     # Plot CDF for linearly scale samples between min-max range(x)
-                    ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': ycolors[i]})
+                    ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': self.summary['color'].iloc[i]})
+
+            # plot CII
+            results = self.results if hasattr(self, 'results') else None
+            _plot_cii_parametric(self.model, self.alpha, results, cii_properties, ax)
 
             # Limit axis
             if xlim is not None:
@@ -967,7 +1012,7 @@ class distfit():
             ax.grid(grid)
             plt.xlabel('PDF name')
             plt.ylabel(('%s (goodness-of-fit test)' %(self.stats)))
-            plt.title('Best fitting PDF: %s' %(self.model['name']))
+            plt.title('Best PDF fit: %s' %(self.model['name']))
             if ylim is not None: plt.ylim(ymin=ylim[0], ymax=ylim[1])
 
             return (fig, ax)
@@ -1258,14 +1303,13 @@ def _predict_percentile(self, y):
 def _plot_pdf_more(df, x, n_top, ax, cmap='Set1'):
     if n_top is None: n_top = 1
     if n_top>1:
-        n_top = n_top + 1
-        n_top = np.minimum(df.shape[0], n_top)
-        ycolors = colourmap.generate(n_top, cmap=cmap, scheme='hex')
+        n_top = np.minimum(df.shape[0], n_top + 1)
+        if cmap is not None: df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex')
         for i in range(1, n_top):
             # Plot pdf
             tmp_distribution = getattr(st, df['distr'].iloc[i])
             tmp_y = tmp_distribution.pdf(x, loc=df['loc'].iloc[i], scale=df['scale'].iloc[i], *df['arg'].iloc[i])
-            _plot_pdf(x, tmp_y, df['distr'].iloc[i], {'linewidth': 2, 'linestyle': '--', 'color': ycolors[i]}, ax)
+            _plot_pdf(x, tmp_y, df['distr'].iloc[i], {'linewidth': 2, 'linestyle': '--', 'color': df['color'].iloc[i]}, ax)
 
 
 def _plot_pdf(x, y, label, pdf_properties, ax):
@@ -1282,6 +1326,7 @@ def _plot_bar(binedges, histvals, bar_properties, ax):
 
 def _plot_emp(x, y, line_properties, ax):
     if line_properties is not None:
+        if line_properties.get('label', None) is None: line_properties['label'] = 'Emperical PDF'
         ax.plot(x, y, **line_properties)
 
 
@@ -1318,6 +1363,43 @@ def _plot_cii_quantile(model, results, cii_properties, ax):
                 cii_properties['label']='Inside boundaries'
                 ax.scatter(results['y'][idxOUT], np.zeros(sum(idxOUT)), color=cii_properties_custom['color_general'], marker=cii_properties_custom['marker'], **cii_properties)
 
+def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
+    # Collect properties
+    cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
+
+    if cii_properties is not None:
+        # Plot vertical line to stress the cut-off point
+        if model['CII_min_alpha'] is not None:
+            cii_properties['label'] = 'CII low ' + '(' + str(alpha) + ')'
+            ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
+        if model['CII_max_alpha'] is not None:
+            cii_properties['label'] = 'CII high ' + '(' + str(alpha) + ')'
+            ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
+        if cii_properties.get('label'): cii_properties.pop('label')
+
+    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+    # if hasattr(self, 'results') and (cii_properties is not None):
+    if (results is not None) and (cii_properties is not None):
+        if alpha is None: alpha=1
+        idxIN=np.where(results['y_proba']<=alpha)[0]
+        logger.info("Mark %d significant regions" %(len(idxIN)))
+
+        # Plot significant hits
+        for i in idxIN:
+            if cii_properties.get('label'): cii_properties.pop('label')
+            ax.axvline(x=results['y'][i], ymin=0, ymax=1, markersize=cii_properties_custom['size'], marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign_multipletest'], **cii_properties)
+
+        # Plot the samples that are not signifcant after multiple test.
+        if np.any(idxIN):
+            cii_properties['label'] = 'Significant'
+            ax.scatter(results['y'][idxIN], np.zeros(len(idxIN)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign'], **cii_properties)
+
+        # Plot the samples that are not signifcant after multiple test.
+        idxOUT = np.where(results['y_proba']>alpha)[0]
+        if np.any(idxOUT):
+            cii_properties['label'] = 'Not significant'
+            ax.scatter(results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
+
 # %% Plot
 def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
@@ -1344,9 +1426,10 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
 
     return fig, ax
 
+
 # %% Plot
 def _plot_parametric(self,
-                     n_top = 1,
+                     n_top=1,
                      title='',
                      figsize=(10, 8),
                      xlim=None,
@@ -1368,8 +1451,6 @@ def _plot_parametric(self,
     Param['xlim'] = xlim
     Param['ylim'] = ylim
     Param['n_top'] = np.minimum(self.summary.shape[0], n_top)
-    # Collect properties
-    cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
 
     # Make figure
     best_fit_name = model['name'].title()
@@ -1377,7 +1458,6 @@ def _plot_parametric(self,
     loc = model['params'][-2]
     scale = model['params'][-1]
     distribution = getattr(st, model['name'])
-    if emp_properties.get('label', None) is None: emp_properties['label'] = 'Emperical PDF'
 
     # Get pdf boundaries
     getmin = distribution.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.0000001, loc=loc, scale=scale)
@@ -1399,14 +1479,9 @@ def _plot_parametric(self,
     _plot_pdf(x, y, best_fit_name + ' (best fit)', pdf_properties, ax)
     # Plot top n pdf
     _plot_pdf_more(self.summary, x, Param['n_top'], ax, cmap=cmap)
-
-    # Make text for plot
-    # param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
-    # param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
-    # ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + ' (' + param_str + ')'))
-    ax.set_title(self._make_title(title))
-    ax.set_xlabel('Values')
-    ax.set_ylabel('Frequency')
+    # plot CII
+    results = self.results if hasattr(self, 'results') else None
+    _plot_cii_parametric(self.model, self.alpha, results, cii_properties, ax)
 
     # Limit axis
     if Param['xlim'] is not None:
@@ -1414,38 +1489,9 @@ def _plot_parametric(self,
     if Param['ylim'] is not None:
         ax.set_ylim(Param['ylim'][0], Param['ylim'][1])
 
-    if cii_properties is not None:
-        # Plot vertical line to stress the cut-off point
-        if self.model['CII_min_alpha'] is not None:
-            cii_properties['label'] = 'CII low ' + '(' + str(self.alpha) + ')'
-            ax.axvline(x=model['CII_min_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
-        if self.model['CII_max_alpha'] is not None:
-            cii_properties['label'] = 'CII high ' + '(' + str(self.alpha) + ')'
-            ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
-        if cii_properties.get('label'): cii_properties.pop('label')
-
-    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
-    if hasattr(self, 'results') and (cii_properties is not None):
-        if self.alpha is None: self.alpha=1
-        idxIN=np.where(self.results['y_proba']<=self.alpha)[0]
-        logger.info("Mark %d significant regions" %(len(idxIN)))
-
-        # Plot significant hits
-        for i in idxIN:
-            if cii_properties.get('label'): cii_properties.pop('label')
-            ax.axvline(x=self.results['y'][i], ymin=0, ymax=1, markersize=cii_properties_custom['size'], marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign_multipletest'], **cii_properties)
-
-        # Plot the samples that are not signifcant after multiple test.
-        if np.any(idxIN):
-            cii_properties['label'] = 'Significant'
-            ax.scatter(self.results['y'][idxIN], np.zeros(len(idxIN)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_sign'], **cii_properties)
-
-        # Plot the samples that are not signifcant after multiple test.
-        idxOUT = np.where(self.results['y_proba']>self.alpha)[0]
-        if np.any(idxOUT):
-            cii_properties['label'] = 'Not significant'
-            ax.scatter(self.results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
-
+    ax.set_title(self._make_title(title))
+    ax.set_xlabel('Values')
+    ax.set_ylabel('Frequency')
     ax.legend(loc='upper right')
     ax.grid(grid)
 
@@ -1486,7 +1532,7 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
 
 
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1'):
     model = {}
     model['distr'] = st.norm
     model['stats'] = stats
@@ -1556,7 +1602,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats):
     # Sort the output
     df = df.sort_values('score')
     df.reset_index(drop=True, inplace=True)
-    df = set_colors(df)
+    df = set_colors(df, cmap=cmap)
     # Return
     return (df, model)
 
