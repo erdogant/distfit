@@ -377,6 +377,7 @@ class distfit():
         >>> results = dist.predict(y)
         >>> dist.plot()
         >>>
+
         """
         if verbose is not None: set_logger(verbose)
         # Clean readily fitted models to ensure correct results.
@@ -620,8 +621,6 @@ class distfit():
             Chart to plot.
                 * 'PDF': Probability density function.
                 * 'CDF': Cumulative density function.
-                * 'QQ': Q-Q plot.
-                * 'probability': Probability plot.
         n_top : int, optional
             Show the top number of results. The default is 1.
         title : String, optional (default: '')
@@ -631,7 +630,7 @@ class distfit():
                 * None: Do not plot.
                 * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'}: default
         pdf_properties : dict
-            The line properties of the pdf.
+            The line properties of the PDF or the CDF.
                 * None: Do not plot.
                 * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
         bar_properties : dict
@@ -685,16 +684,120 @@ class distfit():
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties)
         elif chart.upper()=='CDF' and self.method=='parametric':
             fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cmap=cmap)
-        elif chart.upper()=='QQ' and self.method=='parametric':
-            pass
-        elif chart.upper()=='PROBABILITY' and self.method=='parametric':
-            pass
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
             fig, ax = None, None
 
         # Return
         return fig, ax
+
+    # QQ plot
+    def qqplot(self,
+               X,
+               line='45',
+               n_top=1,
+               title='QQ-plot',
+               figsize=(20, 15),
+               xlim=None,
+               ylim=None,
+               fig=None,
+               ax=None,
+               grid=True,
+               cmap='Set1',
+               alpha=0.5,
+               size=15,
+               verbose=None):
+        """Plot CDF results.
+
+        Parameters
+        ----------
+        line : str, default: '45'
+            Options for the reference line to which the data is compared.
+                * '45' - 45-degree line
+                * 's' - standardized line, the expected order statistics are scaled by the standard deviation of the given sample and have the mean added to them.
+                * 'r' - A regression line is fit
+                * 'q' - A line is fit through the quartiles.
+                * 'None' - by default no reference line is added to the plot.
+        n_top : int, optional
+            Show the top number of results. The default is 1.
+        title : String, optional (default: '')
+            Title of the plot.
+        figsize : tuple, optional (default: (10,8))
+            The figure size.
+        xlim : Float, optional (default: None)
+            Limit figure in x-axis.
+        ylim : Float, optional (default: None)
+            Limit figure in y-axis.
+        fig : Figure, optional (default: None)
+            Matplotlib figure (Note - ignored when method is `discrete`)
+        ax : AxesSubplot, optional (default: None)
+            Matplotlib Axes object. If given, this subplot is used to plot in instead of a new figure being created.
+        grid : Bool, optional (default: True)
+            Show the grid on the figure.
+        # emp_properties : dict
+        #     The line properties of the emperical line.
+        #         * None: Do not plot.
+        #         * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'}: default
+        # cdf_properties : dict
+        #     The line properties of the pdf.
+        #         * None: Do not plot.
+        #         * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
+        cmap : String, optional (default: 'Set1')
+            Colormap when plotting multiple the CDF in case n_top > 1.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
+
+        Returns
+        -------
+        tuple (fig, ax)
+
+        """
+        import statsmodels.api as sm
+        markeredgewidth = 0.5
+        # Q-Q plot of the quantiles of x versus the quantiles/ppf of a distribution.
+        if ax is None: fig, ax = plt.subplots(figsize=figsize)
+        # Show the fitted distribution line.
+        sm.qqplot(X,
+                  line=line,
+                  dist=self.model['model'],
+                  fit=False,
+                  ax=ax,
+                  label=self.model['name'] + ' (best fit)',
+                  markeredgewidth=markeredgewidth,
+                  markersize=size * 1.5,
+                  marker='.',
+                  markerfacecolor=self.summary['color'].iloc[0],
+                  markeredgecolor='#000000',
+                  alpha=np.minimum(1, alpha * 1.5))
+
+        # Plot other CDFs
+        if n_top>1:
+            n_top = np.minimum(self.summary.shape[0], n_top + 1)
+            for i in range(1, n_top):
+                sm.qqplot(X,
+                          line=line,
+                          dist=self.summary['model'].iloc[i],
+                          fit=False,
+                          **{'alpha': alpha, 'markersize': size, 'markerfacecolor': self.summary['color'].iloc[i], 'markeredgewidth': markeredgewidth, 'markeredgecolor': '#000000', 'marker': '.', 'label': self.summary['distr'].iloc[i]},
+                          ax=ax,
+                          )
+
+        # Plot again to get the points at top.
+        ax.grid(grid)
+        ax.set_title(self._make_title(title))
+        ax.legend(loc='upper left')
+        return fig, ax
+
+    def _make_title(self, title=''):
+        param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
+        param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
+        title = '%s\n%s\n%s' %(title, self.model['name'], self.stats + ' (' + param_str + ')')
+        return title
 
     # Plot CDF
     def plot_cdf(self,
@@ -785,12 +888,12 @@ class distfit():
 
             # Plot other CDFs
             if n_top>1:
-                n_top = n_top + 1
-                n_top = np.minimum(self.summary.shape[0], n_top)
+                n_top = np.minimum(self.summary.shape[0], n_top + 1)
                 ycolors = colourmap.generate(n_top, cmap=cmap, scheme='hex')
                 for i in range(1, n_top):
                     # Plot cdf
                     cdf = self.summary['model'].iloc[i].cdf
+                    # Plot CDF for linearly scale samples between min-max range(x)
                     ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': ycolors[i]})
 
             # Limit axis
@@ -800,9 +903,7 @@ class distfit():
                 ax.set_ylim(ylim[0], ylim[1])
 
             # Make text for plot
-            param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
-            param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
-            ax.set_title('%s\n%s\n%s' %(title, self.model['name'], self.stats + ' (' + param_str + ')'))
+            ax.set_title(self._make_title(title))
             ax.set_xlabel('Values')
             ax.set_ylabel('Frequency')
             ax.legend(loc='upper right')
@@ -1008,6 +1109,11 @@ class distfit():
         if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
         return out_distr
 
+
+# %%
+def set_colors(df, cmap='Set1'):
+    df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex')
+    return df
 
 # %%
 def _predict(self, y):
@@ -1295,9 +1401,10 @@ def _plot_parametric(self,
     _plot_pdf_more(self.summary, x, Param['n_top'], ax, cmap=cmap)
 
     # Make text for plot
-    param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
-    param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
-    ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + ' (' + param_str + ')'))
+    # param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
+    # param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
+    # ax.set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, self.stats + ' (' + param_str + ')'))
+    ax.set_title(self._make_title(title))
     ax.set_xlabel('Values')
     ax.set_ylabel('Frequency')
 
@@ -1449,6 +1556,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats):
     # Sort the output
     df = df.sort_values('score')
     df.reset_index(drop=True, inplace=True)
+    df = set_colors(df)
     # Return
     return (df, model)
 

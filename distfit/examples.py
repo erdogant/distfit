@@ -19,7 +19,7 @@ dist = distfit(distr='popular')
 dist.fit_transform(X)
 # dist.plot_cdf(n_top=10);
 fig, ax = dist.plot(chart='PDF', n_top=1);
-dist.plot(chart='CDF', n_top=1, fig=fig, ax=ax);
+dist.plot(chart='CDF', n_top=1);
 # dist.plot_cdf()
 dist.plot_summary(n_top=10);
 
