@@ -480,6 +480,9 @@ class distfit():
         if alpha is not None:
             self.alpha = alpha
             logger.info('Alpha is set to [%g]' %(self.alpha))
+            # Determine confidence intervals on the best fitting distribution
+            self.model = _compute_cii(self, self.model)
+
         logger.info('Compute significance for %d samples.' %(len(y)))
 
         if (self.method=='parametric') or (self.method=='discrete'):
