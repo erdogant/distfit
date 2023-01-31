@@ -65,8 +65,8 @@ Combine plots
 .. code:: python
 	
 	# Plot together
-	fig, ax = dfit.plot(chart='PDF', n_top=1)
-	fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+	fig, ax = dfit.plot(chart='PDF')
+	fig, ax = dfit.plot(chart='CDF', ax=ax)
 
 	# Plot together
 	fig, ax = dfit.plot(chart='PDF', n_top=11)
@@ -99,8 +99,7 @@ Change chart properties
 	dfit.plot(chart='CDF',
 			pdf_properties={'color': 'r'},
 			cii_properties={'color': 'g'},
-			emp_properties=None,
-			bar_properties=None)
+			emp_properties=None)
 
 
 .. code:: python
@@ -111,11 +110,11 @@ Change chart properties
 			cii_properties={'color': 'r', 'linewidth': 3},
 			bar_properties={'color': '#1e3f5a'})
 
+	# Give the previous axes as input.
 	dfit.plot(chart='CDF',
 			n_top=10,
 			pdf_properties={'color': 'r'},
 			cii_properties=None,
-			bar_properties=None,
 			ax=ax)
 
 .. code:: python
@@ -127,11 +126,11 @@ Change chart properties
 			emp_properties={'color': 'g', 'linewidth': 3},
 			bar_properties={'color': '#1e3f5a'})
 
+	# Give the previous axes as input.
 	dfit.plot(chart='CDF',
 			pdf_properties=None,
 			cii_properties=None,
 			emp_properties={'color': 'g', 'linewidth': 3},
-			bar_properties=None,
 			ax=ax)
 
 
