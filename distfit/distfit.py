@@ -679,6 +679,37 @@ class distfit():
         -------
         tuple (fig, ax)
 
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 10000)
+        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>>
+        >>> # Initialize
+        >>> dfit = distfit(alpha=0.01)
+        >>> dfit.fit_transform(X)
+        >>> dfit.predict(y)
+        >>>
+        >>> # Plot seperately
+        >>> fig, ax = dfit.plot(chart='PDF')
+        >>> fig, ax = dfit.plot(chart='CDF')
+        >>>
+        >>> # Change or remove properties of the chart.
+        >>> dfit.plot(chart='PDF', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>> dfit.plot(chart='CDF', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>>
+        >>> # Create subplot
+        >>> fig, ax = plt.subplots(1,2, figsize=(25, 10))
+        >>> dfit.plot(chart='PDF', ax=ax[0])
+        >>> dfit.plot(chart='CDF', ax=ax[1])
+        >>>
+        >>> # Change or remove properties of the chart.
+        >>> fig, ax = dfit.plot(chart='PDF', pdf_properties={'color': 'r', 'linewidth': 3}, cii_properties={'color': 'r', 'linewidth': 3}, bar_properties={'color': '#1e3f5a'})
+        >>> dfit.plot(chart='CDF', n_top=10, pdf_properties={'color': 'r'}, cii_properties=None, bar_properties=None, ax=ax)
+
         """
         if verbose is not None: set_logger(verbose)
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')

@@ -10,23 +10,23 @@ The method **quantile** simply computes the confidence intervals based on the *q
     from distfit import distfit
 
     # Initialize model with quantile method
-    dist = distfit(method='quantile')
+    dfit = distfit(method='quantile')
 
     # Some random data
     X = np.random.normal(10, 3, 2000)
     y = [3,4,5,6,10,11,12,18,20]
     # Compute quantiles based on data
-    dist.fit_transform(X)
+    dfit.fit_transform(X)
 
     # Some results about the CII
-    print(dist.model['CII_min_alpha'])
+    print(dfit.model['CII_min_alpha'])
     # > 5.024718707579791
     # Some results
-    print(dist.model['CII_max_alpha'])
+    print(dfit.model['CII_max_alpha'])
     # > 15.01373120064936
 
     # Plot
-    dist.plot()
+    dfit.plot()
 
 
 .. |fig_quantile1| image:: ../figs/quantile_plot.png
@@ -42,9 +42,9 @@ The method **quantile** simply computes the confidence intervals based on the *q
 .. code:: python
 
     # Make prediction
-    dist.predict(y)
+    dfit.predict(y)
     # Plot
-    dist.plot()
+    dfit.plot()
 
 
 .. |fig_quantile2| image:: ../figs/quantile_plot_predict.png

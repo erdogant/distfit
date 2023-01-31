@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameter fitting &mdash; distfit distfit documentation</title>
+  <title>Parameter fitting &mdash; distfit 1.5.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Saving" href="Save%20and%20Load.html" />
+    <link rel="next" title="Basic plot" href="Plots.html" />
     <link rel="prev" title="Generate samples" href="Generate.html" /> 
 </head>
 
@@ -50,19 +50,6 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#installation">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Methods</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
@@ -82,6 +69,14 @@
 <li class="toctree-l1"><a class="reference internal" href="#smoothing">Smoothing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#integer-fitting">Integer fitting</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html">Basic plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#plot-all-fitted-distributions">Plot all fitted distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#combine-plots">Combine plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#change-chart-properties">Change chart properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#qq-plot">QQ plot</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html">Saving</a></li>
@@ -93,6 +88,20 @@
 <li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-one-specific-distribution">Fit for one specific distribution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-multiple-distributions">Fit for multiple distributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples.html#make-predictions">Make predictions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
@@ -142,9 +151,9 @@
 </pre></div>
 </div>
 <p>For demonstration puprposes we pre-specify the <code class="docutils literal notranslate"><span class="pre">normal</span></code> distribution to find the best parameters. When we do that, as shown below, a <em>mean</em> or <em>loc</em> of <strong>0.004</strong> is detected and a standard deviation (scale) with <strong>2.02</strong> which is very close to our input parameters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># {&#39;distr&#39;: &lt;scipy.stats._continuous_distns.norm_gen at 0x15d8406b208&gt;,</span>
 <span class="c1">#  &#39;params&#39;: (0.00444619012906402, 2.0209991080448138),</span>
@@ -157,7 +166,7 @@
 <span class="c1">#  &#39;CII_max_alpha&#39;: 3.328693903062266}</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <figure class="align-default" id="gaus-mu-0">
@@ -166,10 +175,10 @@
 </section>
 <section id="probability-density-function-fitting">
 <h1>Probability Density Function fitting<a class="headerlink" href="#probability-density-function-fitting" title="Permalink to this heading"></a></h1>
-<p>To measure the goodness of fit of <em>pdfs</em>, we will evaluate multiple <em>pdfs</em> using the <strong>RSS</strong> metrics. The goodness of fit scores are stored in <code class="docutils literal notranslate"><span class="pre">dist.summary</span></code>. In this example, we will <strong>not</strong> specify any distribution but only provide the empirical data to the model.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+<p>To measure the goodness of fit of <em>pdfs</em>, we will evaluate multiple <em>pdfs</em> using the <strong>RSS</strong> metrics. The goodness of fit scores are stored in <code class="docutils literal notranslate"><span class="pre">dfit.summary</span></code>. In this example, we will <strong>not</strong> specify any distribution but only provide the empirical data to the model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
 
 <span class="c1">#   distr         RSS  ...        scale                                     arg</span>
 <span class="c1"># 0        norm  0.00215419  ...        2.021                                      ()</span>
@@ -185,7 +194,7 @@
 </pre></div>
 </div>
 <p>The model detected <code class="docutils literal notranslate"><span class="pre">normal</span></code> as the <strong>best</strong> pdf but a good RSS score is also detected for the <em>t</em> and <em>gamma</em> distribution. But this is not unexpected to see. A summary plot of the evaluated pdfs looks a following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
 </pre></div>
 </div>
 <figure class="align-default" id="gaus-mu-0-summary">
@@ -195,7 +204,10 @@
 <section id="varying-sample-sizes">
 <h1>Varying sample sizes<a class="headerlink" href="#varying-sample-sizes" title="Permalink to this heading"></a></h1>
 <p>The goodness of fit will change according the number of samples that is provided. In the example above we specified 5000 samples which gave good results. However, with a relative low number of samples, a poor fit can occur. For demonstration purposes we will vary the number of samples and store the <em>mu</em>, <em>std</em>. In this experiment we are generating random continuous values from a normal distribution. We will fixate fitting normal distribution and examine the loc, and scale parameters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create random data with varying number of samples</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize without verbose.</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Create random data with varying number of samples</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
 
 <span class="c1"># Initialize model</span>
@@ -205,8 +217,8 @@
 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
-    <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;loc&#39;</span><span class="p">],</span> <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">],</span> <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">])</span>
+    <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;loc&#39;</span><span class="p">],</span> <span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">],</span> <span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>When we plot the results, <code class="docutils literal notranslate"><span class="pre">distfit</span></code> nicely shows that by increasing the number of samples results in a better fit of the parameters. A convergence towards mu=2 and std=0 is clearly seen.</p>
@@ -289,18 +301,18 @@ We will iterate over sample sizes and smoothing windows to analyze the performan
 <span class="c1"># Iterate over smooting window</span>
 <span class="k">for</span> <span class="n">smooth</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">smooth_window</span><span class="p">):</span>
 <span class="c1"># Fit only for the uniform distribution</span>
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="s1">&#39;RSS&#39;</span><span class="p">)</span>
+    <span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="s1">&#39;RSS&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># Estimate paramters for the number of samples</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Iterate over sample sizes</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
-        <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">],</span> <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">])</span>
+        <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">],</span> <span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">])</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="s1">&#39;samples&#39;</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">stats</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;smooth: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smooth</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - RSS: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">dist</span><span class="o">.</span><span class="n">stats</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">dfit</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="s1">&#39;samples&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">dfit</span><span class="o">.</span><span class="n">stats</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;smooth: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">smooth</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; - RSS: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">dfit</span><span class="o">.</span><span class="n">stats</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()))</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Nr.Samples&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RSS&#39;</span><span class="p">)</span>
@@ -326,7 +338,7 @@ We will iterate over sample sizes and smoothing windows to analyze the performan
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Generate.html" class="btn btn-neutral float-left" title="Generate samples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Save%20and%20Load.html" class="btn btn-neutral float-right" title="Saving" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Plots.html" class="btn btn-neutral float-right" title="Basic plot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

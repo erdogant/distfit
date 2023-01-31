@@ -53,10 +53,10 @@ Initialize distfit for discrete distribution for which the binomial distribution
     from distfit import distfit
     
     # Initialize for discrete distribution fitting
-    dist = distfit(method='discrete')
+    dfit = distfit(method='discrete')
     
     # Run distfit to and determine whether we can find the parameters from the data.
-    dist.fit_transform(X)
+    dfit.fit_transform(X)
     
     # [distfit] >fit..
     # [distfit] >transform..
@@ -65,7 +65,7 @@ Initialize distfit for discrete distribution for which the binomial distribution
     # [distfit] >Compute confidence interval [discrete]
     
     # Get the model and best fitted parameters.
-    print(dist.model)
+    print(dfit.model)
     
     # {'distr': <scipy.stats._distn_infrastructure.rv_frozen at 0x1ff23e3beb0>,
     #  'params': (8, 0.4999585504197037),
@@ -78,8 +78,8 @@ Initialize distfit for discrete distribution for which the binomial distribution
     #  'CII_max_alpha': 6.0}
     
     # Best fitted n=8 and p=0.4999 which is great because the input was n=8 and p=0.5
-    dist.model['n']
-    dist.model['p']
+    dfit.model['n']
+    dfit.model['p']
 
 Plot
 ******************************************************
@@ -87,7 +87,7 @@ Plot
 .. code:: python
 
     # Make plot
-    dist.plot()
+    dfit.plot()
 
 
 .. |fig_binom1| image:: ../figs/binomial_plot.png
@@ -111,11 +111,11 @@ Note that *P* stands for the RAW P-values and *y_proba* are the corrected P-valu
     
     # Some data points for which we want to examine their significance.
     y = [0, 1, 10, 11, 12]
-    results = dist.predict(y)
-    dist.plot()
+    results = dfit.predict(y)
+    dfit.plot()
     
     # Make plot with the results
-    dist.plot()
+    dfit.plot()
     
     df_results = pd.DataFrame(pd.DataFrame(results))
     

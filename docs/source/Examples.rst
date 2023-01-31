@@ -28,10 +28,10 @@ A series of distributions are fitted on the emperical data and for each a RSS is
 	from distfit import distfit
 
 	# Initialize
-	dist = distfit(todf=True)
+	dfit = distfit(todf=True)
 
 	# Search for best theoretical fit on your empirical data
-	results = dist.fit_transform(X)
+	results = dfit.fit_transform(X)
 
 	# [distfit] >fit..
 	# [distfit] >transform..
@@ -55,7 +55,7 @@ Plot distribution fit
 .. code:: python
 
     # Plot
-    dist.plot()
+    dfit.plot()
 
 .. |fig1a| image:: ../figs/example_fig1a.png
     :scale: 70%
@@ -75,7 +75,7 @@ Note that the best fit should be **normal**, as this was also the input data. Ho
 .. code:: python
 
     # Make plot
-    dist.plot_summary()
+    dfit.plot_summary()
 
 .. |fig1summary| image:: ../figs/fig1_summary.png
     :scale: 60%
@@ -101,15 +101,15 @@ Suppose you want to test for one specific distribution, such as the normal distr
     y = [3,4,5,6,10,11,12,18,20]
 
     # Initialize
-    dist = distfit(distr='norm')
+    dfit = distfit(distr='norm')
     # Fit on data
-    results = dist.fit_transform(X)
+    results = dfit.fit_transform(X)
 
     # [distfit] >fit..
     # [distfit] >transform..
     # [distfit] >[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]
 
-    dist.plot()
+    dfit.plot()
 
 
 Fit for multiple distributions
@@ -125,9 +125,9 @@ Suppose you want to test multiple distributions:
 	y = [3,4,5,6,10,11,12,18,20]
 
 	# Initialize
-	dist = distfit(distr=['norm', 't', 'uniform'])
+	dfit = distfit(distr=['norm', 't', 'uniform'])
 	# Fit on data
-	results = dist.fit_transform(X)
+	results = dfit.fit_transform(X)
 
 	# [distfit] >fit..
 	# [distfit] >transform..
@@ -136,7 +136,7 @@ Suppose you want to test multiple distributions:
 	# [distfit] >[uniform] [0.00 sec] [RSS: 0.2505846] [loc=-6.583 scale=15.076]
 	# [distfit] >Compute confidence interval [parametric]
 
-	dist.plot()
+	dfit.plot()
 
 
 Make predictions
@@ -169,13 +169,13 @@ A series of distributions are fitted on the emperical data and for each a *RSS* 
     from distfit import distfit
 
     # Initialize
-    dist = distfit(todf=True)
+    dfit = distfit(todf=True)
 
     # Search for best theoretical fit on your empirical data
-    dist.fit_transform(X)
+    dfit.fit_transform(X)
 
     # Make prediction on new datapoints based on the fit
-    results = dist.predict(y)
+    results = dfit.predict(y)
 
 
 Plot predictions
@@ -186,7 +186,7 @@ The best fitted distribution is plotted over the emperical data with it confiden
 .. code:: python
 
     # The plot function will now also include the predictions of y
-    dist.plot()
+    dfit.plot()
 
 
 Examine results
@@ -256,17 +256,17 @@ Note that dataframe ``df`` is included when using the todf=True paramter.
 .. code:: python
 
     # All scores of the tested distributions
-    print(dist.summary)
+    print(dfit.summary)
 
     # Distribution parameters for best fit
-    dist.model
+    dfit.model
 
     # Show the predictions for y
-    print(dist.results['y_pred'])
+    print(dfit.results['y_pred'])
     # ['down' 'down' 'none' 'none' 'none' 'none' 'up' 'up' 'up']
 
     # Show the probabilities for y that belong with the predictions
-    print(dist.results['y_proba'])
+    print(dfit.results['y_proba'])
     # [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]
  
     # All predicted information is also stored in a structured dataframe (only when setting the todf=True)
@@ -275,7 +275,7 @@ Note that dataframe ``df`` is included when using the todf=True paramter.
     # y_pred: True in case y_proba<=alpha
     # P: raw P-values
 
-    print(dist.results['df'])
+    print(dfit.results['df'])
 
 +----+-----+------------+----------+------------+
 |    |   y |    y_proba | y_pred   |          P |

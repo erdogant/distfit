@@ -38,7 +38,7 @@ author = 'Erdogan Taskesen'
 master_doc = 'index'
 
 # The full version, including alpha/beta/rc tags
-release = 'distfit'
+release = distfit.__version__
 
 # -- General configuration ---------------------------------------------------
 

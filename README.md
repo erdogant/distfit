@@ -71,10 +71,10 @@ print(distfit.__version__)
 # Import library
 from distfit import distfit
 
-dist = distfit()        # Initialize 
-dist.fit_transform(X)   # Fit distributions on empirical data X
-dist.predict(y)         # Predict the probability of the resonse variables
-dist.plot()             # Plot the best fitted distribution (y is included if prediction is made)
+dfit = distfit()        # Initialize 
+dfit.fit_transform(X)   # Fit distributions on empirical data X
+dfit.predict(y)         # Predict the probability of the resonse variables
+dfit.plot()             # Plot the best fitted distribution (y is included if prediction is made)
 ```
 
 <hr>
@@ -187,10 +187,10 @@ print(X)
 from distfit import distfit
 
 # Initialize for discrete distribution fitting
-dist = distfit(method='discrete')
+dfit = distfit(method='discrete')
 
 # Run distfit to and determine whether we can find the parameters from the data.
-dist.fit_transform(X)
+dfit.fit_transform(X)
 
 # [distfit] >fit..
 # [distfit] >transform..

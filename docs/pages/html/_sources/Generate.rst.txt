@@ -14,13 +14,13 @@ Lets see how generating samples works:
     X = np.random.normal(0, 2, 10000)
 
     # Initialize model
-    dist = distfit()
+    dfit = distfit()
     
     # Fit distribution on data X
-    dist.fit_transform(X)
+    dfit.fit_transform(X)
     
     # The fitted distribution can now be used to generate new samples.
-    Xgenerate = dist.generate(n=1000)
+    Xgenerate = dfit.generate(n=1000)
 
 
 

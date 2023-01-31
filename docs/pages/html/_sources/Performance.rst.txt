@@ -16,9 +16,9 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 
 .. code:: python
 
-    dist = distfit(distr='norm')
-    dist.fit_transform(X)
-    print(dist.model)
+    dfit = distfit(distr='norm')
+    dfit.fit_transform(X)
+    print(dfit.model)
 
     # {'distr': <scipy.stats._continuous_distns.norm_gen at 0x15d8406b208>,
     #  'params': (0.00444619012906402, 2.0209991080448138),
@@ -32,7 +32,7 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 
 .. code:: python
 
-    dist.plot()
+    dfit.plot()
 
 .. _gaus_mu_0:
 
@@ -43,13 +43,13 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 Probability Density Function fitting
 ''''''''''''''''''''''''''''''''''''''''''''
 
-To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dist.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model.
+To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dfit.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model.
 
 .. code:: python
 
-    dist = distfit()
-    dist.fit_transform(X)
-    print(dist.summary)
+    dfit = distfit()
+    dfit.fit_transform(X)
+    print(dfit.summary)
 
     # 	distr         RSS  ...        scale                                     arg
     # 0        norm  0.00215419  ...        2.021                                      ()
@@ -67,7 +67,7 @@ The model detected ``normal`` as the **best** pdf but a good RSS score is also d
 
 .. code:: python
 
-    dist.plot_summary()
+    dfit.plot_summary()
 
 .. _gaus_mu_0_summary:
 
@@ -82,6 +82,9 @@ The goodness of fit will change according the number of samples that is provided
 
 .. code:: python
 
+    # Initialize without verbose.
+    dfit = distfit(verbose=0)
+
     # Create random data with varying number of samples
     samples = np.arange(250, 10000, 250)
 
@@ -92,8 +95,8 @@ The goodness of fit will change according the number of samples that is provided
     for s in samples:
         print(s)
         X = np.random.normal(0, 2, s)
-        dist.fit_transform(X, verbose=0)
-        out.append([dist.model['loc'], dist.model['scale'], dist.model['name'], s])
+        dfit.fit_transform(X)
+        out.append([dfit.model['loc'], dfit.model['scale'], dfit.model['name'], s])
 
 When we plot the results, ``distfit`` nicely shows that by increasing the number of samples results in a better fit of the parameters. A convergence towards mu=2 and std=0 is clearly seen.
 
@@ -200,18 +203,18 @@ We will iterate over sample sizes and smoothing windows to analyze the performan
     # Iterate over smooting window
     for smooth in tqdm(smooth_window):
     # Fit only for the uniform distribution
-        dist = distfit(distr='uniform', smooth=smooth, stats='RSS')
+        dfit = distfit(distr='uniform', smooth=smooth, stats='RSS', verbose=0)
         # Estimate paramters for the number of samples
         out = []
 
         # Iterate over sample sizes
         for s in samples:
             X = np.random.randint(0, 100, s)
-            dist.fit_transform(X, verbose=0)
-            out.append([dist.model['score'], dist.model['name'], s])
+            dfit.fit_transform(X)
+            out.append([dfit.model['score'], dfit.model['name'], s])
 
-        df = pd.DataFrame(out, columns=[dist.stats,'name','samples'])
-        ax=df[dist.stats].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df[dist.stats].mean()))
+        df = pd.DataFrame(out, columns=[dfit.stats,'name','samples'])
+        ax=df[dfit.stats].plot(grid=True, label='smooth: '+str(smooth) + ' - RSS: ' + str(df[dfit.stats].mean()))
 
     ax.set_xlabel('Nr.Samples')
     ax.set_ylabel('RSS')

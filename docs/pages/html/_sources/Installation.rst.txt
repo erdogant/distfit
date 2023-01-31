@@ -17,15 +17,15 @@ A quick example how to learn a model on a given dataset.
     y = [-8,-6,0,1,2,3,4,5,6]
 
     # Initialize model
-    dist = distfit()
+    dfit = distfit()
 
     # Find best theoretical distribution for empirical data X
-    dist.fit_transform(X)
-    dist.plot()
+    dfit.fit_transform(X)
+    dfit.plot()
 
     # Make prediction
-    dist.predict(y)
-    dist.plot()
+    dfit.predict(y)
+    dfit.plot()
 
 
 Installation

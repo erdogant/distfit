@@ -1,0 +1,182 @@
+Basic plot
+##################################################
+
+Let's start plotting the empirical data using a histogram and the PDF. These plots will help to visually guide whether a distribution is a good model for a dataset. The confidence intervals are automatically set to 95% CII but can be changed using the alpha parameter during initialization. When using the plot functionality, it automatically shows the histogram in bars and with a line, PDF/CDF, and confidence intervals. All these properties can be manually specified or removed.
+
+We will start generating random data from the normal distribution and create a basic PDF and CDF plot.
+
+.. code:: python
+	
+	# Import
+	from distfit import distfit
+	import numpy as np
+
+	# Create dataset
+	X = np.random.normal(0, 2, 10000)
+	y = [-8,-6,0,1,2,3,4,5,6]
+
+	# Initialize
+	dfit = distfit(alpha=0.01)
+
+	# Fit
+	dfit.fit_transform(X)
+
+	# Plot seperately
+	fig, ax = dfit.plot(chart='PDF')
+	fig, ax = dfit.plot(chart='CDF')
+
+
+.. |figP1a| image:: ../figs/example_figP1a.png
+.. |figP1b| image:: ../figs/example_figP1b.png
+
+.. table:: Basic PDF and CDF plot
+   :align: center
+
+   +----------+----------+
+   | |figP1a| | |figP1b| |
+   +----------+----------+
+
+
+Plot all fitted distributions
+##################################################
+
+.. code:: python
+	
+	# Plot seperately
+	fig, ax = dfit.plot(chart='PDF', n_top=11)
+	fig, ax = dfit.plot(chart='CDF', n_top=11)
+
+
+
+.. |figP2a| image:: ../figs/example_figP2a.png
+.. |figP2b| image:: ../figs/example_figP2b.png
+
+.. table:: PDF and CDF plot with multiple fitted distributions.
+   :align: center
+
+   +----------+----------+
+   | |figP2a| | |figP2b| |
+   +----------+----------+
+
+
+Combine plots
+##################################################
+
+.. code:: python
+	
+	# Plot together
+	fig, ax = dfit.plot(chart='PDF', n_top=1)
+	fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+
+	# Plot together
+	fig, ax = dfit.plot(chart='PDF', n_top=11)
+	fig, ax = dfit.plot(chart='CDF', n_top=11, ax=ax)
+
+
+.. |figP3a| image:: ../figs/example_figP3a.png
+.. |figP3b| image:: ../figs/example_figP3b.png
+
+.. table:: Basic PDF and CDF plot
+   :align: center
+
+   +----------+----------+
+   | |figP3a| | |figP3b| |
+   +----------+----------+
+
+
+Change chart properties
+##################################################
+
+.. code:: python
+	
+	# Change or remove properties of the chart.
+	dfit.plot(chart='PDF',
+			pdf_properties={'color': 'r'},
+			cii_properties={'color': 'g'},
+			emp_properties=None,
+			bar_properties=None)
+
+	dfit.plot(chart='CDF',
+			pdf_properties={'color': 'r'},
+			cii_properties={'color': 'g'},
+			emp_properties=None,
+			bar_properties=None)
+
+
+.. code:: python
+
+	# Combine the charts and change properties
+	fig, ax = dfit.plot(chart='PDF',
+			pdf_properties={'color': 'r', 'linewidth': 3},
+			cii_properties={'color': 'r', 'linewidth': 3},
+			bar_properties={'color': '#1e3f5a'})
+
+	dfit.plot(chart='CDF',
+			n_top=10,
+			pdf_properties={'color': 'r'},
+			cii_properties=None,
+			bar_properties=None,
+			ax=ax)
+
+.. code:: python
+
+	# Combine the charts and change properties
+	fig, ax = dfit.plot(chart='PDF',
+			pdf_properties=None,
+			cii_properties=None,
+			emp_properties={'color': 'g', 'linewidth': 3},
+			bar_properties={'color': '#1e3f5a'})
+
+	dfit.plot(chart='CDF',
+			pdf_properties=None,
+			cii_properties=None,
+			emp_properties={'color': 'g', 'linewidth': 3},
+			bar_properties=None,
+			ax=ax)
+
+
+.. |figP4a| image:: ../figs/example_figP4a.png
+.. |figP4b| image:: ../figs/example_figP4b.png
+.. |figP4c| image:: ../figs/example_figP4c.png
+.. |figP4d| image:: ../figs/example_figP4d.png
+
+.. table:: Basic PDF and CDF plot
+   :align: center
+
+   +----------+----------+
+   | |figP4a| | |figP4b| |
+   +----------+----------+
+   | |figP4c| | |figP4d| |
+   +----------+----------+
+
+
+
+QQ plot
+##################################################
+
+.. code:: python
+	
+	# Plot seperately
+	fig, ax = dfit.qqplot(X)
+	fig, ax = dfit.qqplot(X, n_top=11)
+
+
+
+.. |figP2a| image:: ../figs/example_figP5a.png
+.. |figP2b| image:: ../figs/example_figP5b.png
+
+.. table:: Quantile-Quantile plot
+   :align: center
+
+   +----------+----------+
+   | |figP5a| | |figP5b| |
+   +----------+----------+
+
+.. raw:: html
+
+	<hr>
+	<center>
+		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+	</center>
+	<hr>
+

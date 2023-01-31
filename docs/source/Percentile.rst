@@ -10,23 +10,23 @@ The method **percentile** simply computes the confidence intervals based on the 
     from distfit import distfit
 
     # Initialize model with percentile method
-    dist = distfit(method='percentile')
+    dfit = distfit(method='percentile')
 
     # Some random data
     X = np.random.normal(10, 3, 2000)
     y = [3,4,5,6,10,11,12,18,20]
     # Compute Percentiles based on data
-    dist.fit_transform(X)
+    dfit.fit_transform(X)
 
     # Some results about the CII
-    print(dist.model['CII_min_alpha'])
+    print(dfit.model['CII_min_alpha'])
     # > 4.0714359161939235
     # Some results
-    print(dist.model['CII_max_alpha'])
+    print(dfit.model['CII_max_alpha'])
     # > 16.00598292777584
 
     # Plot
-    dist.plot()
+    dfit.plot()
 
 
 .. |fig_percentile1| image:: ../figs/percentile_plot.png
@@ -42,9 +42,9 @@ The method **percentile** simply computes the confidence intervals based on the 
 .. code:: python
 
     # Make prediction
-    dist.predict(y)
+    dfit.predict(y)
     # Plot
-    dist.plot()
+    dfit.plot()
 
 
 .. |fig_percentile2| image:: ../figs/percentile_plot_predict.png

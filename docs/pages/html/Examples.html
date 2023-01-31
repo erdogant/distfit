@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quick start to find best fitting distribution &mdash; distfit distfit documentation</title>
+  <title>Quick start to find best fitting distribution &mdash; distfit 1.5.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Sponsor" href="Documentation.html" />
+    <link rel="next" title="Initialization" href="Functions.html" />
     <link rel="prev" title="Saving" href="Save%20and%20Load.html" /> 
 </head>
 
@@ -50,19 +50,6 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#installation">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
-</ul>
 <p class="caption" role="heading"><span class="caption-text">Methods</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
@@ -81,6 +68,14 @@
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html">Basic plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#plot-all-fitted-distributions">Plot all fitted distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#combine-plots">Combine plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#change-chart-properties">Change chart properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#qq-plot">QQ plot</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul>
@@ -106,6 +101,20 @@
 <li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
@@ -165,10 +174,10 @@
 <span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 
 <span class="c1"># Initialize</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Search for best theoretical fit on your empirical data</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># [distfit] &gt;fit..</span>
 <span class="c1"># [distfit] &gt;transform..</span>
@@ -190,7 +199,7 @@
 <section id="plot-distribution-fit">
 <h2>Plot distribution fit<a class="headerlink" href="#plot-distribution-fit" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id2">
@@ -199,7 +208,7 @@
 <col style="width: 100%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_images/example_fig1a.png"><img alt="fig1a" src="_images/example_fig1a.png" style="width: 430.5px; height: 368.2px;" /></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/example_fig1a.png"><img alt="fig1a" src="_images/example_fig1a.png" style="width: 821.0999999999999px; height: 634.1999999999999px;" /></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -208,7 +217,7 @@
 <h2>Plot RSS<a class="headerlink" href="#plot-rss" title="Permalink to this heading"></a></h2>
 <p>Note that the best fit should be <strong>normal</strong>, as this was also the input data. However, many other distributions can be very similar with specific loc/scale parameters. It is however not unusual to see <em>gamma</em> and <em>beta</em> distribution as these are the “barba-pappas” among the distributions. Lets print the summary of detected distributions with the Residual Sum of Squares.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plot</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id3">
@@ -231,15 +240,15 @@
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
 
 <span class="c1"># Initialize</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">)</span>
 <span class="c1"># Fit on data</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># [distfit] &gt;fit..</span>
 <span class="c1"># [distfit] &gt;transform..</span>
 <span class="c1"># [distfit] &gt;[norm] [RSS: 0.0151267] [loc=0.103 scale=2.028]</span>
 
-<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -251,9 +260,9 @@
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
 
 <span class="c1"># Initialize</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;uniform&#39;</span><span class="p">])</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;uniform&#39;</span><span class="p">])</span>
 <span class="c1"># Fit on data</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># [distfit] &gt;fit..</span>
 <span class="c1"># [distfit] &gt;transform..</span>
@@ -262,7 +271,7 @@
 <span class="c1"># [distfit] &gt;[uniform] [0.00 sec] [RSS: 0.2505846] [loc=-6.583 scale=15.076]</span>
 <span class="c1"># [distfit] &gt;Compute confidence interval [parametric]</span>
 
-<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -286,13 +295,13 @@ outside the confidence interval but not marked as significant. See section Algor
 <span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 
 <span class="c1"># Initialize</span>
-<span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Search for best theoretical fit on your empirical data</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># Make prediction on new datapoints based on the fit</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -300,7 +309,7 @@ outside the confidence interval but not marked as significant. See section Algor
 <h2>Plot predictions<a class="headerlink" href="#plot-predictions" title="Permalink to this heading"></a></h2>
 <p>The best fitted distribution is plotted over the emperical data with it confidence intervals.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The plot function will now also include the predictions of y</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -413,17 +422,17 @@ In our examples it is the <code class="docutils literal notranslate"><span class
 The same variable names are used; <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">y_proba</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> and <code class="docutils literal notranslate"><span class="pre">P</span></code>.
 Note that dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> is included when using the todf=True paramter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># All scores of the tested distributions</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
 
 <span class="c1"># Distribution parameters for best fit</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">model</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">model</span>
 
 <span class="c1"># Show the predictions for y</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
 <span class="c1"># [&#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39; &#39;up&#39;]</span>
 
 <span class="c1"># Show the probabilities for y that belong with the predictions</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
 <span class="c1"># [2.75338375e-05 2.74664877e-03 4.74739680e-01 3.28636879e-01 1.99195071e-01 1.06316132e-01 5.05914722e-02 2.18922761e-02 8.89349927e-03]</span>
 
 <span class="c1"># All predicted information is also stored in a structured dataframe (only when setting the todf=True)</span>
@@ -432,7 +441,7 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
 <span class="c1"># y_pred: True in case y_proba&lt;=alpha</span>
 <span class="c1"># P: raw P-values</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -520,7 +529,7 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Save%20and%20Load.html" class="btn btn-neutral float-left" title="Saving" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Documentation.html" class="btn btn-neutral float-right" title="Sponsor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Functions.html" class="btn btn-neutral float-right" title="Initialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

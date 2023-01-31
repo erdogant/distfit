@@ -22,9 +22,9 @@ Manually specifying
     # Load library
     from distfit import distfit
     # Initialize model and test only for normal distribution
-    dist = distfit(distr='norm')
+    dfit = distfit(distr='norm')
     # Set multiple distributions to test for
-    dist = distfit(distr=['norm','t'])
+    dfit = distfit(distr=['norm','t'])
 
 The ``popular`` set of PDFs contains the following set of distributions and can be used as depicted below:
 
@@ -43,7 +43,7 @@ The ``popular`` set of PDFs contains the following set of distributions and can 
 .. code:: python
 
     # Initialize model and select popular distributions
-    dist = distfit(distr='popular')
+    dfit = distfit(distr='popular')
 
  
 The ``full`` set contains the following set of distributions:
@@ -90,7 +90,7 @@ The distributions frechet_r and frechet_l are also not supported anymore.
 .. code:: python
 
     # Initialize model and select all distributions
-    dist = distfit(distr='full')
+    dfit = distfit(distr='full')
 
 
 Residual Sum of Squares (RSS)
@@ -117,11 +117,11 @@ Note that, due to multiple testing approaches, it can occur that samples can be 
 
 The following output variables are available. More information can be found under **return** in the docstring.
 
-dist.predict
-	* dist.results['y_proba']
-	* dist.results['y_pred']
-	* dist.results['df']
-	* dist.summary
+dfit.predict
+	* dfit.results['y_proba']
+	* dfit.results['y_pred']
+	* dfit.results['df']
+	* dfit.summary
 
 The output variable ``y_proba`` is by default corrected for multiple testing using the false discovery rate (fdr).
 FDR-controlling procedures are designed to control the expected proportion of "discoveries" that are false.
@@ -130,7 +130,7 @@ If desired, other multiple test methods can be choosen, each with its own proper
 .. code:: python
 
     # Initialize
-    dist = distfit(multtest='holm', alpha=0.01)
+    dfit = distfit(multtest='holm', alpha=0.01)
 
 
 +----------------+---------------------------------------------------+
@@ -197,7 +197,7 @@ It all starts with the initialization:
 .. code:: python
 
     # Initialize model and select popular distributions
-    dist = distfit(alpha=0.01)
+    dfit = distfit(alpha=0.01)
 
 
 The object now returns variables that are set by default, except for the ``alpha`` parameter (nothing else is provided). For more details, see the **returns** in the docstrings at :func:`distfit.distfit.distfit`. In the next step, input-data *X* can be provided:
@@ -205,19 +205,19 @@ The object now returns variables that are set by default, except for the ``alpha
 .. code:: python
 
     # Initialize model and select popular distributions
-    dist.fit_transform(X)
+    dfit.fit_transform(X)
 
 The object can now be feeded with data *X*, using ``fit`` and ``transform`` function, that will add more output variables to the object.
 Instead of using the two functions seperately, it can also be performed with ``fit_transform``: :func:`distfit.distfit.distfit.fit_transform`.
 
 The fit_transform outputs the variables *summary*, *distributions* and *model*
 
-dist.summary
+dfit.summary
 	The summary of the fits across the distributions.
 
 .. code:: python
     
-    print(dist.summary)
+    print(dfit.summary)
     # 	distr         RSS  ...      scale                                      arg
     # 0       gamma  0.00185211  ...  0.0370159                     (3004.147964288284,)
     # 1           t  0.00186936  ...    2.02883                     (2517332.591227023,)
@@ -231,17 +231,17 @@ dist.summary
     # 9      pareto    0.634924  ...    1.42095                    (0.5384782616155881,)
 
 
-**dist.distributions** is a list containing the extracted pdfs from ``scipy``
+**dfit.distributions** is a list containing the extracted pdfs from ``scipy``
 	The collected distributions.
 
-**dist.model** contains information regarding the best scoring pdf:
-	* dist.model['RSS']
-	* dist.model['name']
-	* dist.model['distr']
-	* dist.model['params']
-	* dist.model['loc']
-	* dist.model['scale']
-	* dist.model['arg']
+**dfit.model** contains information regarding the best scoring pdf:
+	* dfit.model['RSS']
+	* dfit.model['name']
+	* dfit.model['distr']
+	* dfit.model['params']
+	* dfit.model['loc']
+	* dfit.model['scale']
+	* dfit.model['arg']
 
 
 .. raw:: html

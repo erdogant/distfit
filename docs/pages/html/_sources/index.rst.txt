@@ -62,13 +62,6 @@ Contents
    Installation
 
 .. toctree::
-  :maxdepth: 2
-  :caption: Functions
-
-  Functions
-
-
-.. toctree::
   :maxdepth: 3
   :caption: Methods
 
@@ -91,6 +84,12 @@ Contents
 
 .. toctree::
   :maxdepth: 3
+  :caption: Plots
+
+  Plots
+
+.. toctree::
+  :maxdepth: 3
   :caption: Save and Load
 
   Save and Load
@@ -101,6 +100,12 @@ Contents
   :caption: Examples
 
   Examples
+
+.. toctree::
+  :maxdepth: 2
+  :caption: Functions
+
+  Functions
 
 
 .. toctree::
