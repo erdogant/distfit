@@ -4,11 +4,15 @@ import unittest
 from scipy.stats import binom
 
 def show_figures(dist):
-    dist.plot()
-    dist.plot(cii_properties=None, emp_properties={}, pdf_properties={}, bar_properties={})
-    dist.plot(cii_properties={}, emp_properties=None, pdf_properties={}, bar_properties={})
-    dist.plot(cii_properties={}, emp_properties={}, pdf_properties=None, bar_properties={})
-    dist.plot(cii_properties={}, emp_properties={}, pdf_properties={}, bar_properties=None)
+    charts = ['PDF', 'CDF']
+    n_top=[1, 10]
+    for chart in charts:
+        for n in n_top:
+            dist.plot(chart=chart, n_top=n)
+            dist.plot(chart=chart, n_top=n, cii_properties=None, emp_properties={}, pdf_properties={}, bar_properties={})
+            dist.plot(chart=chart, n_top=n, cii_properties={}, emp_properties=None, pdf_properties={}, bar_properties={})
+            dist.plot(chart=chart, n_top=n, cii_properties={}, emp_properties={}, pdf_properties=None, bar_properties={})
+            dist.plot(chart=chart, n_top=n, cii_properties={}, emp_properties={}, pdf_properties={}, bar_properties=None)
     dist.plot_summary()
     
 class Test_DISTFIT(unittest.TestCase):
@@ -18,7 +22,7 @@ class Test_DISTFIT(unittest.TestCase):
         dist = distfit()
         X = binom(8, 0.5).rvs(1000)
         dist = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
-        model = dist.fit_transform(X, verbose=3)
+        dist.fit_transform(X, verbose='info');
         show_figures(dist)
 
         X = np.random.uniform(0, 1000, 10000)
@@ -58,7 +62,7 @@ class Test_DISTFIT(unittest.TestCase):
         dist = distfit()
         assert np.all(np.isin(['method', 'alpha', 'bins', 'distr', 'multtest', 'n_perm'], dir(dist)))
         # Fit and transform data
-        dist.fit_transform(X, verbose=3)
+        dist.fit_transform(X, verbose='info')
     
         # TEST 1: check output is unchanged
         assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dist)))
@@ -186,7 +190,7 @@ class Test_DISTFIT(unittest.TestCase):
         X = binom(8, 0.5).rvs(10000)
     
         dist = distfit(method='discrete', f=1.5, weighted=True)
-        dist.fit_transform(X, verbose=3)
+        dist.fit_transform(X, verbose='info')
         assert dist.model['n']==8
         assert np.round(dist.model['p'], decimals=1)==0.5
     

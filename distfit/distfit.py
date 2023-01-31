@@ -303,11 +303,12 @@ class distfit():
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
-            model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats)
+            out_summary, model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats)
             model = _compute_cii(self, model)
             # self.histdata = (figdata['Xdata'], figdata['hist'])
             self.model = model
-            self.summary = figdata
+            self.summary = out_summary
+            self.figdata = figdata
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, X)
@@ -692,7 +693,7 @@ class distfit():
             fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties)
         elif chart.upper()=='PDF' and (self.method=='quantile') or (self.method=='percentile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties)
-        elif chart.upper()=='CDF' and self.method=='parametric':
+        elif chart.upper()=='CDF' and (self.method=='parametric' or self.method=='discrete'):
             fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cii_properties=cii_properties, cmap=cmap)
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
@@ -904,7 +905,7 @@ class distfit():
         if n_top is None: n_top = 1
 
         # Create figure
-        if self.method=='parametric':
+        if self.method=='parametric' or self.method=='discrete':
             # Create figure
             if ax is None: fig, ax = plt.subplots(figsize=figsize)
 
@@ -925,10 +926,11 @@ class distfit():
             getmin = np.min(self.histdata[1])
             # Build pdf and turn into pandas Series
             x = np.linspace(getmin, getmax, self.size)
-            if cdf_properties.get('label', None) is None: cdf_properties['label'] = self.model['name'] + " (best fit)"
-            cdf = self.model['model'].cdf
-            # Plot the best CDF
-            ax.plot(x, cdf(x), **cdf_properties)
+            if cdf_properties is not None:
+                if cdf_properties.get('label', None) is None: cdf_properties['label'] = self.model['name'] + " (best fit)"
+                cdf = self.model['model'].cdf
+                # Plot the best CDF
+                ax.plot(x, cdf(x), **cdf_properties)
 
             # Plot other CDFs
             if n_top>1:
@@ -1896,7 +1898,19 @@ def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS'):
     logger.info('Fit using binomial distribution.')
     hist = fit_binom(X)
     model, figdata = transform_binom(hist, f=f, weighted=weighted, stats=stats)
-    return model, figdata
+
+    # Create dataframe (this is required to be consistent with other parts)
+    df = pd.DataFrame(index=range(0, 1), columns=['distr', 'score', 'loc', 'scale', 'arg', 'params', 'model'])
+    df['name'] = model['name']
+    df['distr'] = model['distr']
+    df['model'] = model['model']  # Store the fitted model
+    df['params'] = [model['params']]
+    df['score'] = model['score']
+    df['loc'] = model['n']
+    df['scale'] = model['p']
+    df['arg'] = None
+    
+    return df, model, figdata
 
 
 def plot_binom(self,
@@ -1931,10 +1945,10 @@ def plot_binom(self,
     cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
 
     model = self.model
-    figdata = self.summary
+    # figdata = self.figdata
     n_fit = model['n']
     p_fit = model['p']
-    histf = BinomPMF(n_fit)(figdata['Xdata'], p_fit) * figdata['hist'].sum()
+    histf = BinomPMF(n_fit)(self.figdata['Xdata'], p_fit) * self.figdata['hist'].sum()
 
     # Init figure
     fig, ax = plt.subplots(2, 1, figsize=figsize)
@@ -1943,15 +1957,15 @@ def plot_binom(self,
     if bar_properties is not None:
         bar_properties['align']='center'
         bar_properties['label']='Histogram'
-        ax[0].bar(figdata['Xdata'], figdata['hist'], **bar_properties)
+        ax[0].bar(self.figdata['Xdata'], self.figdata['hist'], **bar_properties)
     # plot Emperical data
     if emp_properties is not None:
-        ax[0].plot(figdata['Xdata'], figdata['hist'], 'o', color=emp_properties['color'], label=emp_properties['label'])
+        ax[0].plot(self.figdata['Xdata'], self.figdata['hist'], 'o', color=emp_properties['color'], label=emp_properties['label'])
 
     # plot PDF
     if pdf_properties is not None:
         pdf_properties['label'] = 'PMF (binomial)'
-        ax[0].step(figdata['Xdata'], histf, where='mid', **pdf_properties)
+        ax[0].step(self.figdata['Xdata'], histf, where='mid', **pdf_properties)
         ax[0].axhline(0, color=pdf_properties['color'])
 
     # Plot CII
@@ -2002,10 +2016,10 @@ def plot_binom(self,
     # Second image
     ax[1].set_xlabel('n')
     ax[1].set_ylabel(self.stats)
-    plotfunc = ax[1].semilogy if figdata['scores'].max()>20 * figdata['scores'].min()>0 else ax[1].plot
-    plotfunc(figdata['nvals'], figdata['scores'], 'k-', label=('%s over n scan' %self.stats))
-    ax[1].vlines(n_fit, 0, figdata['scores'].max(), color=cii_properties_custom['color'], linestyles='dashed')
-    ax[1].hlines(model['score'], figdata['nvals'].min(), figdata['nvals'].max(), color=cii_properties_custom['color'], linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
+    plotfunc = ax[1].semilogy if self.figdata['scores'].max()>20 * self.figdata['scores'].min()>0 else ax[1].plot
+    plotfunc(self.figdata['nvals'], self.figdata['scores'], 'k-', label=('%s over n scan' %self.stats))
+    ax[1].vlines(n_fit, 0, self.figdata['scores'].max(), color=cii_properties_custom['color'], linestyles='dashed')
+    ax[1].hlines(model['score'], self.figdata['nvals'].min(), self.figdata['nvals'].max(), color=cii_properties_custom['color'], linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
     ax[1].legend(loc='upper right')
     ax[1].grid(grid)
     fig.show()
