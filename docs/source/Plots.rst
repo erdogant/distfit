@@ -162,8 +162,8 @@ QQ plot
 
 
 
-.. |figP2a| image:: ../figs/example_figP5a.png
-.. |figP2b| image:: ../figs/example_figP5b.png
+.. |figP5a| image:: ../figs/example_figP5a.png
+.. |figP5b| image:: ../figs/example_figP5b.png
 
 .. table:: Quantile-Quantile plot
    :align: center
