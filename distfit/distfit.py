@@ -110,7 +110,7 @@ class distfit():
     f : float, (default: 1.5)
         Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
     cmap : String, optional (default: 'Set1')
-        Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+        Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
     verbose : [str, int], default is 'info' or 20
         Set the verbose messages using string or integer values.
             * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -143,27 +143,25 @@ class distfit():
     >>> from distfit import distfit
     >>> import numpy as np
     >>>
-    >>> # Create dataset
     >>> X = np.random.normal(0, 2, 1000)
     >>> y = [-8,-6,0,1,2,3,4,5,6]
     >>>
-    >>> # Default method is parameteric models
-    >>> dist = distfit()
-    >>>
-    >>> # In case of quantile
-    >>> dist = distfit(method='quantile')
-    >>>
-    >>> # In case of percentile
-    >>> dist = distfit(method='percentile')
-    >>>
-    >>> # Fit using method
-    >>> model_results = dist.fit_transform(X)
-    >>>
-    >>> dist.plot()
+    >>> dfit = distfit()
+    >>> results = dfit.fit_transform(X)
+    >>> dfit.plot()
     >>>
     >>> # Make prediction
-    >>> results = dist.predict(y)
-    >>> dist.plot()
+    >>> results_proba = dfit.predict(y)
+    >>>
+    >>> # Plot PDF
+    >>> fig, ax = dfit.plot(chart='PDF', n_top=1)
+    >>>
+    >>> # Add the CDF to the plot
+    >>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+    >>>
+    >>> # QQ-plot for top 10 fitted distributions
+    >>> fig, ax = dfit.qqplot(X, n_top=10)
+    >>>
 
     References
     ----------
@@ -365,23 +363,25 @@ class distfit():
         >>> X = np.random.normal(0, 2, 1000)
         >>> y = [-8,-6,0,1,2,3,4,5,6]
         >>>
-        >>> # Default method is parameteric models
-        >>> dist = distfit()
+        >>> # Default method is parametric.
+        >>> dfit = distfit()
         >>>
         >>> # In case of quantile
-        >>> dist = distfit(method='quantile')
+        >>> dfit = distfit(method='quantile')
         >>>
         >>> # In case of percentile
-        >>> dist = distfit(method='percentile')
+        >>> dfit = distfit(method='percentile')
         >>>
         >>> # Fit using method
-        >>> model_results = dist.fit_transform(X)
+        >>> model_results = dfit.fit_transform(X)
         >>>
-        >>> dist.plot()
+        >>> dfit.plot()
         >>>
         >>> # Make prediction
-        >>> results = dist.predict(y)
-        >>> dist.plot()
+        >>> results = dfit.predict(y)
+        >>>
+        >>> # Plot results with CII and predictions.
+        >>> dfit.plot()
         >>>
 
         """
@@ -464,15 +464,16 @@ class distfit():
         >>> y = [-8,-6,0,1,2,3,4,5,6]
         >>>
         >>> # Initialize
-        >>> dist = distfit(todf=True)
+        >>> dfit = distfit(todf=True)
         >>> # Fit
-        >>> model_results = dist.fit_transform(X)
+        >>> model_results = dfit.fit_transform(X)
         >>>
-        >>> # Make prediction
-        >>> results = dist.predict(y)
+        >>> # Make predictions
+        >>> results = dfit.predict(y)
         >>> print(results['df'])
         >>>
-        >>> dist.plot()
+        >>> # Plot results with CII and predictions.
+        >>> dfit.plot()
         """
         if verbose is not None: set_logger(verbose)
         if 'list' in str(type(y)): y=np.array(y)
@@ -529,12 +530,12 @@ class distfit():
         >>> y = [-8,-6,0,1,2,3,4,5,6]
         >>>
         >>> # Initialize
-        >>> dist = distfit(todf=True)
+        >>> dfit = distfit(todf=True)
         >>> # Fit
-        >>> dist.fit_transform(X)
+        >>> dfit.fit_transform(X)
         >>>
         >>> # Create syntethic data using fitted distribution.
-        >>> Xnew = dist.generate(10)
+        >>> Xnew = dfit.generate(10)
         >>>
         """
         if verbose is not None: set_logger(verbose)
@@ -583,10 +584,10 @@ class distfit():
         >>> X = np.random.normal(0, 2, 1000)
         >>>
         >>> # Initialize
-        >>> dist = distfit()
+        >>> dfit = distfit()
         >>>
         >>> # Compute bins and density
-        >>> bins, density = dist.density(X)
+        >>> bins, density = dfit.density(X)
         >>>
         >>> # Make plot
         >>> plt.figure(); plt.plot(bins, density)
@@ -664,7 +665,7 @@ class distfit():
         grid : Bool, optional (default: True)
             Show the grid on the figure.
         cmap : String, optional (default: None)
-            Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+            Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
             However, when cmap is set, the specified colormap is used.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
@@ -746,7 +747,7 @@ class distfit():
         grid : Bool, optional (default: True)
             Show the grid on the figure.
         cmap : String, optional (default: None)
-            Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+            Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
             However, when cmap is set, the specified colormap is used.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
@@ -769,16 +770,16 @@ class distfit():
         >>> X = np.random.normal(0, 2, 1000)
         >>>
         >>> # Initialize
-        >>> dist = distfit()
+        >>> dfit = distfit()
         >>>
         >>> # Fit
-        >>> dist.fit_transform(X)
+        >>> dfit.fit_transform(X)
         >>>
         >>> # Make qq-plot
-        >>> dist.qqplot(X)
+        >>> dfit.qqplot(X)
         >>>
         >>> # Make qq-plot for top 10 best fitted models.
-        >>> dist.qqplot(X, n_top=10)
+        >>> dfit.qqplot(X, n_top=10)
         >>>
 
         """
@@ -860,7 +861,7 @@ class distfit():
                 * None: Do not plot.
                 * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
         cmap : String, optional (default: None)
-            Colormap when plotting multiple the CDF. The used colors are stored in dist.summary['colors'].
+            Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
             However, when cmap is set, the specified colormap is used.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
@@ -883,21 +884,21 @@ class distfit():
         >>> X = np.random.normal(0, 2, 1000)
         >>>
         >>> # Initialize
-        >>> dist = distfit()
+        >>> dfit = distfit()
         >>>
         >>> # Fit
-        >>> dist.fit_transform(X)
+        >>> dfit.fit_transform(X)
         >>>
         >>> # Make CDF plot
-        >>> fig, ax = dist.plot(chart='CDF')
+        >>> fig, ax = dfit.plot(chart='CDF')
         >>>
         >>> # Append the PDF plot
-        >>> dist.plot(chart='PDF', fig=fig, ax=ax)
+        >>> dfit.plot(chart='PDF', fig=fig, ax=ax)
         >>>
         >>> # Plot the CDF of the top 10 fitted distributions.
-        >>> fig, ax = dist.plot(chart='CDF', n_top=10)
+        >>> fig, ax = dfit.plot(chart='CDF', n_top=10)
         >>> # Append the PDF plot
-        >>> dist.plot(chart='PDF', n_top=10, fig=fig, ax=ax)
+        >>> dfit.plot(chart='PDF', n_top=10, fig=fig, ax=ax)
         >>>
         """
         logger.info('Ploting CDF')
@@ -1162,8 +1163,24 @@ class distfit():
 
 # %%
 def set_colors(df, cmap='Set1'):
+    """Set colors.
+
+    Parameters
+    ----------
+    df : DataFrame
+        DESCRIPTION.
+    cmap : str, default: 'Set1'
+        Set the colormap.
+
+    Returns
+    -------
+    df : DataFrame
+        DataFrame.
+
+    """
     df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex')
     return df
+
 
 # %%
 def _predict(self, y):
@@ -1173,14 +1190,6 @@ def _predict(self, y):
 
     # Compute P-value for data based on null-distribution
     Pvalues = self.model['model'].cdf(y)
-    # else:
-    #     # Get distribution and the parameters
-    #     getdist = self.model['distr']
-    #     arg = self.model['params'][:-2]
-    #     loc = self.model['params'][-2]
-    #     scale = self.model['params'][-1]
-    #     # Compute P-value for data based on null-distribution
-    #     getP = getdist.cdf(y, *arg, loc, scale) if arg else getdist.cdf(y, loc, scale)
 
     # Determine P based on upper/lower/no bounds
     if self.bound=='up' or self.bound=='right' or self.bound=='high':
@@ -1353,7 +1362,7 @@ def _plot_cii_quantile(model, results, cii_properties, ax):
         ax.axvline(model['CII_min_alpha'], c=cii_properties_custom['color'], label='CII low', **cii_properties)
         ax.axvline(model['CII_max_alpha'], c=cii_properties_custom['color'], label='CII high', **cii_properties)
 
-        # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+        # Add significant hits as line into the plot. This data is dervived from dfit.proba_parametric
         if results is not None:
             for i in range(0, len(results['y'])):
                 if results['y_pred'][i] != 'none':
@@ -1382,7 +1391,7 @@ def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
             ax.axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
         if cii_properties.get('label'): cii_properties.pop('label')
 
-    # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+    # Add significant hits as line into the plot. This data is dervived from dfit.proba_parametric
     # if hasattr(self, 'results') and (cii_properties is not None):
     if (results is not None) and (cii_properties is not None):
         if alpha is None: alpha=1
@@ -1939,7 +1948,7 @@ def plot_binom(self,
     Param['xlim'] = xlim
     Param['ylim'] = ylim
     # Make figure
-    # dist = self.model['distr']
+    # dfit = self.model['distr']
     best_fit_name = self.model['name'].title()
     best_fit_param = self.model['params']
     cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
@@ -1978,7 +1987,7 @@ def plot_binom(self,
             cii_properties['label'] = 'CII high ' + '(' + str(self.alpha) + ')'
             ax[0].axvline(x=model['CII_max_alpha'], ymin=0, ymax=1, color=cii_properties_custom['color'], **cii_properties)
 
-        # Add significant hits as line into the plot. This data is dervived from dist.proba_parametric
+        # Add significant hits as line into the plot. This data is dervived from dfit.proba_parametric
         if hasattr(self, 'results'):
             # Plot significant hits with multiple test
             if self.alpha is None: self.alpha=1

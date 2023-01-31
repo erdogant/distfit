@@ -33,13 +33,22 @@ Example
 >>> X = np.random.normal(0, 2, 1000)
 >>> y = [-8,-6,0,1,2,3,4,5,6]
 >>>
->>> dist = distfit()
->>> model_results = dist.fit_transform(X)
->>> dist.plot()
+>>> dfit = distfit()
+>>> results = dfit.fit_transform(X)
+>>> dfit.plot()
 >>>
 >>> # Make prediction
->>> results = dist.predict(y)
->>> dist.plot()
+>>> results_proba = dfit.predict(y)
+>>>
+>>> # Plot PDF
+>>> fig, ax = dfit.plot(chart='PDF', n_top=1)
+>>>
+>>> # Add the CDF to the plot
+>>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+>>>
+>>> # QQ-plot for top 10 fitted distributions
+>>> fig, ax = dfit.qqplot(X, n_top=10)
+>>>
 
 References
 ----------
