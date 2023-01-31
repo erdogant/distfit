@@ -87,24 +87,30 @@ dfit.plot()             # Plot the best fitted distribution (y is included if pr
 
 ```python
 
-# Prints the screen:
-# [distfit] >fit..
-# [distfit] >transform..
-# [distfit] >[norm      ] [RSS: 0.0133619] [loc=-0.059 scale=2.031] 
-# [distfit] >[expon     ] [RSS: 0.3911576] [loc=-6.213 scale=6.154] 
-# [distfit] >[pareto    ] [RSS: 0.6755185] [loc=-7.965 scale=1.752] 
-# [distfit] >[dweibull  ] [RSS: 0.0183543] [loc=-0.053 scale=1.726] 
-# [distfit] >[t         ] [RSS: 0.0133619] [loc=-0.059 scale=2.031] 
-# [distfit] >[genextreme] [RSS: 0.0115116] [loc=-0.830 scale=1.964] 
-# [distfit] >[gamma     ] [RSS: 0.0111372] [loc=-19.843 scale=0.209] 
-# [distfit] >[lognorm   ] [RSS: 0.0111236] [loc=-29.689 scale=29.561] 
-# [distfit] >[beta      ] [RSS: 0.0113012] [loc=-12.340 scale=41.781] 
-# [distfit] >[uniform   ] [RSS: 0.2481737] [loc=-6.213 scale=12.281] 
+# [distfit] >INFO> fit
+# [distfit] >INFO> transform
+# [distfit] >INFO> [norm      ] [0.00 sec] [RSS: 0.00108326] [loc=-0.048 scale=1.997]
+# [distfit] >INFO> [expon     ] [0.00 sec] [RSS: 0.404237] [loc=-6.897 scale=6.849]
+# [distfit] >INFO> [pareto    ] [0.00 sec] [RSS: 0.404237] [loc=-536870918.897 scale=536870912.000]
+# [distfit] >INFO> [dweibull  ] [0.06 sec] [RSS: 0.0115552] [loc=-0.031 scale=1.722]
+# [distfit] >INFO> [t         ] [0.59 sec] [RSS: 0.00108349] [loc=-0.048 scale=1.997]
+# [distfit] >INFO> [genextreme] [0.17 sec] [RSS: 0.00300806] [loc=-0.806 scale=1.979]
+# [distfit] >INFO> [gamma     ] [0.05 sec] [RSS: 0.00108459] [loc=-1862.903 scale=0.002]
+# [distfit] >INFO> [lognorm   ] [0.32 sec] [RSS: 0.00121597] [loc=-110.597 scale=110.530]
+# [distfit] >INFO> [beta      ] [0.10 sec] [RSS: 0.00105629] [loc=-16.364 scale=32.869]
+# [distfit] >INFO> [uniform   ] [0.00 sec] [RSS: 0.287339] [loc=-6.897 scale=14.437]
+# [distfit] >INFO> [loggamma  ] [0.12 sec] [RSS: 0.00109042] [loc=-370.746 scale=55.722]
+# [distfit] >INFO> Compute confidence intervals [parametric]
+# [distfit] >INFO> Compute significance for 9 samples.
+# [distfit] >INFO> Multiple test correction method applied: [fdr_bh].
+# [distfit] >INFO> Create PDF plot for the parametric method.
+# [distfit] >INFO> Mark 5 significant regions
+# [distfit] >INFO> Estimated distribution: beta [loc:-16.364265, scale:32.868811]
 ```
 
 <p align="left">
   <a href="https://erdogant.github.io/distfit/pages/html/Examples.html#make-predictions">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1.png" width="450" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example_figP4c.png" width="450" />
   </a>
 </p>
 
