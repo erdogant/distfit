@@ -34,7 +34,7 @@ console = logging.StreamHandler()
 formatter = logging.Formatter('[distfit] >%(levelname)s> %(message)s')
 console.setFormatter(formatter)
 logger.addHandler(console)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 # %% Class dist
@@ -964,15 +964,15 @@ class distfit():
                 # Plot the best CDF
                 ax.plot(x, cdf(x), **cdf_properties)
 
-            # Plot other CDFs
-            if n_top>1:
-                n_top = np.minimum(self.summary.shape[0], n_top + 1)
-                if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex')
-                for i in range(1, n_top):
-                    # Plot cdf
-                    cdf = self.summary['model'].iloc[i].cdf
-                    # Plot CDF for linearly scale samples between min-max range(x)
-                    ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': self.summary['color'].iloc[i]})
+                # Plot other CDFs
+                if n_top>1:
+                    n_top = np.minimum(self.summary.shape[0], n_top + 1)
+                    if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex')
+                    for i in range(1, n_top):
+                        # Plot cdf
+                        cdf = self.summary['model'].iloc[i].cdf
+                        # Plot CDF for linearly scale samples between min-max range(x)
+                        ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': self.summary['color'].iloc[i]})
 
             # plot CII
             results = self.results if hasattr(self, 'results') else None
