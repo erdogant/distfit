@@ -1345,9 +1345,9 @@ def _predict_percentile(self, y):
 
 
 # %% Plot bar
-def _plot_pdf_more(df, x, n_top, ax, cmap='Set1'):
+def _plot_pdf_more(df, x, n_top, cmap, pdf_properties, ax):
     if n_top is None: n_top = 1
-    if n_top>1:
+    if n_top>1 and (pdf_properties is not None):
         n_top = np.minimum(df.shape[0], n_top + 1)
         if cmap is not None: df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex')
         for i in range(1, n_top):
@@ -1523,7 +1523,7 @@ def _plot_parametric(self,
     # Plot pdf
     _plot_pdf(x, y, best_fit_name + ' (best fit)', pdf_properties, ax)
     # Plot top n pdf
-    _plot_pdf_more(self.summary, x, Param['n_top'], ax, cmap=cmap)
+    _plot_pdf_more(self.summary, x, Param['n_top'], cmap, pdf_properties, ax)
     # plot CII
     results = self.results if hasattr(self, 'results') else None
     _plot_cii_parametric(self.model, self.alpha, results, cii_properties, ax)
