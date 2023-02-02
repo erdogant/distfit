@@ -24,7 +24,9 @@ y = [0, 1, 10, 11, 12]
 
 results = dfit.predict(y)
 dfit.plot(chart='PDF')
-dfit.plot(chart='CDF')
+dfit.plot(chart='PDF', pdf_properties=None)
+dfit.plot(chart='CDF', n_top=5)
+dfit.plot(chart='CDF', pdf_properties=None, n_top=2)
 dfit.plot_cdf()
 
 # %%
@@ -51,6 +53,13 @@ dfit.fit_transform(X)
 # QQplot
 dfit.qqplot(X)
 dfit.qqplot(X, n_top=11, cmap='Set1')
+
+dfit.plot(chart='PDF')
+dfit.plot(chart='PDF', pdf_properties=None)
+dfit.plot(chart='PDF', pdf_properties=None, n_top=10)
+dfit.plot(chart='CDF', n_top=10)
+dfit.plot(chart='CDF', pdf_properties=None, n_top=10)
+
 
 # fig, ax = dfit.plot(chart='CDF', n_top=10);
 # dfit.plot(chart='PDF', n_top=10, fig=fig, ax=ax);
