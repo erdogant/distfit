@@ -612,10 +612,10 @@ class distfit():
              chart='PDF',
              n_top=1,
              title='',
-             emp_properties={'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'},
-             pdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
-             bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'center'},
-             cii_properties={'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
+             emp_properties={'color': '#000000', 'linewidth': 3, 'linestyle': '-'},
+             pdf_properties={'color': '#880808', 'linewidth': 3, 'linestyle': '-'},
+             bar_properties={'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'},
+             cii_properties={'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
              xlabel='Values',
              ylabel='Frequency',
              figsize=(20, 15),
@@ -641,19 +641,19 @@ class distfit():
         emp_properties : dict
             The line properties of the emperical line.
                 * None: Do not plot.
-                * {'color': '#000000', 'linewidth': 1.3, 'linestyle': '-'}: default
+                * {'color': '#000000', 'linewidth': 3, 'linestyle': '-'}
         pdf_properties : dict
             The line properties of the PDF or the CDF.
                 * None: Do not plot.
-                * {'color': '#004481', 'linewidth': 2, 'linestyle': '-'}: default
+                * {'color': '#880808', 'linewidth': 3, 'linestyle': '-'}
         bar_properties : dict
             bar properties of the histogram.
                 * None: Do not plot.
-                * {'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}: default
+                * {'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'edge'}
         cii_properties : dict
             bar properties of the histogram.
                 * None: Do not plot.
-                * {'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}: default
+                * {'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}
         xlabel : String, (default: 'value')
             Label for the x-axis.
         ylabel : String, (default: 'Frequency')
@@ -719,10 +719,10 @@ class distfit():
         """
         if verbose is not None: set_logger(verbose)
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
-        if cii_properties is not None: cii_properties = {**{'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
-        if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 1.3, 'linestyle': '-', 'label': None}, **emp_properties}
-        if pdf_properties is not None: pdf_properties = {**{'color': '#004481', 'linewidth': 2, 'linestyle': '-'}, **pdf_properties}
-        if bar_properties is not None: bar_properties = {**{'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'edge'}, **bar_properties}
+        if cii_properties is not None: cii_properties = {**{'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
+        if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 3, 'linestyle': '-', 'label': None}, **emp_properties}
+        if pdf_properties is not None: pdf_properties = {**{'color': '#880808', 'linewidth': 3, 'linestyle': '-'}, **pdf_properties}
+        if bar_properties is not None: bar_properties = {**{'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'}, **bar_properties}
 
         logger.info('Create %s plot for the %s method.' %(chart, self.method))
         if chart.upper()=='PDF' and self.method=='parametric':
