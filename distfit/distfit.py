@@ -616,6 +616,8 @@ class distfit():
              pdf_properties={'color': '#004481', 'linewidth': 2, 'linestyle': '-'},
              bar_properties={'color': '#ffffff', 'linewidth': 1, 'edgecolor': '#808080', 'align': 'center'},
              cii_properties={'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
+             xlabel='Values',
+             ylabel='Frequency',
              figsize=(20, 15),
              xlim=None,
              ylim=None,
@@ -652,6 +654,10 @@ class distfit():
             bar properties of the histogram.
                 * None: Do not plot.
                 * {'color': '#880808', 'linewidth': 2, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}: default
+        xlabel : String, (default: 'value')
+            Label for the x-axis.
+        ylabel : String, (default: 'Frequency')
+            Label for the y-axis.
         figsize : tuple, optional (default: (10,8))
             The figure size.
         xlim : Float, optional (default: None)
@@ -720,13 +726,13 @@ class distfit():
 
         logger.info('Create %s plot for the %s method.' %(chart, self.method))
         if chart.upper()=='PDF' and self.method=='parametric':
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, n_top=n_top, cmap=cmap)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel)
         elif chart.upper()=='PDF' and self.method=='discrete':
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, xlabel=xlabel, ylabel=ylabel)
         elif chart.upper()=='PDF' and (self.method=='quantile') or (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties, xlabel=xlabel, ylabel=ylabel)
         elif chart.upper()=='CDF' and (self.method=='parametric' or self.method=='discrete'):
-            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cii_properties=cii_properties, cmap=cmap)
+            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cii_properties=cii_properties, cmap=cmap, xlabel=xlabel, ylabel=ylabel)
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
             fig, ax = None, None
@@ -853,6 +859,8 @@ class distfit():
                  n_top=1,
                  title='',
                  figsize=(20, 15),
+                 xlabel='Values',
+                 ylabel='Frequency',
                  xlim=None,
                  ylim=None,
                  fig=None,
@@ -871,6 +879,10 @@ class distfit():
             Show the top number of results. The default is 1.
         title : String, optional (default: '')
             Title of the plot.
+        xlabel : string (default: 'Values')
+            Label of the x-axis.
+        ylabel : string (default: 'Frequencies')
+            Label of the y-axis.
         figsize : tuple, optional (default: (10,8))
             The figure size.
         xlim : Float, optional (default: None)
@@ -986,8 +998,8 @@ class distfit():
 
             # Make text for plot
             ax.set_title(self._make_title(title))
-            ax.set_xlabel('Values')
-            ax.set_ylabel('Frequency')
+            ax.set_xlabel(xlabel)
+            ax.set_ylabel(ylabel)
             ax.legend(loc='upper right')
             ax.grid(grid)
         else:
@@ -1446,7 +1458,7 @@ def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
             ax.scatter(results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
 # %% Plot
-def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
+def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
     if not hasattr(self, 'results'): self.results=None
 
@@ -1464,8 +1476,8 @@ def _plot_quantile(self, title='', figsize=(15, 8), xlim=None, ylim=None, fig=No
         ax.set_ylim(ylim[0], ylim[1])
 
     ax.grid(grid)
-    ax.set_xlabel('Values')
-    ax.set_ylabel('Frequency')
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
     ax.set_title(title)
     ax.legend(loc='upper right')
 
@@ -1477,6 +1489,8 @@ def _plot_parametric(self,
                      n_top=1,
                      title='',
                      figsize=(10, 8),
+                     xlabel='Values',
+                     ylabel='Frequency',
                      xlim=None,
                      ylim=None,
                      grid=True,
@@ -1535,8 +1549,8 @@ def _plot_parametric(self,
         ax.set_ylim(Param['ylim'][0], Param['ylim'][1])
 
     ax.set_title(self._make_title(title))
-    ax.set_xlabel('Values')
-    ax.set_ylabel('Frequency')
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
     ax.legend(loc='upper right')
     ax.grid(grid)
 
@@ -1949,7 +1963,6 @@ def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS'):
     df['loc'] = model['n']
     df['scale'] = model['p']
     df['arg'] = None
-    
     return df, model, figdata
 
 
@@ -1958,6 +1971,8 @@ def plot_binom(self,
                pdf_properties={},
                bar_properties={},
                cii_properties={},
+               xlabel='Values',
+               ylabel='Frequency',
                title='',
                figsize=(10, 8),
                xlim=None,
@@ -2044,8 +2059,8 @@ def plot_binom(self,
         ax[0].set_xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
     if Param['ylim'] is not None:
         ax[0].set_ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
-    ax[0].set_xlabel('k')
-    ax[0].set_ylabel('Counts')
+    ax[0].set_xlabel(xlabel)
+    ax[0].set_ylabel(ylabel)
     ax[0].legend(loc='upper right')
     ax[0].grid(grid)
     param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
