@@ -6,6 +6,24 @@ import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
 
+# %% CDF plot
+from distfit import distfit
+dfit = distfit(verbose=20)
+
+# Random Exponential data
+# X = np.random.exponential(0.5, 10000)
+# X = np.random.uniform(0, 1000, 10000)
+X = np.random.normal(0, 1, 1000)
+dfit = distfit(distr='popular')
+# Fit and plot
+dfit.fit_transform(X)
+# dfit.plot_cdf(n_top=10);
+fig, ax = dfit.plot(chart='PDF', n_top=5, cmap='Set2');
+dfit.plot(chart='CDF', n_top=10, cmap='Set2', ax=ax);
+# dfit.plot_cdf()
+dfit.plot_summary(n_top=10);
+
+
 # %%
 from distfit import distfit
 # Set parameters for the test-case
