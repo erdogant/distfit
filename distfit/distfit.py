@@ -421,7 +421,7 @@ class distfit():
             if hasattr(self, 'summary'): del self.summary
             if hasattr(self, 'size'): del self.size
 
-    def predict(self, y, alpha=None, verbose=None):
+    def predict(self, y, alpha: float = None, todf: bool = False, verbose: [str, int] = None):
         """Compute probability for response variables y, using the specified method.
 
         Computes P-values for [y] based on the fitted distribution from X.
@@ -436,6 +436,8 @@ class distfit():
             The model created by the .fit() function.
         alpha : float, default: None
             Significance alpha is inherited from self if None.
+        todf : Bool (default: False)
+            Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -476,6 +478,7 @@ class distfit():
         >>> dfit.plot()
         """
         if verbose is not None: set_logger(verbose)
+        if todf is not None: self.todf = todf
         if 'list' in str(type(y)): y=np.array(y)
         if 'float' in str(type(y)): y=np.array([y])
         if 'numpy.ndarray' not in str(type(y)): raise Exception('y should be of type np.array or list')
