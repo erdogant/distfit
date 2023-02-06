@@ -824,7 +824,7 @@ class distfit():
 
         """
         n_top = np.minimum(self.summary.shape[0], n_top)
-        if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex')
+        if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex', verbose=0)
         markeredgewidth = 0.5
 
         # Q-Q plot of the quantiles of x versus the quantiles/ppf of a distribution.
@@ -982,7 +982,7 @@ class distfit():
                 # Plot other CDFs
                 if n_top>1:
                     n_top = np.minimum(self.summary.shape[0], n_top + 1)
-                    if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex')
+                    if cmap is not None: self.summary['color'] = colourmap.generate(self.summary.shape[0], cmap=cmap, scheme='hex', verbose=0)
                     for i in range(1, n_top):
                         # Plot cdf
                         cdf = self.summary['model'].iloc[i].cdf
@@ -1224,7 +1224,7 @@ def set_colors(df, cmap='Set1'):
         DataFrame.
 
     """
-    df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex')
+    df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex', verbose=0)
     return df
 
 
@@ -1364,7 +1364,7 @@ def _plot_pdf_more(df, x, n_top, cmap, pdf_properties, ax):
     if n_top is None: n_top = 1
     if n_top>1 and (pdf_properties is not None):
         n_top = np.minimum(df.shape[0], n_top + 1)
-        if cmap is not None: df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex')
+        if cmap is not None: df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex', verbose=0)
         for i in range(1, n_top):
             # Plot pdf
             tmp_distribution = getattr(st, df['distr'].iloc[i])
