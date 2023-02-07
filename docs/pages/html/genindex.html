@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; distfit 1.5.2 documentation</title>
+  <title>Index &mdash; distfit 1.6.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -62,6 +62,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#bootstrapping">Bootstrapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
@@ -93,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.bootstrap">Bootstrapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
@@ -160,12 +162,18 @@
       <li><a href="distfit.distfit.html#distfit.distfit.BinomPMF">BinomPMF (class in distfit.distfit)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="distfit.distfit.html#distfit.distfit.distfit.bootstrap">bootstrap() (distfit.distfit.distfit method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="distfit.distfit.html#distfit.distfit.distfit.density">density() (distfit.distfit.distfit method)</a>
+</li>
+      <li><a href="distfit.distfit.html#distfit.distfit.disable_tqdm">disable_tqdm() (in module distfit.distfit)</a>
 </li>
       <li><a href="distfit.distfit.html#distfit.distfit.distfit">distfit (class in distfit.distfit)</a>
 </li>
@@ -181,6 +189,13 @@
 
       <ul>
         <li><a href="Functions.html#module-distfit.distfit.distfit">module</a>
+</li>
+      </ul></li>
+      <li>
+    distfit.distfit.distfit.bootstrap
+
+      <ul>
+        <li><a href="Functions.html#module-distfit.distfit.distfit.bootstrap">module</a>
 </li>
       </ul></li>
       <li>
@@ -204,6 +219,8 @@
         <li><a href="Functions.html#module-distfit.distfit.distfit.generate">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     distfit.distfit.distfit.get_distributions
 
@@ -211,8 +228,6 @@
         <li><a href="Functions.html#module-distfit.distfit.distfit.get_distributions">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     distfit.distfit.distfit.load
 
@@ -316,6 +331,8 @@
         <li><a href="distfit.distfit.html#module-distfit.distfit">distfit.distfit</a>
 </li>
         <li><a href="Functions.html#module-distfit.distfit.distfit">distfit.distfit.distfit</a>
+</li>
+        <li><a href="Functions.html#module-distfit.distfit.distfit.bootstrap">distfit.distfit.distfit.bootstrap</a>
 </li>
         <li><a href="Functions.html#module-distfit.distfit.distfit.density">distfit.distfit.distfit.density</a>
 </li>

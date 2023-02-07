@@ -3,7 +3,7 @@ Parameter fitting
 
 The **performance** of ``distfit`` can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf). 
 
-Lets evalute the performance of ``distfit`` of the detected parameters when we draw random samples from a normal (Gaussian) distribution with *mu*=0 and *std*=2. We would expect to find *mu* and *std* very close to the input values.
+Lets evaluate the performance of ``distfit`` of the detected parameters when we draw random samples from a normal (Gaussian) distribution with *mu*=0 and *std*=2. We would expect to find *mu* and *std* very close to the input values.
 
 .. code:: python
 
@@ -16,34 +16,40 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 
 .. code:: python
 
-    dfit = distfit(distr='norm')
-    dfit.fit_transform(X)
-    print(dfit.model)
+	dfit = distfit(distr='norm')
+	dfit.fit_transform(X)
+	print(dfit.model)
 
-    # {'distr': <scipy.stats._continuous_distns.norm_gen at 0x15d8406b208>,
-    #  'params': (0.00444619012906402, 2.0209991080448138),
-    #  'name': 'norm',
-    #  'RSS': 0.0021541850376229827,
-    #  'loc': 0.00444619012906402,
-    #  'scale': 2.0209991080448138,
-    #  'arg': (),
-    #  'CII_min_alpha': -3.319801522804139,
-    #  'CII_max_alpha': 3.328693903062266}
+	# {'name': 'norm',
+	#  'score': 0.0008652960233748114,
+	#  'loc': -0.03151369033439687,
+	#  'scale': 2.0045971659158206,
+	#  'arg': (),
+	#  'params': (-0.03151369033439687, 2.0045971659158206),
+	#  'model': <scipy.stats._distn_infrastructure.rv_continuous_frozen at 0x1dbd0819450>,
+	#  'bootstrap_score': 0,
+	#  'bootstrap_pass': None,
+	#  'color': '#e41a1c',
+	#  'CII_min_alpha': -3.3287826092676776,
+	#  'CII_max_alpha': 3.265755228598883}
+
 
 .. code:: python
 
-    dfit.plot()
+    dfit.plot(chart='PDF')
 
 .. _gaus_mu_0:
 
 .. figure:: ../figs/gaus_mu_0.png
-    :scale: 80%
+    :scale: 60%
 
 
 Probability Density Function fitting
 ''''''''''''''''''''''''''''''''''''''''''''
 
-To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using the **RSS** metrics. The goodness of fit scores are stored in ``dfit.summary``. In this example, we will **not** specify any distribution but only provide the empirical data to the model.
+To measure the goodness of fit of *PDFs*, we will evaluate multiple *PDFs* using **RSS**. The goodness of fit scores are stored in ``dfit.summary``. In this example, we will **not** specify any distribution but only provide the empirical data and compute the fits for the different PDFs.
+
+An example of the results are shown in the code section. 
 
 .. code:: python
 
@@ -51,7 +57,7 @@ To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using
     dfit.fit_transform(X)
     print(dfit.summary)
 
-    # 	distr         RSS  ...        scale                                     arg
+    # 	distr         score  ...        scale                                     arg
     # 0        norm  0.00215419  ...        2.021                                      ()
     # 1           t  0.00215429  ...      2.02105                    (2734197.302263666,)
     # 2       gamma  0.00216592  ...   0.00599666                   (113584.76147029496,)
@@ -63,16 +69,76 @@ To measure the goodness of fit of *pdfs*, we will evaluate multiple *pdfs* using
     # 8      pareto    0.358765  ...  2.40844e+08                   (31772216.567824945,)
     # 9       expon    0.360553  ...      7.51848                                      ()
 
-The model detected ``normal`` as the **best** pdf but a good RSS score is also detected for the *t* and *gamma* distribution. But this is not unexpected to see. A summary plot of the evaluated pdfs looks a following:
+
+If we repeat the experiment again, teh results will change slightly due to the stochastic element. See figure below.
 
 .. code:: python
 
     dfit.plot_summary()
 
+
 .. _gaus_mu_0_summary:
 
 .. figure:: ../figs/gaus_mu_0_summary.png
     :scale: 80%
+
+
+The model detected ``beta`` as the **best** PDF but a good RSS score is also detected for other distributions.
+
+**But why did the normal distribution not have the lowest Residual Sum of Squares despite we generated random normal data?**
+
+	1. Well, first of all, our input data set will always be a finite list that is bound within a (narrow) range. In contradition, the theoretical (normal) distribution goes to infinity in both directions.
+	2. Secondly, all statistical analyses are based on models, and all models are merely simplifications of the real world. Or in other words, to approximate the theoretical distributions, we need to use multiple statistical tests, each with its own (dis)advantages.
+	3. Finally, some distributions have a very flexible character for which the (log)gamma is a clear example. For a large k, the gamma distribution converges to normal distribution.
+
+The result is that the top 7 distributions have a similar and low RSS score, among them the normal distribution. We can see in the summary statistics that the estimated parameters for the normal distribution are loc=~0 and scale=~2, which is very close to our initially generated random sample population (mean=0, std=2). All things considered, A very good result.
+
+
+
+Bootstrapping
+'''''''''''''''''''''''''''''''''''''
+
+In order to validate our fitted model, the Kolmogorov-Smirnov (KS) test is used to compare the distribution of the bootstrapped samples to the original data to assess the goodness of fit. If the model is overfitting, the KS test will reveal a significant difference between the bootstrapped samples and the original data, indicating that the model is not representative of the underlying distribution. **Note that bootstrapping is computationally intensive.**
+
+The goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
+
+	1. Resample using fitted distribution.
+	2. Use the resampled data to fit the distribution.
+	3. Compare the resampled data vs. fitted PDF.
+	4. Repeat 1000 times the steps 1-3
+	5. return score=ratio succes / n_boost
+	6. return whether the 95% CII for the KS-test statistic is valid.
+
+
+.. code:: python
+
+	# Import library
+	from distfit import distfit
+
+	# Initialize with 100 permutations
+	dfit = distfit(n_boost=100)
+
+	# Generate data from PDF
+	# X = np.random.exponential(0.5, 10000)
+	# X = np.random.uniform(0, 1000, 10000)
+	X = np.random.normal(163, 10, 10000)
+
+	# Fit model
+	results = dfit.fit_transform(X)
+
+	# Results are stored in summary
+	dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
+
+	# Create summary plot
+	dfit.plot_summary()
+
+
+.. _summary_fit:
+
+.. figure:: ../figs/summary_fit.png
+    :scale: 80%
+
+The plot contains on the left axes the goodness of fit test for which a low score is oberved for for the first 8 distributions (up to dweibull). The right axes is the bootstrapping result that depicts the succes ratio how often the model was representative for the underlying distribution. The score is [0-1] where 1 depicts succesfull for all bootstraps. The green and red dot represent whether there was a significant difference or not. The combined information demonstrates that the top 6 distributions are stable, whereas the t-distribution and the dweibull-distribution are not representative for the underlying input data.
 
 
 Varying sample sizes

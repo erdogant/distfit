@@ -67,7 +67,7 @@ Initialize distfit for discrete distribution for which the binomial distribution
     # Get the model and best fitted parameters.
     print(dfit.model)
     
-    # {'distr': <scipy.stats._distn_infrastructure.rv_frozen at 0x1ff23e3beb0>,
+    # {'model': <scipy.stats._distn_infrastructure.rv_frozen at 0x1ff23e3beb0>,
     #  'params': (8, 0.4999585504197037),
     #  'name': 'binom',
     #  'SSE': 7.786589839641551,

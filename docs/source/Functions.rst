@@ -55,6 +55,18 @@ Compute Density
 
 
 
+Bootstrapping
+################################################################
+
+.. automodule:: distfit.distfit.distfit.bootstrap
+    :members:
+    :undoc-members:
+
+
+-----------------------------------
+
+
+
 Get Distributions
 ################################################################
 

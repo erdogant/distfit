@@ -218,7 +218,7 @@ dfit.summary
 .. code:: python
     
     print(dfit.summary)
-    # 	distr         RSS  ...      scale                                      arg
+    # 	name         RSS  ...      scale                                      arg
     # 0       gamma  0.00185211  ...  0.0370159                     (3004.147964288284,)
     # 1           t  0.00186936  ...    2.02883                     (2517332.591227023,)
     # 2        norm  0.00186945  ...    2.02882                                       ()
@@ -237,7 +237,7 @@ dfit.summary
 **dfit.model** contains information regarding the best scoring pdf:
 	* dfit.model['RSS']
 	* dfit.model['name']
-	* dfit.model['distr']
+	* dfit.model['model']
 	* dfit.model['params']
 	* dfit.model['loc']
 	* dfit.model['scale']

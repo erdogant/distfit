@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Discrete &mdash; distfit 1.5.2 documentation</title>
+  <title>Discrete &mdash; distfit 1.6.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -72,6 +72,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#bootstrapping">Bootstrapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
@@ -103,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.bootstrap">Bootstrapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
@@ -203,7 +205,7 @@ Typically, with 500 samples, you get a fit that looks OK by eye, but which does 
 <span class="c1"># Get the model and best fitted parameters.</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 
-<span class="c1"># {&#39;distr&#39;: &lt;scipy.stats._distn_infrastructure.rv_frozen at 0x1ff23e3beb0&gt;,</span>
+<span class="c1"># {&#39;model&#39;: &lt;scipy.stats._distn_infrastructure.rv_frozen at 0x1ff23e3beb0&gt;,</span>
 <span class="c1">#  &#39;params&#39;: (8, 0.4999585504197037),</span>
 <span class="c1">#  &#39;name&#39;: &#39;binom&#39;,</span>
 <span class="c1">#  &#39;SSE&#39;: 7.786589839641551,</span>
