@@ -12,6 +12,10 @@
 |python| |pypi| |docs| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |colab| |DOI| |donate|
 
 
+.. note::
+	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
+
+
 ``distfit`` is a python package for probability density fitting of univariate distributions for random variables.
 With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.
 
@@ -187,3 +191,4 @@ Indices and tables
 .. |DOI| image:: https://zenodo.org/badge/231843440.svg
     :alt: Cite
     :target: https://zenodo.org/badge/latestdoi/231843440
+
