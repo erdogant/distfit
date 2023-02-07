@@ -17,15 +17,16 @@ X = np.random.normal(163, 10, 10000)
 dfit = distfit(distr='popular')
 # Fit and plot
 results = dfit.fit_transform(X, n_boost=10)
-dfit.summary[['distr', 'score', 'bootstrap_score', 'bootstrap_pass']]
+dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
 
 
-out = dfit.bootstrap(X, n_boost=10, n_top=None)
+# out = dfit.bootstrap(X, n_boost=10, n_top=None)
+
+dfit.plot_summary()
 
 fig, ax = dfit.plot(chart='PDF', n_top=5, cmap='Set2');
 dfit.plot(chart='CDF', n_top=10, cmap='Set2', ax=ax);
 # dfit.plot_cdf()
-dfit.plot_summary(n_top=10);
 
 
 # %%
@@ -347,7 +348,7 @@ for stat in stats:
                 X = st.pareto.rvs(b, size=s)
                 dfit = distfit(todf=True, stats=stat, bins=bs)
                 dfit.fit_transform(X)
-                r = np.where(dfit.summary['distr']=='pareto')[0][0]
+                r = np.where(dfit.summary['name']=='pareto')[0][0]
                 ranking.append([r, b, s, bs, stat])
 
 df = pd.DataFrame(ranking, columns=['rank','b','sample size', 'bins', 'stats'])
@@ -481,7 +482,7 @@ for smooth in tqdm(smooth_window):
     for s in samples:
         X = np.random.normal(0, 2, s)
         dfit.fit_transform(X, verbose=0)
-        # out.append([dfit.model['RSS'], dfit.model['name'], np.where(dfit.summary['distr']=='norm')[0][0], s])
+        # out.append([dfit.model['RSS'], dfit.model['name'], np.where(dfit.summary['name']=='norm')[0][0], s])
         out.append([dfit.model['scale'], dfit.model['name'], s])
 
     df=pd.DataFrame(out, columns=['mu','name','samples'])
@@ -518,7 +519,7 @@ for smooth in tqdm(smooth_window):
     for s in samples:
         X = np.random.randint(0, 100, s)
         dfit.fit_transform(X, verbose=0)
-        # out.append([dfit.model['RSS'], dfit.model['name'], np.where(dfit.summary['distr']=='uniform')[0][0], s])
+        # out.append([dfit.model['RSS'], dfit.model['name'], np.where(dfit.summary['name']=='uniform')[0][0], s])
         out.append([dfit.model['RSS'], dfit.model['name'], s])
 
     df = pd.DataFrame(out, columns=['RSS','name','samples'])

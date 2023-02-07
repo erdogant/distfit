@@ -60,14 +60,14 @@ class Test_DISTFIT(unittest.TestCase):
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         # Initialize
         dfit = distfit()
-        assert np.all(np.isin(['method', 'alpha', 'bins', 'distr', 'multtest', 'n_perm'], dir(dfit)))
+        assert np.all(np.isin(['method', 'alpha', 'bins', 'name', 'multtest', 'n_perm'], dir(dfit)))
         # Fit and transform data
         dfit.fit_transform(X, verbose='info')
     
         # TEST 1: check output is unchanged
         assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dfit)))
         # TEST 2: Check model output is unchanged
-        assert [*dfit.model.keys()]==['distr', 'stats', 'params', 'name', 'model', 'score', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
+        assert [*dfit.model.keys()]==['name', 'stats', 'params', 'name', 'model', 'score', 'loc', 'scale', 'arg', 'CII_min_alpha', 'CII_max_alpha']
     
         # TEST 3: Check specific distribution
         dfit = distfit(distr='t')
@@ -83,7 +83,7 @@ class Test_DISTFIT(unittest.TestCase):
         # TEST 4A: Check multiple distribution
         dfit = distfit(distr=['norm', 't', 'gamma'])
         results = dfit.fit_transform(X)
-        assert np.all(np.isin(results['summary']['distr'].values, ['gamma', 't', 'norm']))
+        assert np.all(np.isin(results['summary']['name'].values, ['gamma', 't', 'norm']))
     
         # TEST 5: Bound check
         dfit = distfit(distr='t', bound='up', alpha=0.05)
@@ -197,7 +197,7 @@ class Test_DISTFIT(unittest.TestCase):
         # check output is unchanged
         assert np.all(np.isin(['method', 'model', 'summary', 'histdata', 'size'], dir(dfit)))
         # TEST 15A
-        assert [*dfit.model.keys()]==['name', 'distr', 'model', 'params', 'score', 'chi2r', 'n', 'p', 'CII_min_alpha', 'CII_max_alpha']
+        assert [*dfit.model.keys()]==['name', 'name', 'model', 'params', 'score', 'chi2r', 'n', 'p', 'CII_min_alpha', 'CII_max_alpha']
         # TEST 15B
         results = dfit.predict([0, 1, 10, 11, 12])
         assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'y_bool']))

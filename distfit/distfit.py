@@ -16,6 +16,7 @@ import pandas as pd
 
 from scipy.optimize import curve_fit
 import statsmodels.api as sm
+from tqdm import tqdm
 
 from scipy.interpolate import make_interp_spline
 import statsmodels.stats.multitest as multitest
@@ -67,7 +68,7 @@ class distfit():
     distr : str, default: 'popular'
         The (set) of distribution to test. A set of distributions can be tested by using a "popular" list or by specifying the theoretical distribution:
         In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
-            * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, st.oggamma]
+            * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]
             * 'full'
             * 'norm', 't', 'k': Test for one specific distribution.
             * ['norm', 't', 'k', ...]: Test for a list of distributions.
@@ -154,6 +155,11 @@ class distfit():
     >>>
     >>> dfit = distfit()
     >>> results = dfit.fit_transform(X)
+    >>>
+    >>> # Plot summary
+    >>> dfit.plot_summary()
+    >>>
+    >>> # PDF plot
     >>> dfit.plot()
     >>>
     >>> # Make prediction
@@ -856,7 +862,7 @@ class distfit():
                          'markeredgewidth': markeredgewidth,
                          'markeredgecolor': '#000000',
                          'marker': '.',
-                         'label': self.summary['distr'].iloc[i]},
+                         'label': self.summary['name'].iloc[i]},
                       )
 
         # Plot again to get the points at top.
@@ -866,9 +872,10 @@ class distfit():
         return fig, ax
 
     def _make_title(self, title=''):
-        param_names = (self.model['distr'].shapes + ', loc, scale').split(', ') if self.model['distr'].shapes else ['loc', 'scale']
+        shapes = eval('st.'+self.model['name']).shapes
+        param_names = (shapes + ', loc, scale').split(', ') if shapes else ['loc', 'scale']
         param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
-        title = '%s\n%s\n%s' %(title, self.model['name'], self.stats + ' (' + param_str + ')')
+        title = '%s\n%s\n%s' %(title, self.stats, self.model['name'] + '(' + param_str + ')')
         return title
 
     # Plot CDF
@@ -1001,7 +1008,7 @@ class distfit():
                         # Plot cdf
                         cdf = self.summary['model'].iloc[i].cdf
                         # Plot CDF for linearly scale samples between min-max range(x)
-                        ax.plot(x, cdf(x), **{'label': self.summary['distr'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': self.summary['color'].iloc[i]})
+                        ax.plot(x, cdf(x), **{'label': self.summary['name'].iloc[i], 'linewidth': 1.5, 'linestyle': '--', 'color': self.summary['color'].iloc[i]})
 
             # plot CII
             results = self.results if hasattr(self, 'results') else None
@@ -1025,7 +1032,16 @@ class distfit():
         return fig, ax
 
     # Plot summary
-    def plot_summary(self, n_top=None, figsize=(15, 8), ylim=None, fig=None, ax=None, grid=True, verbose=None):
+    def plot_summary(self,
+                     n_top=None,
+                     figsize=(15, 8),
+                     ylim=[None, None],
+                     fig=None,
+                     ax=None,
+                     grid=True,
+                     color_y1='#0000FF',
+                     color_y2='#FC6600',
+                     verbose=None):
         """Plot summary results.
 
         Parameters
@@ -1054,38 +1070,79 @@ class distfit():
 
         """
         if verbose is not None: set_logger(verbose)
+        if n_top is None: n_top = len(self.summary['score'])
+        if n_top==0: n_top = None
         logger.info('Ploting Summary.')
 
         # Create figure
         if self.method=='parametric':
             # Collect scores
-            if n_top is None: n_top = len(self.summary['score'])
             # Collect data
-            x = self.summary['score'][0:n_top]
-            # Collect labels
-            labels = self.summary['distr'].values[0:n_top]
+            df = self.summary.iloc[0:n_top, :].copy()
+            xcoord = np.arange(df.shape[0])
 
-            # Create figure
-            if ax is None: fig, ax = plt.subplots(figsize=figsize)
             # Create plot
-            plt.plot(x, color='#004481', linewidth=2, marker='o')
+            if ax is None:
+                fig, ax = plt.subplots(figsize=figsize)
+
+            # Create left axes
+            score = scale_data(df['score'])
+            ax.plot(score, color=color_y1, linewidth=1, linestyle='--')
+            ax.scatter(xcoord, score, color=color_y1)
+
+            # Round to a specific number of decimal places
+            yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
+            yticks = [0] + yticks
+            yticks = np.round(yticks, decimals=4)
+            # ax.set_yticks(yticks)
+            ax.set_yticklabels(yticks, fontsize=8)
+
             # You can specify a rotation for the tick labels in degrees or with keywords.
-            plt.xticks(np.arange(len(x)), labels, rotation='vertical')
+            ax.set_xticks(xcoord, df['name'].values, rotation='vertical')
+
             # Pad margins so that markers don't get clipped by the axes
-            plt.margins(0.2)
-            # Tweak spacing to prevent clipping of tick-labels
+            ax.margins(0.2)
             plt.subplots_adjust(bottom=0.15)
             ax.grid(grid)
-            plt.xlabel('PDF name')
-            plt.ylabel(('%s (goodness-of-fit test)' %(self.stats)))
-            plt.title('Best PDF fit: %s' %(self.model['name']))
-            if ylim is not None: plt.ylim(ymin=ylim[0], ymax=ylim[1])
+            ax.set_xlabel('Probability Density Function (PDF)')
+            ax.set_ylabel(('%s (goodness of fit test)' %(self.stats)))
+            ax.set_title('%s' %(self.model['name'].title()))
+            # if ylim is not None:
+            ax.set_ylim(ymin=-0.01, ymax=ylim[1])
 
+            # Create right axes
+            if df['bootstrap_pass'][0] is not None:
+                logger.info('Bootstrap results are included..')
+                colors = np.array(['green' if x else 'red' for x in df['bootstrap_pass']])
+
+                # color left y-axis
+                ax.scatter(xcoord, score, color=colors)
+                # Create right y-axis
+                ax2 = ax.twinx()
+                ax2.scatter(xcoord, df['bootstrap_score'], color=colors)
+                ax2.plot(df['bootstrap_score'], color='#ff7f00', linewidth=1, linestyle='--')
+                ax2.set_ylabel('Bootstrap score (higher is better)')
+                ax2.set_ylim(ymin=-0.01, ymax=1)
+
+                # Add legend
+                from matplotlib.lines import Line2D
+                green_dot = Line2D([0], [0], marker='o', color='green', label='Passed the 95% CII KS-test', markersize=10)
+                red_dot = Line2D([0], [0], marker='o', color='red', label='Not passed the 95% CII KS-test', markersize=10)
+                ax2.legend(handles=[green_dot, red_dot], loc='upper left')
+
+                # host.yaxis.label.set_color(p1.get_color())
+                ax.yaxis.label.set_color(color_y1)
+                ax.tick_params(axis='y', colors=color_y1)
+                ax2.yaxis.label.set_color(color_y2)
+                ax2.tick_params(axis='y', colors=color_y2)
+
+            # Show the plot
+            plt.show()
             return (fig, ax)
         else:
-            logger.info('This function works only in case of method is "parametric"')
+            logger.info('This function can only be used when method="parametric"')
             return None, None
-
+    
     # Save model
     def save(self, filepath, overwrite=True):
         """Save learned model in pickle file.
@@ -1102,7 +1159,7 @@ class distfit():
         object
 
         """
-        args = ['alpha', 'bins', 'bound', 'df', 'distr', 'distributions', 'histdata', 'method', 'model', 'multtest', 'n_perm', 'size', 'smooth', 'summary', 'y_pred', 'results']
+        args = ['alpha', 'bins', 'bound', 'df', 'name', 'distributions', 'histdata', 'method', 'model', 'multtest', 'n_perm', 'size', 'smooth', 'summary', 'y_pred', 'results']
         out = {}
         for arg in args:
             if hasattr(self, arg):
@@ -1110,7 +1167,7 @@ class distfit():
                 if arg=='bins': out.update({arg: self.bins})
                 if arg=='bound': out.update({arg: self.bound})
                 if arg=='df': out.update({arg: self.df})  # TODO REMOVE
-                if arg=='distr': out.update({arg: self.distr})
+                if arg=='name': out.update({arg: self.distr})
                 if arg=='distributions': out.update({arg: self.distributions})
                 if arg=='histdata': out.update({arg: self.histdata})
                 if arg=='method': out.update({arg: self.method})
@@ -1154,7 +1211,7 @@ class distfit():
         if out.get('multtest', None) is not None: self.multtest = out['multtest']
         if out.get('method', None) is not None: self.method = out['method']
         if out.get('distributions', None) is not None: self.distributions = out['distributions']
-        if out.get('distr', None) is not None: self.distr = out['distr']
+        if out.get('name', None) is not None: self.distr = out['name']
         if out.get('bound', None) is not None: self.bound = out['bound']
         if out.get('bins', None) is not None: self.bins = out['bins']
         if out.get('alpha', None) is not None: self.alpha = out['alpha']
@@ -1221,14 +1278,21 @@ class distfit():
         return out_distr
 
     # bootstrap.
-    def bootstrap(self, X, n_boost=1000, alpha=0.05, n_top=None):
+    def bootstrap(self, X, n_boost=100, alpha=0.05, n=10000, n_top=None, update_model=True):
         """Bootstrap.
 
-        # The goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
+        To validate our fitted model, the Kolmogorov-Smirnov (KS) test is used to compare the distribution of
+        the bootstrapped samples to the original data to assess the goodness of fit. If the model is overfitting,
+        the KS test will reveal a significant difference between the bootstrapped samples and the original data,
+        indicating that the model is not representative of the underlying distribution.
+
+        The goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
             1. Resample using fitted distribution.
-            2. Use the resampled data to fit again the distribution.
+            2. Use the resampled data to fit the distribution.
             3. Compare the resampled data vs. fitted PDF.
-            4. return score=ratio succes / n_boost and KS-test passes in 1-alpha quantile.
+            4. Repeat 1000 times the steps 1-3
+            5. return score=ratio succes / n_boost
+            6. return whether the 95% CII for the KS-test statistic is valid.
 
         Parameters
         ----------
@@ -1240,35 +1304,98 @@ class distfit():
                 * 1000: Thousand bootstraps.
         alpha : float, default: 0.05
             Significance alpha.
+        n : int, default: 10000
+            Number of samples to draw per bootstrap. This number if set to minimum(len(X), n)
         n_top : int, optional
             Show the top number of results. The default is None.
+        update_model : float, default: True
+            Update to the best model.
 
         Returns
         -------
         None.
 
+        Examples
+        --------
+        >>> # Import library
+        >>> from distfit import distfit
+        >>>
+        >>> # Initialize with 100 permutations
+        >>> dfit = distfit(n_boost=100)
+        >>>
+        >>> # Random data
+        >>> # X = np.random.exponential(0.5, 10000)
+        >>> # X = np.random.uniform(0, 1000, 10000)
+        >>> X = np.random.normal(163, 10, 10000)
+        >>>
+        >>> results = dfit.fit_transform(X)
+        >>>
+        >>> # Results are stored in summary
+        >>> dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
+        >>>
+        >>> # Create summary plot
+        >>> dfit.plot_summary()
+
+        Examples
+        --------
+        >>> # Import library
+        >>> from distfit import distfit
+        >>>
+        >>> # Initialize without permutations
+        >>> dfit = distfit()
+        >>>
+        >>> # Random data
+        >>> # X = np.random.exponential(0.5, 10000)
+        >>> # X = np.random.uniform(0, 1000, 10000)
+        >>> X = np.random.normal(163, 10, 10000)
+        >>>
+        >>> # Fit without permutations
+        >>> results = dfit.fit_transform(X)
+        >>>
+        >>> # Results are stored in summary
+        >>> dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
+        >>>
+        >>> # Create summary plot (no bootstrap is present)
+        >>> dfit.plot_summary()
+        >>>
+        >>> results = dfit.bootstrap(X, n_boost=100)
+        >>>
+        >>> # Create summary plot (the bootstrap is automatically added to the plot)
+        >>> dfit.plot_summary()
+
         """
+        if update_model and n_boost<10:
+            logger.warning('Bootstrapping requires n_boost to be >=10 <return>')
+            return None
+
         if n_top is None: n_top = self.summary.shape[0]
         self.summary['bootstrap_score'] = 0
         self.summary['bootstrap_pass'] = None
-        logger.info('Bootstrap for %d distributions with n=%d' %(n_top, n_boost))
+        logger.info('Bootstrap for %d distributions with n_boost=%d' %(n_top, n_boost))
+        max_name_len = np.max(list(map(len, self.summary['name'][0:n_top].values)))
         for i in range(n_top):
-            distr = self.summary['distr'].iloc[i]
+            distr = self.summary['name'].iloc[i]
             # Do the bootstrap
-            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr),
-                                                         self.summary['model'].iloc[i],
-                                                         X, n_boost=n_boost,
-                                                         alpha=alpha,
-                                                         random_state=self.random_state)
-            logger.info('Bootstrap: Pass: %s, score: %g: [%s]' %(bootstrap_pass, bootstrap_score, distr))
+            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), self.summary['model'].iloc[i], X, n_boost=n_boost, alpha=alpha, random_state=self.random_state)
             # Store results
+            logger.info('Bootstrap: [%s%s] > Score: %.2g > Pass 95%% CII KS-test: %s' %(distr, ' ' * (max_name_len - len(distr)), bootstrap_score, bootstrap_pass))
             self.summary['bootstrap_score'].iloc[i] = bootstrap_score
             self.summary['bootstrap_pass'].iloc[i] = bootstrap_pass
 
-        # Sort the output
-        self.summary = _sort_dataframe(self.summary, cmap=self.cmap)
+        # Sort on best model
+        df_summary, model = _sort_dataframe(self.summary, cmap=self.cmap)
+
+        # Save results
+        if update_model and (n_boost is not None) and (n_boost>=10):
+            logger.info('Updating model to: [%s]' %(model['name'].title()))
+            # Determine confidence intervals on the best fitting distribution
+            self.model = _compute_cii(self, model)
+            self.summary = df_summary
         # Return
-        return self.summary
+        return df_summary
+
+
+
 
 # %% Bootstrapping
 # from multiprocessing import Pool
@@ -1286,7 +1413,7 @@ class distfit():
 #     # Store the test statistics
 #     return Dn_i[0]
 
-# def bootstrapP(distribution, distribution_fit, data, B=1000, alpha=0.05, random_state=None, n_processes=8):
+# def bootstrapP(distribution, distribution_fit, data, B=1000, alpha=0.05, random_state=None, n_processes=6):
 #     n = len(data)
 
 #     # KS test
@@ -1303,28 +1430,29 @@ class distfit():
 
 
 # %% Bootstrapping
-def _bootstrap(distribution, distribution_fit, data, n_boost=1000, alpha=0.05, random_state=None):
-    bootstrap_score, bootstrap_pass = 0, None
-    if n_boost is not None:
-        n = len(data)
-        # KS test
-        Dn = st.kstest(data, distribution_fit.cdf)
+def _bootstrap(distribution, distribution_fit, X, n_boost=100, alpha=0.05, random_state=None):
+    # Bootstrapping
+    # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
+    # 1. Resample using fitted distribution.
+    # 2. Use the resampled data to fit again the distribution.
+    # 3. Compare the resampled data vs. fitted PDF.
 
-        # Bootstrapping
-        # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
-        # 1. Resample using fitted distribution.
-        # 2. Use the resampled data to fit again the distribution.
-        # 3. Compare the resampled data vs. fitted PDF.
+    bootstrap_score, bootstrap_pass = 0, None
+    if (n_boost is not None) and (n_boost>=10):
+        # Limit the number of samples to avoid memory issues.
+        n = np.minimum(10000, len(X))
+        # Kolmogorov-Smirnov (KS) statistic
+        Dn = st.kstest(X, distribution_fit.cdf)
 
         Dns=[]
-        for i in range(n_boost):
-            # Resample from target distribution
+        for i in tqdm(range(n_boost), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
+            # Resample from target distribution: k
             resamples = distribution_fit.rvs(n, random_state=random_state)
             # Find new target parameters after resampling
             params = distribution.fit(resamples)
-            # Create new fit
+            # Create new fit: k-hat
             fit = distribution(*params)
-            # Score the sample distribution vs. PDF with newly found parameters.
+            # Score the k-hat distribution vs. for the resampled data of distribution k.
             Dn_i = st.kstest(resamples, fit.cdf)
             # Store the test statistics
             Dns.append(Dn_i[0])
@@ -1384,10 +1512,10 @@ def _predict(self, y):
     y_proba = _do_multtest(Praw, self.multtest)
     # up/down based on threshold
     y_pred = np.repeat('none', len(y))
-    if not isinstance(self.model['CII_max_alpha'], type(None)):
+    if self.model['CII_max_alpha'] is not None:
         if self.bound=='up' or self.bound=='right' or self.bound=='high' or self.bound=='both':
             y_pred[y>=self.model['CII_max_alpha']]='up'
-    if not isinstance(self.model['CII_min_alpha'], type(None)):
+    if self.model['CII_min_alpha'] is not None:
         if self.bound=='down' or self.bound=='left' or self.bound=='low' or self.bound=='both':
             y_pred[y<=self.model['CII_min_alpha']]='down'
 
@@ -1497,9 +1625,9 @@ def _plot_pdf_more(df, x, n_top, cmap, pdf_properties, ax):
         if cmap is not None: df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex', verbose=0)
         for i in range(1, n_top):
             # Plot pdf
-            tmp_distribution = getattr(st, df['distr'].iloc[i])
+            tmp_distribution = getattr(st, df['name'].iloc[i])
             tmp_y = tmp_distribution.pdf(x, loc=df['loc'].iloc[i], scale=df['scale'].iloc[i], *df['arg'].iloc[i])
-            _plot_pdf(x, tmp_y, df['distr'].iloc[i], {'linewidth': 2, 'linestyle': '--', 'color': df['color'].iloc[i]}, ax)
+            _plot_pdf(x, tmp_y, df['name'].iloc[i], {'linewidth': 2, 'linestyle': '--', 'color': df['color'].iloc[i]}, ax)
 
 
 def _plot_pdf(x, y, label, pdf_properties, ax):
@@ -1687,7 +1815,7 @@ def _plot_parametric(self,
     ax.legend(loc='upper right')
     ax.grid(grid)
 
-    logger.info("Estimated distribution: %s [loc:%f, scale:%f]" %(model['name'], model['params'][-2], model['params'][-1]))
+    logger.info("Estimated distribution: %s(loc:%f, scale:%f)" %(model['name'].title(), model['params'][-2], model['params'][-1]))
     return (fig, ax)
 
 
@@ -1712,7 +1840,7 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     out['stats'] = stats
     out['bins'] = bins
     out['bound'] = bound
-    out['distr'] = distr
+    out['name'] = distr
     out['method'] = method
     out['multtest'] = multtest
     out['n_perm'] = n_perm
@@ -1727,13 +1855,13 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
 
 # %% Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boost=None, random_state=None):
-    model = {}
-    model['distr'] = st.norm
-    model['stats'] = stats
-    model['params'] = (0.0, 1.0)
+    # model = {}
+    # model['name'] = st.norm
+    # model['stats'] = stats
+    # model['params'] = (0.0, 1.0)
     best_score = np.inf
     best_bootstrap_score = np.inf
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
@@ -1778,19 +1906,19 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 df.values[i, 8] = bootstrap_pass
 
                 # identify if this distribution is better
-                if (best_score > score > 0) or (best_bootstrap_score > bootstrap_score > 0):
-                    best_score = score
-                    best_bootstrap_score = bootstrap_score
-                    model['name'] = distr_name
-                    model['distr'] = distribution
-                    model['model'] = distribution_fit
-                    model['params'] = params
-                    model['score'] = score
-                    model['loc'] = loc
-                    model['scale'] = scale
-                    model['arg'] = arg
-                    model['bootstrap_score'] = bootstrap_score
-                    model['bootstrap_pass'] = bootstrap_pass
+                # if (best_score > score > 0) or (best_bootstrap_score > bootstrap_score > 0):
+                #     best_score = score
+                #     best_bootstrap_score = bootstrap_score
+                #     model['name'] = distr_name
+                #     model['name'] = distribution
+                #     model['model'] = distribution_fit
+                #     model['params'] = params
+                #     model['score'] = score
+                #     model['loc'] = loc
+                #     model['scale'] = scale
+                #     model['arg'] = arg
+                #     model['bootstrap_score'] = bootstrap_score
+                #     model['bootstrap_pass'] = bootstrap_pass
 
             # Setup for the logger
             spaces_1 = ' ' * (max_name_len - len(distr_name))
@@ -1804,7 +1932,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
             # logger.error(e)
 
     # Sort the output
-    df = _sort_dataframe(df, cmap=cmap)
+    df, model = _sort_dataframe(df, cmap=cmap)
     # Return
     return (df, model)
 
@@ -1815,7 +1943,10 @@ def _sort_dataframe(df, cmap='Set1'):
     df.sort_values(by=['bootstrap_score', 'score', 'bootstrap_pass'], ascending=[False, True, True], inplace=True)
     df.reset_index(drop=True, inplace=True)
     df = set_colors(df, cmap=cmap)
-    return df
+    # Get best model
+    model = df.iloc[0,:].to_dict()
+
+    return df, model
 
 # %% Compute fit score
 def _compute_fit_score(stats, y_obs, pdf):
@@ -2071,7 +2202,7 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS'):
     # Store
     model = {}
     model['name'] = 'binom'
-    model['distr'] = st.binom
+    # model['name'] = st.binom
     model['model'] = st.binom(n_fit, p_fit)
     model['params'] = (n_fit, p_fit)
     model['score'] = score
@@ -2105,9 +2236,9 @@ def fit_transform_binom(X, f=1.5, weighted=True, stats='RSS'):
     model, figdata = transform_binom(hist, f=f, weighted=weighted, stats=stats)
 
     # Create dataframe (this is required to be consistent with other parts)
-    df = pd.DataFrame(index=range(0, 1), columns=['distr', 'score', 'loc', 'scale', 'arg', 'params', 'model'])
+    df = pd.DataFrame(index=range(0, 1), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model'])
     df['name'] = model['name']
-    df['distr'] = model['distr']
+    # df['name'] = model['name']
     df['model'] = model['model']  # Store the fitted model
     df['params'] = [model['params']]
     df['score'] = model['score']
@@ -2145,7 +2276,7 @@ def plot_binom(self,
     Param['xlim'] = xlim
     Param['ylim'] = ylim
     # Make figure
-    # dfit = self.model['distr']
+    # dfit = self.model['name']
     best_fit_name = self.model['name'].title()
     best_fit_param = self.model['params']
     cii_properties, cii_properties_custom = _get_cii_properties(cii_properties)
@@ -2282,10 +2413,11 @@ class k_distribution:
 
 
 def scale_data(y):
-    ynorm = y
-    for i, value in enumerate(y):
-        ynorm[i] = (value - min(y)) / (max(y) - min(y))
-    return ynorm
+    return [(x - min(y)) / (max(y) - min(y)) for x in y]
+    # ynorm = y
+    # for i, value in enumerate(y):
+    #     ynorm[i] = (value - min(y)) / (max(y) - min(y))
+    # return ynorm
     
 # %%
 def set_logger(verbose: [str, int] = 'info'):
@@ -2333,3 +2465,9 @@ def set_logger(verbose: [str, int] = 'info'):
 
     # Show examples
     logger.setLevel(verbose)
+
+
+# %%
+def disable_tqdm():
+    """Set the logger for verbosity messages."""
+    return (True if (logger.getEffectiveLevel()>=30) else False)
