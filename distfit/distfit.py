@@ -712,6 +712,7 @@ class distfit():
         --------
         >>> from distfit import distfit
         >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
         >>>
         >>> # Create dataset
         >>> X = np.random.normal(0, 2, 10000)
