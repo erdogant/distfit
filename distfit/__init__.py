@@ -2,7 +2,7 @@ from distfit.distfit import distfit
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '1.5.5'
+__version__ = '1.6.0'
 
 
 # module level doc-string
@@ -36,6 +36,9 @@ Example
 >>> dfit = distfit()
 >>> results = dfit.fit_transform(X)
 >>> dfit.plot()
+>>>
+>>> # Plot summary
+>>> dfit.plot_summary()
 >>>
 >>> # Make prediction
 >>> results_proba = dfit.predict(y)

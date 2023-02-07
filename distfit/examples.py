@@ -8,19 +8,18 @@ import distfit
 
 # %% CDF plot
 from distfit import distfit
-dfit = distfit(verbose=20)
 
 # Random Exponential data
 # X = np.random.exponential(0.5, 10000)
 # X = np.random.uniform(0, 1000, 10000)
 X = np.random.normal(163, 10, 10000)
-dfit = distfit(distr='popular')
+dfit = distfit(distr='popular', n_boost=10, verbose='info')
 # Fit and plot
-results = dfit.fit_transform(X, n_boost=10)
+results = dfit.fit_transform(X)
 dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
 
 
-# out = dfit.bootstrap(X, n_boost=10, n_top=None)
+out = dfit.bootstrap(X, n_boost=10, n_top=None)
 
 dfit.plot_summary()
 
