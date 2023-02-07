@@ -87,6 +87,10 @@ class distfit():
             * 'down', 'low' or 'left': lowerbounds
     alpha : float, default: 0.05
         Significance alpha.
+    n_boost : int, default: None
+        Number of bootstraps to validate the fit.
+            * None: No Bootstrap.
+            * 1000: Thousand bootstraps.
     multtest : str, default: 'fdr_bh'
         Multiple test correction.
             * None
@@ -111,6 +115,8 @@ class distfit():
         Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
     cmap : String, optional (default: 'Set1')
         Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
+    random_state : int, optional
+        Random state.
     verbose : [str, int], default is 'info' or 20
         Set the verbose messages using string or integer values.
             * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -176,6 +182,7 @@ class distfit():
                  bins: int = 'auto',
                  bound: str = 'both',
                  alpha: float = 0.05,
+                 n_boost: int = None,
                  multtest: str = 'fdr_bh',
                  smooth: int = None,
                  n_perm: int = 10000,
@@ -184,6 +191,7 @@ class distfit():
                  f: float = 1.5,
                  mhist: str = 'numpy',
                  cmap: str = 'Set1',
+                 random_state: int = None,
                  verbose: [str, int] = 'info',
                  ):
         """Initialize distfit with user-defined parameters."""
@@ -193,6 +201,7 @@ class distfit():
         self.bins = bins
         self.bound = bound
         self.distr = distr
+        self.n_boost = n_boost
         self.multtest = multtest
         self.smooth = smooth
         self.n_perm = n_perm
@@ -202,6 +211,7 @@ class distfit():
         self.weighted = weighted  # Only for discrete
         self.mhist = mhist
         self.cmap = cmap
+        self.random_state = random_state
         self.verbose = verbose
         # Set the logger
         set_logger(verbose=verbose)
@@ -293,7 +303,7 @@ class distfit():
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boost=self.n_boost, random_state=self.random_state)
             # Determine confidence intervals on the best fitting distribution
             model = _compute_cii(self, model)
             # Store
@@ -320,7 +330,7 @@ class distfit():
             raise Exception(logger.error('Method parameter can only be "parametric", "quantile" or "percentile".'))
 
     # Fit and transform in one go.
-    def fit_transform(self, X, verbose=None):
+    def fit_transform(self, X, n_boost=None, verbose=None):
         """Fit best scoring theoretical distribution to the empirical data (X).
 
         Parameters
@@ -386,6 +396,7 @@ class distfit():
 
         """
         if verbose is not None: set_logger(verbose)
+        if n_boost is not None: self.n_boost=n_boost
         # Clean readily fitted models to ensure correct results.
         self._clean()
         # Fit model to get list of distributions to check
@@ -408,6 +419,8 @@ class distfit():
                          self.summary,
                          self.weighted,
                          self.f,
+                         self.n_boost,
+                         self.random_state,
                          )
         # Return
         return results
@@ -542,12 +555,13 @@ class distfit():
         >>>
         """
         if verbose is not None: set_logger(verbose)
+        if random_state is not None: self.random_state = random_state
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in generate: A model is required. Try fitting first on your data using fit_transform(X)')
         logger.info('Generate %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
         X = None
 
         if (self.method=='parametric') or (self.method=='discrete'):
-            X = self.model['model'].rvs(size=n, random_state=random_state)
+            X = self.model['model'].rvs(size=n, random_state=self.random_state)
         else:
             logger.warning('Nothing to generate. Method should be of type: "parametric" or "discrete"')
         # Return
@@ -1206,6 +1220,122 @@ class distfit():
         if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
         return out_distr
 
+    # bootstrap.
+    def bootstrap(self, X, n_boost=1000, alpha=0.05, n_top=None):
+        """Bootstrap.
+
+        # The goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
+            1. Resample using fitted distribution.
+            2. Use the resampled data to fit again the distribution.
+            3. Compare the resampled data vs. fitted PDF.
+            4. return score=ratio succes / n_boost and KS-test passes in 1-alpha quantile.
+
+        Parameters
+        ----------
+        X : array-like
+            Set of values belonging to the data
+        n_boost : int, default: None
+            Number of bootstraps to validate the fit.
+                * None: No Bootstrap.
+                * 1000: Thousand bootstraps.
+        alpha : float, default: 0.05
+            Significance alpha.
+        n_top : int, optional
+            Show the top number of results. The default is None.
+
+        Returns
+        -------
+        None.
+
+        """
+        if n_top is None: n_top = self.summary.shape[0]
+        self.summary['bootstrap_score'] = 0
+        self.summary['bootstrap_pass'] = None
+        logger.info('Bootstrap for %d distributions with n=%d' %(n_top, n_boost))
+        for i in range(n_top):
+            distr = self.summary['distr'].iloc[i]
+            # Do the bootstrap
+            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr),
+                                                         self.summary['model'].iloc[i],
+                                                         X, n_boost=n_boost,
+                                                         alpha=alpha,
+                                                         random_state=self.random_state)
+            logger.info('Bootstrap: Pass: %s, score: %g: [%s]' %(bootstrap_pass, bootstrap_score, distr))
+            # Store results
+            self.summary['bootstrap_score'].iloc[i] = bootstrap_score
+            self.summary['bootstrap_pass'].iloc[i] = bootstrap_pass
+
+        # Sort the output
+        self.summary = _sort_dataframe(self.summary, cmap=self.cmap)
+        # Return
+        return self.summary
+
+# %% Bootstrapping
+# from multiprocessing import Pool
+# from functools import partial
+
+# def _bootstrap_chunk(i, distribution_fit, distribution, n, random_state):
+#     # Resample from target distribution
+#     resamples = distribution_fit.rvs(n, random_state=random_state)
+#     # Find new target parameters after resampling
+#     params = distribution.fit(resamples)
+#     # Create new fit
+#     fit = distribution(*params)
+#     # Score the sample distribution vs. PDF with newly found parameters.
+#     Dn_i = st.kstest(resamples, fit.cdf)
+#     # Store the test statistics
+#     return Dn_i[0]
+
+# def bootstrapP(distribution, distribution_fit, data, B=1000, alpha=0.05, random_state=None, n_processes=8):
+#     n = len(data)
+
+#     # KS test
+#     Dn = st.kstest(data, distribution_fit.cdf)
+
+#     with Pool(processes=n_processes) as pool:
+#         bootstrap_chunk_with_args = partial(_bootstrap_chunk, distribution_fit=distribution_fit, distribution=distribution, n=n, random_state=random_state)
+#         Dns = pool.map(bootstrap_chunk_with_args, range(B))
+
+#     Dn_alpha = np.quantile(Dns, 1 - alpha)
+#     outcome = "rejected" if Dn[0] > Dn_alpha else "Passed"
+#     pvalue = np.sum(Dns > Dn[0]) / B
+#     return pvalue, outcome
+
+
+# %% Bootstrapping
+def _bootstrap(distribution, distribution_fit, data, n_boost=1000, alpha=0.05, random_state=None):
+    bootstrap_score, bootstrap_pass = 0, None
+    if n_boost is not None:
+        n = len(data)
+        # KS test
+        Dn = st.kstest(data, distribution_fit.cdf)
+
+        # Bootstrapping
+        # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
+        # 1. Resample using fitted distribution.
+        # 2. Use the resampled data to fit again the distribution.
+        # 3. Compare the resampled data vs. fitted PDF.
+
+        Dns=[]
+        for i in range(n_boost):
+            # Resample from target distribution
+            resamples = distribution_fit.rvs(n, random_state=random_state)
+            # Find new target parameters after resampling
+            params = distribution.fit(resamples)
+            # Create new fit
+            fit = distribution(*params)
+            # Score the sample distribution vs. PDF with newly found parameters.
+            Dn_i = st.kstest(resamples, fit.cdf)
+            # Store the test statistics
+            Dns.append(Dn_i[0])
+
+        Dn_alpha = np.quantile(Dns, 1 - alpha)
+        bootstrap_pass = False if Dn[0] > Dn_alpha else True
+        # Compute ratio correct
+        bootstrap_score = np.sum(Dns > Dn[0]) / n_boost
+    # Return
+    return bootstrap_score, bootstrap_pass
+
 
 # %%
 def set_colors(df, cmap='Set1'):
@@ -1572,7 +1702,7 @@ def _format_data(data):
     return data
 
 
-def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f):
+def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f, n_boost, random_state):
     out = {}
     out['model'] = model
     out['summary'] = summary
@@ -1589,25 +1719,28 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     out['smooth'] = smooth
     out['weighted'] = weighted
     out['f'] = f
+    out['n_boost'] = n_boost
+    out['random_state'] = random_state
     # Return
     return out
 
 
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1'):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boost=None, random_state=None):
     model = {}
     model['distr'] = st.norm
     model['stats'] = stats
     model['params'] = (0.0, 1.0)
     best_score = np.inf
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg', 'params', 'model'])
+    best_bootstrap_score = np.inf
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['distr', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
     # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
     for i, distribution in enumerate(DISTRIBUTIONS):
 
-        # Fit the distribution. However this can result in an error so therefore you need to try-except
+        # Fit the distribution. However this can result in an error. I need the try-except.
         try:
             start_time = time.time()
 
@@ -1628,6 +1761,10 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 score = _compute_fit_score(stats, y_obs, pdf)
                 # Get name of the distribution
                 distr_name = distribution.name if isinstance(distribution.name, str) else distribution.name()
+                # Fitted model
+                distribution_fit = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
+                # Bootstrapping
+                bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boost=n_boost, random_state=random_state)
 
                 # Store results
                 df.values[i, 0] = distr_name
@@ -1636,19 +1773,24 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 df.values[i, 3] = scale
                 df.values[i, 4] = arg
                 df.values[i, 5] = params
-                df.values[i, 6] = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
+                df.values[i, 6] = distribution_fit
+                df.values[i, 7] = bootstrap_score
+                df.values[i, 8] = bootstrap_pass
 
                 # identify if this distribution is better
-                if best_score > score > 0:
+                if (best_score > score > 0) or (best_bootstrap_score > bootstrap_score > 0):
                     best_score = score
+                    best_bootstrap_score = bootstrap_score
                     model['name'] = distr_name
                     model['distr'] = distribution
-                    model['model'] = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
+                    model['model'] = distribution_fit
                     model['params'] = params
                     model['score'] = score
                     model['loc'] = loc
                     model['scale'] = scale
                     model['arg'] = arg
+                    model['bootstrap_score'] = bootstrap_score
+                    model['bootstrap_pass'] = bootstrap_pass
 
             # Setup for the logger
             spaces_1 = ' ' * (max_name_len - len(distr_name))
@@ -1662,12 +1804,18 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
             # logger.error(e)
 
     # Sort the output
-    df = df.sort_values('score')
-    df.reset_index(drop=True, inplace=True)
-    df = set_colors(df, cmap=cmap)
+    df = _sort_dataframe(df, cmap=cmap)
     # Return
     return (df, model)
 
+
+# %% Sort dataframe
+def _sort_dataframe(df, cmap='Set1'):
+    # df = df.sort_values('score')
+    df.sort_values(by=['bootstrap_score', 'score', 'bootstrap_pass'], ascending=[False, True, True], inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    df = set_colors(df, cmap=cmap)
+    return df
 
 # %% Compute fit score
 def _compute_fit_score(stats, y_obs, pdf):
