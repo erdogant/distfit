@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Initialization &mdash; distfit 1.6.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sponsor" href="Documentation.html" />
+    <link rel="prev" title="Quick start to find best fitting distribution" href="Examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> distfit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">Background</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Abstract.html">Abstract</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Generate samples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Generate.html">Generate samples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#bootstrapping">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html">Basic plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#plot-all-fitted-distributions">Plot all fitted distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#combine-plots">Combine plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#change-chart-properties">Change chart properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#qq-plot">QQ plot</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html">Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html#loading">Loading</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Quick start to find best fitting distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-one-specific-distribution">Fit for one specific distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-multiple-distributions">Fit for multiple distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#make-predictions">Make predictions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.bootstrap">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-distfit.distfit.distfit.load">Load</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#medium-blog">Medium Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
+</ul>
+
+    <a href= "genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">distfit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Initialization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-distfit.distfit.distfit">
+<span id="initialization"></span><h1>Initialization<a class="headerlink" href="#module-distfit.distfit.distfit" title="Permalink to this heading"></a></h1>
+<p>Probability density function.</p>
+<p>distfit is a python package for probability density fitting of univariate distributions for random variables.
+With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For the parametric approach, the distfit library can determine the best fit across 89 theoretical distributions.
+To score the fit, one of the scoring statistics for the good-of-fitness test can be used used, such as RSS/SSE, Wasserstein,
+Kolmogorov-Smirnov (KS), or Energy. After finding the best-fitted theoretical distribution, the loc, scale,
+and arg parameters are returned, such as mean and standard deviation for normal distribution.</p></li>
+<li><p>For the non-parametric approach, the distfit library contains two methods, the quantile and percentile method.
+Both methods assume that the data does not follow a specific probability distribution. In the case of the quantile method,
+the quantiles of the data are modeled whereas for the percentile method, the percentiles are modeled.</p></li>
+<li><p>In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
+The best fit is then derived using the binomial distribution.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">param method</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Specify the method type.</dt><dd><ul class="simple">
+<li><p>‘parametric’</p></li>
+<li><p>‘quantile’</p></li>
+<li><p>‘percentile’</p></li>
+<li><p>‘discrete’</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type method</dt>
+<dd class="field-even"><p>str, default: ‘parametric’</p>
+</dd>
+<dt class="field-odd">param distr</dt>
+<dd class="field-odd"><p>The (set) of distribution to test. A set of distributions can be tested by using a “popular” list or by specifying the theoretical distribution:
+In case using method=”discrete”, then binomial is used. See documentation for more information about ‘popular’ and ‘full’ (link reference below).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘popular’ : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]</p></li>
+<li><p>‘full’</p></li>
+<li><p>‘norm’, ‘t’, ‘k’: Test for one specific distribution.</p></li>
+<li><p>[‘norm’, ‘t’, ‘k’, …]: Test for a list of distributions.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt class="field-even">type distr</dt>
+<dd class="field-even"><p>str, default: ‘popular’</p>
+</dd>
+<dt class="field-odd">param stats</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Specify the scoring statistics for the goodness of fit test.</dt><dd><ul class="simple">
+<li><p>‘RSS’</p></li>
+<li><p>‘wasserstein’</p></li>
+<li><p>‘ks’: Kolmogorov-Smirnov statistic</p></li>
+<li><p>‘energy’</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type stats</dt>
+<dd class="field-even"><p>str, default: ‘RSS’</p>
+</dd>
+<dt class="field-odd">param bins</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Bin size to determine the empirical historgram.</dt><dd><ul class="simple">
+<li><p>‘auto’: Determine the bin size automatically.</p></li>
+<li><p>50: Set specific bin size</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type bins</dt>
+<dd class="field-even"><p>int, default: ‘auto’</p>
+</dd>
+<dt class="field-odd">param bound</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the directionality to test for significance.</dt><dd><ul class="simple">
+<li><p>‘up’, ‘high’, ‘right’: Upperbounds</p></li>
+<li><p>‘down’, ‘low’ or ‘left’: lowerbounds</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type bound</dt>
+<dd class="field-even"><p>str, default: ‘both’</p>
+</dd>
+<dt class="field-odd">param alpha</dt>
+<dd class="field-odd"><p>Significance alpha.</p>
+</dd>
+<dt class="field-even">type alpha</dt>
+<dd class="field-even"><p>float, default: 0.05</p>
+</dd>
+<dt class="field-odd">param n_boots</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Number of bootstraps to validate the fit.</dt><dd><ul class="simple">
+<li><p>None: No Bootstrap.</p></li>
+<li><p>1000: Thousand bootstraps.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type n_boots</dt>
+<dd class="field-even"><p>int, default: None</p>
+</dd>
+<dt class="field-odd">param multtest</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Multiple test correction.</dt><dd><ul class="simple">
+<li><p>None</p></li>
+<li><p>‘bonferroni’</p></li>
+<li><p>‘sidak’</p></li>
+<li><p>‘holm-sidak’</p></li>
+<li><p>‘holm’</p></li>
+<li><p>‘simes-hochberg’</p></li>
+<li><p>‘hommel’</p></li>
+<li><p>‘fdr_bh’</p></li>
+<li><p>‘fdr_by’</p></li>
+<li><p>‘fdr_tsbh’</p></li>
+<li><p>‘fdr_tsbky’</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type multtest</dt>
+<dd class="field-even"><p>str, default: ‘fdr_bh’</p>
+</dd>
+<dt class="field-odd">param smooth</dt>
+<dd class="field-odd"><p>Smoothing the histogram can help to get a better fit when there are only few samples available.
+The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.</p>
+</dd>
+<dt class="field-even">type smooth</dt>
+<dd class="field-even"><p>int, default: None</p>
+</dd>
+<dt class="field-odd">param n_perm</dt>
+<dd class="field-odd"><p>Number of permutations to model null-distribution in case of method is “quantile”</p>
+</dd>
+<dt class="field-even">type n_perm</dt>
+<dd class="field-even"><p>int, default: 10000</p>
+</dd>
+<dt class="field-odd">param weighted</dt>
+<dd class="field-odd"><p>Only used in discrete fitting, method=”discrete”. In principle, the best fit will be obtained if you set weighted=True. However, when using stats=”RSS”, you can set weighted=False.</p>
+</dd>
+<dt class="field-even">type weighted</dt>
+<dd class="field-even"><p>Bool, (default: True)</p>
+</dd>
+<dt class="field-odd">param f</dt>
+<dd class="field-odd"><p>Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.</p>
+</dd>
+<dt class="field-even">type f</dt>
+<dd class="field-even"><p>float, (default: 1.5)</p>
+</dd>
+<dt class="field-odd">param cmap</dt>
+<dd class="field-odd"><p>Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary[‘colors’].</p>
+</dd>
+<dt class="field-even">type cmap</dt>
+<dd class="field-even"><p>String, optional (default: ‘Set1’)</p>
+</dd>
+<dt class="field-odd">param random_state</dt>
+<dd class="field-odd"><p>Random state.</p>
+</dd>
+<dt class="field-even">type random_state</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><em>object.</em></p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Specified method for fitting and predicting.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Specified cut-off for P-value significance.</p></li>
+<li><p><strong>bins</strong> (<em>int</em>) – Number of bins specified to create histogram.</p></li>
+<li><p><strong>bound</strong> (<em>str</em>) – Specified testing directionality of the distribution.</p></li>
+<li><p><strong>distr</strong> (<em>str or list of strings</em>) – Specified distribution or a set of distributions.</p></li>
+<li><p><strong>multtest</strong> (<em>str</em>) – Specified multiple test correction method.</p></li>
+<li><p><strong>todf</strong> (<em>Bool (default: False)</em>) – Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot summary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># PDF plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make prediction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results_proba</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot PDF</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add the CDF to the plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># QQ-plot for top 10 fitted distributions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Documentation: <a class="reference external" href="https://erdogant.github.io/distfit/pages/html/Parametric.html">https://erdogant.github.io/distfit/pages/html/Parametric.html</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.fit_transform">
+<span id="detect-best-fit"></span><h1>Detect best Fit<a class="headerlink" href="#module-distfit.distfit.distfit.fit_transform" title="Permalink to this heading"></a></h1>
+<p>Fit best scoring theoretical distribution to the empirical data (X).</p>
+<dl class="field-list simple">
+<dt class="field-odd">param X</dt>
+<dd class="field-odd"><p>Set of values belonging to the data</p>
+</dd>
+<dt class="field-even">type X</dt>
+<dd class="field-even"><p>array-like</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><em>dict.</em></p></li>
+<li><p><strong>model</strong> (<em>dict</em>) – dict containing keys with distribution parameters
+score : Scoring statistic
+name : distribution name
+distr : distribution function
+params : all kind of parameters
+loc : loc function parameter
+scale : scale function parameter
+arg : arg function parameter</p></li>
+<li><p><strong>summary</strong> (<em>list</em>) – Residual Sum of Squares</p></li>
+<li><p><strong>histdata</strong> (<em>tuple (observed, bins)</em>) – tuple containing observed and bins for data X in the histogram.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – total number of elements in for data X</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Default method is parametric.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># In case of quantile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;quantile&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># In case of percentile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;percentile&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fit using method</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make prediction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot results with CII and predictions.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.predict">
+<span id="predict"></span><h1>Predict<a class="headerlink" href="#module-distfit.distfit.distfit.predict" title="Permalink to this heading"></a></h1>
+<p>Compute probability for response variables y, using the specified method.</p>
+<p>Computes P-values for [y] based on the fitted distribution from X.
+The empirical distribution of X is used to estimate the loc/scale/arg parameters for a
+theoretical distribution in case method type is <code class="docutils literal notranslate"><span class="pre">parametric</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param y</dt>
+<dd class="field-odd"><p>Values to be predicted.</p>
+</dd>
+<dt class="field-even">type y</dt>
+<dd class="field-even"><p>array-like</p>
+</dd>
+<dt class="field-odd">param model</dt>
+<dd class="field-odd"><p>The model created by the .fit() function.</p>
+</dd>
+<dt class="field-even">type model</dt>
+<dd class="field-even"><p>dict, default : None</p>
+</dd>
+<dt class="field-odd">param alpha</dt>
+<dd class="field-odd"><p>Significance alpha is inherited from self if None.</p>
+</dd>
+<dt class="field-even">type alpha</dt>
+<dd class="field-even"><p>float, default: None</p>
+</dd>
+<dt class="field-odd">param todf</dt>
+<dd class="field-odd"><p>Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!</p>
+</dd>
+<dt class="field-even">type todf</dt>
+<dd class="field-even"><p>Bool (default: False)</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><em>Object.</em></p></li>
+<li><p><strong>y_pred</strong> (<em>list of str</em>) – prediction of bounds [upper, lower] for input y, using the fitted distribution X.</p></li>
+<li><p><strong>y_proba</strong> (<em>list of float</em>) – probability for response variable y.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame (only when set: todf=True)</em>) – Dataframe containing the predictions in a structed manner.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make predictions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot results with CII and predictions.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.generate">
+<span id="generate-synthetic-data"></span><h1>Generate Synthetic data<a class="headerlink" href="#module-distfit.distfit.distfit.generate" title="Permalink to this heading"></a></h1>
+<p>Generate synthetic data based on the fitted distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param n</dt>
+<dd class="field-odd"><p>Number of samples to generate.</p>
+</dd>
+<dt class="field-even">type n</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">param random_state</dt>
+<dd class="field-odd"><p>Random state.</p>
+</dd>
+<dt class="field-even">type random_state</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p><strong>X</strong> – Numpy array with generated data.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create syntethic data using fitted distribution.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Xnew</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.density">
+<span id="compute-density"></span><h1>Compute Density<a class="headerlink" href="#module-distfit.distfit.distfit.density" title="Permalink to this heading"></a></h1>
+<p>Compute density based on input data and number of bins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param X</dt>
+<dd class="field-odd"><p>Set of values belonging to the data</p>
+</dd>
+<dt class="field-even">type X</dt>
+<dd class="field-even"><p>array-like</p>
+</dd>
+<dt class="field-odd">param bins</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Bin size to determine the empirical historgram.</dt><dd><ul class="simple">
+<li><p>‘auto’: Determine the bin size automatically.</p></li>
+<li><p>50: Set specific bin size</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type bins</dt>
+<dd class="field-even"><p>int, default: ‘auto’</p>
+</dd>
+<dt class="field-odd">param mhist</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>The density extraction method.</dt><dd><ul class="simple">
+<li><p>‘numpy’</p></li>
+<li><p>‘seaborn’</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type mhist</dt>
+<dd class="field-even"><p>str, (default: ‘numpy’)</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>binedges</strong> (<em>array-like</em>) – Array with the bin edges.</p></li>
+<li><p><strong>histvals</strong> (<em>array-like</em>) – Array with the histogram density values.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Compute bins and density</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bins</span><span class="p">,</span> <span class="n">density</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.bootstrap">
+<span id="bootstrapping"></span><h1>Bootstrapping<a class="headerlink" href="#module-distfit.distfit.distfit.bootstrap" title="Permalink to this heading"></a></h1>
+<p>Bootstrap.</p>
+<p>To validate our fitted model, the Kolmogorov-Smirnov (KS) test is used to compare the distribution of
+the bootstrapped samples to the original data to assess the goodness of fit. If the model is overfitting,
+the KS test will reveal a significant difference between the bootstrapped samples and the original data,
+indicating that the model is not representative of the underlying distribution.</p>
+<dl class="simple">
+<dt>The goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.</dt><dd><ol class="arabic simple">
+<li><p>Resample using fitted distribution.</p></li>
+<li><p>Use the resampled data to fit the distribution.</p></li>
+<li><p>Compare the resampled data vs. fitted PDF.</p></li>
+<li><p>Repeat 1000 times the steps 1-3</p></li>
+<li><p>return score=ratio succes / n_boots</p></li>
+<li><p>return whether the 95% CII for the KS-test statistic is valid.</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param X</dt>
+<dd class="field-odd"><p>Set of values belonging to the data</p>
+</dd>
+<dt class="field-even">type X</dt>
+<dd class="field-even"><p>array-like</p>
+</dd>
+<dt class="field-odd">param n_boots</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Number of bootstraps to validate the fit.</dt><dd><ul class="simple">
+<li><p>None: No Bootstrap.</p></li>
+<li><p>1000: Thousand bootstraps.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type n_boots</dt>
+<dd class="field-even"><p>int, default: None</p>
+</dd>
+<dt class="field-odd">param alpha</dt>
+<dd class="field-odd"><p>Significance alpha.</p>
+</dd>
+<dt class="field-even">type alpha</dt>
+<dd class="field-even"><p>float, default: 0.05</p>
+</dd>
+<dt class="field-odd">param n</dt>
+<dd class="field-odd"><p>Number of samples to draw per bootstrap. This number if set to minimum(len(X), n)</p>
+</dd>
+<dt class="field-even">type n</dt>
+<dd class="field-even"><p>int, default: 10000</p>
+</dd>
+<dt class="field-odd">param n_top</dt>
+<dd class="field-odd"><p>Show the top number of results. The default is None.</p>
+</dd>
+<dt class="field-even">type n_top</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param update_model</dt>
+<dd class="field-odd"><p>Update to the best model.</p>
+</dd>
+<dt class="field-even">type update_model</dt>
+<dd class="field-even"><p>float, default: True</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Import library</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize with 100 permutations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">n_boots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Random data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># X = np.random.exponential(0.5, 10000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># X = np.random.uniform(0, 1000, 10000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">163</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Results are stored in summary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">summary</span><span class="p">[[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;bootstrap_score&#39;</span><span class="p">,</span> <span class="s1">&#39;bootstrap_pass&#39;</span><span class="p">]]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create summary plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Import library</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize without permutations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Random data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># X = np.random.exponential(0.5, 10000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># X = np.random.uniform(0, 1000, 10000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">163</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fit without permutations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Results are stored in summary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">summary</span><span class="p">[[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;bootstrap_score&#39;</span><span class="p">,</span> <span class="s1">&#39;bootstrap_pass&#39;</span><span class="p">]]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create summary plot (no bootstrap is present)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_boots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create summary plot (the bootstrap is automatically added to the plot)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.get_distributions">
+<span id="get-distributions"></span><h1>Get Distributions<a class="headerlink" href="#module-distfit.distfit.distfit.get_distributions" title="Permalink to this heading"></a></h1>
+<p>Return the distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param distr</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Distributions to return.</dt><dd><ul class="simple">
+<li><p>‘full’: all available distributions.</p></li>
+<li><p>‘popular’: Most common distributions.</p></li>
+<li><p>‘norm’, ‘t’, ‘k’ or any other distribution name.</p></li>
+<li><p>[‘norm’, ‘t’, ‘k’]: list of distributions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type distr</dt>
+<dd class="field-even"><p>str.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>List with distributions.</p>
+</dd>
+</dl>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.plot">
+<span id="plot-pdf-cdf"></span><h1>Plot PDF/CDF<a class="headerlink" href="#module-distfit.distfit.distfit.plot" title="Permalink to this heading"></a></h1>
+<p>Make plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param chart</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Chart to plot.</dt><dd><ul class="simple">
+<li><p>‘PDF’: Probability density function.</p></li>
+<li><p>‘CDF’: Cumulative density function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type chart</dt>
+<dd class="field-even"><p>str, default: ‘PDF’</p>
+</dd>
+<dt class="field-odd">param n_top</dt>
+<dd class="field-odd"><p>Show the top number of results. The default is 1.</p>
+</dd>
+<dt class="field-even">type n_top</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param title</dt>
+<dd class="field-odd"><p>Title of the plot.</p>
+</dd>
+<dt class="field-even">type title</dt>
+<dd class="field-even"><p>String, optional (default: ‘’)</p>
+</dd>
+<dt class="field-odd">param emp_properties</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>The line properties of the emperical line.</dt><dd><ul class="simple">
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#000000’, ‘linewidth’: 3, ‘linestyle’: ‘-‘}</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type emp_properties</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">param pdf_properties</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>The line properties of the PDF or the CDF.</dt><dd><ul class="simple">
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#880808’, ‘linewidth’: 3, ‘linestyle’: ‘-‘}</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type pdf_properties</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">param bar_properties</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bar properties of the histogram.</dt><dd><ul class="simple">
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#607B8B’, ‘linewidth’: 1, ‘edgecolor’: ‘#5A5A5A’, ‘align’: ‘edge’}</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type bar_properties</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">param cii_properties</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bar properties of the histogram.</dt><dd><ul class="simple">
+<li><p>None: Do not plot.</p></li>
+<li><p>{‘color’: ‘#C41E3A’, ‘linewidth’: 3, ‘linestyle’: ‘dashed’, ‘marker’: ‘x’, ‘size’: 20, ‘color_sign_multipletest’: ‘g’, ‘color_sign’: ‘g’, ‘color_general’: ‘r’}</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type cii_properties</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">param xlabel</dt>
+<dd class="field-odd"><p>Label for the x-axis.</p>
+</dd>
+<dt class="field-even">type xlabel</dt>
+<dd class="field-even"><p>String, (default: ‘value’)</p>
+</dd>
+<dt class="field-odd">param ylabel</dt>
+<dd class="field-odd"><p>Label for the y-axis.</p>
+</dd>
+<dt class="field-even">type ylabel</dt>
+<dd class="field-even"><p>String, (default: ‘Frequency’)</p>
+</dd>
+<dt class="field-odd">param figsize</dt>
+<dd class="field-odd"><p>The figure size.</p>
+</dd>
+<dt class="field-even">type figsize</dt>
+<dd class="field-even"><p>tuple, optional (default: (10,8))</p>
+</dd>
+<dt class="field-odd">param xlim</dt>
+<dd class="field-odd"><p>Limit figure in x-axis.</p>
+</dd>
+<dt class="field-even">type xlim</dt>
+<dd class="field-even"><p>Float, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param ylim</dt>
+<dd class="field-odd"><p>Limit figure in y-axis.</p>
+</dd>
+<dt class="field-even">type ylim</dt>
+<dd class="field-even"><p>Float, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param fig</dt>
+<dd class="field-odd"><p>Matplotlib figure (Note - ignored when method is <cite>discrete</cite>)</p>
+</dd>
+<dt class="field-even">type fig</dt>
+<dd class="field-even"><p>Figure, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param ax</dt>
+<dd class="field-odd"><p>Matplotlib Axes object (Note - ignored when method is <cite>discrete</cite>)</p>
+</dd>
+<dt class="field-even">type ax</dt>
+<dd class="field-even"><p>Axes, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param grid</dt>
+<dd class="field-odd"><p>Show the grid on the figure.</p>
+</dd>
+<dt class="field-even">type grid</dt>
+<dd class="field-even"><p>Bool, optional (default: True)</p>
+</dd>
+<dt class="field-odd">param cmap</dt>
+<dd class="field-odd"><p>Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary[‘colors’].
+However, when cmap is set, the specified colormap is used.</p>
+</dd>
+<dt class="field-even">type cmap</dt>
+<dd class="field-even"><p>String, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>tuple (fig, ax)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot seperately</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Change or remove properties of the chart.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;g&#39;</span><span class="p">},</span> <span class="n">emp_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;g&#39;</span><span class="p">},</span> <span class="n">emp_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create subplot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Change or remove properties of the chart.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="n">bar_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#1e3f5a&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.qqplot">
+<span id="qq-plot"></span><h1>QQ-plot<a class="headerlink" href="#module-distfit.distfit.distfit.qqplot" title="Permalink to this heading"></a></h1>
+<p>Plot CDF results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param line</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Options for the reference line to which the data is compared.</dt><dd><ul class="simple">
+<li><p>‘45’ - 45-degree line</p></li>
+<li><p>‘s’ - standardized line, the expected order statistics are scaled by the standard deviation of the given sample and have the mean added to them.</p></li>
+<li><p>‘r’ - A regression line is fit</p></li>
+<li><p>‘q’ - A line is fit through the quartiles.</p></li>
+<li><p>‘None’ - by default no reference line is added to the plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type line</dt>
+<dd class="field-even"><p>str, default: ‘45’</p>
+</dd>
+<dt class="field-odd">param n_top</dt>
+<dd class="field-odd"><p>Show the top number of results. The default is 1.</p>
+</dd>
+<dt class="field-even">type n_top</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param title</dt>
+<dd class="field-odd"><p>Title of the plot.</p>
+</dd>
+<dt class="field-even">type title</dt>
+<dd class="field-even"><p>String, optional (default: ‘’)</p>
+</dd>
+<dt class="field-odd">param figsize</dt>
+<dd class="field-odd"><p>The figure size.</p>
+</dd>
+<dt class="field-even">type figsize</dt>
+<dd class="field-even"><p>tuple, optional (default: (10,8))</p>
+</dd>
+<dt class="field-odd">param xlim</dt>
+<dd class="field-odd"><p>Limit figure in x-axis.</p>
+</dd>
+<dt class="field-even">type xlim</dt>
+<dd class="field-even"><p>Float, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param ylim</dt>
+<dd class="field-odd"><p>Limit figure in y-axis.</p>
+</dd>
+<dt class="field-even">type ylim</dt>
+<dd class="field-even"><p>Float, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param fig</dt>
+<dd class="field-odd"><p>Matplotlib figure (Note - ignored when method is <cite>discrete</cite>)</p>
+</dd>
+<dt class="field-even">type fig</dt>
+<dd class="field-even"><p>Figure, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param ax</dt>
+<dd class="field-odd"><p>Matplotlib Axes object. If given, this subplot is used to plot in instead of a new figure being created.</p>
+</dd>
+<dt class="field-even">type ax</dt>
+<dd class="field-even"><p>AxesSubplot, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param grid</dt>
+<dd class="field-odd"><p>Show the grid on the figure.</p>
+</dd>
+<dt class="field-even">type grid</dt>
+<dd class="field-even"><p>Bool, optional (default: True)</p>
+</dd>
+<dt class="field-odd">param cmap</dt>
+<dd class="field-odd"><p>Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary[‘colors’].
+However, when cmap is set, the specified colormap is used.</p>
+</dd>
+<dt class="field-even">type cmap</dt>
+<dd class="field-even"><p>String, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>tuple (fig, ax)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make qq-plot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make qq-plot for top 10 best fitted models.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.plot_summary">
+<span id="plot-summary"></span><h1>Plot Summary<a class="headerlink" href="#module-distfit.distfit.distfit.plot_summary" title="Permalink to this heading"></a></h1>
+<p>Plot summary results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param n_top</dt>
+<dd class="field-odd"><p>Show the top number of results. The default is None.</p>
+</dd>
+<dt class="field-even">type n_top</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param figsize</dt>
+<dd class="field-odd"><p>The figure size.</p>
+</dd>
+<dt class="field-even">type figsize</dt>
+<dd class="field-even"><p>tuple, optional (default: (10,8))</p>
+</dd>
+<dt class="field-odd">param ylim</dt>
+<dd class="field-odd"><p>Limit figure in y-axis.</p>
+</dd>
+<dt class="field-even">type ylim</dt>
+<dd class="field-even"><p>Float, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param fig</dt>
+<dd class="field-odd"><p>Matplotlib figure</p>
+</dd>
+<dt class="field-even">type fig</dt>
+<dd class="field-even"><p>Figure, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param ax</dt>
+<dd class="field-odd"><p>Matplotlib Axes object</p>
+</dd>
+<dt class="field-even">type ax</dt>
+<dd class="field-even"><p>Axes, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
+<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
+<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
+<li><p>20, ‘info’: Messages from info level and higher.</p></li>
+<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
+<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>tuple (fig, ax)</p>
+</dd>
+</dl>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.save">
+<span id="save"></span><h1>Save<a class="headerlink" href="#module-distfit.distfit.distfit.save" title="Permalink to this heading"></a></h1>
+<p>Save learned model in pickle file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param filepath</dt>
+<dd class="field-odd"><p>Pathname to store pickle files.</p>
+</dd>
+<dt class="field-even">type filepath</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><p>Show message. A higher number gives more informatie. The default is 3.</p>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</section>
+<hr class="docutils" />
+<section id="module-distfit.distfit.distfit.load">
+<span id="load"></span><h1>Load<a class="headerlink" href="#module-distfit.distfit.distfit.load" title="Permalink to this heading"></a></h1>
+<p>Load learned model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param filepath</dt>
+<dd class="field-odd"><p>Pathname to stored pickle files.</p>
+</dd>
+<dt class="field-even">type filepath</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">param verbose</dt>
+<dd class="field-odd"><p>Show message. A higher number gives more information. The default is 3.</p>
+</dd>
+<dt class="field-even">type verbose</dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>Object.</p>
+</dd>
+</dl>
+<hr class="docutils" />
+<hr>
+<center>
+        <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+</center>
+<hr></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Examples.html" class="btn btn-neutral float-left" title="Quick start to find best fitting distribution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Documentation.html" class="btn btn-neutral float-right" title="Sponsor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Erdogan Taskesen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
