@@ -88,7 +88,7 @@ class distfit():
             * 'down', 'low' or 'left': lowerbounds
     alpha : float, default: 0.05
         Significance alpha.
-    n_boost : int, default: None
+    n_boots : int, default: None
         Number of bootstraps to validate the fit.
             * None: No Bootstrap.
             * 1000: Thousand bootstraps.
@@ -188,7 +188,7 @@ class distfit():
                  bins: int = 'auto',
                  bound: str = 'both',
                  alpha: float = 0.05,
-                 n_boost: int = None,
+                 n_boots: int = None,
                  multtest: str = 'fdr_bh',
                  smooth: int = None,
                  n_perm: int = 10000,
@@ -207,7 +207,7 @@ class distfit():
         self.bins = bins
         self.bound = bound
         self.distr = distr
-        self.n_boost = n_boost
+        self.n_boots = n_boots
         self.multtest = multtest
         self.smooth = smooth
         self.n_perm = n_perm
@@ -309,7 +309,7 @@ class distfit():
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boost=self.n_boost, random_state=self.random_state)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state)
             # Determine confidence intervals on the best fitting distribution
             model = _compute_cii(self, model)
             # Store
@@ -336,7 +336,7 @@ class distfit():
             raise Exception(logger.error('Method parameter can only be "parametric", "quantile" or "percentile".'))
 
     # Fit and transform in one go.
-    def fit_transform(self, X, n_boost=None, verbose=None):
+    def fit_transform(self, X, n_boots=None, verbose=None):
         """Fit best scoring theoretical distribution to the empirical data (X).
 
         Parameters
@@ -402,7 +402,7 @@ class distfit():
 
         """
         if verbose is not None: set_logger(verbose)
-        if n_boost is not None: self.n_boost=n_boost
+        if n_boots is not None: self.n_boots=n_boots
         # Clean readily fitted models to ensure correct results.
         self._clean()
         # Fit model to get list of distributions to check
@@ -425,7 +425,7 @@ class distfit():
                          self.summary,
                          self.weighted,
                          self.f,
-                         self.n_boost,
+                         self.n_boots,
                          self.random_state,
                          )
         # Return
@@ -1278,7 +1278,7 @@ class distfit():
         return out_distr
 
     # bootstrap.
-    def bootstrap(self, X, n_boost=100, alpha=0.05, n=10000, n_top=None, update_model=True):
+    def bootstrap(self, X, n_boots=100, alpha=0.05, n=10000, n_top=None, update_model=True):
         """Bootstrap.
 
         To validate our fitted model, the Kolmogorov-Smirnov (KS) test is used to compare the distribution of
@@ -1291,14 +1291,14 @@ class distfit():
             2. Use the resampled data to fit the distribution.
             3. Compare the resampled data vs. fitted PDF.
             4. Repeat 1000 times the steps 1-3
-            5. return score=ratio succes / n_boost
+            5. return score=ratio succes / n_boots
             6. return whether the 95% CII for the KS-test statistic is valid.
 
         Parameters
         ----------
         X : array-like
             Set of values belonging to the data
-        n_boost : int, default: None
+        n_boots : int, default: None
             Number of bootstraps to validate the fit.
                 * None: No Bootstrap.
                 * 1000: Thousand bootstraps.
@@ -1321,7 +1321,7 @@ class distfit():
         >>> from distfit import distfit
         >>>
         >>> # Initialize with 100 permutations
-        >>> dfit = distfit(n_boost=100)
+        >>> dfit = distfit(n_boots=100)
         >>>
         >>> # Random data
         >>> # X = np.random.exponential(0.5, 10000)
@@ -1358,25 +1358,25 @@ class distfit():
         >>> # Create summary plot (no bootstrap is present)
         >>> dfit.plot_summary()
         >>>
-        >>> results = dfit.bootstrap(X, n_boost=100)
+        >>> results = dfit.bootstrap(X, n_boots=100)
         >>>
         >>> # Create summary plot (the bootstrap is automatically added to the plot)
         >>> dfit.plot_summary()
 
         """
-        if update_model and n_boost<10:
-            logger.warning('Bootstrapping requires n_boost to be >=10 <return>')
+        if update_model and n_boots<10:
+            logger.warning('Bootstrapping requires n_boots to be >=10 <return>')
             return None
 
         if n_top is None: n_top = self.summary.shape[0]
         self.summary['bootstrap_score'] = 0
         self.summary['bootstrap_pass'] = None
-        logger.info('Bootstrap for %d distributions with n_boost=%d' %(n_top, n_boost))
+        logger.info('Bootstrap for %d distributions with n_boots=%d' %(n_top, n_boots))
         max_name_len = np.max(list(map(len, self.summary['name'][0:n_top].values)))
         for i in range(n_top):
             distr = self.summary['name'].iloc[i]
             # Do the bootstrap
-            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), self.summary['model'].iloc[i], X, n_boost=n_boost, alpha=alpha, random_state=self.random_state)
+            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), self.summary['model'].iloc[i], X, n_boots=n_boots, alpha=alpha, random_state=self.random_state)
             # Store results
             logger.info('Bootstrap: [%s%s] > Score: %.2g > Pass 95%% CII KS-test: %s' %(distr, ' ' * (max_name_len - len(distr)), bootstrap_score, bootstrap_pass))
             self.summary['bootstrap_score'].iloc[i] = bootstrap_score
@@ -1386,7 +1386,7 @@ class distfit():
         df_summary, model = _sort_dataframe(self.summary, cmap=self.cmap)
 
         # Save results
-        if update_model and (n_boost is not None) and (n_boost>=10):
+        if update_model and (n_boots is not None) and (n_boots>=10):
             logger.info('Updating model to: [%s]' %(model['name'].title()))
             # Determine confidence intervals on the best fitting distribution
             self.model = _compute_cii(self, model)
@@ -1430,7 +1430,7 @@ class distfit():
 
 
 # %% Bootstrapping
-def _bootstrap(distribution, distribution_fit, X, n_boost=100, alpha=0.05, random_state=None):
+def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, random_state=None):
     # Bootstrapping
     # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
     # 1. Resample using fitted distribution.
@@ -1438,14 +1438,14 @@ def _bootstrap(distribution, distribution_fit, X, n_boost=100, alpha=0.05, rando
     # 3. Compare the resampled data vs. fitted PDF.
 
     bootstrap_score, bootstrap_pass = 0, None
-    if (n_boost is not None) and (n_boost>=10):
+    if (n_boots is not None) and (n_boots>=10):
         # Limit the number of samples to avoid memory issues.
         n = np.minimum(10000, len(X))
         # Kolmogorov-Smirnov (KS) statistic
         Dn = st.kstest(X, distribution_fit.cdf)
 
         Dns=[]
-        for i in tqdm(range(n_boost), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
+        for i in tqdm(range(n_boots), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
             # Resample from target distribution: k
             resamples = distribution_fit.rvs(n, random_state=random_state)
             # Find new target parameters after resampling
@@ -1460,7 +1460,7 @@ def _bootstrap(distribution, distribution_fit, X, n_boost=100, alpha=0.05, rando
         Dn_alpha = np.quantile(Dns, 1 - alpha)
         bootstrap_pass = False if Dn[0] > Dn_alpha else True
         # Compute ratio correct
-        bootstrap_score = np.sum(Dns > Dn[0]) / n_boost
+        bootstrap_score = np.sum(Dns > Dn[0]) / n_boots
     # Return
     return bootstrap_score, bootstrap_pass
 
@@ -1830,7 +1830,7 @@ def _format_data(data):
     return data
 
 
-def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f, n_boost, random_state):
+def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f, n_boots, random_state):
     out = {}
     out['model'] = model
     out['summary'] = summary
@@ -1847,14 +1847,14 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     out['smooth'] = smooth
     out['weighted'] = weighted
     out['f'] = f
-    out['n_boost'] = n_boost
+    out['n_boots'] = n_boots
     out['random_state'] = random_state
     # Return
     return out
 
 
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boost=None, random_state=None):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None):
     # model = {}
     # model['name'] = st.norm
     # model['stats'] = stats
@@ -1892,7 +1892,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 # Fitted model
                 distribution_fit = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
                 # Bootstrapping
-                bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boost=n_boost, random_state=random_state)
+                bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boots=n_boots, random_state=random_state)
 
                 # Store results
                 df.values[i, 0] = distr_name

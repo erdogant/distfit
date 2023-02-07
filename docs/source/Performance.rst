@@ -106,7 +106,7 @@ The goal here is to estimate the KS statistic of the fitted distribution when th
 	2. Use the resampled data to fit the distribution.
 	3. Compare the resampled data vs. fitted PDF.
 	4. Repeat 1000 times the steps 1-3
-	5. return score=ratio succes / n_boost
+	5. return score=ratio succes / n_boots
 	6. return whether the 95% CII for the KS-test statistic is valid.
 
 
@@ -116,7 +116,7 @@ The goal here is to estimate the KS statistic of the fitted distribution when th
 	from distfit import distfit
 
 	# Initialize with 100 permutations
-	dfit = distfit(n_boost=100)
+	dfit = distfit(n_boots=100)
 
 	# Generate data from PDF
 	# X = np.random.exponential(0.5, 10000)

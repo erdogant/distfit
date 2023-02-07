@@ -25,14 +25,16 @@ class Test_DISTFIT(unittest.TestCase):
         # Create random normal data with mean=2 and std=4
         X = np.random.normal(2, 4, 10000)
         # Alternatively limit the search for only a few theoretical distributions.
-        dfit = distfit(method='parametric', todf=True, distr=['norm', 'expon'])
+        # dfit = distfit(method='parametric', todf=True, distr=['norm', 'expon'])
         # Initialize using the parametric approach.
         dfit = distfit(method='parametric', todf=True)
         # Fit model on input data X.
         dfit.fit_transform(X)
         # Print the bet model results.
+        dfit.bootstrap(X, n_boots=100)
         assert dfit.model
-        assert np.all(np.isin(['distr', 'score', 'loc', 'scale'], dfit.summary.columns))
+        assert np.all(np.isin(['name', 'score', 'loc', 'scale'], dfit.summary.columns))
+        dfit.summary[['name', 'score', 'loc', 'scale']]
 
         # Create subplot
         fig, ax = plt.subplots(1,2, figsize=(25, 10))
@@ -93,8 +95,7 @@ class Test_DISTFIT(unittest.TestCase):
         dfit.fit_transform(X)
         # With the fitted model we can make predictions on new unseen data.
         y = [-8, -2, 1, 3, 5, 15]
-        dfit.predict(y)
-        # dfit.predict(y, todf=True)
+        dfit.predict(y, todf=True)
         # Print results
         print(dfit.results['df'])
         # Plot the results
@@ -112,14 +113,14 @@ class Test_DISTFIT(unittest.TestCase):
 
     def test_bootstrap(self):
         X = np.random.uniform(0, 1000, 10000)
-        dfit = distfit(distr='popular', n_boost=10)
+        dfit = distfit(distr='popular', n_boots=10)
         results = dfit.fit_transform(X)
         dfit.plot_summary()
 
-        dfit = distfit(distr='popular', n_boost=None)
+        dfit = distfit(distr='popular', n_boots=None)
         results = dfit.fit_transform(X)
         dfit.plot_summary()
-        dfit.bootstrap(X, n_boost=10)
+        dfit.bootstrap(X, n_boots=10)
         dfit.plot_summary(n_top=None)
         dfit.plot_summary(n_top=0)
         dfit.plot_summary()
@@ -133,7 +134,7 @@ class Test_DISTFIT(unittest.TestCase):
         results = dfit.fit_transform(X)
         # Create summary plot (no bootstrap is present)
         dfit.plot_summary()
-        results = dfit.bootstrap(X, n_boost=10)
+        results = dfit.bootstrap(X, n_boots=10)
         # Create summary plot (the bootstrap is automatically added to the plot)
         show_figures(dfit)
 
@@ -147,14 +148,14 @@ class Test_DISTFIT(unittest.TestCase):
         show_figures(dfit)
 
         X = np.random.uniform(0, 1000, 10000)
-        dfit = distfit(distr='uniform', n_boost=None)
+        dfit = distfit(distr='uniform', n_boots=None)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dfit.fit_transform(X)
         dfit.predict(y)
         show_figures(dfit)
         
         X = np.random.exponential(0.5, 10000)
-        dfit = distfit(distr='expon', n_boost=None)
+        dfit = distfit(distr='expon', n_boots=None)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dfit.fit_transform(X)
         dfit.plot(figsize=(15, 12), grid=False)
@@ -162,7 +163,7 @@ class Test_DISTFIT(unittest.TestCase):
         show_figures(dfit)
         
         X = np.random.normal(0, 2, 10000)
-        dfit = distfit(distr='norm', n_boost=None)
+        dfit = distfit(distr='norm', n_boots=None)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dfit.fit_transform(X)
         dfit.predict(y)
@@ -180,7 +181,7 @@ class Test_DISTFIT(unittest.TestCase):
         X = np.random.normal(0, 2, 1000)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         # Initialize
-        dfit = distfit(n_boost=None)
+        dfit = distfit(n_boots=None)
         assert np.all(np.isin(['method', 'alpha', 'bins', 'distr', 'multtest', 'n_perm'], dir(dfit)))
         # Fit and transform data
         dfit.fit_transform(X, verbose='info')
@@ -191,38 +192,38 @@ class Test_DISTFIT(unittest.TestCase):
         assert [*dfit.model.keys()]==['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass', 'color', 'CII_min_alpha', 'CII_max_alpha']
     
         # TEST 3: Check specific distribution
-        dfit = distfit(distr='t', n_boost=None)
+        dfit = distfit(distr='t', n_boots=None)
         dfit.fit_transform(X)
         assert dfit.model['name']=='t'
     
         # TEST 4: Check specific distribution
-        dfit = distfit(distr='t', alpha=None, n_boost=None)
+        dfit = distfit(distr='t', alpha=None, n_boots=None)
         dfit.fit_transform(X)
         assert dfit.model['CII_min_alpha'] is not None
         assert dfit.model['CII_max_alpha'] is not None
     
         # TEST 4A: Check multiple distribution
-        dfit = distfit(distr=['norm', 't', 'gamma'], n_boost=None)
+        dfit = distfit(distr=['norm', 't', 'gamma'], n_boots=None)
         results = dfit.fit_transform(X)
         assert np.all(np.isin(results['summary']['name'].values, ['gamma', 't', 'norm']))
     
         # TEST 5: Bound check
-        dfit = distfit(distr='t', bound='up', alpha=0.05, n_boost=None)
+        dfit = distfit(distr='t', bound='up', alpha=0.05, n_boots=None)
         dfit.fit_transform(X, verbose=0)
         assert dfit.model['CII_min_alpha'] is None
         assert dfit.model['CII_max_alpha'] is not None
-        dfit = distfit(distr='t', bound='down', alpha=0.05, n_boost=None)
+        dfit = distfit(distr='t', bound='down', alpha=0.05, n_boots=None)
         dfit.fit_transform(X, verbose=0)
         assert dfit.model['CII_min_alpha'] is not None
         assert dfit.model['CII_max_alpha'] is None
-        dfit = distfit(distr='t', bound='both', alpha=0.05, n_boost=None)
+        dfit = distfit(distr='t', bound='both', alpha=0.05, n_boots=None)
         dfit.fit_transform(X, verbose=0)
         assert dfit.model['CII_min_alpha'] is not None
         assert dfit.model['CII_max_alpha'] is not None
     
         # TEST 6: Distribution check: Make sure the right loc and scale paramters are detected
         X = np.random.normal(0, 2, 10000)
-        dfit = distfit(distr='norm', alpha=0.05, n_boost=None)
+        dfit = distfit(distr='norm', alpha=0.05, n_boots=None)
         dfit.fit_transform(X, verbose=0)
         dfit.model['loc']
         '%.1f' %dfit.model['scale']=='2.0'
@@ -233,24 +234,24 @@ class Test_DISTFIT(unittest.TestCase):
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
     
         # TEST 1: Check bounds
-        out1 = distfit(distr='norm',  bound='up', n_boost=None)
+        out1 = distfit(distr='norm',  bound='up', n_boots=None)
         out1.fit_transform(X, verbose=0)
         out1.predict(y, verbose=0)
         assert np.all(np.isin(np.unique(out1.results['y_pred']), ['none','up']))
     
-        out2 = distfit(distr='norm',  bound='down', n_boost=None)
+        out2 = distfit(distr='norm',  bound='down', n_boots=None)
         out2.fit_transform(X, verbose=0)
         out2.predict(y, verbose=0)
         assert np.all(np.isin(np.unique(out2.results['y_pred']), ['none','down']))
     
-        out3 = distfit(distr='norm',  bound='down', n_boost=None)
+        out3 = distfit(distr='norm',  bound='down', n_boots=None)
         out3.fit_transform(X, verbose=0)
         out3.predict(y, verbose=0)
         assert np.all(np.isin(np.unique(out3.results['y_pred']), ['none','down','up']))
     
         # TEST 8: Check different sizes array
         X = np.random.normal(0, 2, [10,100])
-        dfit = distfit(distr='norm',  bound='up', n_boost=None)
+        dfit = distfit(distr='norm',  bound='up', n_boots=None)
         dfit.fit_transform(X, verbose=0)
         dfit.predict(y, verbose=0)
         assert np.all(np.isin(np.unique(dfit.results['y_pred']), ['none','up']))
@@ -258,7 +259,7 @@ class Test_DISTFIT(unittest.TestCase):
         # TEST 9
         data_random = np.random.normal(0, 2, 1000)
         data = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-        dfit = distfit(n_boost=None)
+        dfit = distfit(n_boots=None)
         dfit.fit_transform(X, verbose=0)
     
         # TEST 10 Check number of output probabilities
@@ -267,7 +268,7 @@ class Test_DISTFIT(unittest.TestCase):
         assert dfit.results['y_proba'].shape[0]==len(y)
     
         # TEST 11: Check whether alpha responds on results
-        out1 = distfit(alpha=0.05, n_boost=None)
+        out1 = distfit(alpha=0.05, n_boots=None)
         out1.fit_transform(X, verbose=0)
         out1.predict(y)
     
@@ -284,7 +285,7 @@ class Test_DISTFIT(unittest.TestCase):
         X = np.random.normal(0, 2, [10,100])
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
     
-        dfit = distfit(bound='up', n_boost=None)
+        dfit = distfit(bound='up', n_boots=None)
         dfit.fit_transform(X, verbose=0)
         dfit.predict(y)
         assert np.all(np.isin(np.unique(dfit.results['y_pred']), ['none','up']))
@@ -292,13 +293,13 @@ class Test_DISTFIT(unittest.TestCase):
         # TEST 13: Precentile
         X = np.random.normal(0, 2, [10,100])
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-        dfit = distfit(method='percentile', n_boost=None)
+        dfit = distfit(method='percentile', n_boots=None)
         dfit.fit_transform(X, verbose=0)
         results=dfit.predict(y)
         assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'teststat']))
     
         # TEST 14: Quantile
-        dfit = distfit(method='quantile', n_boost=None)
+        dfit = distfit(method='quantile', n_boots=None)
         dfit.fit_transform(X, verbose=0)
         results=dfit.predict(y)
         assert np.all(np.isin([*results.keys()],  ['y', 'y_proba', 'y_pred', 'teststat']))
@@ -310,7 +311,7 @@ class Test_DISTFIT(unittest.TestCase):
         # Generate random numbers
         X = binom(8, 0.5).rvs(10000)
     
-        dfit = distfit(method='discrete', f=1.5, weighted=True, n_boost=None)
+        dfit = distfit(method='discrete', f=1.5, weighted=True, n_boots=None)
         dfit.fit_transform(X, verbose='info')
         assert dfit.model['n']==8
         assert np.round(dfit.model['p'], decimals=1)==0.5
