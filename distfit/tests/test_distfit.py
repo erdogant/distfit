@@ -34,7 +34,7 @@ class Test_DISTFIT(unittest.TestCase):
         dfit.bootstrap(X, n_boots=100)
         assert dfit.model
         assert np.all(np.isin(['name', 'score', 'loc', 'scale'], dfit.summary.columns))
-        dfit.summary[['name', 'score', 'loc', 'scale']]
+        dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
 
         # Create subplot
         fig, ax = plt.subplots(1,2, figsize=(25, 10))
