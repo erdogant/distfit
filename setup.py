@@ -13,7 +13,7 @@ else:
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-     install_requires=['matplotlib','numpy','pandas','tqdm','statsmodels','scipy','pypickle', 'colourmap'],
+     install_requires=['matplotlib>=3.6.3','numpy','pandas','tqdm','statsmodels','scipy','pypickle', 'colourmap>=1.1.10'],
      python_requires='>=3',
      name='distfit',
      version=new_version,
