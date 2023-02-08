@@ -13,10 +13,14 @@ from distfit import distfit
 # X = np.random.exponential(0.5, 10000)
 # X = np.random.uniform(0, 1000, 10000)
 X = np.random.normal(163, 10, 10000)
-dfit = distfit(distr='popular', n_boots=10, verbose='info')
-# Fit and plot
+# Initialize with bootstrapping
+dfit = distfit(n_boots=10)
+# Fit
 results = dfit.fit_transform(X)
+# Results
 dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
+# Plot
+dfit.plot_summary()
 
 
 out = dfit.bootstrap(X, n_boots=10, n_top=None)
