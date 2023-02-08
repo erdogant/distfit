@@ -1099,7 +1099,7 @@ class distfit():
             ax.set_yticklabels(yticks, fontsize=8)
 
             # You can specify a rotation for the tick labels in degrees or with keywords.
-            ax.set_xticks(xcoord, df['name'].values, rotation='vertical')
+            ax.set_xticks(xcoord, df['name'].values, rotation=45)
 
             # Pad margins so that markers don't get clipped by the axes
             ax.margins(0.2)
