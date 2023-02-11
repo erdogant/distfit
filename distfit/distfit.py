@@ -189,7 +189,7 @@ class distfit():
                  bound: str = 'both',
                  alpha: float = 0.05,
                  n_boots: int = None,
-                 multtest: str = 'fdr_bh',
+                 # multtest: str = 'fdr_bh',
                  smooth: int = None,
                  n_perm: int = 10000,
                  todf: bool = False,
@@ -208,7 +208,7 @@ class distfit():
         self.bound = bound
         self.distr = distr
         self.n_boots = n_boots
-        self.multtest = multtest
+        self.multtest = 'fdr_bh'
         self.smooth = smooth
         self.n_perm = n_perm
         self.todf = todf
@@ -440,7 +440,12 @@ class distfit():
             if hasattr(self, 'summary'): del self.summary
             if hasattr(self, 'size'): del self.size
 
-    def predict(self, y, alpha: float = None, todf: bool = False, verbose: [str, int] = None):
+    def predict(self,
+                y,
+                alpha: float = None,
+                multtest: str = 'fdr_bh',
+                todf: bool = False,
+                verbose: [str, int] = None):
         """Compute probability for response variables y, using the specified method.
 
         Computes P-values for [y] based on the fitted distribution from X.
@@ -451,8 +456,19 @@ class distfit():
         ----------
         y : array-like
             Values to be predicted.
-        model : dict, default : None
-            The model created by the .fit() function.
+        multtest : str, default: 'fdr_bh'
+            Multiple test correction.
+                * None
+                * 'bonferroni'
+                * 'sidak'
+                * 'holm-sidak'
+                * 'holm'
+                * 'simes-hochberg'
+                * 'hommel'
+                * 'fdr_bh'
+                * 'fdr_by'
+                * 'fdr_tsbh'
+                * 'fdr_tsbky'
         alpha : float, default: None
             Significance alpha is inherited from self if None.
         todf : Bool (default: False)
@@ -495,17 +511,19 @@ class distfit():
         >>>
         >>> # Plot results with CII and predictions.
         >>> dfit.plot()
+        >>>
         """
         if verbose is not None: set_logger(verbose)
         if todf is not None: self.todf = todf
         if 'list' in str(type(y)): y=np.array(y)
         if 'float' in str(type(y)): y=np.array([y])
         if 'numpy.ndarray' not in str(type(y)): raise Exception('y should be of type np.array or list')
+        self.multtest = multtest
         if alpha is not None:
             self.alpha = alpha
             logger.info('Alpha is set to [%g]' %(self.alpha))
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, self.model)
+            self.model = compute_cii(self, self.model)
 
         logger.info('Compute significance for %d samples.' %(len(y)))
 
