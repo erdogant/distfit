@@ -657,7 +657,7 @@ class distfit():
              pdf_properties={'color': '#880808', 'linewidth': 3, 'linestyle': '-'},
              bar_properties={'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'},
              cii_properties={'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
-             fontsize=18,
+             fontsize=16,
              xlabel='Values',
              ylabel='Frequency',
              figsize=(20, 15),
@@ -788,7 +788,7 @@ class distfit():
                line='45',
                n_top=1,
                title='QQ-plot',
-               fontsize=18,
+               fontsize=16,
                figsize=(20, 15),
                xlim=None,
                ylim=None,
@@ -905,7 +905,7 @@ class distfit():
                  xlabel='x-axes',
                  ylabel='y-axes',
                  title='',
-                 fontsize=18,
+                 fontsize=16,
                  figsize=(25, 12),
                  xlim=None,
                  ylim=None,
@@ -1038,7 +1038,7 @@ class distfit():
                  figsize=(20, 15),
                  xlabel='Values',
                  ylabel='Frequency',
-                 fontsize=18,
+                 fontsize=16,
                  xlim=None,
                  ylim=None,
                  fig=None,
@@ -1176,7 +1176,7 @@ class distfit():
                 ax.set_ylim(ylim[0], ylim[1])
 
             # Make text for plot
-            ax.set_title(self._make_title(title))
+            ax.set_title(self._make_title(title), fontsize=fontsize)
             ax.set_xlabel(xlabel, fontsize=fontsize)
             ax.set_ylabel(ylabel, fontsize=fontsize)
             ax.tick_params(axis='both', which='major', labelsize=fontsize)
@@ -1193,10 +1193,10 @@ class distfit():
                      color_axes_left='#0000FF',
                      color_axes_right='#FC6600',
                      rotation=45,
-                     fontsize=10,
+                     fontsize=16,
                      grid=True,
                      ylim=[None, None],
-                     figsize=(15, 8),
+                     figsize=(20, 10),
                      fig=None,
                      ax=None,
                      verbose=None):
@@ -1286,6 +1286,7 @@ class distfit():
                 ax2.plot(df['bootstrap_score'], color='#ff7f00', linewidth=1, linestyle='--')
                 ax2.set_ylabel('Bootstrap score (higher is better)', fontsize=fontsize)
                 ax2.set_ylim(ymin=-0.01, ymax=1)
+                ax2.tick_params(axis='both', which='major', labelsize=fontsize)
 
                 # Add legend
                 from matplotlib.lines import Line2D
@@ -1922,7 +1923,7 @@ def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
             ax.scatter(results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
 # %% Plot
-def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=(15, 8), fontsize=18, xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
+def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=(20, 15), fontsize=16, xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
     if not hasattr(self, 'results'): self.results=None
 
@@ -1953,10 +1954,10 @@ def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=
 def _plot_parametric(self,
                      n_top=1,
                      title='',
-                     figsize=(10, 8),
+                     figsize=(20, 15),
                      xlabel='Values',
                      ylabel='Frequency',
-                     fontsize=18,
+                     fontsize=16,
                      xlim=None,
                      ylim=None,
                      grid=True,
@@ -2460,11 +2461,11 @@ def plot_binom(self,
                pdf_properties={},
                bar_properties={},
                cii_properties={},
-               fontsize=18,
+               fontsize=16,
                xlabel='Values',
                ylabel='Frequency',
                title='',
-               figsize=(10, 8),
+               figsize=(20, 15),
                xlim=None,
                ylim=None,
                grid=True,
