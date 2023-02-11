@@ -92,19 +92,6 @@ class distfit():
         Number of bootstraps to validate the fit.
             * None: No Bootstrap.
             * 1000: Thousand bootstraps.
-    multtest : str, default: 'fdr_bh'
-        Multiple test correction.
-            * None
-            * 'bonferroni'
-            * 'sidak'
-            * 'holm-sidak'
-            * 'holm'
-            * 'simes-hochberg'
-            * 'hommel'
-            * 'fdr_bh'
-            * 'fdr_by'
-            * 'fdr_tsbh'
-            * 'fdr_tsbky'
     smooth : int, default: None
         Smoothing the histogram can help to get a better fit when there are only few samples available.
         The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.
@@ -140,8 +127,6 @@ class distfit():
         Specified testing directionality of the distribution.
     distr : str or list of strings
         Specified distribution or a set of distributions.
-    multtest : str
-        Specified multiple test correction method.
     todf : Bool (default: False)
         Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!
 
@@ -189,7 +174,6 @@ class distfit():
                  bound: str = 'both',
                  alpha: float = 0.05,
                  n_boots: int = None,
-                 # multtest: str = 'fdr_bh',
                  smooth: int = None,
                  n_perm: int = 10000,
                  todf: bool = False,
