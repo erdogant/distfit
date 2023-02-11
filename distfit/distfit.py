@@ -311,25 +311,25 @@ class distfit():
             # Compute best distribution fit on the empirical X
             out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state)
             # Determine confidence intervals on the best fitting distribution
-            model = _compute_cii(self, model)
+            model = compute_cii(self, model)
             # Store
             self.model = model
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
             out_summary, model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats)
-            model = _compute_cii(self, model)
+            model = compute_cii(self, model)
             # self.histdata = (figdata['Xdata'], figdata['hist'])
             self.model = model
             self.summary = out_summary
             self.figdata = figdata
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, X)
+            self.model = compute_cii(self, X)
             self.summary = None
         elif self.method=='percentile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, X)
+            self.model = compute_cii(self, X)
             self.percentile = np.percentile(X, 7)
             self.summary = None
         else:
@@ -657,6 +657,7 @@ class distfit():
              pdf_properties={'color': '#880808', 'linewidth': 3, 'linestyle': '-'},
              bar_properties={'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'},
              cii_properties={'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
+             fontsize=18,
              xlabel='Values',
              ylabel='Frequency',
              figsize=(20, 15),
@@ -695,6 +696,8 @@ class distfit():
             bar properties of the histogram.
                 * None: Do not plot.
                 * {'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}
+        fontsize : int, (default: 18)
+            Fontsize for the axis and ticks.
         xlabel : String, (default: 'value')
             Label for the x-axis.
         ylabel : String, (default: 'Frequency')
@@ -761,20 +764,17 @@ class distfit():
         """
         if verbose is not None: set_logger(verbose)
         if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
-        if cii_properties is not None: cii_properties = {**{'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
-        if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 3, 'linestyle': '-', 'label': None}, **emp_properties}
-        if pdf_properties is not None: pdf_properties = {**{'color': '#880808', 'linewidth': 3, 'linestyle': '-'}, **pdf_properties}
-        if bar_properties is not None: bar_properties = {**{'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'}, **bar_properties}
+        properties = _get_properties(pdf_properties, emp_properties, bar_properties, cii_properties)
 
         logger.info('Create %s plot for the %s method.' %(chart, self.method))
         if chart.upper()=='PDF' and self.method=='parametric':
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         elif chart.upper()=='PDF' and self.method=='discrete':
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=emp_properties, pdf_properties=pdf_properties, bar_properties=bar_properties, cii_properties=cii_properties, xlabel=xlabel, ylabel=ylabel)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         elif chart.upper()=='PDF' and (self.method=='quantile') or (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, bar_properties=bar_properties, cii_properties=cii_properties, xlabel=xlabel, ylabel=ylabel)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         elif chart.upper()=='CDF' and (self.method=='parametric' or self.method=='discrete'):
-            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=emp_properties, cdf_properties=pdf_properties, cii_properties=cii_properties, cmap=cmap, xlabel=xlabel, ylabel=ylabel)
+            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], cdf_properties=properties['pdf'], cii_properties=properties['cii'], cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
             fig, ax = None, None
@@ -788,6 +788,7 @@ class distfit():
                line='45',
                n_top=1,
                title='QQ-plot',
+               fontsize=18,
                figsize=(20, 15),
                xlim=None,
                ylim=None,
@@ -798,10 +799,12 @@ class distfit():
                size=15,
                cmap=None,
                verbose=None):
-        """Plot CDF results.
+        """Plot QQplot results.
 
         Parameters
         ----------
+        X : array-like
+            The Null distribution or background data is build from X.
         line : str, default: '45'
             Options for the reference line to which the data is compared.
                 * '45' - 45-degree line
@@ -1035,6 +1038,7 @@ class distfit():
                  figsize=(20, 15),
                  xlabel='Values',
                  ylabel='Frequency',
+                 fontsize=18,
                  xlim=None,
                  ylim=None,
                  fig=None,
@@ -1121,6 +1125,7 @@ class distfit():
         logger.info('Ploting CDF')
         if verbose is not None: set_logger(verbose)
         if n_top is None: n_top = 1
+        properties = _get_properties(cdf_properties, emp_properties, None, cii_properties)
 
         # Create figure
         if self.method=='parametric' or self.method=='discrete':
@@ -1134,21 +1139,21 @@ class distfit():
             # using numpy np.cumsum to calculate the CDF. We can also find using the PDF values by looping and adding
             cdf_emp = np.cumsum(pdf_emp)
             # plot
-            if emp_properties is not None:
-                emp_properties['marker'] = 'o'
-                if emp_properties.get('label', None) is None: emp_properties['label'] = 'Emperical CDF'
-                ax.plot(bins_count, cdf_emp, **emp_properties)
+            if properties['emp'] is not None:
+                properties['emp']['marker'] = 'o'
+                if properties['emp'].get('label', None) is None: properties['emp']['label'] = 'Emperical CDF'
+                ax.plot(bins_count, cdf_emp, **properties['emp'])
 
             # Plot Theoretical CDF
             getmax = np.max(self.histdata[1])
             getmin = np.min(self.histdata[1])
             # Build pdf and turn into pandas Series
             x = np.linspace(getmin, getmax, self.size)
-            if cdf_properties is not None:
-                if cdf_properties.get('label', None) is None: cdf_properties['label'] = self.model['name'] + " (best fit)"
+            if properties['pdf'] is not None:
+                if properties['pdf'].get('label', None) is None: properties['pdf']['label'] = self.model['name'] + " (best fit)"
                 cdf = self.model['model'].cdf
                 # Plot the best CDF
-                ax.plot(x, cdf(x), **cdf_properties)
+                ax.plot(x, cdf(x), **properties['pdf'])
 
                 # Plot other CDFs
                 if n_top>1:
@@ -1162,7 +1167,7 @@ class distfit():
 
             # plot CII
             results = self.results if hasattr(self, 'results') else None
-            _plot_cii_parametric(self.model, self.alpha, results, cii_properties, ax)
+            _plot_cii_parametric(self.model, self.alpha, results, properties['cii'], ax)
 
             # Limit axis
             if xlim is not None:
@@ -1172,8 +1177,9 @@ class distfit():
 
             # Make text for plot
             ax.set_title(self._make_title(title))
-            ax.set_xlabel(xlabel)
-            ax.set_ylabel(ylabel)
+            ax.set_xlabel(xlabel, fontsize=fontsize)
+            ax.set_ylabel(ylabel, fontsize=fontsize)
+            ax.tick_params(axis='both', which='major', labelsize=fontsize)
             ax.legend(loc='upper right')
             ax.grid(grid)
         else:
@@ -1184,13 +1190,15 @@ class distfit():
     # Plot summary
     def plot_summary(self,
                      n_top=None,
-                     figsize=(15, 8),
+                     color_axes_left='#0000FF',
+                     color_axes_right='#FC6600',
+                     rotation=45,
+                     fontsize=10,
+                     grid=True,
                      ylim=[None, None],
+                     figsize=(15, 8),
                      fig=None,
                      ax=None,
-                     grid=True,
-                     color_y1='#0000FF',
-                     color_y2='#FC6600',
                      verbose=None):
         """Plot summary results.
 
@@ -1200,10 +1208,16 @@ class distfit():
             Show the top number of results. The default is None.
         figsize : tuple, optional (default: (10,8))
             The figure size.
-        ylim : Float, optional (default: None)
-            Limit figure in y-axis.
+        color_axes_left : str, (default: '#0000FF')
+            Hex color of goodness of fit axes (left axes).
+        color_axes_right : str, (default: '#FC6600')
+            Hex color of boostrap axes (right axes).
+        grid : Bool, optional (default: True)
+            Show the grid on the figure.
         fig : Figure, optional (default: None)
             Matplotlib figure
+        ylim : Float, optional (default: [None, None])
+            Limit figure in y-axis.
         ax : Axes, optional (default: None)
             Matplotlib Axes object
         verbose : [str, int], default is 'info' or 20
@@ -1226,8 +1240,7 @@ class distfit():
 
         # Create figure
         if self.method=='parametric':
-            # Collect scores
-            # Collect data
+            # Collect scores/data
             df = self.summary.iloc[0:n_top, :].copy()
             xcoord = np.arange(df.shape[0])
 
@@ -1237,28 +1250,28 @@ class distfit():
 
             # Create left axes
             score = scale_data(df['score'])
-            ax.plot(score, color=color_y1, linewidth=1, linestyle='--')
-            ax.scatter(xcoord, score, color=color_y1)
+            ax.plot(score, color=color_axes_left, linewidth=1, linestyle='--')
+            ax.scatter(xcoord, score, color=color_axes_left)
 
             # Round to a specific number of decimal places
             yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
             yticks = [0] + yticks
             yticks = np.round(yticks, decimals=4)
             # ax.set_yticks(yticks)
-            ax.set_yticklabels(yticks, fontsize=8)
+            ax.set_yticklabels(yticks, fontsize=fontsize)
 
             # You can specify a rotation for the tick labels in degrees or with keywords.
-            ax.set_xticks(xcoord, df['name'].values, rotation=45)
+            ax.set_xticks(xcoord, df['name'].values, rotation=rotation)
 
             # Pad margins so that markers don't get clipped by the axes
             ax.margins(0.2)
             plt.subplots_adjust(bottom=0.15)
             ax.grid(grid)
-            ax.set_xlabel('Probability Density Function (PDF)')
-            ax.set_ylabel(('%s (goodness of fit test)' %(self.stats)))
-            ax.set_title('%s' %(self.model['name'].title()))
-            # if ylim is not None:
-            ax.set_ylim(ymin=-0.01, ymax=ylim[1])
+            ax.set_xlabel('Probability Density Function (PDF)', fontsize=fontsize)
+            ax.set_ylabel(('%s (goodness of fit test)' %(self.stats)), fontsize=fontsize)
+            ax.set_title('%s' %(self.model['name'].title()), fontsize=fontsize)
+            ax.tick_params(axis='both', which='major', labelsize=fontsize)
+            ax.set_ylim(ymin=-0.1, ymax=ylim[1])
 
             # Create right axes
             if df['bootstrap_pass'][0] is not None:
@@ -1271,7 +1284,7 @@ class distfit():
                 ax2 = ax.twinx()
                 ax2.scatter(xcoord, df['bootstrap_score'], color=colors)
                 ax2.plot(df['bootstrap_score'], color='#ff7f00', linewidth=1, linestyle='--')
-                ax2.set_ylabel('Bootstrap score (higher is better)')
+                ax2.set_ylabel('Bootstrap score (higher is better)', fontsize=fontsize)
                 ax2.set_ylim(ymin=-0.01, ymax=1)
 
                 # Add legend
@@ -1281,18 +1294,18 @@ class distfit():
                 ax2.legend(handles=[green_dot, red_dot], loc='upper left')
 
                 # host.yaxis.label.set_color(p1.get_color())
-                ax.yaxis.label.set_color(color_y1)
-                ax.tick_params(axis='y', colors=color_y1)
-                ax2.yaxis.label.set_color(color_y2)
-                ax2.tick_params(axis='y', colors=color_y2)
+                ax.yaxis.label.set_color(color_axes_left)
+                ax.tick_params(axis='y', colors=color_axes_left)
+                ax2.yaxis.label.set_color(color_axes_right)
+                ax2.tick_params(axis='y', colors=color_axes_right)
 
             # Show the plot
-            plt.show()
+            # plt.show()
             return (fig, ax)
         else:
             logger.info('This function can only be used when method="parametric"')
             return None, None
-    
+
     # Save model
     def save(self, filepath, overwrite=True):
         """Save learned model in pickle file.
@@ -1424,7 +1437,7 @@ class distfit():
             except:
                 logger.error('[%s] does not exist! <skipping>' %(distr))
 
-        if len(out_distr)==0: raise Exception('[distfit] >Error: Could nog select valid distributions for testing!')
+        if len(out_distr)==0: raise Exception('[distfit] >Error: [%s] is not a valid selection for distributions. Choose: "full", "popular", "norm", "t" etc or a list of distributions.' %(distr))
         return out_distr
 
     # bootstrap.
@@ -1644,6 +1657,15 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
         bootstrap_score = np.sum(Dns > Dn[0]) / n_boots
     # Return
     return bootstrap_score, bootstrap_pass
+
+
+# %%
+def _get_properties(pdf_properties, emp_properties, bar_properties, cii_properties):
+    if cii_properties is not None: cii_properties = {**{'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r', 'alpha': 1}, **cii_properties}
+    if emp_properties is not None: emp_properties = {**{'color': '#000000', 'linewidth': 3, 'linestyle': '-', 'label': None}, **emp_properties}
+    if pdf_properties is not None: pdf_properties = {**{'color': '#880808', 'linewidth': 3, 'linestyle': '-'}, **pdf_properties}
+    if bar_properties is not None: bar_properties = {**{'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'}, **bar_properties}
+    return {'pdf': pdf_properties, 'emp': emp_properties, 'bar': bar_properties, 'cii': cii_properties}
 
 
 # %%
@@ -1900,7 +1922,7 @@ def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
             ax.scatter(results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
 # %% Plot
-def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=(15, 8), xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
+def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=(15, 8), fontsize=18, xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
     if not hasattr(self, 'results'): self.results=None
 
@@ -1917,11 +1939,12 @@ def _plot_quantile(self, title='', xlabel='Values', ylabel='Frequency', figsize=
     if ylim is not None:
         ax.set_ylim(ylim[0], ylim[1])
 
-    ax.grid(grid)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(title)
     ax.legend(loc='upper right')
+    ax.tick_params(axis='both', which='major', labelsize=fontsize)
+    ax.grid(grid)
 
     return fig, ax
 
@@ -1933,6 +1956,7 @@ def _plot_parametric(self,
                      figsize=(10, 8),
                      xlabel='Values',
                      ylabel='Frequency',
+                     fontsize=18,
                      xlim=None,
                      ylim=None,
                      grid=True,
@@ -1990,9 +2014,10 @@ def _plot_parametric(self,
     if Param['ylim'] is not None:
         ax.set_ylim(Param['ylim'][0], Param['ylim'][1])
 
-    ax.set_title(self._make_title(title))
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
+    ax.set_title(self._make_title(title), fontsize=fontsize)
+    ax.set_xlabel(xlabel, fontsize=fontsize)
+    ax.set_ylabel(ylabel, fontsize=fontsize)
+    ax.tick_params(axis='both', which='major', labelsize=fontsize)
     ax.legend(loc='upper right')
     ax.grid(grid)
 
@@ -2142,35 +2167,36 @@ def _compute_fit_score(stats, y_obs, pdf):
         score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
         # score = -np.log10(st.kstest(y_obs, pdf)[1])
     else:
-        raise Exception('[%] statistic not implemented.', stats)
+        raise Exception('[distfit] [%] statistic not implemented.', stats)
     return score
 
 
 # %% Determine confidence intervals on the best fitting distribution
-def _compute_cii(self, model):
+def compute_cii(self, model, alpha=None):
     logger.info("Compute confidence intervals [%s]" %(self.method))
     CIIup, CIIdown = None, None
+    if alpha is None: alpha = self.alpha
 
     if (self.method=='parametric') or (self.method=='discrete'):
         # Determine %CII
-        if self.alpha is not None:
+        if alpha is not None:
             if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
-                # CIIdown = distr.ppf(1 - self.alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(1 - self.alpha, loc=loc, scale=scale)
-                CIIdown = model['model'].ppf(1 - self.alpha)
+                # CIIdown = distr.ppf(1 - alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(1 - alpha, loc=loc, scale=scale)
+                CIIdown = model['model'].ppf(1 - alpha)
             if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
-                # CIIup = distr.ppf(self.alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(self.alpha, loc=loc, scale=scale)
-                CIIup = model['model'].ppf(self.alpha)
+                # CIIup = distr.ppf(alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(alpha, loc=loc, scale=scale)
+                CIIup = model['model'].ppf(alpha)
     elif self.method=='quantile':
         X = model
         model = {}
-        CIIdown = np.quantile(X, 1 - self.alpha)
-        CIIup = np.quantile(X, self.alpha)
+        CIIdown = np.quantile(X, 1 - alpha)
+        CIIup = np.quantile(X, alpha)
     elif self.method=='percentile':
         X = model
         model = {}
         # Set Confidence intervals
-        cii_high = (0 + (self.alpha / 2)) * 100
-        cii_low = (1 - (self.alpha / 2)) * 100
+        cii_high = (0 + (alpha / 2)) * 100
+        cii_low = (1 - (alpha / 2)) * 100
         CIIup = np.percentile(X, cii_high)
         CIIdown = np.percentile(X, cii_low)
     else:
@@ -2434,6 +2460,7 @@ def plot_binom(self,
                pdf_properties={},
                bar_properties={},
                cii_properties={},
+               fontsize=18,
                xlabel='Values',
                ylabel='Frequency',
                title='',
@@ -2522,23 +2549,25 @@ def plot_binom(self,
         ax[0].set_xlim(xmin=Param['xlim'][0], xmax=Param['xlim'][1])
     if Param['ylim'] is not None:
         ax[0].set_ylim(ymin=Param['ylim'][0], ymax=Param['ylim'][1])
-    ax[0].set_xlabel(xlabel)
-    ax[0].set_ylabel(ylabel)
+    ax[0].set_xlabel(xlabel, fontsize=fontsize)
+    ax[0].set_ylabel(ylabel, fontsize=fontsize)
     ax[0].legend(loc='upper right')
     ax[0].grid(grid)
     param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(['n', 'p'], best_fit_param)])
-    ax[0].set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str))
+    ax[0].set_title('%s\n%s\n%s' %(Param['title'], best_fit_name, param_str), fontsize=fontsize)
     ax[0].legend(loc='upper right')
+    ax[0].tick_params(axis='both', which='major', labelsize=fontsize)
     ax[0].grid(grid)
 
     # Second image
-    ax[1].set_xlabel('n')
-    ax[1].set_ylabel(self.stats)
+    ax[1].set_xlabel('n', fontsize=fontsize)
+    ax[1].set_ylabel(self.stats, fontsize=fontsize)
     plotfunc = ax[1].semilogy if self.figdata['scores'].max()>20 * self.figdata['scores'].min()>0 else ax[1].plot
     plotfunc(self.figdata['nvals'], self.figdata['scores'], 'k-', label=('%s over n scan' %self.stats))
     ax[1].vlines(n_fit, 0, self.figdata['scores'].max(), color=cii_properties_custom['color'], linestyles='dashed')
     ax[1].hlines(model['score'], self.figdata['nvals'].min(), self.figdata['nvals'].max(), color=cii_properties_custom['color'], linestyles='dashed', label="Best %s: %.3g" %(self.stats, model['score']))
     ax[1].legend(loc='upper right')
+    ax[1].tick_params(axis='both', which='major', labelsize=fontsize)
     ax[1].grid(grid)
     fig.show()
 
