@@ -1539,12 +1539,43 @@ class distfit():
         if update_model and (n_boots is not None) and (n_boots>=10):
             logger.info('Updating model to: [%s]' %(model['name'].title()))
             # Determine confidence intervals on the best fitting distribution
-            self.model = _compute_cii(self, model)
+            self.model = compute_cii(self, model)
             self.summary = df_summary
         # Return
         return df_summary
 
+    def import_example(self, data='gas_spot_price'):
+        """Import example dataset from github source.
 
+        Description
+        -----------
+        Imports data directly from github source.
+
+        Parameters
+        ----------
+        data : str
+            * 'gas_spot_price'
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame that conains the data.
+
+        """
+        df = None
+        logger.info('Downloading and processing [%s] from github source.' %(data))
+
+        if data=='gas_spot_price':
+            df = pd.read_csv(r'https://erdogant.github.io/datasets/Henry_Hub_Natural_Gas_Spot_Price.zip')
+            df['Day'] = pd.to_datetime(df['Day'])
+            df.dropna(inplace=True)
+            df = df.rename(columns={'Day': 'date', 'Henry Hub Natural Gas Spot Price Dollars per Million Btu': 'price'})
+            # Set the date column as the index
+            df.set_index('date', inplace=True)
+        else:
+            logger.error('[%s] is not a valid data set that can be returned.' %(data))
+
+        return df
 
 
 # %% Bootstrapping
