@@ -813,6 +813,8 @@ class distfit():
             Show the top number of results. The default is 1.
         title : String, optional (default: '')
             Title of the plot.
+        fontsize : int, (default: 18)
+            Fontsize for the axis and ticks.
         figsize : tuple, optional (default: (10,8))
             The figure size.
         xlim : Float, optional (default: None)
@@ -885,16 +887,145 @@ class distfit():
                       )
 
         # Plot again to get the points at top.
-        ax.grid(grid)
-        ax.set_title(self._make_title(title))
+        ax.set_title(self._make_title(title), fontsize=fontsize)
+        ax.tick_params(axis='both', which='major', labelsize=fontsize)
+        ax.set_xlabel('Theoretical Quantiles', fontsize=fontsize)
+        ax.set_ylabel('Sample Quantiles', fontsize=fontsize)
         ax.legend(loc='upper left')
+        ax.grid(grid)
+        return fig, ax
+
+    # Data plot
+    def lineplot(self,
+                 X,
+                 labels=None,
+                 xlabel='x-axes',
+                 ylabel='y-axes',
+                 title='',
+                 fontsize=18,
+                 figsize=(25, 12),
+                 xlim=None,
+                 ylim=None,
+                 fig=None,
+                 ax=None,
+                 grid=False,
+                 cii_properties={'alpha': 0.7, 'linewidth': 1},
+                 verbose=None):
+        """Plot data and CII and/or predictions.
+
+        Parameters
+        ----------
+        X : array-like
+            The Null distribution or background data is build from X.
+        labels : array-like
+            Labels for the x-axes. Should be the same size as X.
+        xlabel : string (default: 'Values')
+            Label of the x-axis.
+        ylabel : string (default: 'Frequencies')
+            Label of the y-axis.
+        title : String, optional (default: '')
+            Title of the plot.
+        fontsize : int, (default: 18)
+            Fontsize for the axis and ticks.
+        figsize : tuple, optional (default: (10,8))
+            The figure size.
+        xlim : Float, optional (default: None)
+            Limit figure in x-axis.
+        ylim : Float, optional (default: None)
+            Limit figure in y-axis.
+        fig : Figure, optional (default: None)
+            Matplotlib figure (Note - ignored when method is `discrete`)
+        ax : AxesSubplot, optional (default: None)
+            Matplotlib Axes object. If given, this subplot is used to plot in instead of a new figure being created.
+        grid : Bool, optional (default: True)
+            Show the grid on the figure.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
+
+        Returns
+        -------
+        tuple (fig, ax)
+
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 1000)
+        >>>
+        >>> # Initialize
+        >>> dfit = distfit()
+        >>>
+        >>> # Fit
+        >>> dfit.fit_transform(X)
+        >>>
+        >>> # Make line plot
+        >>> dfit.lineplot(X)
+        >>>
+        >>> # Make line plot
+        >>> dfit.predict([0, 1, 2, 3, 4, 5])
+        >>> dfit.lineplot(X)
+
+        """
+        cii_properties = _get_properties(None, None, None, cii_properties)['cii']
+
+        if isinstance(X, pd.DataFrame):
+            logger.info('Dataframe detected. Labels are derived from the index and the data is flattened.')
+            labels = X.index.values
+            X = X.values.ravel()
+
+        # Make data input checks
+        if (labels is not None) and len(X)!=len(labels): raise Exception('Labels should be of the same size as X')
+        if labels is None: labels = range(0, len(X))
+        if ax is None: fig, ax = plt.subplots(figsize=figsize)
+        ax.plot(labels, X, color='black')
+
+        if hasattr(self, 'model'):
+            CII_min_alpha = self.model['CII_min_alpha']
+            CII_max_alpha = self.model['CII_max_alpha']
+
+            # Plot prediction results
+            if hasattr(self, 'results'):
+                Iloc = self.results['y_proba']<=self.alpha
+                minth = self.results['y'][np.logical_and(self.results['y_pred']=='down', Iloc)]
+                maxth = self.results['y'][np.logical_and(self.results['y_pred']=='up', Iloc)]
+
+                # Mark significant regions.
+                if len(maxth)>0:
+                    ax.fill_between(labels, 0, 1, where=X >= maxth.min(), color='green', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Up')
+                if len(minth)>0:
+                    ax.fill_between(labels, 0, 1, where=X <= minth.max(), color='#880808', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Down')
+
+            # Plot CII lines
+            ax.axhline(CII_min_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII uperbound (alpha=' + str(self.alpha) + ')')
+            ax.axhline(CII_max_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII lowerbound (alpha=' + str(self.alpha) + ')')
+
+            # Make title
+            title = self._make_title(title)
+
+        # Set figure properties
+        ax.set_title(title, fontsize=fontsize)
+        ax.tick_params(axis='both', which='major', labelsize=fontsize)
+        ax.set_xlabel(xlabel, fontsize=fontsize)
+        ax.set_ylabel(ylabel, fontsize=fontsize)
+        ax.grid(grid)
+        ax.legend(loc='upper left')
+
+        # Return
         return fig, ax
 
     def _make_title(self, title=''):
-        shapes = eval('st.'+self.model['name']).shapes
+        shapes = eval('st.' + self.model['name']).shapes
         param_names = (shapes + ', loc, scale').split(', ') if shapes else ['loc', 'scale']
         param_str = ', '.join(['{}={:g}'.format(k, v) for k, v in zip(param_names, self.model['params'])])
-        title = '%s\n%s\n%s' %(title, self.stats, self.model['name'] + '(' + param_str + ')')
+        # title = '%s\n%s\n%s' %(title, self.stats, self.model['name'] + '(' + param_str + ')')
+        title = '%s\n%s' %(title, self.model['name'] + '(' + param_str + ')')
         return title
 
     # Plot CDF
