@@ -246,7 +246,7 @@ class distfit():
         elif self.method=='percentile':
             pass
         else:
-            raise Exception('[distfit] Error: method parameter can only be "parametric", "discrete", "quantile" or "percentile".')
+            raise Exception('[distfit]> Error: method parameter can only be "parametric", "discrete", "quantile" or "percentile".')
 
     # Transform
     def transform(self, X, verbose=None):
