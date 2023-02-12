@@ -183,6 +183,7 @@ class distfit():
                  cmap: str = 'Set1',
                  random_state: int = None,
                  verbose: [str, int] = 'info',
+                 multtest=None,
                  ):
         """Initialize distfit with user-defined parameters."""
         if (alpha is None): alpha=1
@@ -205,6 +206,7 @@ class distfit():
         self.verbose = verbose
         # Set the logger
         set_logger(verbose=verbose)
+        if multtest is not None: logger.warning('multtest will be removed from initialization in a future release. Please set this parameter when using the predict function. Example: dfit.predict(multtest="holm")')
 
     # Fit
     def fit(self, verbose=None):

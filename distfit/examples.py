@@ -9,7 +9,7 @@ import distfit
 # %% lineplot
 from distfit import distfit
 X = np.random.normal(163, 10, 1000)
-dfit = distfit()
+dfit = distfit(multtest='test')
 dfit.fit_transform(X, n_boots=10)
 dfit.plot_summary()
 dfit.plot_summary(ylim=[0, 0.0002])
