@@ -31,7 +31,7 @@ class Test_DISTFIT(unittest.TestCase):
         # Fit model on input data X.
         dfit.fit_transform(X)
         # Print the bet model results.
-        dfit.bootstrap(X, n_boots=100)
+        dfit.bootstrap(X, n_boots=10)
         assert dfit.model
         assert np.all(np.isin(['name', 'score', 'loc', 'scale'], dfit.summary.columns))
         dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']]
@@ -90,12 +90,12 @@ class Test_DISTFIT(unittest.TestCase):
         # Create random normal data with mean=2 and std=4
         X = np.random.normal(2, 4, 10000)
         # Initialize using the parametric approach (default).
-        dfit = distfit(multtest='fdr_bh', alpha=0.05)
+        dfit = distfit(alpha=0.05)
         # Fit model on input data X.
         dfit.fit_transform(X)
         # With the fitted model we can make predictions on new unseen data.
         y = [-8, -2, 1, 3, 5, 15]
-        dfit.predict(y, todf=True)
+        dfit.predict(y, multtest='holm', todf=True);
         # Print results
         print(dfit.results['df'])
         # Plot the results
