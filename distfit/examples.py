@@ -6,6 +6,30 @@ import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
 
+# %% lineplot
+from distfit import distfit
+X = np.random.normal(163, 10, 1000)
+dfit = distfit()
+dfit.fit_transform(X, n_boots=10)
+dfit.plot_summary()
+dfit.plot_summary(ylim=[0, 0.0002])
+
+dfit.lineplot(X)
+
+y = [135, 145, 150, 160, 180, 185, 200]
+results = dfit.predict(y)
+dfit.lineplot(X)
+
+# %% Import example
+
+from distfit import distfit
+dfit = distfit()
+df = dfit.import_example(data='gas_spot_price')
+dfit.lineplot(df, xlabel='Years', ylabel='Natural gas spot price', grid=True)
+plt.show()
+
+
+
 # %% CDF plot
 from distfit import distfit
 
@@ -24,12 +48,11 @@ dfit.plot_summary()
 
 
 out = dfit.bootstrap(X, n_boots=10, n_top=None)
-
 dfit.plot_summary()
 
 fig, ax = dfit.plot(chart='PDF', n_top=5, cmap='Set2');
 dfit.plot(chart='CDF', n_top=10, cmap='Set2', ax=ax);
-# dfit.plot_cdf()
+dfit.plot_cdf()
 
 
 # %%
@@ -54,16 +77,6 @@ dfit.plot(chart='PDF', pdf_properties=None)
 dfit.plot(chart='CDF', n_top=5)
 dfit.plot(chart='CDF', pdf_properties=None, n_top=2)
 dfit.plot_cdf()
-
-# %%
-from distfit import distfit
-
-dfit = distfit(method='parametric', todf=True)
-dfit.load(r'c:\temp\model.pkl')
-dfit.plot(chart='PDF')
-
-dfit.plot(chart='PDF', emp_properties=None, pdf_properties=None, bar_properties=None)
-dfit.qqplot(X)
 
 # %% QQ plot
 from distfit import distfit
@@ -135,7 +148,7 @@ results = dfit.fit_transform(X)
 y = [0, 1, 10, 11, 12]
 
 results = dfit.predict(y)
-dfit.plot()
+dfit.plot(fontsize=14)
 
 # %%
 from distfit import distfit
@@ -297,7 +310,7 @@ dfit = distfit(stats='ks', distr=['k','t','expon', 'gamma', 'lognorm'], bins=50)
 results = dfit.fit_transform(X, verbose=0)
 
 dfit.plot()
-dfit.plot_summary()
+dfit.plot_summary(fontsize=10)
 
 # %% Multiple distributions as input
 import scipy.stats as st
