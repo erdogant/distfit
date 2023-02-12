@@ -1231,18 +1231,22 @@ class distfit():
             # Create plot
             if ax is None:
                 fig, ax = plt.subplots(figsize=figsize)
-
-            # Create left axes
-            score = scale_data(df['score'])
-            ax.plot(score, color=color_axes_left, linewidth=1, linestyle='--')
-            ax.scatter(xcoord, score, color=color_axes_left)
-
-            # Round to a specific number of decimal places
-            yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
-            yticks = [0] + yticks
-            yticks = np.round(yticks, decimals=4)
-            # ax.set_yticks(yticks)
-            ax.set_yticklabels(yticks, fontsize=fontsize)
+            
+            if ylim[1] is None:
+                if ylim[0] is None: ylim[0] = -0.1
+                # Create left axes
+                score = scale_data(df['score'])
+                ax.plot(score, color=color_axes_left, linewidth=1, linestyle='--')
+                ax.scatter(xcoord, score, color=color_axes_left)
+    
+                # Round to a specific number of decimal places
+                yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
+                yticks = [0] + yticks
+                yticks = np.round(yticks, decimals=4)
+                ax.set_yticklabels(yticks, fontsize=fontsize)
+            else:
+                ax.scatter(xcoord, df['score'], color=color_axes_left)
+                ax.plot(df['score'], color=color_axes_left, linewidth=1, linestyle='--')
 
             # You can specify a rotation for the tick labels in degrees or with keywords.
             ax.set_xticks(xcoord, df['name'].values, rotation=rotation)
@@ -1255,7 +1259,7 @@ class distfit():
             ax.set_ylabel(('%s (goodness of fit test)' %(self.stats)), fontsize=fontsize)
             ax.set_title('%s' %(self.model['name'].title()), fontsize=fontsize)
             ax.tick_params(axis='both', which='major', labelsize=fontsize)
-            ax.set_ylim(ymin=-0.1, ymax=ylim[1])
+            ax.set_ylim(ymin=ylim[0], ymax=ylim[1])
 
             # Create right axes
             if df['bootstrap_pass'][0] is not None:
