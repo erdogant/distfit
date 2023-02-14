@@ -1178,6 +1178,7 @@ class distfit():
                      n_top=None,
                      color_axes_left='#0000FF',
                      color_axes_right='#FC6600',
+                     title=None,
                      rotation=45,
                      fontsize=16,
                      grid=True,
@@ -1198,6 +1199,8 @@ class distfit():
             Hex color of goodness of fit axes (left axes).
         color_axes_right : str, (default: '#FC6600')
             Hex color of boostrap axes (right axes).
+        title : String, optional (default: '')
+            Title of the plot.
         grid : Bool, optional (default: True)
             Show the grid on the figure.
         fig : Figure, optional (default: None)
@@ -1233,14 +1236,14 @@ class distfit():
             # Create plot
             if ax is None:
                 fig, ax = plt.subplots(figsize=figsize)
-            
+
             if ylim[1] is None:
                 if ylim[0] is None: ylim[0] = -0.1
                 # Create left axes
                 score = scale_data(df['score'])
                 ax.plot(score, color=color_axes_left, linewidth=1, linestyle='--')
                 ax.scatter(xcoord, score, color=color_axes_left)
-    
+
                 # Round to a specific number of decimal places
                 yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
                 yticks = [0] + yticks
@@ -1254,12 +1257,13 @@ class distfit():
             ax.set_xticks(xcoord, df['name'].values, rotation=rotation)
 
             # Pad margins so that markers don't get clipped by the axes
+            if title is None: title='%s (best fit)' %(self.model['name'].title())
             ax.margins(0.2)
             plt.subplots_adjust(bottom=0.15)
             ax.grid(grid)
             ax.set_xlabel('Probability Density Function (PDF)', fontsize=fontsize)
             ax.set_ylabel(('%s (goodness of fit test)' %(self.stats)), fontsize=fontsize)
-            ax.set_title('%s' %(self.model['name'].title()), fontsize=fontsize)
+            ax.set_title(title, fontsize=fontsize)
             ax.tick_params(axis='both', which='major', labelsize=fontsize)
             ax.set_ylim(ymin=ylim[0], ymax=ylim[1])
 
