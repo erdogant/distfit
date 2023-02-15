@@ -17,7 +17,7 @@ dfit.plot_summary(ylim=[0, 0.0002])
 dfit.lineplot(X)
 
 y = [135, 145, 150, 160, 180, 185, 200]
-results = dfit.predict(y)
+results = dfit.predict(y, multtest='holm')
 dfit.lineplot(X)
 
 # %% Import example
