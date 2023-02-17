@@ -2683,5 +2683,5 @@ def disable_tqdm():
 def check_version():
     import matplotlib
     if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
-        raise ImportError('This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
+        logger.error('This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
 
