@@ -13,6 +13,7 @@ import time
 import pypickle
 import numpy as np
 import pandas as pd
+from packaging import version
 
 from scipy.optimize import curve_fit
 import statsmodels.api as sm
@@ -207,6 +208,8 @@ class distfit():
         # Set the logger
         set_logger(verbose=verbose)
         if multtest is not None: logger.warning('multtest will be removed from initialization in a future release. Please set this parameter when using the predict function. Example: dfit.predict(multtest="holm")')
+        # Check versions
+        check_version()
 
     # Fit
     def fit(self, verbose=None):
@@ -2676,3 +2679,9 @@ def set_logger(verbose: [str, int] = 'info'):
 def disable_tqdm():
     """Set the logger for verbosity messages."""
     return (True if (logger.getEffectiveLevel()>=30) else False)
+
+def check_version():
+    import matplotlib
+    if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
+        raise ImportError('This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
+
