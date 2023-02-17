@@ -6,6 +6,32 @@ import distfit
 # print(distfit.__version__)
 # print(dir(distfit))
 
+from distfit import distfit
+X = np.random.normal(163, 10, 1000)
+dfit = distfit(multtest='test')
+dfit.fit_transform(X, n_boots=0)
+dfit.plot_summary()
+
+
+# %%
+
+from distfit import distfit
+X = np.random.normal(6, 1, 500)
+dfit = distfit()
+dfit.fit_transform(X)
+
+X2 = np.random.normal(6, 0.9, 500)
+X2 = np.hstack([[7]*50, X2])
+dfit2 = distfit()
+dfit2.fit_transform(X2)
+
+fig, ax = plt.subplots(1,2, figsize=(25,10))
+dfit.plot(title='without swear words', ax=ax[0])
+dfit2.plot(title='with swear words', ax=ax[1])
+
+import scipy.stats as st
+st.kstest(X, X2)
+
 # %% lineplot
 from distfit import distfit
 X = np.random.normal(163, 10, 1000)
