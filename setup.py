@@ -1,3 +1,4 @@
+from packaging import version
 import setuptools
 import re
 
@@ -9,11 +10,16 @@ if getversion:
 else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
+import matplotlib
+if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
+    raise ImportError(
+        'This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
+
 # Setup ------------
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-     install_requires=['matplotlib>=3.6.3','numpy','pandas','tqdm','statsmodels','scipy','pypickle', 'colourmap>=1.1.10'],
+     install_requires=['packaging', 'matplotlib>=3.5.2','numpy','pandas','tqdm','statsmodels','scipy','pypickle', 'colourmap>=1.1.10'],
      python_requires='>=3',
      name='distfit',
      version=new_version,
