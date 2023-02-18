@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Initialization &mdash; distfit 1.6.0 documentation</title>
+  <title>Initialization &mdash; distfit distfit documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -31,6 +31,9 @@
         <div class="wy-side-nav-search" >
             <a href="index.html" class="icon icon-home"> distfit
           </a>
+              <div class="version">
+                1.6.6
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -142,7 +145,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-distfit.distfit.distfit">
+  <hr>
+<center>
+        <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+        <div data-ea-publisher="erdogantgithubio" data-ea-type="text"></div>
+        <!-- <div data-ea-publisher="erdogantgithubio" data-ea-type="text" data-ea-style="fixedfooter"></div> -->
+</center>
+<hr><section id="module-distfit.distfit.distfit">
 <span id="initialization"></span><h1>Initialization<a class="headerlink" href="#module-distfit.distfit.distfit" title="Permalink to this heading"></a></h1>
 <p>Probability density function.</p>
 <p>distfit is a python package for probability density fitting of univariate distributions for random variables.
@@ -246,27 +255,6 @@ In case using method=”discrete”, then binomial is used. See documentation fo
 <dt class="field-even">type n_boots</dt>
 <dd class="field-even"><p>int, default: None</p>
 </dd>
-<dt class="field-odd">param multtest</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Multiple test correction.</dt><dd><ul class="simple">
-<li><p>None</p></li>
-<li><p>‘bonferroni’</p></li>
-<li><p>‘sidak’</p></li>
-<li><p>‘holm-sidak’</p></li>
-<li><p>‘holm’</p></li>
-<li><p>‘simes-hochberg’</p></li>
-<li><p>‘hommel’</p></li>
-<li><p>‘fdr_bh’</p></li>
-<li><p>‘fdr_by’</p></li>
-<li><p>‘fdr_tsbh’</p></li>
-<li><p>‘fdr_tsbky’</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type multtest</dt>
-<dd class="field-even"><p>str, default: ‘fdr_bh’</p>
-</dd>
 <dt class="field-odd">param smooth</dt>
 <dd class="field-odd"><p>Smoothing the histogram can help to get a better fit when there are only few samples available.
 The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.</p>
@@ -327,7 +315,6 @@ The smooth parameter represnts a window that is used to create the convolution a
 <li><p><strong>bins</strong> (<em>int</em>) – Number of bins specified to create histogram.</p></li>
 <li><p><strong>bound</strong> (<em>str</em>) – Specified testing directionality of the distribution.</p></li>
 <li><p><strong>distr</strong> (<em>str or list of strings</em>) – Specified distribution or a set of distributions.</p></li>
-<li><p><strong>multtest</strong> (<em>str</em>) – Specified multiple test correction method.</p></li>
 <li><p><strong>todf</strong> (<em>Bool (default: False)</em>) – Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!</p></li>
 </ul>
 </dd>
@@ -455,11 +442,26 @@ theoretical distribution in case method type is <code class="docutils literal no
 <dt class="field-even">type y</dt>
 <dd class="field-even"><p>array-like</p>
 </dd>
-<dt class="field-odd">param model</dt>
-<dd class="field-odd"><p>The model created by the .fit() function.</p>
+<dt class="field-odd">param multtest</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Multiple test correction.</dt><dd><ul class="simple">
+<li><p>None</p></li>
+<li><p>‘bonferroni’</p></li>
+<li><p>‘sidak’</p></li>
+<li><p>‘holm-sidak’</p></li>
+<li><p>‘holm’</p></li>
+<li><p>‘simes-hochberg’</p></li>
+<li><p>‘hommel’</p></li>
+<li><p>‘fdr_bh’</p></li>
+<li><p>‘fdr_by’</p></li>
+<li><p>‘fdr_tsbh’</p></li>
+<li><p>‘fdr_tsbky’</p></li>
+</ul>
 </dd>
-<dt class="field-even">type model</dt>
-<dd class="field-even"><p>dict, default : None</p>
+</dl>
+</dd>
+<dt class="field-even">type multtest</dt>
+<dd class="field-even"><p>str, default: ‘fdr_bh’</p>
 </dd>
 <dt class="field-odd">param alpha</dt>
 <dd class="field-odd"><p>Significance alpha is inherited from self if None.</p>
@@ -516,6 +518,7 @@ theoretical distribution in case method type is <code class="docutils literal no
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot results with CII and predictions.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
 </section>
@@ -855,6 +858,12 @@ indicating that the model is not representative of the underlying distribution.<
 <dt class="field-even">type cii_properties</dt>
 <dd class="field-even"><p>dict</p>
 </dd>
+<dt class="field-odd">param fontsize</dt>
+<dd class="field-odd"><p>Fontsize for the axis and ticks.</p>
+</dd>
+<dt class="field-even">type fontsize</dt>
+<dd class="field-even"><p>int, (default: 18)</p>
+</dd>
 <dt class="field-odd">param xlabel</dt>
 <dd class="field-odd"><p>Label for the x-axis.</p>
 </dd>
@@ -932,6 +941,7 @@ However, when cmap is set, the specified colormap is used.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create dataset</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
@@ -964,8 +974,14 @@ However, when cmap is set, the specified colormap is used.</p>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.qqplot">
 <span id="qq-plot"></span><h1>QQ-plot<a class="headerlink" href="#module-distfit.distfit.distfit.qqplot" title="Permalink to this heading"></a></h1>
-<p>Plot CDF results.</p>
+<p>Plot QQplot results.</p>
 <dl class="field-list simple">
+<dt class="field-odd">param X</dt>
+<dd class="field-odd"><p>The Null distribution or background data is build from X.</p>
+</dd>
+<dt class="field-even">type X</dt>
+<dd class="field-even"><p>array-like</p>
+</dd>
 <dt class="field-odd">param line</dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Options for the reference line to which the data is compared.</dt><dd><ul class="simple">
@@ -992,6 +1008,12 @@ However, when cmap is set, the specified colormap is used.</p>
 </dd>
 <dt class="field-even">type title</dt>
 <dd class="field-even"><p>String, optional (default: ‘’)</p>
+</dd>
+<dt class="field-odd">param fontsize</dt>
+<dd class="field-odd"><p>Fontsize for the axis and ticks.</p>
+</dd>
+<dt class="field-even">type fontsize</dt>
+<dd class="field-even"><p>int, (default: 18)</p>
 </dd>
 <dt class="field-odd">param figsize</dt>
 <dd class="field-odd"><p>The figure size.</p>
@@ -1094,17 +1116,41 @@ However, when cmap is set, the specified colormap is used.</p>
 <dt class="field-even">type figsize</dt>
 <dd class="field-even"><p>tuple, optional (default: (10,8))</p>
 </dd>
-<dt class="field-odd">param ylim</dt>
-<dd class="field-odd"><p>Limit figure in y-axis.</p>
+<dt class="field-odd">param color_axes_left</dt>
+<dd class="field-odd"><p>Hex color of goodness of fit axes (left axes).</p>
 </dd>
-<dt class="field-even">type ylim</dt>
-<dd class="field-even"><p>Float, optional (default: None)</p>
+<dt class="field-even">type color_axes_left</dt>
+<dd class="field-even"><p>str, (default: ‘#0000FF’)</p>
+</dd>
+<dt class="field-odd">param color_axes_right</dt>
+<dd class="field-odd"><p>Hex color of boostrap axes (right axes).</p>
+</dd>
+<dt class="field-even">type color_axes_right</dt>
+<dd class="field-even"><p>str, (default: ‘#FC6600’)</p>
+</dd>
+<dt class="field-odd">param title</dt>
+<dd class="field-odd"><p>Title of the plot.</p>
+</dd>
+<dt class="field-even">type title</dt>
+<dd class="field-even"><p>String, optional (default: ‘’)</p>
+</dd>
+<dt class="field-odd">param grid</dt>
+<dd class="field-odd"><p>Show the grid on the figure.</p>
+</dd>
+<dt class="field-even">type grid</dt>
+<dd class="field-even"><p>Bool, optional (default: True)</p>
 </dd>
 <dt class="field-odd">param fig</dt>
 <dd class="field-odd"><p>Matplotlib figure</p>
 </dd>
 <dt class="field-even">type fig</dt>
 <dd class="field-even"><p>Figure, optional (default: None)</p>
+</dd>
+<dt class="field-odd">param ylim</dt>
+<dd class="field-odd"><p>Limit figure in y-axis.</p>
+</dd>
+<dt class="field-even">type ylim</dt>
+<dd class="field-even"><p>Float, optional (default: [None, None])</p>
 </dd>
 <dt class="field-odd">param ax</dt>
 <dd class="field-odd"><p>Matplotlib Axes object</p>
@@ -1178,7 +1224,10 @@ However, when cmap is set, the specified colormap is used.</p>
 <hr class="docutils" />
 <hr>
 <center>
-        <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
+        <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+        <!-- Show an image ad -->
+        <!-- <div data-ea-publisher="erdogantgithubio" data-ea-type="image"></div> -->
+        <div data-ea-publisher="erdogantgithubio" data-ea-type="image" data-ea-style="stickybox"></div>
 </center>
 <hr></section>
 

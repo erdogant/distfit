@@ -1,3 +1,11 @@
+distfit's documentation!
+========================
+
+|python| |pypi| |docs| |stars| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |medium| |colab| |DOI| |repo-size| |donate|
+
+.. include:: add_top.add
+
+
 .. |logo| image:: ../figs/logo.png
 
 .. table::
@@ -9,11 +17,6 @@
 
 -----------------------------------
 
-|python| |pypi| |docs| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |colab| |DOI| |donate|
-
-
-.. note::
-	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
 
 
 ``distfit`` is a python package for probability density fitting of univariate distributions for random variables.
@@ -42,11 +45,22 @@ With the random variable as an input, distfit can find the best fit for parametr
    +----------+
 
 
-.. tip::
-	**distfit** vs. **fitdist**
-	The ``fitdist`` library is directly build on the ``distfit`` library so there are no changes between the two except for naming. If you desire to use the ``fitdist`` library thats great! Just change all the examples in this documentation into ``fitdist``. Thats it. Have fun!
+.. note::
+	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
 
 
+
+-----------------------------------
+
+.. note::
+	**Your ❤️ is important to keep maintaining this package.** You can `support <https://erdogant.github.io/distfit/pages/html/Documentation.html>`_ in various ways, have a look at the `sponser page <https://erdogant.github.io/distfit/pages/html/Documentation.html>`_.
+	Report bugs, issues and feature extensions at `github <https://github.com/erdogant/distfit/>`_ page.
+
+	.. code-block:: console
+
+	   pip install distfit
+
+-----------------------------------
 
 
 Contents
@@ -130,15 +144,18 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. raw:: html
 
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
+.. |medium| image:: https://img.shields.io/badge/Medium-Blog-green.svg
+    :alt: Medium Blog
+    :target: https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog
 
+.. |repo-size| image:: https://img.shields.io/github/repo-size/erdogant/distfit
+    :alt: repo-size
+    :target: https://img.shields.io/github/repo-size/erdogant/distfit
 
+.. |stars| image:: https://img.shields.io/github/stars/erdogant/distfit
+    :alt: Stars
+    :target: https://img.shields.io/github/stars/erdogant/distfit
 
 .. |python| image:: https://img.shields.io/pypi/pyversions/distfit.svg
     :alt: |Python
@@ -192,3 +209,5 @@ Indices and tables
     :alt: Cite
     :target: https://zenodo.org/badge/latestdoi/231843440
 
+
+.. include:: add_bottom.add

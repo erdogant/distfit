@@ -1,11 +1,4 @@
 """distfit is a python package for probability density fitting."""
-# --------------------------------------------------
-# Name        : distfit.py
-# Author      : E.Taskesen
-# Contact     : erdogant@gmail.com
-# github      : https://github.com/erdogant/distfit
-# Licence     : See licences
-# --------------------------------------------------
 
 
 # %% Libraries
@@ -1558,8 +1551,6 @@ class distfit():
     def import_example(self, data='gas_spot_price'):
         """Import example dataset from github source.
 
-        Description
-        -----------
         Imports data directly from github source.
 
         Parameters
@@ -1673,7 +1664,7 @@ def set_colors(df, cmap='Set1'):
     Parameters
     ----------
     df : DataFrame
-        DESCRIPTION.
+        DataFrame.
     cmap : str, default: 'Set1'
         Set the colormap.
 

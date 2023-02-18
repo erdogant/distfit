@@ -1,3 +1,5 @@
+.. include:: add_top.add
+
 Discrete
 ##########
 
@@ -145,11 +147,6 @@ Note that *P* stands for the RAW P-values and *y_proba* are the corrected P-valu
     * https://stackoverflow.com/a/62365555/6228891
 
 
-.. raw:: html
 
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
 
+.. include:: add_bottom.add

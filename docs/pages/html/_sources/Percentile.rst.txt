@@ -1,3 +1,5 @@
+.. include:: add_top.add
+
 Percentiles
 '''''''''''
 
@@ -81,11 +83,7 @@ The method **percentile** simply computes the confidence intervals based on the 
 +-----+-----------+----------+-----+------------+
 
 
-.. raw:: html
 
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
 
+
+.. include:: add_bottom.add

@@ -1,6 +1,5 @@
-.. _code_directive:
+.. include:: add_top.add
 
--------------------------------------
 
 **Saving** and **loading** models can be desired to start from a previous learning point.
 In order to accomplish this, two functions are implemented: function :func:`distfit.save` and function :func:`distfit.load`
@@ -42,10 +41,5 @@ Loading a learned model can be done using the function :func:`dfit.load`:
     dfit.load('my_first_model.pkl')
 
 
-.. raw:: html
 
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
+.. include:: add_bottom.add

@@ -1,3 +1,5 @@
+.. include:: add_top.add
+
 Basic plot
 ##################################################
 
@@ -171,11 +173,7 @@ QQ plot
    | |figP5a| | |figP5b| |
    +----------+----------+
 
-.. raw:: html
 
-	<hr>
-	<center>
-		<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEADP27U&placement=erdogantgithubio" id="_carbonads_js"></script>
-	</center>
-	<hr>
 
+
+.. include:: add_bottom.add
