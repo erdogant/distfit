@@ -15,11 +15,11 @@
 [![Issues](https://img.shields.io/github/issues/erdogant/distfit.svg)](https://github.com/erdogant/distfit/issues)
 [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![DOI](https://zenodo.org/badge/231843440.svg)](https://zenodo.org/badge/latestdoi/231843440)
-<!--- [![Colab](https://colab.research.google.com/assets/colab-badge.svg?logo=github%20sponsors)](https://erdogant.github.io/distfit/pages/html/Documentation.html#colab-notebook) -->
 [![Medium](https://img.shields.io/badge/Medium-Blog-green)](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
 [![Donate](https://img.shields.io/badge/Support%20this%20project-grey.svg?logo=github%20sponsors)](https://erdogant.github.io/distfit/pages/html/Documentation.html#)
 <!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
+<!--- [![Colab](https://colab.research.google.com/assets/colab-badge.svg?logo=github%20sponsors)](https://erdogant.github.io/distfit/pages/html/Documentation.html#colab-notebook) -->
 
 # 
 ### [Read the Medium Blog for more information](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
