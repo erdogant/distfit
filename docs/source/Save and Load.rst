@@ -1,5 +1,3 @@
-.. include:: add_top.add
-
 
 **Saving** and **loading** models can be desired to start from a previous learning point.
 In order to accomplish this, two functions are implemented: function :func:`distfit.save` and function :func:`distfit.load`

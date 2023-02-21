@@ -3,7 +3,9 @@ distfit's documentation!
 
 |python| |pypi| |docs| |stars| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |medium| |colab| |DOI| |repo-size| |donate|
 
-.. include:: add_top.add
+
+.. note::
+	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
 
 
 .. |logo| image:: ../figs/logo.png
@@ -43,11 +45,6 @@ With the random variable as an input, distfit can find the best fit for parametr
    +----------+
    | |fig1|   |
    +----------+
-
-
-.. note::
-	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
-
 
 
 -----------------------------------

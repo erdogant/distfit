@@ -1,5 +1,3 @@
-.. include:: add_top.add
-
 Quick start to find best fitting distribution
 ##################################################
 

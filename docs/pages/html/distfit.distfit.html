@@ -17,6 +17,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -115,7 +116,46 @@
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API References</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.BinomPMF"><code class="docutils literal notranslate"><span class="pre">BinomPMF</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.check_version"><code class="docutils literal notranslate"><span class="pre">check_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.compute_cii"><code class="docutils literal notranslate"><span class="pre">compute_cii()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.disable_tqdm"><code class="docutils literal notranslate"><span class="pre">disable_tqdm()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.distfit"><code class="docutils literal notranslate"><span class="pre">distfit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.bootstrap"><code class="docutils literal notranslate"><span class="pre">distfit.bootstrap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.density"><code class="docutils literal notranslate"><span class="pre">distfit.density()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.fit"><code class="docutils literal notranslate"><span class="pre">distfit.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.fit_transform"><code class="docutils literal notranslate"><span class="pre">distfit.fit_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.generate"><code class="docutils literal notranslate"><span class="pre">distfit.generate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.get_distributions"><code class="docutils literal notranslate"><span class="pre">distfit.get_distributions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.import_example"><code class="docutils literal notranslate"><span class="pre">distfit.import_example()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.lineplot"><code class="docutils literal notranslate"><span class="pre">distfit.lineplot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.load"><code class="docutils literal notranslate"><span class="pre">distfit.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.plot"><code class="docutils literal notranslate"><span class="pre">distfit.plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.plot_cdf"><code class="docutils literal notranslate"><span class="pre">distfit.plot_cdf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.plot_summary"><code class="docutils literal notranslate"><span class="pre">distfit.plot_summary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.predict"><code class="docutils literal notranslate"><span class="pre">distfit.predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.qqplot"><code class="docutils literal notranslate"><span class="pre">distfit.qqplot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.save"><code class="docutils literal notranslate"><span class="pre">distfit.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.transform"><code class="docutils literal notranslate"><span class="pre">distfit.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.fit_binom"><code class="docutils literal notranslate"><span class="pre">fit_binom()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.fit_transform_binom"><code class="docutils literal notranslate"><span class="pre">fit_transform_binom()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.k_distribution"><code class="docutils literal notranslate"><span class="pre">k_distribution</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.k_distribution.fit"><code class="docutils literal notranslate"><span class="pre">k_distribution.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.k_distribution.name"><code class="docutils literal notranslate"><span class="pre">k_distribution.name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.k_distribution.pdf"><code class="docutils literal notranslate"><span class="pre">k_distribution.pdf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.plot_binom"><code class="docutils literal notranslate"><span class="pre">plot_binom()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.scale_data"><code class="docutils literal notranslate"><span class="pre">scale_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.set_colors"><code class="docutils literal notranslate"><span class="pre">set_colors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.set_logger"><code class="docutils literal notranslate"><span class="pre">set_logger()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.smoothline"><code class="docutils literal notranslate"><span class="pre">smoothline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.transform_binom"><code class="docutils literal notranslate"><span class="pre">transform_binom()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -144,13 +184,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <hr>
-<center>
-        <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
-        <div data-ea-publisher="erdogantgithubio" data-ea-type="text"></div>
-        <!-- <div data-ea-publisher="erdogantgithubio" data-ea-type="text" data-ea-style="fixedfooter"></div> -->
-</center>
-<hr><section id="module-distfit.distfit">
+  <section id="module-distfit.distfit">
 <span id="api-references"></span><h1>API References<a class="headerlink" href="#module-distfit.distfit" title="Permalink to this heading"></a></h1>
 <p>distfit is a python package for probability density fitting.</p>
 <dl class="py class">
