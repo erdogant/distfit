@@ -31,7 +31,7 @@ logger.propagate = False
 
 
 # %% Class dist
-class distfit():
+class distfit:
     """Probability density function.
 
     distfit is a python package for probability density fitting of univariate distributions for random variables.
@@ -48,113 +48,6 @@ class distfit():
 
         * In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
           The best fit is then derived using the binomial distribution.
-
-    Parameters
-    ----------
-    method : str, default: 'parametric'
-        Specify the method type.
-            * 'parametric'
-            * 'quantile'
-            * 'percentile'
-            * 'discrete'
-    distr : str, default: 'popular'
-        The (set) of distribution to test. A set of distributions can be tested by using a "popular" list or by specifying the theoretical distribution:
-        In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
-            * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]
-            * 'full'
-            * 'norm', 't', 'k': Test for one specific distribution.
-            * ['norm', 't', 'k', ...]: Test for a list of distributions.
-    stats : str, default: 'RSS'
-        Specify the scoring statistics for the goodness of fit test.
-            * 'RSS'
-            * 'wasserstein'
-            * 'ks': Kolmogorov-Smirnov statistic
-            * 'energy'
-    bins : int, default: 'auto'
-        Bin size to determine the empirical historgram.
-            * 'auto': Determine the bin size automatically.
-            * 50: Set specific bin size
-    bound : str, default: 'both'
-        Set the directionality to test for significance.
-            * 'up', 'high', 'right': Upperbounds
-            * 'down', 'low' or 'left': lowerbounds
-    alpha : float, default: 0.05
-        Significance alpha.
-    n_boots : int, default: None
-        Number of bootstraps to validate the fit.
-            * None: No Bootstrap.
-            * 1000: Thousand bootstraps.
-    smooth : int, default: None
-        Smoothing the histogram can help to get a better fit when there are only few samples available.
-        The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.
-    n_perm : int, default: 10000
-        Number of permutations to model null-distribution in case of method is "quantile"
-    weighted : Bool, (default: True)
-        Only used in discrete fitting, method="discrete". In principle, the best fit will be obtained if you set weighted=True. However, when using stats="RSS", you can set weighted=False.
-    f : float, (default: 1.5)
-        Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
-    cmap : String, optional (default: 'Set1')
-        Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
-    random_state : int, optional
-        Random state.
-    verbose : [str, int], default is 'info' or 20
-        Set the verbose messages using string or integer values.
-            * 0, 60, None, 'silent', 'off', 'no']: No message.
-            * 10, 'debug': Messages from debug level and higher.
-            * 20, 'info': Messages from info level and higher.
-            * 30, 'warning': Messages from warning level and higher.
-            * 50, 'critical': Messages from critical level and higher.
-
-    Returns
-    -------
-    object.
-
-    method : str
-        Specified method for fitting and predicting.
-    alpha : float
-        Specified cut-off for P-value significance.
-    bins : int
-        Number of bins specified to create histogram.
-    bound : str
-        Specified testing directionality of the distribution.
-    distr : str or list of strings
-        Specified distribution or a set of distributions.
-    todf : Bool (default: False)
-        Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!
-
-    Examples
-    --------
-    >>> from distfit import distfit
-    >>> import numpy as np
-    >>>
-    >>> X = np.random.normal(0, 2, 1000)
-    >>> y = [-8,-6,0,1,2,3,4,5,6]
-    >>>
-    >>> dfit = distfit()
-    >>> results = dfit.fit_transform(X)
-    >>>
-    >>> # Plot summary
-    >>> dfit.plot_summary()
-    >>>
-    >>> # PDF plot
-    >>> dfit.plot()
-    >>>
-    >>> # Make prediction
-    >>> results_proba = dfit.predict(y)
-    >>>
-    >>> # Plot PDF
-    >>> fig, ax = dfit.plot(chart='PDF', n_top=1)
-    >>>
-    >>> # Add the CDF to the plot
-    >>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
-    >>>
-    >>> # QQ-plot for top 10 fitted distributions
-    >>> fig, ax = dfit.qqplot(X, n_top=10)
-    >>>
-
-    References
-    ----------
-    * Documentation: https://erdogant.github.io/distfit/pages/html/Parametric.html
 
     """
 
@@ -177,7 +70,116 @@ class distfit():
                  verbose: [str, int] = 'info',
                  multtest=None,
                  ):
-        """Initialize distfit with user-defined parameters."""
+        """Initialize distfit with user-defined parameters.
+
+        Parameters
+        ----------
+        method : str, default: 'parametric'
+            Specify the method type.
+                * 'parametric'
+                * 'quantile'
+                * 'percentile'
+                * 'discrete'
+        distr : str, default: 'popular'
+            The (set) of distribution to test. A set of distributions can be tested by using a "popular" list or by specifying the theoretical distribution:
+            In case using method="discrete", then binomial is used. See documentation for more information about 'popular' and 'full' (link reference below).
+                * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]
+                * 'full'
+                * 'norm', 't', 'k': Test for one specific distribution.
+                * ['norm', 't', 'k', ...]: Test for a list of distributions.
+        stats : str, default: 'RSS'
+            Specify the scoring statistics for the goodness of fit test.
+                * 'RSS'
+                * 'wasserstein'
+                * 'ks': Kolmogorov-Smirnov statistic
+                * 'energy'
+        bins : int, default: 'auto'
+            Bin size to determine the empirical historgram.
+                * 'auto': Determine the bin size automatically.
+                * 50: Set specific bin size
+        bound : str, default: 'both'
+            Set the directionality to test for significance.
+                * 'up', 'high', 'right': Upperbounds
+                * 'down', 'low' or 'left': lowerbounds
+        alpha : float, default: 0.05
+            Significance alpha.
+        n_boots : int, default: None
+            Number of bootstraps to validate the fit.
+                * None: No Bootstrap.
+                * 1000: Thousand bootstraps.
+        smooth : int, default: None
+            Smoothing the histogram can help to get a better fit when there are only few samples available.
+            The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.
+        n_perm : int, default: 10000
+            Number of permutations to model null-distribution in case of method is "quantile"
+        weighted : Bool, (default: True)
+            Only used in discrete fitting, method="discrete". In principle, the best fit will be obtained if you set weighted=True. However, when using stats="RSS", you can set weighted=False.
+        f : float, (default: 1.5)
+            Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.
+        cmap : String, optional (default: 'Set1')
+            Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
+        random_state : int, optional
+            Random state.
+        verbose : [str, int], default is 'info' or 20
+            Set the verbose messages using string or integer values.
+                * 0, 60, None, 'silent', 'off', 'no']: No message.
+                * 10, 'debug': Messages from debug level and higher.
+                * 20, 'info': Messages from info level and higher.
+                * 30, 'warning': Messages from warning level and higher.
+                * 50, 'critical': Messages from critical level and higher.
+
+        Returns
+        -------
+        object.
+
+        method : str
+            Specified method for fitting and predicting.
+        alpha : float
+            Specified cut-off for P-value significance.
+        bins : int
+            Number of bins specified to create histogram.
+        bound : str
+            Specified testing directionality of the distribution.
+        distr : str or list of strings
+            Specified distribution or a set of distributions.
+        todf : Bool (default: False)
+            Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!
+
+        Examples
+        --------
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>>
+        >>> X = np.random.normal(0, 2, 1000)
+        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>>
+        >>> dfit = distfit()
+        >>> results = dfit.fit_transform(X)
+        >>>
+        >>> # Plot summary
+        >>> dfit.plot_summary()
+        >>>
+        >>> # PDF plot
+        >>> dfit.plot()
+        >>>
+        >>> # Make prediction
+        >>> results_proba = dfit.predict(y)
+        >>>
+        >>> # Plot PDF
+        >>> fig, ax = dfit.plot(chart='PDF', n_top=1)
+        >>>
+        >>> # Add the CDF to the plot
+        >>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+        >>>
+        >>> # QQ-plot for top 10 fitted distributions
+        >>> fig, ax = dfit.qqplot(X, n_top=10)
+        >>>
+
+        References
+        ----------
+            * Documentation: https://erdogant.github.io/distfit/pages/html/Parametric.html
+
+        """
         if (alpha is None): alpha=1
         self.method = method
         self.alpha = alpha

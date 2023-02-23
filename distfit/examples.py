@@ -8,7 +8,7 @@ import distfit
 
 from distfit import distfit
 X = np.random.normal(163, 10, 1000)
-dfit = distfit(multtest='test')
+dfit = distfit()
 dfit.fit_transform(X, n_boots=0)
 dfit.plot_summary()
 
