@@ -49,6 +49,35 @@ class distfit:
         * In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
           The best fit is then derived using the binomial distribution.
 
+    Examples
+    --------
+    >>> from distfit import distfit
+    >>> import numpy as np
+    >>>
+    >>> X = np.random.normal(0, 2, 1000)
+    >>> y = [-8,-6,0,1,2,3,4,5,6]
+    >>>
+    >>> dfit = distfit()
+    >>> results = dfit.fit_transform(X)
+    >>>
+    >>> # Plot summary
+    >>> dfit.plot_summary()
+    >>>
+    >>> # PDF plot
+    >>> dfit.plot()
+    >>>
+    >>> # Make prediction
+    >>> results_proba = dfit.predict(y)
+    >>>
+    >>> # Plot PDF
+    >>> fig, ax = dfit.plot(chart='PDF')
+    >>>
+    >>> # Add the CDF to the plot
+    >>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+    >>>
+    >>> # QQ-plot for top 10 fitted distributions
+    >>> fig, ax = dfit.qqplot(X, n_top=10)
+    >>>
     """
 
     def __init__(self,
@@ -177,7 +206,7 @@ class distfit:
 
         References
         ----------
-            * Documentation: https://erdogant.github.io/distfit/pages/html/Parametric.html
+            * https://erdogant.github.io/distfit
 
         """
         if (alpha is None): alpha=1
