@@ -1276,7 +1276,8 @@ class distfit:
                 ax.set_yticklabels(yticks, fontsize=fontsize)
             else:
                 ax.scatter(xcoord, df['score'], color=color_axes_left)
-                ax.plot(df['score'], color=color_axes_left, linewidth=1, linestyle='--')
+                score = df['score']
+                ax.plot(score, color=color_axes_left, linewidth=1, linestyle='--')
 
             # You can specify a rotation for the tick labels in degrees or with keywords.
             ax.set_xticks(xcoord, df['name'].values, rotation=rotation)

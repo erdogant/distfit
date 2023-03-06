@@ -28,6 +28,7 @@ dfit2.fit_transform(X2)
 fig, ax = plt.subplots(1,2, figsize=(25,10))
 dfit.plot(title='without swear words', ax=ax[0])
 dfit2.plot(title='with swear words', ax=ax[1])
+fig
 
 import scipy.stats as st
 st.kstest(X, X2)
