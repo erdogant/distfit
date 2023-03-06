@@ -1413,7 +1413,7 @@ class distfit:
         distr : str.
             Distributions to return.
                 * 'full': all available distributions.
-                * 'popular': Most common distributions.
+                * 'popular' : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]
                 * 'norm', 't', 'k' or any other distribution name.
                 * ['norm', 't', 'k']: list of distributions.
 
