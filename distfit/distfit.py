@@ -1619,6 +1619,8 @@ class distfit:
             df = df.rename(columns={'Day': 'date', 'Henry Hub Natural Gas Spot Price Dollars per Million Btu': 'price'})
             # Set the date column as the index
             df.set_index('date', inplace=True)
+        elif data=='tips':
+            df = pd.read_csv(r'https://erdogant.github.io/datasets/tips.zip')
         else:
             logger.error('[%s] is not a valid data set that can be returned.' %(data))
 
