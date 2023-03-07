@@ -595,14 +595,24 @@ class distfit:
         """
         if verbose is not None: set_logger(verbose)
         if random_state is not None: self.random_state = random_state
-        if not hasattr(self, 'model'): raise Exception('[distfit] Error in generate: A model is required. Try fitting first on your data using fit_transform(X)')
-        logger.info('Generate %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
+        if not hasattr(self, 'model') and not isinstance(self.distr, str): raise Exception('[distfit] Error in creating Synthetic data: A fitted model or input parameter "distr" is required. Tip: First fit on your data using dfit.fit_transform(X) or specify one distribution.')
         X = None
 
-        if (self.method=='parametric') or (self.method=='discrete'):
-            X = self.model['model'].rvs(size=n, random_state=self.random_state)
-        else:
-            logger.warning('Nothing to generate. Method should be of type: "parametric" or "discrete"')
+        if hasattr(self, 'model'):
+            if (self.method=='parametric') or (self.method=='discrete'):
+                logger.info('Create Synthetic data for %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
+                model = self.model['model']
+            else:
+                logger.warning('Nothing to generate. Method should be of type: "parametric" or "discrete"')
+        elif isinstance(self.distr, str):
+            logger.info('Create Synthetic data for [%s] distribution where parameters needs to be estimated first from a distribution (default: Uniform).' %(self.distr))
+            model = eval('st.' + self.distr)
+            # Set default parameters for the distribution of interest by fitting it to a normal distribution.
+            X = st.uniform.rvs(size=1000)
+            model = self.fit_transform(X, verbose=0)['model']['model']
+
+        X = model.rvs(size=n, random_state=self.random_state)
+
         # Return
         return X
 
