@@ -585,7 +585,7 @@ class distfit:
         >>> y = [-8,-6,0,1,2,3,4,5,6]
         >>>
         >>> # Initialize
-        >>> dfit = distfit(todf=True)
+        >>> dfit = distfit()
         >>> # Fit
         >>> dfit.fit_transform(X)
         >>>
