@@ -1601,6 +1601,7 @@ class distfit:
         ----------
         data : str
             * 'gas_spot_price'
+            * 'tips'
 
         Returns
         -------
