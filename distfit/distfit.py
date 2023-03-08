@@ -1030,8 +1030,10 @@ class distfit:
                     ax.fill_between(labels, 0, 1, where=X <= minth.max(), color='#880808', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Down')
 
             # Plot CII lines
-            ax.axhline(CII_min_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII uperbound (alpha=' + str(self.alpha) + ')')
-            ax.axhline(CII_max_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII lowerbound (alpha=' + str(self.alpha) + ')')
+            if CII_min_alpha is not None:
+                ax.axhline(CII_min_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII uperbound (alpha=' + str(self.alpha) + ')')
+            if CII_max_alpha is not None:
+                ax.axhline(CII_max_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII lowerbound (alpha=' + str(self.alpha) + ')')
 
             # Make title
             title = self._make_title(title)
