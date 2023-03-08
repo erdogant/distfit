@@ -1,3 +1,102 @@
+from distfit import distfit
+import matplotlib.pyplot as plt
+
+dfit = distfit(smooth=3, bound='up')
+df = dfit.import_example(data='tips')
+dfit.fit_transform(df['tip'], n_boots=100)
+# dfit.fit_transform(df['tip'], n_boots=0)
+dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True)
+
+# Plot PDF/CDF
+fig, ax = plt.subplots(1,2, figsize=(25, 10))
+dfit.plot(chart='PDF', n_top=5, ax=ax[0])
+dfit.plot(chart='CDF', n_top=5,ax=ax[1])
+# Show plot
+plt.show()
+
+fig, ax = dfit.plot()
+dfit.plot(chart='CDF', ax=ax)
+
+dfit.plot_summary()
+
+X = dfit.generate(100)
+# Ploy the data
+dfit.lineplot(X, xlabel='Number', ylabel='Tip value', grid=True)
+plt.figure();plt.plot(X)
+
+# %%
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+from distfit import distfit
+import scipy.stats as st
+
+fig, ax = plt.subplots(3,4, figsize=(25,20))
+distr = ['norm', 'expon', 'uniform', 't', 'beta', 'gamma', 'pareto', 'gengamma', 'lognorm', 'dweibull', 'cauchy', 'f']
+# distr = ['norm', 'expon', 'uniform', 't', 'beta', 'gamma', 'pareto', 'gengamma', 'lognorm', 'dweibull']
+# for i, row in enumerate(ax):
+#     dfit = distfit(distr=distr[i])
+#     # Fit
+#     X = dfit.generate(n=1000)
+#     # fig, ax = dfit.plot(bar_properties=None, emp_properties=None, cii_properties=None)
+#     sns.histplot(data=X, kde=True, stat="density", ax=row)
+#     # Results
+
+# for i in range(3):
+#     for j in range(4):
+#         d = distr[i*4+j]
+#         dfit = distfit(distr=d)
+#         # Fit
+#         X = dfit.generate(n=1000)
+#         sns.histplot(data=X, kde=True, stat="density", ax=ax[i][j])
+#         ax[i][j].set_title(distr[i*4+j], fontsize=16)
+#         # Results
+
+fig, ax = plt.subplots(3,4, figsize=(25,20))
+size=5000
+samples = {}
+for dist in distr:
+    if dist == 'norm':
+        X = st.norm.rvs(size=size)
+        i, j = 0, 0
+    elif dist == 'expon':
+        X = st.expon.rvs(size=size)
+        i, j = 0, 1
+    elif dist == 'uniform':
+        X = st.uniform.rvs(size=size)
+        i, j = 0, 2
+    elif dist == 'beta':
+        X = st.beta.rvs(2, 5, size=size)
+        i, j = 0, 3
+    elif dist == 't':
+        X = st.t.rvs(5, size=size)
+        i, j = 1, 0
+    elif dist == 'gamma':
+        X = st.gamma.rvs(2, size=size)
+        i, j = 1, 1
+    elif dist == 'pareto':
+        X = st.pareto.rvs(2, size=size)
+        i, j = 1, 2
+    elif dist == 'gengamma':
+        X = st.gengamma.rvs(a=1.5, c=1, scale=2, size=size)
+        i, j = 1, 3
+    elif dist == 'lognorm':
+        X = st.lognorm.rvs(s=1, loc=0, scale=1, size=size)
+        i, j = 2, 0
+    elif dist == 'dweibull':
+        X = st.weibull_min.rvs(c=1.5, loc=0, scale=1, size=size)
+        i, j = 2, 1
+    elif dist == 'cauchy':
+        X = st.cauchy.rvs(loc=0, scale=1, size=200)
+        i, j = 2, 2
+    elif dist == 'f':
+        f_samples = st.f.rvs(dfn=3, dfd=5, loc=0, scale=1, size=200)
+        i, j = 2, 3
+    sns.histplot(data=X, kde=True, stat="density", ax=ax[i][j])
+    ax[i][j].set_title(dist, fontsize=16)
+    ax[i][j].grid(True)
+ 
+# %%
 import numpy as np
 from scipy.stats import binom, poisson
 import matplotlib.pyplot as plt
