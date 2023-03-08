@@ -1603,6 +1603,7 @@ class distfit:
         data : str
             * 'gas_spot_price'
             * 'tips'
+            * 'occupancy'
 
         Returns
         -------
@@ -1622,6 +1623,8 @@ class distfit:
             df.set_index('date', inplace=True)
         elif data=='tips':
             df = pd.read_csv(r'https://erdogant.github.io/datasets/tips.zip')
+        elif data=='occupancy':
+            df = pd.read_csv(r'https://erdogant.github.io/datasets/UCI_Occupancy_Detection.zip')
         else:
             logger.error('[%s] is not a valid data set that can be returned.' %(data))
 
