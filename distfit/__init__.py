@@ -44,10 +44,10 @@ Example
 >>> results_proba = dfit.predict(y)
 >>>
 >>> # Plot PDF
->>> fig, ax = dfit.plot(chart='PDF', n_top=1)
+>>> fig, ax = dfit.plot(chart='pdf', n_top=1)
 >>>
 >>> # Add the CDF to the plot
->>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+>>> fig, ax = dfit.plot(chart='cdf', n_top=1, ax=ax)
 >>>
 >>> # QQ-plot for top 10 fitted distributions
 >>> fig, ax = dfit.qqplot(X, n_top=10)

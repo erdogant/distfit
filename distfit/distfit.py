@@ -73,10 +73,10 @@ class distfit:
     >>> results_proba = dfit.predict(y)
     >>>
     >>> # Plot PDF
-    >>> fig, ax = dfit.plot(chart='PDF')
+    >>> fig, ax = dfit.plot(chart='pdf')
     >>>
     >>> # Add the CDF to the plot
-    >>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+    >>> fig, ax = dfit.plot(chart='cdf', n_top=1, ax=ax)
     >>>
     >>> # QQ-plot for top 10 fitted distributions
     >>> fig, ax = dfit.qqplot(X, n_top=10)
@@ -198,10 +198,10 @@ class distfit:
         >>> results_proba = dfit.predict(y)
         >>>
         >>> # Plot PDF
-        >>> fig, ax = dfit.plot(chart='PDF', n_top=1)
+        >>> fig, ax = dfit.plot(chart='pdf', n_top=1)
         >>>
         >>> # Add the CDF to the plot
-        >>> fig, ax = dfit.plot(chart='CDF', n_top=1, ax=ax)
+        >>> fig, ax = dfit.plot(chart='cdf', n_top=1, ax=ax)
         >>>
         >>> # QQ-plot for top 10 fitted distributions
         >>> fig, ax = dfit.qqplot(X, n_top=10)
@@ -674,7 +674,7 @@ class distfit:
 
     # Plot
     def plot(self,
-             chart='PDF',
+             chart='pdf',
              n_top=1,
              title='',
              emp_properties={'color': '#000000', 'linewidth': 3, 'linestyle': '-'},
@@ -696,10 +696,10 @@ class distfit:
 
         Parameters
         ----------
-        chart: str, default: 'PDF'
+        chart: str, default: 'pdf'
             Chart to plot.
-                * 'PDF': Probability density function.
-                * 'CDF': Cumulative density function.
+                * 'pdf': Probability density function.
+                * 'cdf': Cumulative density function.
         n_top : int, optional
             Show the top number of results. The default is 1.
         title : String, optional (default: '')
@@ -769,21 +769,21 @@ class distfit:
         >>> dfit.predict(y)
         >>>
         >>> # Plot seperately
-        >>> fig, ax = dfit.plot(chart='PDF')
-        >>> fig, ax = dfit.plot(chart='CDF')
+        >>> fig, ax = dfit.plot(chart='pdf')
+        >>> fig, ax = dfit.plot(chart='cdf')
         >>>
         >>> # Change or remove properties of the chart.
-        >>> dfit.plot(chart='PDF', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
-        >>> dfit.plot(chart='CDF', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>> dfit.plot(chart='pdf', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>> dfit.plot(chart='cdf', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
         >>>
         >>> # Create subplot
         >>> fig, ax = plt.subplots(1,2, figsize=(25, 10))
-        >>> dfit.plot(chart='PDF', ax=ax[0])
-        >>> dfit.plot(chart='CDF', ax=ax[1])
+        >>> dfit.plot(chart='pdf', ax=ax[0])
+        >>> dfit.plot(chart='cdf', ax=ax[1])
         >>>
         >>> # Change or remove properties of the chart.
-        >>> fig, ax = dfit.plot(chart='PDF', pdf_properties={'color': 'r', 'linewidth': 3}, cii_properties={'color': 'r', 'linewidth': 3}, bar_properties={'color': '#1e3f5a'})
-        >>> dfit.plot(chart='CDF', n_top=10, pdf_properties={'color': 'r'}, cii_properties=None, bar_properties=None, ax=ax)
+        >>> fig, ax = dfit.plot(chart='pdf', pdf_properties={'color': 'r', 'linewidth': 3}, cii_properties={'color': 'r', 'linewidth': 3}, bar_properties={'color': '#1e3f5a'})
+        >>> dfit.plot(chart='cdf', n_top=10, pdf_properties={'color': 'r'}, cii_properties=None, bar_properties=None, ax=ax)
 
         """
         if verbose is not None: set_logger(verbose)
@@ -791,13 +791,13 @@ class distfit:
         properties = _get_properties(pdf_properties, emp_properties, bar_properties, cii_properties)
 
         logger.info('Create %s plot for the %s method.' %(chart, self.method))
-        if chart.upper()=='PDF' and self.method=='parametric':
+        if chart.lower()=='pdf' and self.method=='parametric':
             fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
-        elif chart.upper()=='PDF' and self.method=='discrete':
+        elif chart.lower()=='pdf' and self.method=='discrete':
             fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
-        elif chart.upper()=='PDF' and (self.method=='quantile') or (self.method=='percentile'):
+        elif chart.lower()=='pdf' and (self.method=='quantile') or (self.method=='percentile'):
             fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
-        elif chart.upper()=='CDF' and (self.method=='parametric' or self.method=='discrete'):
+        elif chart.lower()=='cdf' and (self.method=='parametric' or self.method=='discrete'):
             fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], cdf_properties=properties['pdf'], cii_properties=properties['cii'], cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
@@ -1137,15 +1137,15 @@ class distfit:
         >>> dfit.fit_transform(X)
         >>>
         >>> # Make CDF plot
-        >>> fig, ax = dfit.plot(chart='CDF')
+        >>> fig, ax = dfit.plot(chart='cdf')
         >>>
         >>> # Append the PDF plot
-        >>> dfit.plot(chart='PDF', fig=fig, ax=ax)
+        >>> dfit.plot(chart='pdf', fig=fig, ax=ax)
         >>>
         >>> # Plot the CDF of the top 10 fitted distributions.
-        >>> fig, ax = dfit.plot(chart='CDF', n_top=10)
+        >>> fig, ax = dfit.plot(chart='cdf', n_top=10)
         >>> # Append the PDF plot
-        >>> dfit.plot(chart='PDF', n_top=10, fig=fig, ax=ax)
+        >>> dfit.plot(chart='pdf', n_top=10, fig=fig, ax=ax)
         >>>
         """
         logger.info('Ploting CDF')
