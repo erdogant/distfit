@@ -22,8 +22,8 @@ We will start generating random data from the normal distribution and create a b
 	dfit.fit_transform(X)
 
 	# Plot seperately
-	fig, ax = dfit.plot(chart='PDF')
-	fig, ax = dfit.plot(chart='CDF')
+	fig, ax = dfit.plot(chart='pdf')
+	fig, ax = dfit.plot(chart='cdf')
 
 
 .. |figP1a| image:: ../figs/example_figP1a.png
@@ -43,8 +43,8 @@ Plot all fitted distributions
 .. code:: python
 	
 	# Plot seperately
-	fig, ax = dfit.plot(chart='PDF', n_top=11)
-	fig, ax = dfit.plot(chart='CDF', n_top=11)
+	fig, ax = dfit.plot(chart='pdf', n_top=11)
+	fig, ax = dfit.plot(chart='cdf', n_top=11)
 
 
 
@@ -65,12 +65,12 @@ Combine plots
 .. code:: python
 	
 	# Plot together
-	fig, ax = dfit.plot(chart='PDF')
-	fig, ax = dfit.plot(chart='CDF', ax=ax)
+	fig, ax = dfit.plot(chart='pdf')
+	fig, ax = dfit.plot(chart='cdf', ax=ax)
 
 	# Plot together
-	fig, ax = dfit.plot(chart='PDF', n_top=11)
-	fig, ax = dfit.plot(chart='CDF', n_top=11, ax=ax)
+	fig, ax = dfit.plot(chart='pdf', n_top=11)
+	fig, ax = dfit.plot(chart='cdf', n_top=11, ax=ax)
 
 
 .. |figP3a| image:: ../figs/example_figP3a.png
@@ -90,13 +90,13 @@ Change chart properties
 .. code:: python
 	
 	# Change or remove properties of the chart.
-	dfit.plot(chart='PDF',
+	dfit.plot(chart='pdf',
 			pdf_properties={'color': 'r'},
 			cii_properties={'color': 'g'},
 			emp_properties=None,
 			bar_properties=None)
 
-	dfit.plot(chart='CDF',
+	dfit.plot(chart='cdf',
 			pdf_properties={'color': 'r'},
 			cii_properties={'color': 'g'},
 			emp_properties=None)
@@ -105,13 +105,13 @@ Change chart properties
 .. code:: python
 
 	# Combine the charts and change properties
-	fig, ax = dfit.plot(chart='PDF',
+	fig, ax = dfit.plot(chart='pdf',
 			pdf_properties={'color': 'r', 'linewidth': 3},
 			cii_properties={'color': 'r', 'linewidth': 3},
 			bar_properties={'color': '#1e3f5a'})
 
 	# Give the previous axes as input.
-	dfit.plot(chart='CDF',
+	dfit.plot(chart='cdf',
 			n_top=10,
 			pdf_properties={'color': 'r'},
 			cii_properties=None,
@@ -120,14 +120,14 @@ Change chart properties
 .. code:: python
 
 	# Combine the charts and change properties
-	fig, ax = dfit.plot(chart='PDF',
+	fig, ax = dfit.plot(chart='pdf',
 			pdf_properties=None,
 			cii_properties=None,
 			emp_properties={'color': 'g', 'linewidth': 3},
 			bar_properties={'color': '#1e3f5a'})
 
 	# Give the previous axes as input.
-	dfit.plot(chart='CDF',
+	dfit.plot(chart='cdf',
 			pdf_properties=None,
 			cii_properties=None,
 			emp_properties={'color': 'g', 'linewidth': 3},

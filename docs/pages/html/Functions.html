@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> distfit
           </a>
               <div class="version">
-                1.6.6
+                1.6.9
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -164,156 +164,6 @@ the quantiles of the data are modeled whereas for the percentile method, the per
 The best fit is then derived using the binomial distribution.</p></li>
 </ul>
 </div></blockquote>
-<dl class="field-list">
-<dt class="field-odd">param method</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Specify the method type.</dt><dd><ul class="simple">
-<li><p>‘parametric’</p></li>
-<li><p>‘quantile’</p></li>
-<li><p>‘percentile’</p></li>
-<li><p>‘discrete’</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type method</dt>
-<dd class="field-even"><p>str, default: ‘parametric’</p>
-</dd>
-<dt class="field-odd">param distr</dt>
-<dd class="field-odd"><p>The (set) of distribution to test. A set of distributions can be tested by using a “popular” list or by specifying the theoretical distribution:
-In case using method=”discrete”, then binomial is used. See documentation for more information about ‘popular’ and ‘full’ (link reference below).</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>‘popular’ : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]</p></li>
-<li><p>‘full’</p></li>
-<li><p>‘norm’, ‘t’, ‘k’: Test for one specific distribution.</p></li>
-<li><p>[‘norm’, ‘t’, ‘k’, …]: Test for a list of distributions.</p></li>
-</ul>
-</div></blockquote>
-</dd>
-<dt class="field-even">type distr</dt>
-<dd class="field-even"><p>str, default: ‘popular’</p>
-</dd>
-<dt class="field-odd">param stats</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Specify the scoring statistics for the goodness of fit test.</dt><dd><ul class="simple">
-<li><p>‘RSS’</p></li>
-<li><p>‘wasserstein’</p></li>
-<li><p>‘ks’: Kolmogorov-Smirnov statistic</p></li>
-<li><p>‘energy’</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type stats</dt>
-<dd class="field-even"><p>str, default: ‘RSS’</p>
-</dd>
-<dt class="field-odd">param bins</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Bin size to determine the empirical historgram.</dt><dd><ul class="simple">
-<li><p>‘auto’: Determine the bin size automatically.</p></li>
-<li><p>50: Set specific bin size</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type bins</dt>
-<dd class="field-even"><p>int, default: ‘auto’</p>
-</dd>
-<dt class="field-odd">param bound</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Set the directionality to test for significance.</dt><dd><ul class="simple">
-<li><p>‘up’, ‘high’, ‘right’: Upperbounds</p></li>
-<li><p>‘down’, ‘low’ or ‘left’: lowerbounds</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type bound</dt>
-<dd class="field-even"><p>str, default: ‘both’</p>
-</dd>
-<dt class="field-odd">param alpha</dt>
-<dd class="field-odd"><p>Significance alpha.</p>
-</dd>
-<dt class="field-even">type alpha</dt>
-<dd class="field-even"><p>float, default: 0.05</p>
-</dd>
-<dt class="field-odd">param n_boots</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Number of bootstraps to validate the fit.</dt><dd><ul class="simple">
-<li><p>None: No Bootstrap.</p></li>
-<li><p>1000: Thousand bootstraps.</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type n_boots</dt>
-<dd class="field-even"><p>int, default: None</p>
-</dd>
-<dt class="field-odd">param smooth</dt>
-<dd class="field-odd"><p>Smoothing the histogram can help to get a better fit when there are only few samples available.
-The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.</p>
-</dd>
-<dt class="field-even">type smooth</dt>
-<dd class="field-even"><p>int, default: None</p>
-</dd>
-<dt class="field-odd">param n_perm</dt>
-<dd class="field-odd"><p>Number of permutations to model null-distribution in case of method is “quantile”</p>
-</dd>
-<dt class="field-even">type n_perm</dt>
-<dd class="field-even"><p>int, default: 10000</p>
-</dd>
-<dt class="field-odd">param weighted</dt>
-<dd class="field-odd"><p>Only used in discrete fitting, method=”discrete”. In principle, the best fit will be obtained if you set weighted=True. However, when using stats=”RSS”, you can set weighted=False.</p>
-</dd>
-<dt class="field-even">type weighted</dt>
-<dd class="field-even"><p>Bool, (default: True)</p>
-</dd>
-<dt class="field-odd">param f</dt>
-<dd class="field-odd"><p>Only used in discrete fitting. It uses n in range n0/f to n0*f where n0 is the initial estimate.</p>
-</dd>
-<dt class="field-even">type f</dt>
-<dd class="field-even"><p>float, (default: 1.5)</p>
-</dd>
-<dt class="field-odd">param cmap</dt>
-<dd class="field-odd"><p>Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary[‘colors’].</p>
-</dd>
-<dt class="field-even">type cmap</dt>
-<dd class="field-even"><p>String, optional (default: ‘Set1’)</p>
-</dd>
-<dt class="field-odd">param random_state</dt>
-<dd class="field-odd"><p>Random state.</p>
-</dd>
-<dt class="field-even">type random_state</dt>
-<dd class="field-even"><p>int, optional</p>
-</dd>
-<dt class="field-odd">param verbose</dt>
-<dd class="field-odd"><dl class="simple">
-<dt>Set the verbose messages using string or integer values.</dt><dd><ul class="simple">
-<li><p>0, 60, None, ‘silent’, ‘off’, ‘no’]: No message.</p></li>
-<li><p>10, ‘debug’: Messages from debug level and higher.</p></li>
-<li><p>20, ‘info’: Messages from info level and higher.</p></li>
-<li><p>30, ‘warning’: Messages from warning level and higher.</p></li>
-<li><p>50, ‘critical’: Messages from critical level and higher.</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">type verbose</dt>
-<dd class="field-even"><p>[str, int], default is ‘info’ or 20</p>
-</dd>
-<dt class="field-odd">returns</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><em>object.</em></p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Specified method for fitting and predicting.</p></li>
-<li><p><strong>alpha</strong> (<em>float</em>) – Specified cut-off for P-value significance.</p></li>
-<li><p><strong>bins</strong> (<em>int</em>) – Number of bins specified to create histogram.</p></li>
-<li><p><strong>bound</strong> (<em>str</em>) – Specified testing directionality of the distribution.</p></li>
-<li><p><strong>distr</strong> (<em>str or list of strings</em>) – Specified distribution or a set of distributions.</p></li>
-<li><p><strong>todf</strong> (<em>Bool (default: False)</em>) – Output results in pandas dataframe when True. Note that creating pandas dataframes makes the code run significantly slower!</p></li>
-</ul>
-</dd>
-</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -334,20 +184,16 @@ The smooth parameter represnts a window that is used to create the convolution a
 <span class="gp">&gt;&gt;&gt; </span><span class="n">results_proba</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot PDF</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add the CDF to the plot</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># QQ-plot for top 10 fitted distributions</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Documentation: <a class="reference external" href="https://erdogant.github.io/distfit/pages/html/Parametric.html">https://erdogant.github.io/distfit/pages/html/Parametric.html</a></p></li>
-</ul>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.fit_transform">
@@ -565,7 +411,7 @@ theoretical distribution in case method type is <code class="docutils literal no
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialize</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">todf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Fit</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -761,7 +607,7 @@ indicating that the model is not representative of the underlying distribution.<
 <dd class="field-odd"><dl class="simple">
 <dt>Distributions to return.</dt><dd><ul class="simple">
 <li><p>‘full’: all available distributions.</p></li>
-<li><p>‘popular’: Most common distributions.</p></li>
+<li><p>‘popular’ : [norm, expon, pareto, dweibull, t, genextreme, gamma, lognorm, beta, uniform, loggamma]</p></li>
 <li><p>‘norm’, ‘t’, ‘k’ or any other distribution name.</p></li>
 <li><p>[‘norm’, ‘t’, ‘k’]: list of distributions.</p></li>
 </ul>
@@ -784,14 +630,14 @@ indicating that the model is not representative of the underlying distribution.<
 <dt class="field-odd">param chart</dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Chart to plot.</dt><dd><ul class="simple">
-<li><p>‘PDF’: Probability density function.</p></li>
-<li><p>‘CDF’: Cumulative density function.</p></li>
+<li><p>‘pdf’: Probability density function.</p></li>
+<li><p>‘cdf’: Cumulative density function.</p></li>
 </ul>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">type chart</dt>
-<dd class="field-even"><p>str, default: ‘PDF’</p>
+<dd class="field-even"><p>str, default: ‘pdf’</p>
 </dd>
 <dt class="field-odd">param n_top</dt>
 <dd class="field-odd"><p>Show the top number of results. The default is 1.</p>
@@ -948,21 +794,21 @@ However, when cmap is set, the specified colormap is used.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot seperately</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Change or remove properties of the chart.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;g&#39;</span><span class="p">},</span> <span class="n">emp_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;g&#39;</span><span class="p">},</span> <span class="n">emp_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;g&#39;</span><span class="p">},</span> <span class="n">emp_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;g&#39;</span><span class="p">},</span> <span class="n">emp_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create subplot</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Change or remove properties of the chart.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;PDF&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="n">bar_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#1e3f5a&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="n">bar_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#1e3f5a&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span> <span class="n">cii_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
