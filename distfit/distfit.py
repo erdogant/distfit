@@ -2106,14 +2106,7 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
 
 # %% Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None):
-    # model = {}
-    # model['name'] = st.norm
-    # model['stats'] = stats
-    # model['params'] = (0.0, 1.0)
-    best_score = np.inf
-    best_bootstrap_score = np.inf
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
-    # max_name_len = np.max(list(map(lambda x: len(x.name), DISTRIBUTIONS)))
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
@@ -2155,21 +2148,6 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 df.values[i, 6] = distribution_fit
                 df.values[i, 7] = bootstrap_score
                 df.values[i, 8] = bootstrap_pass
-
-                # identify if this distribution is better
-                # if (best_score > score > 0) or (best_bootstrap_score > bootstrap_score > 0):
-                #     best_score = score
-                #     best_bootstrap_score = bootstrap_score
-                #     model['name'] = distr_name
-                #     model['name'] = distribution
-                #     model['model'] = distribution_fit
-                #     model['params'] = params
-                #     model['score'] = score
-                #     model['loc'] = loc
-                #     model['scale'] = scale
-                #     model['arg'] = arg
-                #     model['bootstrap_score'] = bootstrap_score
-                #     model['bootstrap_pass'] = bootstrap_pass
 
             # Setup for the logger
             spaces_1 = ' ' * (max_name_len - len(distr_name))
