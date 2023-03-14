@@ -139,7 +139,7 @@ After making some predictions, we can plot again but now the predictions are aut
 
 <p align="left">
   <a href="https://erdogant.github.io/distfit/pages/html/Examples.html#make-predictions">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_prediction.png" width="450" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example_figP1a.png" width="450" />
   </a>
 </p>
 
@@ -153,7 +153,7 @@ The full list of distributions is listed here: https://erdogant.github.io/distfi
 
 <p align="left">
   <a href="https://erdogant.github.io/distfit/pages/html/Examples.html#fit-for-one-specific-distribution">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_prediction.png" width="450" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example_figP3b.png" width="450" />
   </a>
 </p>
 
@@ -166,7 +166,7 @@ The full list of distributions is listed here: https://erdogant.github.io/distfi
 
 <p align="left">
   <a href="https://erdogant.github.io/distfit/pages/html/Examples.html#fit-for-multiple-distributions">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/fig1_prediction.png" width="450" />
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/example_figP2b.png" width="450" />
   </a>
 </p>
 
