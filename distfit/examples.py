@@ -1,4 +1,73 @@
 from distfit import distfit
+import pandas as pd
+
+normal_distributions = ["halfgennorm", "lognorm", "powerlognorm",
+                        "gennorm", "norm", "truncnorm", "exponnorm",
+                        "powernorm", "foldnorm",  "halfnorm"]
+
+values = pd.read_pickle(r"C:\Users\playground\Downloads\repro\repro_data")
+dist_fitter = distfit(distr=normal_distributions, n_boots=10)
+dist_fitter.fit_transform(values)
+dist_fitter.plot_summary()
+dist_fitter.plot()
+dist_fitter.bootstrap(values, n_boots=10, update_model=False)
+
+# %%
+import matplotlib.pyplot as plt
+from distfit import distfit
+import seaborn as sns
+import numpy as np
+import scipy.stats as st
+np.random.seed(4)
+
+loc = 5
+scale=10
+sample_dist = st.lognorm.rvs(3, loc=loc, scale=np.exp(scale), size=10000)
+# shape, loc, scale = st.lognorm.fit(sample_dist, floc=0)
+# print(shape, loc, scale)
+# print(np.log(scale), shape) # mu and sigma
+
+dfit = distfit('parametric', todf=True, distr=["lognorm"])
+dfit.fit_transform(sample_dist)
+
+print('Estimated loc: %g, input loc: %g' %(dfit.model['loc'], loc))
+print('Estimated mu or scale: %g, input scale: %g' %(np.log(dfit.model['scale']), scale))
+
+# mu
+np.mean(np.log(sample_dist))
+
+
+mu=13.8
+loc=47.55
+x_sim = np.random.normal(loc=loc,scale=np.exp(mu), size = 10000)
+x_sim = np.append([*filter(lambda x: x<=80, x_sim)],np.random.normal(loc=90,scale=10, size = 50))
+x_sim = np.array([*filter(lambda x: x >=0,x_sim)])
+
+# shape, loc, scale = stats.lognorm.fit(sample, floc=0) # hold location to 0 while fitting
+# np.mean(x_sim)
+# np.std(np.log(x_sim))
+
+dfit = distfit(todf=True, distr=["lognorm"])
+dfit.fit_transform(x_sim)
+dfit.bootstrap(x_sim, n_boots=1)
+
+# print('Estimated loc: %g, input loc: %g' %(dfit.model['loc'], loc))
+print('Estimated mu or scale: %g, input scale: %g' %(np.log(dfit.model['scale']), mu))
+dfit.plot()
+
+np.mean(np.log(x_sim))
+np.std(np.log(x_sim))
+
+
+# sns.histplot(x,ax=ax[0])
+fig, ax = plt.subplots(1,3, figsize=(20,8))
+dfit.plot("PDF",n_top=3,fontsize=11, pdf_properties=None, cii_properties=None, emp_properties=None, ax=ax[0], bar_properties={'edgecolor': '#000000'})
+dfit.plot("PDF",n_top=3,fontsize=11,ax=ax[1])
+dfit.plot("CDF",n_top=3,fontsize=11,ax=ax[2])
+plt.show()
+
+# %%
+from distfit import distfit
 import matplotlib.pyplot as plt
 
 dfit = distfit(smooth=3, bound='up')
