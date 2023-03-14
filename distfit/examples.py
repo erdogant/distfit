@@ -9,13 +9,13 @@ dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True)
 
 # Plot PDF/CDF
 fig, ax = plt.subplots(1,2, figsize=(25, 10))
-dfit.plot(chart='PDF', n_top=5, ax=ax[0])
-dfit.plot(chart='CDF', n_top=5,ax=ax[1])
+dfit.plot(chart='pdf', n_top=5, ax=ax[0])
+dfit.plot(chart='cdf', n_top=5,ax=ax[1])
 # Show plot
 plt.show()
 
 fig, ax = dfit.plot()
-dfit.plot(chart='CDF', ax=ax)
+dfit.plot(chart='cdf', ax=ax)
 
 dfit.plot_summary()
 
@@ -176,8 +176,8 @@ dfit.plot_summary()
 out = dfit.bootstrap(X, n_boots=10, n_top=None)
 dfit.plot_summary()
 
-fig, ax = dfit.plot(chart='PDF', n_top=5, cmap='Set2');
-dfit.plot(chart='CDF', n_top=10, cmap='Set2', ax=ax);
+fig, ax = dfit.plot(chart='pdf', n_top=5, cmap='Set2');
+dfit.plot(chart='cdf', n_top=10, cmap='Set2', ax=ax);
 dfit.plot_cdf()
 
 
@@ -198,10 +198,10 @@ results = dfit.fit_transform(X)
 y = [0, 1, 10, 11, 12]
 
 results = dfit.predict(y)
-dfit.plot(chart='PDF')
-dfit.plot(chart='PDF', pdf_properties=None)
-dfit.plot(chart='CDF', n_top=5)
-dfit.plot(chart='CDF', pdf_properties=None, n_top=2)
+dfit.plot(chart='pdf')
+dfit.plot(chart='pdf', pdf_properties=None)
+dfit.plot(chart='cdf', n_top=5)
+dfit.plot(chart='cdf', pdf_properties=None, n_top=2)
 dfit.plot_cdf()
 
 # %% QQ plot
@@ -219,15 +219,15 @@ dfit.fit_transform(X)
 dfit.qqplot(X)
 dfit.qqplot(X, n_top=11, cmap='Set1')
 
-dfit.plot(chart='PDF')
-dfit.plot(chart='PDF', pdf_properties=None)
-dfit.plot(chart='PDF', pdf_properties=None, n_top=10)
-dfit.plot(chart='CDF', n_top=10)
-dfit.plot(chart='CDF', pdf_properties=None, n_top=10)
+dfit.plot(chart='pdf')
+dfit.plot(chart='pdf', pdf_properties=None)
+dfit.plot(chart='pdf', pdf_properties=None, n_top=10)
+dfit.plot(chart='cdf', n_top=10)
+dfit.plot(chart='cdf', pdf_properties=None, n_top=10)
 
 
-# fig, ax = dfit.plot(chart='CDF', n_top=10);
-# dfit.plot(chart='PDF', n_top=10, fig=fig, ax=ax);
+# fig, ax = dfit.plot(chart='cdf', n_top=10);
+# dfit.plot(chart='pdf', n_top=10, fig=fig, ax=ax);
 # dfit.qqplot(X, n_top=10, fig=fig, ax=ax);
 
 # %% CDF plot
@@ -242,8 +242,8 @@ dfit = distfit(distr='popular')
 # Fit and plot
 dfit.fit_transform(X)
 # dfit.plot_cdf(n_top=10);
-fig, ax = dfit.plot(chart='PDF', n_top=5, cmap='Set2');
-dfit.plot(chart='CDF', n_top=10, cmap='Set2', ax=ax);
+fig, ax = dfit.plot(chart='pdf', n_top=5, cmap='Set2');
+dfit.plot(chart='cdf', n_top=10, cmap='Set2', ax=ax);
 # dfit.plot_cdf()
 dfit.plot_summary(n_top=10);
 

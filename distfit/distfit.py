@@ -1672,29 +1672,34 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
     # 3. Compare the resampled data vs. fitted PDF.
 
     bootstrap_score, bootstrap_pass = 0, None
-    if (n_boots is not None) and (n_boots>=10):
-        # Limit the number of samples to avoid memory issues.
-        n = np.minimum(10000, len(X))
-        # Kolmogorov-Smirnov (KS) statistic
-        Dn = st.kstest(X, distribution_fit.cdf)
-
-        Dns=[]
-        for i in tqdm(range(n_boots), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
-            # Resample from target distribution: k
-            resamples = distribution_fit.rvs(n, random_state=random_state)
-            # Find new target parameters after resampling
-            params = distribution.fit(resamples)
-            # Create new fit: k-hat
-            fit = distribution(*params)
-            # Score the k-hat distribution vs. for the resampled data of distribution k.
-            Dn_i = st.kstest(resamples, fit.cdf)
-            # Store the test statistics
-            Dns.append(Dn_i[0])
-
-        Dn_alpha = np.quantile(Dns, 1 - alpha)
-        bootstrap_pass = False if Dn[0] > Dn_alpha else True
-        # Compute ratio correct
-        bootstrap_score = np.sum(Dns > Dn[0]) / n_boots
+    
+    try:
+        if (n_boots is not None) and (n_boots>=10):
+            # Limit the number of samples to avoid memory issues.
+            n = np.minimum(10000, len(X))
+            # Kolmogorov-Smirnov (KS) statistic
+            Dn = st.kstest(X, distribution_fit.cdf)
+    
+            Dns=[]
+            for i in tqdm(range(n_boots), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
+                # Resample n times from target distribution.
+                resamples = distribution_fit.rvs(n, random_state=random_state)
+                # Find new target parameters after resampling
+                params = distribution.fit(resamples)
+                # Create new fit: k-hat
+                fit = distribution(*params)
+                # Score the k-hat distribution vs. for the resampled data of distribution k.
+                Dn_i = st.kstest(resamples, fit.cdf)
+                # Store the test statistics
+                Dns.append(Dn_i[0])
+    
+            Dn_alpha = np.quantile(Dns, 1 - alpha)
+            bootstrap_pass = False if Dn[0] > Dn_alpha else True
+            # Compute ratio correct
+            bootstrap_score = np.sum(Dns > Dn[0]) / n_boots
+    except:
+        pass
+        # logger.info('[%s] > Could not estimate fit, likely due to low sample size.' %(distr))
     # Return
     return bootstrap_score, bootstrap_pass
 

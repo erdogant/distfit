@@ -5,7 +5,7 @@ from scipy.stats import binom
 import matplotlib.pyplot as plt
 
 def show_figures(dfit):
-    charts = ['PDF', 'CDF']
+    charts = ['pdf', 'cdf']
     n_top=[1, 10]
     for chart in charts:
         for n in n_top:
@@ -38,14 +38,14 @@ class Test_DISTFIT(unittest.TestCase):
 
         # Create subplot
         fig, ax = plt.subplots(1,2, figsize=(25, 10))
-        dfit.plot(chart='PDF', ax=ax[0])
-        dfit.plot(chart='CDF', ax=ax[1])
-        dfit.plot(chart='PDF',  emp_properties=None, bar_properties=None, pdf_properties={'color': 'r'}, cii_properties={'color': 'g'})
+        dfit.plot(chart='pdf', ax=ax[0])
+        dfit.plot(chart='cdf', ax=ax[1])
+        dfit.plot(chart='pdf',  emp_properties=None, bar_properties=None, pdf_properties={'color': 'r'}, cii_properties={'color': 'g'})
 
         # Create subplot
         fig, ax = plt.subplots(1,2, figsize=(25, 10))
-        dfit.plot(chart='PDF', n_top=11, ax=ax[0])
-        dfit.plot(chart='CDF', n_top=11, ax=ax[1])
+        dfit.plot(chart='pdf', n_top=11, ax=ax[0])
+        dfit.plot(chart='cdf', n_top=11, ax=ax[1])
 
         # Create subplot
         fig, ax = plt.subplots(1,2, figsize=(25, 10))

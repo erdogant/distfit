@@ -36,7 +36,7 @@ For demonstration puprposes we pre-specify the ``normal`` distribution to find t
 
 .. code:: python
 
-    dfit.plot(chart='PDF')
+    dfit.plot(chart='pdf')
 
 .. _gaus_mu_0:
 
