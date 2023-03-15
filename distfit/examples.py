@@ -1,4 +1,19 @@
 from distfit import distfit
+import time
+import pandas as pd
+
+start_time = time.time()
+# normal_distributions = ["halfgennorm", "lognorm", "powerlognorm", "gennorm", "norm", "truncnorm", "exponnorm", "powernorm", "foldnorm",  "halfnorm"]
+normal_distributions = ["halfgennorm", "lognorm"]
+
+X = pd.read_pickle(r"C:\Users\playground\Downloads\repro\repro_data")
+dfit = distfit(distr=normal_distributions, n_boots=1, n_jobs=1)
+dfit.fit_transform(X)
+time_spent = time.time() - start_time
+print(time_spent)
+
+# %%
+from distfit import distfit
 import pandas as pd
 
 normal_distributions = ["halfgennorm", "lognorm", "powerlognorm",

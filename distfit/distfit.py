@@ -101,6 +101,7 @@ class distfit:
                  random_state: int = None,
                  verbose: [str, int] = 'info',
                  multtest=None,
+                 n_jobs=1,
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -152,6 +153,8 @@ class distfit:
             Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
         random_state : int, optional
             Random state.
+        n_jobs : int, optional (default: 1)
+            Number of cpu cores that are used to compute the distributions.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -230,6 +233,7 @@ class distfit:
         self.cmap = cmap
         self.random_state = random_state
         self.verbose = verbose
+        self.n_jobs = n_jobs
         # Set the logger
         set_logger(verbose=verbose)
         if multtest is not None: logger.warning('multtest will be removed from initialization in a future release. Please set this parameter when using the predict function. Example: dfit.predict(multtest="holm")')
@@ -2163,7 +2167,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
     # Sort the output
     df, model = _sort_dataframe(df, cmap=cmap)
     # Return
-    return (df, model)
+    return df, model
 
 
 # %% Sort dataframe
