@@ -19,6 +19,9 @@ import scipy.stats as st
 import logging
 import colourmap
 
+from joblib import Parallel, delayed
+from multiprocessing import cpu_count
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -1676,14 +1679,14 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
     # 3. Compare the resampled data vs. fitted PDF.
 
     bootstrap_score, bootstrap_pass = 0, None
-    
+
     try:
         if (n_boots is not None) and (n_boots>=10):
             # Limit the number of samples to avoid memory issues.
             n = np.minimum(10000, len(X))
             # Kolmogorov-Smirnov (KS) statistic
             Dn = st.kstest(X, distribution_fit.cdf)
-    
+
             Dns=[]
             for i in tqdm(range(n_boots), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
                 # Resample n times from target distribution.
@@ -1696,7 +1699,7 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
                 Dn_i = st.kstest(resamples, fit.cdf)
                 # Store the test statistics
                 Dns.append(Dn_i[0])
-    
+
             Dn_alpha = np.quantile(Dns, 1 - alpha)
             bootstrap_pass = False if Dn[0] > Dn_alpha else True
             # Compute ratio correct
@@ -2108,61 +2111,66 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     return out
 
 
+def _fit_distribution(data, X, y_obs, distribution, stats, max_name_len, n_boots=None, random_state=None):
+    # Fit the distribution. However this can result in an error. I need the try-except.
+    try:
+        start_time = time.time()
+
+        # Ignore warnings from data that can't be fit
+        with warnings.catch_warnings():
+            # fit dist to data
+            params = distribution.fit(data)
+            logger.debug(params)
+
+            # Separate parts of parameters
+            arg = params[:-2]
+            loc = params[-2]
+            scale = params[-1]
+
+            # Calculate fitted PDF and error with fit in distribution
+            pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
+            # Compute score based on fit
+            score = _compute_fit_score(stats, y_obs, pdf)
+            # Get name of the distribution
+            distr_name = distribution.name if isinstance(distribution.name, str) else distribution.name()
+            # Fitted model
+            distribution_fit = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
+            # Bootstrapping
+            bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boots=n_boots, random_state=random_state)
+
+            # print(i)
+            # # Store results
+            # df.values[i, 0] = distr_name
+            # df.values[i, 1] = score
+            # df.values[i, 2] = loc
+            # df.values[i, 3] = scale
+            # df.values[i, 4] = arg
+            # df.values[i, 5] = params
+            # df.values[i, 6] = distribution_fit
+            # df.values[i, 7] = bootstrap_score
+            # df.values[i, 8] = bootstrap_pass
+
+        # Setup for the logger
+        spaces_1 = ' ' * (max_name_len - len(distr_name))
+        scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
+        time_spent = time.time() - start_time
+        logger.info("[%s%s] [%.4s sec] %s" %(distr_name, spaces_1, time_spent, scores))
+        return [distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass]
+
+    except Exception:
+        pass
+        # e = sys.exc_info()[0]
+        # logger.error(e)
+
 # %% Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None):
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
     # Estimate distribution parameters
-    for i, distribution in enumerate(DISTRIBUTIONS):
-
-        # Fit the distribution. However this can result in an error. I need the try-except.
-        try:
-            start_time = time.time()
-
-            # Ignore warnings from data that can't be fit
-            with warnings.catch_warnings():
-                # fit dist to data
-                params = distribution.fit(data)
-                logger.debug(params)
-
-                # Separate parts of parameters
-                arg = params[:-2]
-                loc = params[-2]
-                scale = params[-1]
-
-                # Calculate fitted PDF and error with fit in distribution
-                pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
-                # Compute score based on fit
-                score = _compute_fit_score(stats, y_obs, pdf)
-                # Get name of the distribution
-                distr_name = distribution.name if isinstance(distribution.name, str) else distribution.name()
-                # Fitted model
-                distribution_fit = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
-                # Bootstrapping
-                bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boots=n_boots, random_state=random_state)
-
-                # Store results
-                df.values[i, 0] = distr_name
-                df.values[i, 1] = score
-                df.values[i, 2] = loc
-                df.values[i, 3] = scale
-                df.values[i, 4] = arg
-                df.values[i, 5] = params
-                df.values[i, 6] = distribution_fit
-                df.values[i, 7] = bootstrap_score
-                df.values[i, 8] = bootstrap_pass
-
-            # Setup for the logger
-            spaces_1 = ' ' * (max_name_len - len(distr_name))
-            scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
-            time_spent = time.time() - start_time
-            logger.info("[%s%s] [%.4s sec] %s" %(distr_name, spaces_1, time_spent, scores))
-
-        except Exception:
-            pass
-            # e = sys.exc_info()[0]
-            # logger.error(e)
+    results = Parallel(n_jobs=cpu_count())(delayed(_fit_distribution)(data, X, y_obs, distribution, stats, max_name_len, n_boots, random_state) for distribution in DISTRIBUTIONS)
+    for i in range(len(DISTRIBUTIONS)):
+        df.values[i] = results[i]
 
     # Sort the output
     df, model = _sort_dataframe(df, cmap=cmap)
@@ -2655,7 +2663,7 @@ def scale_data(y):
     # for i, value in enumerate(y):
     #     ynorm[i] = (value - min(y)) / (max(y) - min(y))
     # return ynorm
-    
+
 # %%
 def set_logger(verbose: [str, int] = 'info'):
     """Set the logger for verbosity messages.
