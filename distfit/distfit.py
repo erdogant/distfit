@@ -930,6 +930,7 @@ class distfit:
     def lineplot(self,
                  X,
                  labels=None,
+                 projection=True,
                  xlabel='x-axes',
                  ylabel='y-axes',
                  title='',
@@ -941,15 +942,18 @@ class distfit:
                  ax=None,
                  grid=False,
                  cii_properties={'alpha': 0.7, 'linewidth': 1},
+                 line_properties={'linestyle': '-', 'color': '#004481', 'marker': '.', 'linewidth': 1, 'markersize': 10},
                  verbose=None):
         """Plot data and CII and/or predictions.
 
         Parameters
         ----------
         X : array-like
-            The Null distribution or background data is build from X.
+            The Null distribution or background data is build from X. The x-axis are the index values, and the y-axis the corresponding values.
         labels : array-like
             Labels for the x-axes. Should be the same size as X.
+        projection : bool (default: True)
+            Projection of the distribution.
         xlabel : string (default: 'Values')
             Label of the x-axis.
         ylabel : string (default: 'Frequencies')
@@ -970,6 +974,15 @@ class distfit:
             Matplotlib Axes object. If given, this subplot is used to plot in instead of a new figure being created.
         grid : Bool, optional (default: True)
             Show the grid on the figure.
+        cii_properties : dict
+            bar properties of the histogram.
+                * None: Do not plot.
+                * {'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}
+        line_properties : dict
+            Properties of the line. Set one or multiple properties.
+                * {'linestyle': '-', 'color': '#004481', 'marker': '.', 'linewidth': 1, 'markersize': 10}
+                * {'color': '#000000'}
+                * {'color': '#000000', 'marker': ''}
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -1005,6 +1018,7 @@ class distfit:
 
         """
         cii_properties = _get_properties(None, None, None, cii_properties)['cii']
+        line_properties = {**{'linestyle': '-', 'color': '#004481', 'marker': '.', 'linewidth': 1, 'markersize': 10}, **line_properties}
 
         if isinstance(X, pd.DataFrame):
             logger.info('Dataframe detected. Labels are derived from the index and the data is flattened.')
@@ -1015,7 +1029,13 @@ class distfit:
         if (labels is not None) and len(X)!=len(labels): raise Exception('Labels should be of the same size as X')
         if labels is None: labels = range(0, len(X))
         if ax is None: fig, ax = plt.subplots(figsize=figsize)
-        ax.plot(labels, X, color='black')
+
+        # Create projection
+        if projection and hasattr(self, 'model'):
+            _plot_projection(self, X, labels, line_properties, ax)
+
+        # Create lineplot
+        plt.plot(labels, X, **line_properties)
 
         if hasattr(self, 'model'):
             CII_min_alpha = self.model['CII_min_alpha']
@@ -1634,6 +1654,47 @@ class distfit:
 
         return df
 
+# %% Plot projection
+def _plot_projection(self, X, labels, line_properties, ax):
+    # Add horizontal lines
+    minvalue = labels[-1] + int(labels[-1]*0.1)
+    maxvalue = labels[-1] + int(labels[-1]*0.2)
+
+    # Rescale data
+    pdf_y=scale_data_minmax(self.histdata[0], minvalue=minvalue, maxvalue=maxvalue)
+    pdf_x=scale_data_minmax(np.arange(0, len(pdf_y)), minvalue=min(X), maxvalue=max(X))
+
+    # Create emperical PDF
+    ax.plot(pdf_y, pdf_x, color='black', linestyle='-', linewidth=1.5, label='Emperical PDF')
+
+    # Create vertical lines
+    ax.vlines(x=minvalue, ymin=min(pdf_x), ymax=max(pdf_x), color='#000000', linewidth=1.2)
+
+    # Create the horizontal lines
+    for i in range(len(labels)):
+        ax.hlines(X[i], labels[i], minvalue, colors='gray', linestyles='--', linewidth=0.8)
+        ax.plot(minvalue, X[i], marker=line_properties['marker'], color=line_properties['color'], alpha=0.8, markersize=line_properties['markersize'])
+
+    # Create PDF
+    # Make figure
+    best_fit_name = self.model['name'].title()
+    arg = self.model['params'][:-2]
+    loc = self.model['params'][-2]
+    scale = self.model['params'][-1]
+    distribution = getattr(st, self.model['name'])
+    # Get pdf boundaries
+    getmin = distribution.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.0000001, loc=loc, scale=scale)
+    getmax = distribution.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.9999999, loc=loc, scale=scale)
+    # Take maximum/minimum based on empirical data to avoid long theoretical distribution tails
+    getmax = np.minimum(getmax, np.max(self.histdata[1]))
+    getmin = np.maximum(getmin, np.min(self.histdata[1]))
+    # Build pdf and turn into pandas Series
+    x = np.linspace(getmin, getmax, self.size)
+    y = distribution.pdf(x, loc=loc, scale=scale, *arg)
+    y = scale_data_minmax(y, minvalue=minvalue, maxvalue=maxvalue)
+    ax.plot(y, x, color='#880808', linestyle='-', linewidth=1.5, label=best_fit_name + ' (best fit)')
+
+    return ax
 
 # %% Bootstrapping
 # from multiprocessing import Pool
@@ -2648,6 +2709,8 @@ class k_distribution:
         """Name of distribution."""
         return 'k'
 
+def scale_data_minmax(X, minvalue, maxvalue):
+    return (((X - min(X)) / (max(X) - min(X))) * (maxvalue - minvalue)) + minvalue
 
 def scale_data(y):
     return [(x - min(y)) / (max(y) - min(y)) for x in y]
