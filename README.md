@@ -22,7 +22,12 @@
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
 # 
-### [Read the Medium Blog for more information](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
+### [Read the Medium Blog](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
+
+# 
+
+### [Documentation pages](https://erdogant.github.io/distfit/)
+
 # 
 
 ``distfit`` is a python package for probability density fitting of univariate distributions for random variables.
@@ -44,11 +49,6 @@ With the random variable as an input, distfit can find the best fit for parametr
 **⭐️ Star this repo if you like it ⭐️**
 # 
 
-### [Documentation pages](https://erdogant.github.io/distfit/)
-
-On the [documentation pages](https://erdogant.github.io/distfit/) you can find detailed information about the ``distfit`` library with many examples. 
-
-# 
 
 
 ### Installation
