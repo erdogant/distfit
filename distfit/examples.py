@@ -3,13 +3,18 @@ import matplotlib.pyplot as plt
 
 dfit = distfit(smooth=3, bound='up')
 df = dfit.import_example(data='tips')
-dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=False)
+dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=True)
 
 dfit.fit_transform(df['tip'], n_boots=1)
 # dfit.fit_transform(df['tip'], n_boots=0)
-dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=True)
-dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=False)
-dfit.plot()
+dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=True, ylim=[0, 11])
+# dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=False)
+# dfit.plot()
+
+X = dfit.generate(100)
+# Ploy the data
+dfit.lineplot(X, xlabel='Number', ylabel='Tip value', grid=True, ylim=[0, 11])
+
 
 # %%
 from distfit import distfit

@@ -940,7 +940,7 @@ class distfit:
                  ylim=None,
                  fig=None,
                  ax=None,
-                 grid=False,
+                 grid=True,
                  cii_properties={'alpha': 0.7, 'linewidth': 1},
                  line_properties={'linestyle': '-', 'color': '#004481', 'marker': '.', 'linewidth': 1, 'markersize': 10},
                  verbose=None):
@@ -964,10 +964,11 @@ class distfit:
             Fontsize for the axis and ticks.
         figsize : tuple, optional (default: (10,8))
             The figure size.
-        xlim : Float, optional (default: None)
-            Limit figure in x-axis.
-        ylim : Float, optional (default: None)
+        xlim : tuple, optional (default: None)
+            Limit figure in x-axis: [0, 100]
+        ylim : tuple, optional (default: None)
             Limit figure in y-axis.
+            Limit figure in x-axis: [0, 10]
         fig : Figure, optional (default: None)
             Matplotlib figure (Note - ignored when method is `discrete`)
         ax : AxesSubplot, optional (default: None)
@@ -1062,6 +1063,12 @@ class distfit:
             # Make title
             title = self._make_title(title)
 
+        # Limit axis
+        if xlim is not None:
+            ax.set_xlim(xlim[0], xlim[1])
+        if ylim is not None:
+            ax.set_ylim(ylim[0], ylim[1])
+
         # Set figure properties
         ax.set_title(title, fontsize=fontsize)
         ax.tick_params(axis='both', which='major', labelsize=fontsize)
@@ -1113,10 +1120,11 @@ class distfit:
             Label of the y-axis.
         figsize : tuple, optional (default: (10,8))
             The figure size.
-        xlim : Float, optional (default: None)
-            Limit figure in x-axis.
-        ylim : Float, optional (default: None)
+        xlim : tuple, optional (default: None)
+            Limit figure in x-axis: [0, 100]
+        ylim : tuple, optional (default: None)
             Limit figure in y-axis.
+            Limit figure in x-axis: [0, 10]
         fig : Figure, optional (default: None)
             Matplotlib figure (Note - ignored when method is `discrete`)
         ax : Axes, optional (default: None)
@@ -1660,12 +1668,19 @@ def _plot_projection(self, X, labels, line_properties, ax):
     minvalue = labels[-1] + int(labels[-1]*0.1)
     maxvalue = labels[-1] + int(labels[-1]*0.2)
 
+    # Get histogram of original X
+    X_bins, y_obs = self.density(X, self.bins, mhist=self.mhist)
+    # Smoothing by interpolation
+    X_bins, y_obs = smoothline(X_bins, y_obs, interpol=1, window=self.smooth)
+    histdata = (y_obs, X_bins)
+
+
     # Rescale data
-    pdf_y=scale_data_minmax(self.histdata[0], minvalue=minvalue, maxvalue=maxvalue)
+    pdf_y=scale_data_minmax(histdata[0], minvalue=minvalue, maxvalue=maxvalue)
     pdf_x=scale_data_minmax(np.arange(0, len(pdf_y)), minvalue=min(X), maxvalue=max(X))
 
     # Create emperical PDF
-    ax.plot(pdf_y, pdf_x, color='black', linestyle='-', linewidth=1.5, label='Emperical PDF')
+    ax.plot(pdf_y, pdf_x, color='black', linestyle='-', linewidth=1.5, label='Emperical PDF.')
 
     # Create vertical lines
     ax.vlines(x=minvalue, ymin=min(pdf_x), ymax=max(pdf_x), color='#000000', linewidth=1.2)
