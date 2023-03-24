@@ -172,6 +172,41 @@ QQ plot
    +----------+----------+
 
 
+Line plots
+##################################################
+
+.. code:: python
+	
+	# Line plot
+
+	# Import
+	from distfit import distfit
+	# Initialize
+	dfit = distfit(smooth=3, bound='up')
+	# Import
+	df = dfit.import_example(data='tips')
+	# Make line plot without any fitting
+	dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'})
+
+	# Fit
+	dfit.fit_transform(df['tip'])
+	# Create line plot but now with the distribution
+	dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=True)
+
+
+
+.. |figP6a| image:: ../figs/lineplot_fig1.png
+.. |figP6b| image:: ../figs/lineplot_fig2.png
+
+.. table:: Line plot
+   :align: center
+
+   +----------+
+   | |figP6a| |
+   +----------+
+   | |figP6b| |
+   +----------+
+
 
 
 .. include:: add_bottom.add

@@ -9,4 +9,4 @@ scipy
 pypickle
 colourmap>="1.1.10"
 packaging
-joblib
+
