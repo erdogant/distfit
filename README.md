@@ -22,7 +22,11 @@
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
 # 
-### [Read the Medium Blog](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
+### Blogs
+#### [Blog: How to Find the Best Theoretical Distribution for Your Data.](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
+
+#### [Blog: Outlier Detection Using Distribution Fitting in Univariate Datasets.](https://towardsdatascience.com/outlier-detection-using-distribution-fitting-in-univariate-data-sets-ac8b7a14d40e)
+
 
 # 
 
