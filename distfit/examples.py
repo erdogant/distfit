@@ -1,11 +1,10 @@
 from distfit import distfit
-import matplotlib.pyplot as plt
 
 dfit = distfit(smooth=3, bound='up')
 df = dfit.import_example(data='tips')
 dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=True)
 
-dfit.fit_transform(df['tip'], n_boots=1)
+dfit.fit_transform(df['tip'])
 # dfit.fit_transform(df['tip'], n_boots=0)
 dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=True, ylim=[0, 11])
 # dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True, line_properties={'marker':'.'}, projection=False)
