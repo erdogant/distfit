@@ -8,7 +8,14 @@ Medium Blog
 ############
 
 .. note::
-	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
+	`How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
+
+.. note::
+	`Outlier Detection Using Distribution Fitting in Univariate Datasets. <https://towardsdatascience.com/outlier-detection-using-distribution-fitting-in-univariate-data-sets-ac8b7a14d40e>`_
+
+.. note::
+	`Step-by-Step Guide to Generate Synthetic Data by Sampling From Univariate Distributions. <https://towardsdatascience.com/step-by-step-guide-to-generate-synthetic-data-by-sampling-from-univariate-distributions-6b0be4221cb1>`_
+
 
 Github
 ############

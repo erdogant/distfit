@@ -1,4 +1,16 @@
 from distfit import distfit
+import matplotlib.pyplot as plt
+
+dfit = distfit(smooth=3)
+df = dfit.import_example(data='tips')
+dfit.fit_transform(df['tip'])
+
+dfit.summary = dfit.summary[dfit.summary['name'].isin(['lognorm', 'gamma', 'pareto'])]
+dfit.plot(chart='pdf', n_top=5)
+
+
+# %%
+from distfit import distfit
 
 dfit = distfit(smooth=3, bound='up')
 df = dfit.import_example(data='tips')
@@ -108,6 +120,7 @@ df = dfit.import_example(data='tips')
 dfit.fit_transform(df['tip'], n_boots=100)
 # dfit.fit_transform(df['tip'], n_boots=0)
 dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True)
+
 
 # Plot PDF/CDF
 fig, ax = plt.subplots(1,2, figsize=(25, 10))
