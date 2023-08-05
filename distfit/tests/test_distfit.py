@@ -296,13 +296,13 @@ class Test_DISTFIT(unittest.TestCase):
         dfit = distfit(method='percentile', n_boots=None)
         dfit.fit_transform(X, verbose=0)
         results=dfit.predict(y)
-        assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'teststat']))
+        assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'teststat', 'df']))
     
         # TEST 14: Quantile
         dfit = distfit(method='quantile', n_boots=None)
         dfit.fit_transform(X, verbose=0)
         results=dfit.predict(y)
-        assert np.all(np.isin([*results.keys()],  ['y', 'y_proba', 'y_pred', 'teststat']))
+        assert np.all(np.isin([*results.keys()],  ['y', 'y_proba', 'y_pred', 'teststat', 'df']))
     
         # TEST 15: Discrete
         import random
@@ -322,7 +322,7 @@ class Test_DISTFIT(unittest.TestCase):
         assert [*dfit.model.keys()]==['name', 'model', 'params', 'score', 'chi2r', 'n', 'p', 'CII_min_alpha', 'CII_max_alpha']
         # TEST 15B
         results = dfit.predict([0, 1, 10, 11, 12])
-        assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'y_bool']))
+        assert np.all(np.isin([*results.keys()], ['y', 'y_proba', 'y_pred', 'P', 'y_bool', 'df']))
 
         from distfit import distfit
         # Set parameters for the test-case
