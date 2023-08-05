@@ -200,15 +200,15 @@ Note that dataframe ``df`` is included when using the **todf=True** parameter.
 .. code:: python
 
     # Print probabilities
-    print(out['y_proba'])
+    print(results['y_proba'])
     # > [0.02702734, 0.04908335, 0.08492715, 0.13745288, 0.49567466, 0.41288701, 0.3248188 , 0.02260135, 0.00636084]
     
     # Print the labels with respect to the confidence intervals
-    print(out['y_pred'])
+    print(results['y_pred'])
     # > ['down' 'down' 'down' 'none' 'none' 'none' 'none' 'up' 'up']
 
     # Print the dataframe containing the total information
-    print(out['df'])
+    print(results['df'])
 
 +----+-----+------------+----------+------------+
 |    |   y |    y_proba | y_pred   |          P |

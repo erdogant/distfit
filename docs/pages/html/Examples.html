@@ -12,8 +12,6 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -324,15 +322,15 @@ The “P” stands for the RAW P-values and “y_proba” are the corrected P-va
 In case you want to use the “P” values, set “multtest” to None during initialization.
 Note that dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> is included when using the <strong>todf=True</strong> parameter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print probabilities</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_proba&#39;</span><span class="p">])</span>
 <span class="c1"># &gt; [0.02702734, 0.04908335, 0.08492715, 0.13745288, 0.49567466, 0.41288701, 0.3248188 , 0.02260135, 0.00636084]</span>
 
 <span class="c1"># Print the labels with respect to the confidence intervals</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;y_pred&#39;</span><span class="p">])</span>
 <span class="c1"># &gt; [&#39;down&#39; &#39;down&#39; &#39;down&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;none&#39; &#39;up&#39; &#39;up&#39;]</span>
 
 <span class="c1"># Print the dataframe containing the total information</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;df&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
