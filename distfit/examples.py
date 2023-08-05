@@ -1,3 +1,22 @@
+import numpy as np
+from distfit import distfit
+import matplotlib.pyplot as plt
+X = np.random.normal(0, 2, 10000)
+y = [-8,-6,0,1,2,3,4,5,6]
+dfit = distfit(alpha=0.01)
+dfit.fit_transform(X)
+fig, ax = dfit.plot(chart='pdf')
+fig, ax = dfit.plot(chart='cdf', n_top=11)
+
+plt.show()
+# Or
+fig.show()
+
+
+
+
+# %%
+
 from distfit import distfit
 import matplotlib.pyplot as plt
 

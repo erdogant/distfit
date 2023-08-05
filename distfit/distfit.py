@@ -462,7 +462,7 @@ class distfit:
                 y,
                 alpha: float = None,
                 multtest: str = 'fdr_bh',
-                todf: bool = False,
+                todf: bool = True,
                 verbose: [str, int] = None):
         """Compute probability for response variables y, using the specified method.
 
