@@ -23,14 +23,12 @@ import warnings
 warnings.filterwarnings('ignore')
 
 logger = logging.getLogger(__name__)
-for handler in logger.handlers[:]:
-    logger.removeHandler(handler)
-
+[logger.removeHandler(handler) for handler in logger.handlers[:]]
 console = logging.StreamHandler()
 formatter = logging.Formatter('[distfit] >%(levelname)s> %(message)s')
 console.setFormatter(formatter)
 logger.addHandler(console)
-logger.propagate = False
+# logger.propagate = False
 
 
 # %% Class dist
