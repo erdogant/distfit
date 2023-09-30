@@ -22,7 +22,7 @@ import colourmap
 import warnings
 warnings.filterwarnings('ignore')
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('')
 [logger.removeHandler(handler) for handler in logger.handlers[:]]
 console = logging.StreamHandler()
 formatter = logging.Formatter('[distfit] >%(levelname)s> %(message)s')
