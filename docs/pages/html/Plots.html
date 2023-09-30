@@ -12,9 +12,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=daee824d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +36,7 @@
             distfit
           </a>
               <div class="version">
-                1.6.10
+                1.6.11
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -149,7 +151,7 @@
            <div itemprop="articleBody">
              
   <section id="basic-plot">
-<h1>Basic plot<a class="headerlink" href="#basic-plot" title="Permalink to this heading"></a></h1>
+<h1>Basic plot<a class="headerlink" href="#basic-plot" title="Link to this heading"></a></h1>
 <p>Let’s start plotting the empirical data using a histogram and the PDF. These plots will help to visually guide whether a distribution is a good model for a dataset. The confidence intervals are automatically set to 95% CII but can be changed using the alpha parameter during initialization. When using the plot functionality, it automatically shows the histogram in bars and with a line, PDF/CDF, and confidence intervals. All these properties can be manually specified or removed.</p>
 <p>We will start generating random data from the normal distribution and create a basic PDF and CDF plot.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import</span>
@@ -172,7 +174,7 @@
 </pre></div>
 </div>
 <table class="docutils align-center" id="id1">
-<caption><span class="caption-text">Basic PDF and CDF plot</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Basic PDF and CDF plot</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><img alt="figP1a" src="_images/example_figP1a.png" /></p></td>
 <td><p><img alt="figP1b" src="_images/example_figP1b.png" /></p></td>
@@ -181,14 +183,14 @@
 </table>
 </section>
 <section id="plot-all-fitted-distributions">
-<h1>Plot all fitted distributions<a class="headerlink" href="#plot-all-fitted-distributions" title="Permalink to this heading"></a></h1>
+<h1>Plot all fitted distributions<a class="headerlink" href="#plot-all-fitted-distributions" title="Link to this heading"></a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot seperately</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id2">
-<caption><span class="caption-text">PDF and CDF plot with multiple fitted distributions.</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">PDF and CDF plot with multiple fitted distributions.</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><img alt="figP2a" src="_images/example_figP2a.png" /></p></td>
 <td><p><img alt="figP2b" src="_images/example_figP2b.png" /></p></td>
@@ -197,7 +199,7 @@
 </table>
 </section>
 <section id="combine-plots">
-<h1>Combine plots<a class="headerlink" href="#combine-plots" title="Permalink to this heading"></a></h1>
+<h1>Combine plots<a class="headerlink" href="#combine-plots" title="Link to this heading"></a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot together</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;cdf&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -208,7 +210,7 @@
 </pre></div>
 </div>
 <table class="docutils align-center" id="id3">
-<caption><span class="caption-text">Basic PDF and CDF plot</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Basic PDF and CDF plot</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><img alt="figP3a" src="_images/example_figP3a.png" /></p></td>
 <td><p><img alt="figP3b" src="_images/example_figP3b.png" /></p></td>
@@ -217,7 +219,7 @@
 </table>
 </section>
 <section id="change-chart-properties">
-<h1>Change chart properties<a class="headerlink" href="#change-chart-properties" title="Permalink to this heading"></a></h1>
+<h1>Change chart properties<a class="headerlink" href="#change-chart-properties" title="Link to this heading"></a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change or remove properties of the chart.</span>
 <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span>
                 <span class="n">pdf_properties</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">},</span>
@@ -261,7 +263,7 @@
 </pre></div>
 </div>
 <table class="docutils align-center" id="id4">
-<caption><span class="caption-text">Basic PDF and CDF plot</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Basic PDF and CDF plot</span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><img alt="figP4a" src="_images/example_figP4a.png" /></p></td>
 <td><p><img alt="figP4b" src="_images/example_figP4b.png" /></p></td>
@@ -273,14 +275,14 @@
 </table>
 </section>
 <section id="qq-plot">
-<h1>QQ plot<a class="headerlink" href="#qq-plot" title="Permalink to this heading"></a></h1>
+<h1>QQ plot<a class="headerlink" href="#qq-plot" title="Link to this heading"></a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot seperately</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_top</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id5">
-<caption><span class="caption-text">Quantile-Quantile plot</span><a class="headerlink" href="#id5" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Quantile-Quantile plot</span><a class="headerlink" href="#id5" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><img alt="figP5a" src="_images/example_figP5a.png" /></p></td>
 <td><p><img alt="figP5b" src="_images/example_figP5b.png" /></p></td>
@@ -289,7 +291,7 @@
 </table>
 </section>
 <section id="line-plots">
-<h1>Line plots<a class="headerlink" href="#line-plots" title="Permalink to this heading"></a></h1>
+<h1>Line plots<a class="headerlink" href="#line-plots" title="Link to this heading"></a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Line plot</span>
 
 <span class="c1"># Import</span>
@@ -308,7 +310,7 @@
 </pre></div>
 </div>
 <table class="docutils align-center" id="id6">
-<caption><span class="caption-text">Line plot</span><a class="headerlink" href="#id6" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Line plot</span><a class="headerlink" href="#id6" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><img alt="figP6a" src="_images/lineplot_fig1.png" /></p></td>
 </tr>

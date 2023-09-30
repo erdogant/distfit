@@ -12,9 +12,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=daee824d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +36,7 @@
             distfit
           </a>
               <div class="version">
-                1.6.10
+                1.6.11
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -152,7 +154,7 @@
 In order to accomplish this, two functions are implemented: function <code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.save()</span></code> and function <code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.load()</span></code>
 Below is an illustration how to save and load models.</p>
 <section id="saving">
-<h1>Saving<a class="headerlink" href="#saving" title="Permalink to this heading"></a></h1>
+<h1>Saving<a class="headerlink" href="#saving" title="Link to this heading"></a></h1>
 <p>Saving a learned model can be done using the function <code class="xref py py-func docutils literal notranslate"><span class="pre">distfit.save()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -170,7 +172,7 @@ Below is an illustration how to save and load models.</p>
 </div>
 </section>
 <section id="loading">
-<h1>Loading<a class="headerlink" href="#loading" title="Permalink to this heading"></a></h1>
+<h1>Loading<a class="headerlink" href="#loading" title="Link to this heading"></a></h1>
 <p>Loading a learned model can be done using the function <code class="xref py py-func docutils literal notranslate"><span class="pre">dfit.load()</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize</span>
 <span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">()</span>

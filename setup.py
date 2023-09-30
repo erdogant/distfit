@@ -16,7 +16,7 @@ if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
         'This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
 
 # Setup ------------
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 setuptools.setup(
      install_requires=['packaging', 'matplotlib>=3.5.2','numpy','pandas','tqdm','statsmodels','scipy','pypickle', 'colourmap>=1.1.10'],

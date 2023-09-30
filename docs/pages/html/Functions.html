@@ -12,9 +12,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=daee824d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +36,7 @@
             distfit
           </a>
               <div class="version">
-                1.6.10
+                1.6.11
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -149,7 +151,7 @@
            <div itemprop="articleBody">
              
   <section id="module-distfit.distfit.distfit">
-<span id="initialization"></span><h1>Initialization<a class="headerlink" href="#module-distfit.distfit.distfit" title="Permalink to this heading"></a></h1>
+<span id="initialization"></span><h1>Initialization<a class="headerlink" href="#module-distfit.distfit.distfit" title="Link to this heading"></a></h1>
 <p>Probability density function.</p>
 <p>distfit is a python package for probability density fitting of univariate distributions for random variables.
 With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.</p>
@@ -199,7 +201,7 @@ The best fit is then derived using the binomial distribution.</p></li>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.fit_transform">
-<span id="detect-best-fit"></span><h1>Detect best Fit<a class="headerlink" href="#module-distfit.distfit.distfit.fit_transform" title="Permalink to this heading"></a></h1>
+<span id="detect-best-fit"></span><h1>Detect best Fit<a class="headerlink" href="#module-distfit.distfit.distfit.fit_transform" title="Link to this heading"></a></h1>
 <p>Fit best scoring theoretical distribution to the empirical data (X).</p>
 <dl class="field-list simple">
 <dt class="field-odd">param X<span class="colon">:</span></dt>
@@ -273,7 +275,7 @@ arg : arg function parameter</p></li>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.predict">
-<span id="predict"></span><h1>Predict<a class="headerlink" href="#module-distfit.distfit.distfit.predict" title="Permalink to this heading"></a></h1>
+<span id="predict"></span><h1>Predict<a class="headerlink" href="#module-distfit.distfit.distfit.predict" title="Link to this heading"></a></h1>
 <p>Compute probability for response variables y, using the specified method.</p>
 <p>Computes P-values for [y] based on the fitted distribution from X.
 The empirical distribution of X is used to estimate the loc/scale/arg parameters for a
@@ -367,7 +369,7 @@ theoretical distribution in case method type is <code class="docutils literal no
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.generate">
-<span id="generate-synthetic-data"></span><h1>Generate Synthetic data<a class="headerlink" href="#module-distfit.distfit.distfit.generate" title="Permalink to this heading"></a></h1>
+<span id="generate-synthetic-data"></span><h1>Generate Synthetic data<a class="headerlink" href="#module-distfit.distfit.distfit.generate" title="Link to this heading"></a></h1>
 <p>Generate synthetic data based on the fitted distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param n<span class="colon">:</span></dt>
@@ -425,7 +427,7 @@ theoretical distribution in case method type is <code class="docutils literal no
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.density">
-<span id="compute-density"></span><h1>Compute Density<a class="headerlink" href="#module-distfit.distfit.distfit.density" title="Permalink to this heading"></a></h1>
+<span id="compute-density"></span><h1>Compute Density<a class="headerlink" href="#module-distfit.distfit.distfit.density" title="Link to this heading"></a></h1>
 <p>Compute density based on input data and number of bins.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param X<span class="colon">:</span></dt>
@@ -487,7 +489,7 @@ theoretical distribution in case method type is <code class="docutils literal no
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.bootstrap">
-<span id="bootstrapping"></span><h1>Bootstrapping<a class="headerlink" href="#module-distfit.distfit.distfit.bootstrap" title="Permalink to this heading"></a></h1>
+<span id="bootstrapping"></span><h1>Bootstrapping<a class="headerlink" href="#module-distfit.distfit.distfit.bootstrap" title="Link to this heading"></a></h1>
 <p>Bootstrap.</p>
 <p>To validate our fitted model, the Kolmogorov-Smirnov (KS) test is used to compare the distribution of
 the bootstrapped samples to the original data to assess the goodness of fit. If the model is overfitting,
@@ -602,7 +604,7 @@ indicating that the model is not representative of the underlying distribution.<
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.get_distributions">
-<span id="get-distributions"></span><h1>Get Distributions<a class="headerlink" href="#module-distfit.distfit.distfit.get_distributions" title="Permalink to this heading"></a></h1>
+<span id="get-distributions"></span><h1>Get Distributions<a class="headerlink" href="#module-distfit.distfit.distfit.get_distributions" title="Link to this heading"></a></h1>
 <p>Return the distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param distr<span class="colon">:</span></dt>
@@ -626,7 +628,7 @@ indicating that the model is not representative of the underlying distribution.<
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.plot">
-<span id="plot-pdf-cdf"></span><h1>Plot PDF/CDF<a class="headerlink" href="#module-distfit.distfit.distfit.plot" title="Permalink to this heading"></a></h1>
+<span id="plot-pdf-cdf"></span><h1>Plot PDF/CDF<a class="headerlink" href="#module-distfit.distfit.distfit.plot" title="Link to this heading"></a></h1>
 <p>Make plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param chart<span class="colon">:</span></dt>
@@ -816,7 +818,7 @@ However, when cmap is set, the specified colormap is used.</p>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.qqplot">
-<span id="qq-plot"></span><h1>QQ-plot<a class="headerlink" href="#module-distfit.distfit.distfit.qqplot" title="Permalink to this heading"></a></h1>
+<span id="qq-plot"></span><h1>QQ-plot<a class="headerlink" href="#module-distfit.distfit.distfit.qqplot" title="Link to this heading"></a></h1>
 <p>Plot QQplot results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param X<span class="colon">:</span></dt>
@@ -944,7 +946,7 @@ However, when cmap is set, the specified colormap is used.</p>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.plot_summary">
-<span id="plot-summary"></span><h1>Plot Summary<a class="headerlink" href="#module-distfit.distfit.distfit.plot_summary" title="Permalink to this heading"></a></h1>
+<span id="plot-summary"></span><h1>Plot Summary<a class="headerlink" href="#module-distfit.distfit.distfit.plot_summary" title="Link to this heading"></a></h1>
 <p>Plot summary results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param n_top<span class="colon">:</span></dt>
@@ -1023,7 +1025,7 @@ However, when cmap is set, the specified colormap is used.</p>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.save">
-<span id="save"></span><h1>Save<a class="headerlink" href="#module-distfit.distfit.distfit.save" title="Permalink to this heading"></a></h1>
+<span id="save"></span><h1>Save<a class="headerlink" href="#module-distfit.distfit.distfit.save" title="Link to this heading"></a></h1>
 <p>Save learned model in pickle file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param filepath<span class="colon">:</span></dt>
@@ -1045,7 +1047,7 @@ However, when cmap is set, the specified colormap is used.</p>
 </section>
 <hr class="docutils" />
 <section id="module-distfit.distfit.distfit.load">
-<span id="load"></span><h1>Load<a class="headerlink" href="#module-distfit.distfit.distfit.load" title="Permalink to this heading"></a></h1>
+<span id="load"></span><h1>Load<a class="headerlink" href="#module-distfit.distfit.distfit.load" title="Link to this heading"></a></h1>
 <p>Load learned model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param filepath<span class="colon">:</span></dt>
