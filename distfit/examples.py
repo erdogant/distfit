@@ -1,3 +1,14 @@
+# %% Issue 39
+from distfit import distfit
+import numpy as np
+
+dfit = distfit(todf=True)
+cost = np.random.normal(0, 2, 10000)
+result = dfit.fit_transform(cost)
+dfit.plot(chart='pdf')
+
+# %%
+
 import numpy as np
 from distfit import distfit
 import matplotlib.pyplot as plt
