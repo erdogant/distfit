@@ -2,7 +2,7 @@
 from distfit import distfit
 import numpy as np
 
-dfit = distfit(todf=True)
+dfit = distfit(todf=True, distr='t')
 cost = np.random.normal(0, 2, 10000)
 result = dfit.fit_transform(cost)
 dfit.plot(chart='pdf')
