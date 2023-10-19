@@ -100,7 +100,7 @@ class distfit:
                  random_state: int = None,
                  verbose: [str, int] = 'info',
                  multtest=None,
-                 n_jobs=-1,
+                 n_jobs=1,
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -152,9 +152,10 @@ class distfit:
             Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
         random_state : int, optional
             Random state.
-        n_jobs : int, optional (default: -1)
+        n_jobs : int, optional (default: 1)
             Number of cpu cores that are used to compute the bootstrap.
-            Note that the use of multiple cores accacionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
+            Note that the use of all multiple cores accacionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
+            -1: Use all cores
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -1712,7 +1713,7 @@ def _plot_projection(self, X, labels, line_properties, ax):
 
 
 # %% Bootstrapping
-def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, random_state=None, n_jobs=-1):
+def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, random_state=None, n_jobs=1):
     # Bootstrapping
     # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
     # 1. Resample using fitted distribution.
@@ -2195,7 +2196,7 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
 
 
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None, n_jobs=-1):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None, n_jobs=1):
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
