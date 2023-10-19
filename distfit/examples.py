@@ -1,14 +1,70 @@
+# Import libraries
+import time
+import numpy as np
+from distfit import distfit
+
+# Create random normal data with mean=2 and std=4
+X = np.random.normal(2, 4, 10000)
+
+# Alternatively limit the search for only a few theoretical distributions.
+dfit = distfit(method='parametric', todf=True, n_jobs=-1)
+
+# Fit model on input data X.
+start = time.time()
+dfit.fit_transform(X, n_boots=100)
+end = time.time()
+print(end - start)
+
+dfit.summary[['name', 'score', 'loc', 'scale']]
+
+# Bootstrapping
+# dfit.bootstrap(X, n_boots=100)
+
+# Print
+dfit.plot_summary()
+print(dfit.summary[['name', 'score', 'bootstrap_score', 'bootstrap_pass']])
+
+
+
+# %% Issue 39
+from distfit import distfit
+import time
+import numpy as np
+
+dfit = distfit(todf=True, distr='t', n_jobs=1)
+cost = np.random.normal(0, 2, 10000)
+
+start = time.time()
+result = dfit.fit_transform(cost, n_boots=10)
+end = time.time()
+print(end - start)
+
+
+
+from distfit import distfit
+import matplotlib.pyplot as plt
+
+dfit = distfit(smooth=3, bound='up')
+df = dfit.import_example(data='tips')
+dfit.fit_transform(df['tip'], n_boots=100)
+
+dfit.summary
+
+
 # %% Issue 39
 from distfit import distfit
 import numpy as np
 
 dfit = distfit(todf=True, distr='t')
 cost = np.random.normal(0, 2, 10000)
-result = dfit.fit_transform(cost)
+result = dfit.fit_transform(cost, n_boots=100)
 dfit.plot(chart='pdf')
 
 # %%
 
+
+
+# %%
 import numpy as np
 from distfit import distfit
 import matplotlib.pyplot as plt
@@ -147,7 +203,7 @@ import matplotlib.pyplot as plt
 
 dfit = distfit(smooth=3, bound='up')
 df = dfit.import_example(data='tips')
-dfit.fit_transform(df['tip'], n_boots=100)
+dfit.fit_transform(df['tip'], n_boots=10)
 # dfit.fit_transform(df['tip'], n_boots=0)
 dfit.lineplot(df['tip'], xlabel='Number', ylabel='Tip value', grid=True)
 
@@ -309,7 +365,7 @@ from distfit import distfit
 # X = np.random.uniform(0, 1000, 10000)
 X = np.random.normal(163, 10, 10000)
 # Initialize with bootstrapping
-dfit = distfit(n_boots=10)
+dfit = distfit(n_boots=1000)
 # Fit
 results = dfit.fit_transform(X)
 # Results
