@@ -11,7 +11,7 @@ from joblib import Parallel, delayed
 
 from scipy.optimize import curve_fit
 import statsmodels.api as sm
-from tqdm import tqdm
+# from tqdm import tqdm
 
 from scipy.interpolate import make_interp_spline
 import statsmodels.stats.multitest as multitest
@@ -154,7 +154,7 @@ class distfit:
             Random state.
         n_jobs : int, optional (default: 1)
             Number of cpu cores that are used to compute the bootstrap.
-            Note that the use of all multiple cores accacionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
+            Note that the use of multiple cores accacionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
             -1: Use all cores
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
@@ -2794,9 +2794,9 @@ def set_logger(verbose: [str, int] = 'info'):
 
 
 # %%
-def disable_tqdm():
-    """Set the logger for verbosity messages."""
-    return (True if (logger.getEffectiveLevel()>=30) else False)
+# def disable_tqdm():
+#     """Set the logger for verbosity messages."""
+#     return (True if (logger.getEffectiveLevel()>=30) else False)
 
 def check_version():
     import matplotlib

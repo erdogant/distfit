@@ -23,7 +23,6 @@ setuptools.setup(
                        'matplotlib>=3.5.2',
                        'numpy',
                        'pandas',
-                       'tqdm',
                        'statsmodels',
                        'scipy',
                        'pypickle',
