@@ -7,6 +7,7 @@ import pypickle
 import numpy as np
 import pandas as pd
 from packaging import version
+from joblib import Parallel, delayed
 
 from scipy.optimize import curve_fit
 import statsmodels.api as sm
@@ -99,7 +100,7 @@ class distfit:
                  random_state: int = None,
                  verbose: [str, int] = 'info',
                  multtest=None,
-                 n_jobs=1,
+                 n_jobs=-1,
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -151,8 +152,9 @@ class distfit:
             Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
         random_state : int, optional
             Random state.
-        n_jobs : int, optional (default: 1)
-            Number of cpu cores that are used to compute the distributions.
+        n_jobs : int, optional (default: -1)
+            Number of cpu cores that are used to compute the bootstrap.
+            Note that the use of multiple cores accacionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
                 * 0, 60, None, 'silent', 'off', 'no']: No message.
@@ -325,7 +327,7 @@ class distfit:
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state, n_jobs=self.n_jobs)
             # Determine confidence intervals on the best fitting distribution
             model = compute_cii(self, model)
             # Store
@@ -1604,8 +1606,7 @@ class distfit:
         max_name_len = np.max(list(map(len, self.summary['name'][0:n_top].values)))
         for i in range(n_top):
             distr = self.summary['name'].iloc[i]
-            # Do the bootstrap
-            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), self.summary['model'].iloc[i], X, n_boots=n_boots, alpha=alpha, random_state=self.random_state)
+            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), self.summary['model'].iloc[i], X, n_boots=n_boots, alpha=alpha, random_state=self.random_state, n_jobs=self.n_jobs)
             # Store results
             logger.info('Bootstrap: [%s%s] > Score: %.2g > Pass 95%% CII KS-test: %s' %(distr, ' ' * (max_name_len - len(distr)), bootstrap_score, bootstrap_pass))
             self.summary['bootstrap_score'].iloc[i] = bootstrap_score
@@ -1709,40 +1710,9 @@ def _plot_projection(self, X, labels, line_properties, ax):
 
     return ax
 
-# %% Bootstrapping
-# from multiprocessing import Pool
-# from functools import partial
-
-# def _bootstrap_chunk(i, distribution_fit, distribution, n, random_state):
-#     # Resample from target distribution
-#     resamples = distribution_fit.rvs(n, random_state=random_state)
-#     # Find new target parameters after resampling
-#     params = distribution.fit(resamples)
-#     # Create new fit
-#     fit = distribution(*params)
-#     # Score the sample distribution vs. PDF with newly found parameters.
-#     Dn_i = st.kstest(resamples, fit.cdf)
-#     # Store the test statistics
-#     return Dn_i[0]
-
-# def bootstrapP(distribution, distribution_fit, data, B=1000, alpha=0.05, random_state=None, n_processes=6):
-#     n = len(data)
-
-#     # KS test
-#     Dn = st.kstest(data, distribution_fit.cdf)
-
-#     with Pool(processes=n_processes) as pool:
-#         bootstrap_chunk_with_args = partial(_bootstrap_chunk, distribution_fit=distribution_fit, distribution=distribution, n=n, random_state=random_state)
-#         Dns = pool.map(bootstrap_chunk_with_args, range(B))
-
-#     Dn_alpha = np.quantile(Dns, 1 - alpha)
-#     outcome = "rejected" if Dn[0] > Dn_alpha else "Passed"
-#     pvalue = np.sum(Dns > Dn[0]) / B
-#     return pvalue, outcome
-
 
 # %% Bootstrapping
-def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, random_state=None):
+def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, random_state=None, n_jobs=-1):
     # Bootstrapping
     # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
     # 1. Resample using fitted distribution.
@@ -1750,16 +1720,15 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
     # 3. Compare the resampled data vs. fitted PDF.
 
     bootstrap_score, bootstrap_pass = 0, None
-    
+
     try:
         if (n_boots is not None) and (n_boots>=10):
             # Limit the number of samples to avoid memory issues.
             n = np.minimum(10000, len(X))
             # Kolmogorov-Smirnov (KS) statistic
             Dn = st.kstest(X, distribution_fit.cdf)
-    
-            Dns=[]
-            for i in tqdm(range(n_boots), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
+
+            def bootstrap_iteration(i):
                 # Resample n times from target distribution.
                 resamples = distribution_fit.rvs(n, random_state=random_state)
                 # Find new target parameters after resampling
@@ -1768,9 +1737,11 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
                 fit = distribution(*params)
                 # Score the k-hat distribution vs. for the resampled data of distribution k.
                 Dn_i = st.kstest(resamples, fit.cdf)
-                # Store the test statistics
-                Dns.append(Dn_i[0])
-    
+                # Return the test statistic
+                return Dn_i[0]
+
+            Dns = Parallel(n_jobs=n_jobs)(delayed(bootstrap_iteration)(i) for i in range(n_boots))
+
             Dn_alpha = np.quantile(Dns, 1 - alpha)
             bootstrap_pass = False if Dn[0] > Dn_alpha else True
             # Compute ratio correct
@@ -1780,6 +1751,47 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
         # logger.info('[%s] > Could not estimate fit, likely due to low sample size.' %(distr))
     # Return
     return bootstrap_score, bootstrap_pass
+
+
+# %% Bootstrapping
+# def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, random_state=None):
+#     # Bootstrapping
+#     # the goal here is to estimate the KS statistic of the fitted distribution when the params are estimated from data.
+#     # 1. Resample using fitted distribution.
+#     # 2. Use the resampled data to fit again the distribution.
+#     # 3. Compare the resampled data vs. fitted PDF.
+
+#     bootstrap_score, bootstrap_pass = 0, None
+    
+#     try:
+#         if (n_boots is not None) and (n_boots>=10):
+#             # Limit the number of samples to avoid memory issues.
+#             n = np.minimum(10000, len(X))
+#             # Kolmogorov-Smirnov (KS) statistic
+#             Dn = st.kstest(X, distribution_fit.cdf)
+    
+#             Dns=[]
+#             for i in tqdm(range(n_boots), desc="[distfit] >Bootstrapping " + distribution.name.title(), position=0, leave=False, disable=disable_tqdm()):
+#                 # Resample n times from target distribution.
+#                 resamples = distribution_fit.rvs(n, random_state=random_state)
+#                 # Find new target parameters after resampling
+#                 params = distribution.fit(resamples)
+#                 # Create new fit: k-hat
+#                 fit = distribution(*params)
+#                 # Score the k-hat distribution vs. for the resampled data of distribution k.
+#                 Dn_i = st.kstest(resamples, fit.cdf)
+#                 # Store the test statistics
+#                 Dns.append(Dn_i[0])
+    
+#             Dn_alpha = np.quantile(Dns, 1 - alpha)
+#             bootstrap_pass = False if Dn[0] > Dn_alpha else True
+#             # Compute ratio correct
+#             bootstrap_score = np.sum(Dns > Dn[0]) / n_boots
+#     except:
+#         pass
+#         # logger.info('[%s] > Could not estimate fit, likely due to low sample size.' %(distr))
+#     # Return
+#     return bootstrap_score, bootstrap_pass
 
 
 # %%
@@ -2183,7 +2195,7 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
 
 
 # %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None):
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None, n_jobs=-1):
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
@@ -2214,7 +2226,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 # Fitted model
                 distribution_fit = distribution(*arg, loc, scale) if arg else distribution(loc, scale)  # Store the fitted model
                 # Bootstrapping
-                bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boots=n_boots, random_state=random_state)
+                bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boots=n_boots, random_state=random_state, n_jobs=n_jobs)
 
                 # Store results
                 df.values[i, 0] = distr_name
