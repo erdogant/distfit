@@ -19,7 +19,17 @@ if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
 with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 setuptools.setup(
-     install_requires=['packaging', 'matplotlib>=3.5.2','numpy','pandas','tqdm','statsmodels','scipy','pypickle', 'colourmap>=1.1.10'],
+     install_requires=['packaging',
+                       'matplotlib>=3.5.2',
+                       'numpy',
+                       'pandas',
+                       'tqdm',
+                       'statsmodels',
+                       'scipy',
+                       'pypickle',
+                       'colourmap>=1.1.10',
+                       'joblib',
+                       ],
      python_requires='>=3',
      name='distfit',
      version=new_version,
