@@ -1,4 +1,16 @@
-# Import libraries
+# %% Issue xx
+
+from distfit import distfit
+import numpy as np
+
+dfit = distfit(distr='full',stats='energy',todf=True, n_jobs=-1)
+X = np.random.normal(0, 2, 10000)
+dfit.fit_transform(X)
+dfit.plot(chart='pdf')
+
+
+
+# %% Import libraries
 import time
 import numpy as np
 from distfit import distfit
