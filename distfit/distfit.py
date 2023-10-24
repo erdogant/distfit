@@ -1489,7 +1489,7 @@ class distfit:
                          st.chi, st.chi2, st.cosine, st.dgamma, st.dweibull, st.erlang, st.expon, st.exponnorm,
                          st.exponweib, st.exponpow, st.f, st.fatiguelife, st.fisk, st.foldcauchy, st.foldnorm,
                          st.genlogistic, st.genpareto, st.gennorm, st.genexpon, st.genextreme, st.gausshyper, st.gamma,
-                         st.gengamma, st.genhalflogistic, st.gilbrat, st.gompertz, st.gumbel_r, st.gumbel_l,
+                         st.gengamma, st.genhalflogistic, st.gibrat, st.gompertz, st.gumbel_r, st.gumbel_l,
                          st.halfcauchy, st.halflogistic, st.halfnorm, st.halfgennorm, st.hypsecant, st.invgamma,
                          st.invgauss, st.invweibull, st.johnsonsb, st.johnsonsu, st.laplace, st.levy,
                          st.logistic, st.loggamma, st.loglaplace, st.lognorm, st.lomax, st.maxwell, st.mielke,
