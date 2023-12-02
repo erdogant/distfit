@@ -9,6 +9,7 @@ __pycache__/
 # Personal
 old/
 *.pkl
+.pypirc
 
 # Distribution / packaging
 .pylint.*
