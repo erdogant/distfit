@@ -141,7 +141,7 @@ class distfit:
                 * 1000: Thousand bootstraps.
         smooth : int, default: None
             Smoothing the histogram can help to get a better fit when there are only few samples available.
-            The smooth parameter represnts a window that is used to create the convolution and gradually smoothen the line.
+            The smooth parameter is a window that is used to create the convolution and gradually smoothen the line.
         n_perm : int, default: 10000
             Number of permutations to model null-distribution in case of method is "quantile"
         weighted : Bool, (default: True)
