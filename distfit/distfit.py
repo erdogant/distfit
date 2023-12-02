@@ -330,25 +330,25 @@ class distfit:
             # Compute best distribution fit on the empirical X
             out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state, n_jobs=self.n_jobs)
             # Determine confidence intervals on the best fitting distribution
-            model = compute_cii(self, model)
+            model = compute_cii(self, model, logger=logger)
             # Store
             self.model = model
             self.summary = out_summary
         elif self.method=='discrete':
             # Compute best distribution fit on the empirical X
             out_summary, model, figdata = fit_transform_binom(X, f=self.f, weighted=True, stats=self.stats)
-            model = compute_cii(self, model)
+            model = compute_cii(self, model, logger=logger)
             # self.histdata = (figdata['Xdata'], figdata['hist'])
             self.model = model
             self.summary = out_summary
             self.figdata = figdata
         elif self.method=='quantile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = compute_cii(self, X)
+            self.model = compute_cii(self, X, logger=logger)
             self.summary = None
         elif self.method=='percentile':
             # Determine confidence intervals on the best fitting distribution
-            self.model = compute_cii(self, X)
+            self.model = compute_cii(self, X, logger=logger)
             self.percentile = np.percentile(X, 7)
             self.summary = None
         else:
@@ -1821,7 +1821,9 @@ def set_colors(df, cmap='Set1'):
         DataFrame.
 
     """
+    verbose = get_logger()
     df['color'] = colourmap.generate(df.shape[0], cmap=cmap, scheme='hex', verbose=0)
+    set_logger(verbose)
     return df
 
 
@@ -2791,6 +2793,11 @@ def set_logger(verbose: [str, int] = 'info'):
 
     # Show examples
     logger.setLevel(verbose)
+
+
+# %%
+def get_logger():
+    return logger.getEffectiveLevel()
 
 
 # %%
