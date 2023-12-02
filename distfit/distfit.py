@@ -2123,11 +2123,21 @@ def _plot_parametric(self,
     distribution = getattr(st, model['name'])
 
     # Get pdf boundaries
-    getmin = distribution.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.0000001, loc=loc, scale=scale)
-    getmax = distribution.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.9999999, loc=loc, scale=scale)
     # Take maximum/minimum based on empirical data to avoid long theoretical distribution tails
-    getmax = np.minimum(getmax, np.max(self.histdata[1]))
-    getmin = np.maximum(getmin, np.min(self.histdata[1]))
+    try:
+        getmin = distribution.ppf(0.0000001, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.0000001, loc=loc, scale=scale)
+        getmin = np.maximum(getmin, np.min(self.histdata[1]))
+    except ValueError:
+        logger.info('The minimum CII could not be determined. The minimum of the histogram is used instead.')
+        getmin = np.min(self.histdata[1])
+
+    try:
+        getmax = distribution.ppf(0.9999999, *arg, loc=loc, scale=scale) if arg else distribution.ppf(0.9999999, loc=loc, scale=scale)
+        getmax = np.minimum(getmax, np.max(self.histdata[1]))
+    except ValueError:
+        logger.info('The maximum CII could not be determined. The maximum of the histogram is used instead.')
+        getmax = np.max(self.histdata[1])
+
     # Build pdf and turn into pandas Series
     x = np.linspace(getmin, getmax, self.size)
     y = distribution.pdf(x, loc=loc, scale=scale, *arg)
@@ -2288,20 +2298,25 @@ def _compute_fit_score(stats, y_obs, pdf):
 
 
 # %% Determine confidence intervals on the best fitting distribution
-def compute_cii(self, model, alpha=None):
-    logger.info("Compute confidence intervals [%s]" %(self.method))
+def compute_cii(self, model, alpha=None, logger=None):
     CIIup, CIIdown = None, None
     if alpha is None: alpha = self.alpha
+
+    if logger is not None: logger.info("Compute confidence intervals [%s]" %(self.method))
+    if self.method not in ['parametric', 'quantile', 'percentile', 'discrete']:
+        raise Exception('[distfit] >Error: method parameter can only be of type: "parametric", "quantile", "percentile" or "discrete".')
 
     if (self.method=='parametric') or (self.method=='discrete'):
         # Determine %CII
         if alpha is not None:
-            if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
-                # CIIdown = distr.ppf(1 - alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(1 - alpha, loc=loc, scale=scale)
-                CIIdown = model['model'].ppf(1 - alpha)
-            if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
-                # CIIup = distr.ppf(alpha, *arg, loc=loc, scale=scale) if arg else distr.ppf(alpha, loc=loc, scale=scale)
-                CIIup = model['model'].ppf(alpha)
+            _, CIIdown, flag1 = get_ppf(self, model, bound=self.bound, alpha=alpha, logger=logger)
+            CIIup, _, flag2 = get_ppf(self, model, bound=self.bound, alpha=alpha, logger=logger)
+            if (flag1 or flag2): logger.info('The CII with alpha=%g could not be determined for [%s]. Try different values for alpha. The minimum of the histogram is used instead.' %(alpha, model['name']))
+
+            # if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
+            #     CIIdown = model['model'].ppf(1 - alpha)
+            # if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
+            #     CIIup = model['model'].ppf(alpha)
     elif self.method=='quantile':
         X = model
         model = {}
@@ -2315,13 +2330,34 @@ def compute_cii(self, model, alpha=None):
         cii_low = (1 - (alpha / 2)) * 100
         CIIup = np.percentile(X, cii_high)
         CIIdown = np.percentile(X, cii_low)
-    else:
-        raise Exception('[distfit] >Error: method parameter can only be of type: "parametric", "quantile", "percentile" or "discrete".')
 
     # Store
     model['CII_min_alpha'] = CIIup
     model['CII_max_alpha'] = CIIdown
     return model
+
+
+# Get the CII boundaries
+def get_ppf(self, model, bound, alpha, logger=None):
+    CIIup, CIIdown = None, None
+    flag=False
+    if self.bound=='up' or self.bound=='both' or self.bound=='right' or self.bound=='high':
+        try:
+            CIIdown = model['model'].ppf(1 - alpha)
+        except ValueError as e:
+            flag=True
+            logger.debug(e)
+            CIIdown = np.max(self.histdata[1])
+
+    if self.bound=='down' or self.bound=='both' or self.bound=='left' or self.bound=='low':
+        try:
+            CIIup = model['model'].ppf(alpha)
+        except ValueError as e:
+            flag=True
+            logger.debug(e)
+            CIIup = np.min(self.histdata[1])
+
+    return CIIup, CIIdown, flag
 
 
 # Multiple test correction
