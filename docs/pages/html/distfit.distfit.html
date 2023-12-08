@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API References &mdash; distfit distfit documentation</title>
@@ -35,7 +35,7 @@
             distfit
           </a>
               <div class="version">
-                1.6.11
+                1.7.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -124,7 +124,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.BinomPMF"><code class="docutils literal notranslate"><span class="pre">BinomPMF</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.check_version"><code class="docutils literal notranslate"><span class="pre">check_version()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.compute_cii"><code class="docutils literal notranslate"><span class="pre">compute_cii()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.disable_tqdm"><code class="docutils literal notranslate"><span class="pre">disable_tqdm()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.distfit"><code class="docutils literal notranslate"><span class="pre">distfit</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.bootstrap"><code class="docutils literal notranslate"><span class="pre">distfit.bootstrap()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.distfit.density"><code class="docutils literal notranslate"><span class="pre">distfit.density()</span></code></a></li>
@@ -146,6 +145,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.fit_binom"><code class="docutils literal notranslate"><span class="pre">fit_binom()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.fit_transform_binom"><code class="docutils literal notranslate"><span class="pre">fit_transform_binom()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.get_ppf"><code class="docutils literal notranslate"><span class="pre">get_ppf()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#distfit.distfit.k_distribution"><code class="docutils literal notranslate"><span class="pre">k_distribution</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.k_distribution.fit"><code class="docutils literal notranslate"><span class="pre">k_distribution.fit()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#distfit.distfit.k_distribution.name"><code class="docutils literal notranslate"><span class="pre">k_distribution.name()</span></code></a></li>
@@ -210,14 +211,8 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="distfit.distfit.compute_cii">
-<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">compute_cii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.compute_cii" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">compute_cii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.compute_cii" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="distfit.distfit.disable_tqdm">
-<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">disable_tqdm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.disable_tqdm" title="Link to this definition"></a></dt>
-<dd><p>Set the logger for verbosity messages.</p>
-</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="distfit.distfit.distfit">
@@ -1145,6 +1140,16 @@ arg : arg function parameter</p></li>
 <span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">fit_transform_binom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weighted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RSS'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.fit_transform_binom" title="Link to this definition"></a></dt>
 <dd><p>Convert array of samples (nonnegative ints) to histogram and fit.</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="distfit.distfit.get_logger">
+<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.get_logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="distfit.distfit.get_ppf">
+<span class="sig-prename descclassname"><span class="pre">distfit.distfit.</span></span><span class="sig-name descname"><span class="pre">get_ppf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#distfit.distfit.get_ppf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="distfit.distfit.k_distribution">
