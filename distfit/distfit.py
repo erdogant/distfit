@@ -1980,12 +1980,13 @@ def _plot_pdf(x, y, label, pdf_properties, ax):
 
 def _plot_bar(binedges, histvals, bar_properties, ax):
     if bar_properties is not None:
-        ax.bar(binedges[:-1], histvals[:-1], width=np.diff(binedges), **bar_properties)
+        bar_properties.setdefault('width', np.diff(binedges))
+        ax.bar(binedges[:-1], histvals[:-1], **bar_properties)
 
 
 def _plot_emp(x, y, line_properties, ax):
     if line_properties is not None:
-        if line_properties.get('label', None) is None: line_properties['label'] = 'Emperical PDF'
+        line_properties.setdefault('label', 'Emperical PDF')
         ax.plot(x, y, **line_properties)
 
 

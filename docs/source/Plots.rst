@@ -108,7 +108,7 @@ Change chart properties
 	fig, ax = dfit.plot(chart='pdf',
 			pdf_properties={'color': 'r', 'linewidth': 3},
 			cii_properties={'color': 'r', 'linewidth': 3},
-			bar_properties={'color': '#1e3f5a'})
+			bar_properties={'color': '#1e3f5a', 'width': 10})
 
 	# Give the previous axes as input.
 	dfit.plot(chart='cdf',
