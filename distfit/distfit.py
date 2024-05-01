@@ -101,6 +101,7 @@ class distfit:
                  verbose: [str, int] = 'info',
                  multtest=None,
                  n_jobs=1,
+                 n_jobs_dist=1,
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -235,6 +236,7 @@ class distfit:
         self.random_state = random_state
         self.verbose = verbose
         self.n_jobs = n_jobs
+        self.n_jobs_dist = n_jobs_dist
         # Set the logger
         set_logger(verbose=verbose)
         if multtest is not None: logger.warning('multtest will be removed from initialization in a future release. Please set this parameter when using the predict function. Example: dfit.predict(multtest="holm")')
@@ -328,7 +330,7 @@ class distfit:
 
         if self.method=='parametric':
             # Compute best distribution fit on the empirical X
-            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state, n_jobs=self.n_jobs)
+            out_summary, model = _compute_score_distribution(X, X_bins, y_obs, self.distributions, self.stats, cmap=self.cmap, n_boots=self.n_boots, random_state=self.random_state, n_jobs=self.n_jobs, n_jobs_dist=self.n_jobs_dist)
             # Determine confidence intervals on the best fitting distribution
             model = compute_cii(self, model, logger=logger)
             # Store
@@ -2208,18 +2210,15 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     return out
 
 
-# %% Compute score for each distribution
-def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None, n_jobs=1):
+# %% Compute score for each distribution - in parallel when n_jobs_dist != 1
+def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None, n_jobs=1, n_jobs_dist=1):
     df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
-    # Estimate distribution parameters
-    for i, distribution in enumerate(DISTRIBUTIONS):
-
-        # Fit the distribution. However this can result in an error. I need the try-except.
+    def fit_distribution(i, distribution):
         try:
             start_time = time.time()
-
+            # Fit the distribution. However, this can result in an error. I need the try-except.
             # Ignore warnings from data that can't be fit
             with warnings.catch_warnings():
                 # fit dist to data
@@ -2242,27 +2241,33 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 # Bootstrapping
                 bootstrap_score, bootstrap_pass = _bootstrap(distribution, distribution_fit, data, n_boots=n_boots, random_state=random_state, n_jobs=n_jobs)
 
-                # Store results
-                df.values[i, 0] = distr_name
-                df.values[i, 1] = score
-                df.values[i, 2] = loc
-                df.values[i, 3] = scale
-                df.values[i, 4] = arg
-                df.values[i, 5] = params
-                df.values[i, 6] = distribution_fit
-                df.values[i, 7] = bootstrap_score
-                df.values[i, 8] = bootstrap_pass
+                # Setup for the logger - when not Parallel executed
+                spaces_1 = ' ' * (max_name_len - len(distr_name))
+                scores = ('[%s: %g] [loc=%.3f scale=%.3f]' % (stats, score, loc, scale))
+                time_spent = time.time() - start_time
+                logger.info("[%s%s] [%.4s sec] %s" % (distr_name, spaces_1, time_spent, scores))
+
+                return (i, distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass, start_time)
+
+        except Exception as e:
+            return None
+
+    # Parallelize the loop over distributions
+    results = Parallel(n_jobs=n_jobs_dist)(
+        delayed(fit_distribution)(i, distribution) for i, distribution in enumerate(DISTRIBUTIONS)
+    )
+
+    # Fill the DataFrame with the results
+    for result in results:
+        if result is not None:
+            i, distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass, start_time = result
+            df.values[i] = [distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass]
 
             # Setup for the logger
             spaces_1 = ' ' * (max_name_len - len(distr_name))
-            scores = ('[%s: %g] [loc=%.3f scale=%.3f]' %(stats, score, loc, scale))
+            scores = ('[%s: %g] [loc=%.3f scale=%.3f]' % (stats, score, loc, scale))
             time_spent = time.time() - start_time
-            logger.info("[%s%s] [%.4s sec] %s" %(distr_name, spaces_1, time_spent, scores))
-
-        except Exception:
-            pass
-            # e = sys.exc_info()[0]
-            # logger.error(e)
+            logger.info("[%s%s] [%.4s sec] %s" % (distr_name, spaces_1, time_spent, scores))
 
     # Sort the output
     df, model = _sort_dataframe(df, cmap=cmap)
@@ -2280,6 +2285,7 @@ def _sort_dataframe(df, cmap='Set1'):
     model = df.iloc[0,:].to_dict()
 
     return df, model
+
 
 # %% Compute fit score
 def _compute_fit_score(stats, y_obs, pdf):
