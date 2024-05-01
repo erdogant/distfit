@@ -100,8 +100,8 @@ class distfit:
                  random_state: int = None,
                  verbose: [str, int] = 'info',
                  multtest=None,
-                 n_jobs=1,
-                 n_jobs_dist=1,
+                 n_jobs: int = 1,
+                 n_jobs_dist: int = 1,
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -155,7 +155,10 @@ class distfit:
             Random state.
         n_jobs : int, optional (default: 1)
             Number of cpu cores that are used to compute the bootstrap.
-            Note that the use of multiple cores accacionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
+            Note that the use of multiple cores occasionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
+            -1: Use all cores
+        n_jobs_dist : int, optional (default: 1)
+            Number of cpu cores that are used to compute distriubtion fitting.
             -1: Use all cores
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
