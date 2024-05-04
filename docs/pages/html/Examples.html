@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quick start to find best fitting distribution &mdash; distfit distfit documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -36,7 +38,7 @@
             distfit
           </a>
               <div class="version">
-                1.7.3
+                1.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -110,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#parallel-computing">Parallel Computing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
@@ -504,6 +507,32 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
 </tr>
 </tbody>
 </table>
+</section>
+</section>
+<section id="parallel-computing">
+<h1>Parallel Computing<a class="headerlink" href="#parallel-computing" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Distfit</span></code>  supports parallel computing where it performs parallelizing into two parts for maximum efficiency: over the fitting of distributions and separately over the bootstrap approach.
+The chart below shows how effective parallelization is over these two parts. In general it can be seen that parallelizing is very effective! Time to compute is reduced from ~210sec to ~48sec.
+The <code class="docutils literal notranslate"><span class="pre">n_jobs_dist</span></code> describes the general loop, while <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> pertains to the bootstrap part.
+When the cores are somehow divided between the two tasks, there is no performance gain. In other words, when bootstrapping is enabled, it is best to allocate most of the cores to it.
+Core allocation is automatically managed during initialization, so you only need to set <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Initialization</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">distr</span><span class="o">=</span><span class="s1">&#39;popular&#39;</span><span class="p">,</span> <span class="n">n_boots</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">)</span>
+<span class="c1"># Fit</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Compute time</span>
+<span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils align-center" id="id5">
+<caption><span class="caption-text">Parallel Computing</span><a class="headerlink" href="#id5" title="Link to this table"></a></caption>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/performance_parralel_jobs.png"><img alt="fig_parallel_computing" src="_images/performance_parralel_jobs.png" style="width: 612.0px; height: 388.0px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
 <hr>
 <center>
         <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
@@ -512,7 +541,6 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
         <div data-ea-publisher="erdogantgithubio" data-ea-type="image" data-ea-style="stickybox"></div>
 </center>
 <hr></section>
-</section>
 
 
            </div>

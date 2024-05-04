@@ -301,14 +301,13 @@ Note that dataframe ``df`` is included when using the todf=True paramter.
 
 
 Parallel Computing
-******************
+######################
 
-``Distfit``  supports parallel computing, parallelizing into two main parts for maximum efficiency: over the fitting of distributions and separately over the bootstrap approach.
-The chart below shows how effective parallelization is over these two parts.
+``Distfit``  supports parallel computing where it performs parallelizing into two parts for maximum efficiency: over the fitting of distributions and separately over the bootstrap approach.
+The chart below shows how effective parallelization is over these two parts. In general it can be seen that parallelizing is very effective! Time to compute is reduced from ~210sec to ~48sec.
 The ``n_jobs_dist`` describes the general loop, while ``n_jobs`` pertains to the bootstrap part.
-When the cores are divided between the two tasks, there is no performance gain. In other words, when bootstrapping is enabled, it is best to allocate most of the cores to it.
-Core allocation is automatically managed during initialization, so you only need to set ``n_jobs``
-
+When the cores are somehow divided between the two tasks, there is no performance gain. In other words, when bootstrapping is enabled, it is best to allocate most of the cores to it.
+Core allocation is automatically managed during initialization, so you only need to set ``n_jobs``.
 
 
 
@@ -325,7 +324,7 @@ Core allocation is automatically managed during initialization, so you only need
 
 
 .. |fig_parallel_computing| image:: ../figs/performance_parralel_jobs.png
-    :scale: 70%
+    :scale: 100%
 
 .. table:: Parallel Computing
    :align: center
