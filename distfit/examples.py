@@ -1,3 +1,93 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from distfit import distfit
+import time
+from tqdm import tqdm
+
+X = np.random.normal(163, 10, 10000)
+
+def run_prog_bootstrap(n_jobs: int, n_jobs_dist: int, n_boots: int):
+    dfit = distfit(distr='popular', n_boots=n_boots, n_jobs=n_jobs, n_jobs_dist=n_jobs_dist, verbose='warning')
+    results = dfit.fit_transform(X)
+    return results
+
+def compute_performance(n_boots_list):
+    combinations = [(1, 1)] + [(i, 8 - i) for i in range(1, 8)]
+    timings = {}
+
+    for comb in tqdm(combinations):
+        timings[(comb[0], comb[1])] = []
+        for n_boots in tqdm(n_boots_list, ):
+            start_time = time.time()
+            _ = run_prog_bootstrap(comb[0], comb[1], n_boots)
+            elapsed_time = time.time() - start_time
+            timings[(comb[0], comb[1])].append((n_boots, elapsed_time))
+
+    return timings
+
+def plot_performance(timings):
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    colors = ['r', 'g', 'b', 'm', 'c', 'y', 'k']  # Define colors for different n_jobs values
+    markers = ['o', '^', 's', 'd', 'x', 'v', 'h']  # Define markers for different n_jobs values
+
+    for (n_jobs, n_jobs_dist), results in timings.items():
+        x, y = zip(*results)
+        label = f"n_jobs={n_jobs}, n_jobs_dist={n_jobs_dist}"
+        # Ensure indexing within range of available colors and markers
+        idx = min(n_jobs - 1, len(colors) - 1)
+        idy = min(n_jobs_dist - 1, len(markers) - 1)
+        ax.plot(x, y, label=label, color=colors[idx], marker=markers[idy], linestyle='-')
+
+    ax.set_xlabel('n_boots')
+    ax.set_ylabel('Time (s)')
+    ax.set_title('Performance Comparison')
+    ax.legend()
+    plt.grid(True)
+    plt.show()
+
+# Define the n_boots_list
+n_boots_list = [0, 1, 10, 50, 100]
+
+# Compute performance
+timings = compute_performance(n_boots_list)
+
+# Plot performance
+plot_performance(timings)
+
+
+
+
+
+# %% Parrellel computing
+import time
+from distfit import distfit
+
+X = np.random.normal(163, 10, 10000)
+
+
+def run_prog_bootstrap(n_jobs: int, n_jobs_dist: int):
+    dfit = distfit(distr='popular', n_boots=50, n_jobs=n_jobs, n_jobs_dist=n_jobs_dist, verbose='warning')
+    results = dfit.fit_transform(X)
+    return results
+
+def run_prog_raw(n_jobs_dist: int):
+    dfit = distfit(distr='popular', n_jobs_dist=n_jobs_dist)
+    results = dfit.fit_transform(X)
+    return results
+
+
+# %timeit run_prog_bootstrap(n_jobs=7, n_jobs_dist=1)
+
+# %timeit run_prog_raw(n_jobs_dist=1)
+# %timeit run_prog_raw(n_jobs_dist=8)
+
+# start_time = time.time()
+# dfit = distfit(distr='popular', n_boots=50, n_jobs=7, n_jobs_dist=1, verbose='info')
+# dfit.fit_transform(X)
+# elapsed_time = time.time() - start_time
+# print(elapsed_time)
+
 # %% Issue 45
 # https://github.com/erdogant/distfit/issues/45
 
@@ -35,17 +125,17 @@ marg_dists = ['gennorm',
 
 dfit = distfit(distr=marg_dists)
 dfit.fit_transform(data)
-dfit.plot()
+dfit.plot(bar_properties={'width':10})
 
 # %% Issue xx
 
 from distfit import distfit
 import numpy as np
-
-dfit = distfit(distr='full',stats='energy',todf=True, n_jobs=-1)
 X = np.random.normal(0, 2, 10000)
+
+dfit = distfit()
 dfit.fit_transform(X)
-dfit.plot(chart='pdf')
+dfit.plot(bar_properties={'width':0.1})
 
 
 
