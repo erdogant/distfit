@@ -101,7 +101,6 @@ class distfit:
                  verbose: [str, int] = 'info',
                  multtest=None,
                  n_jobs: int = 1,
-                 n_jobs_dist: int = 1,
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -154,11 +153,8 @@ class distfit:
         random_state : int, optional
             Random state.
         n_jobs : int, optional (default: 1)
-            Number of cpu cores that are used to compute the bootstrap.
+            Number of cpu cores that are used for the computations.
             Note that the use of multiple cores occasionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
-            -1: Use all cores
-        n_jobs_dist : int, optional (default: 1)
-            Number of cpu cores that are used to compute distribution fitting.
             -1: Use all cores
         verbose : [str, int], default is 'info' or 20
             Set the verbose messages using string or integer values.
@@ -220,6 +216,9 @@ class distfit:
             * https://erdogant.github.io/distfit
 
         """
+        # Set the logger
+        set_logger(verbose=verbose)
+
         if (alpha is None): alpha=1
         self.method = method
         self.alpha = alpha
@@ -238,10 +237,17 @@ class distfit:
         self.cmap = cmap
         self.random_state = random_state
         self.verbose = verbose
-        self.n_jobs = n_jobs
-        self.n_jobs_dist = n_jobs_dist
-        # Set the logger
-        set_logger(verbose=verbose)
+
+        # Set n_jobs
+        if n_boots is not None:
+            # Allocate the cores to bootstrapping
+            self.n_jobs_dist = 1
+            self.n_jobs = n_jobs
+        else:
+            # Allocate the cores to general proces
+            self.n_jobs_dist = n_jobs
+            self.n_jobs = 1
+
         if multtest is not None: logger.warning('multtest will be removed from initialization in a future release. Please set this parameter when using the predict function. Example: dfit.predict(multtest="holm")')
         # Check versions
         check_version()
