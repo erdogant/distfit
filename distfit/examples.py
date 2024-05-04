@@ -3,25 +3,27 @@ import matplotlib.pyplot as plt
 from distfit import distfit
 import time
 from tqdm import tqdm
+import colourmap
 
 X = np.random.normal(163, 10, 10000)
 
-def run_prog_bootstrap(n_jobs: int, n_jobs_dist: int, n_boots: int):
-    dfit = distfit(distr='popular', n_boots=n_boots, n_jobs=n_jobs, n_jobs_dist=n_jobs_dist, verbose='warning')
+def run_prog_bootstrap(n_jobs: int, n_boots: int):
+    dfit = distfit(distr='popular', n_boots=n_boots, n_jobs=n_jobs, verbose='warning')
     results = dfit.fit_transform(X)
     return results
 
 def compute_performance(n_boots_list):
-    combinations = [(1, 1)] + [(i, 8 - i) for i in range(1, 8)]
+    # combinations = [(1, 1)] + [(i, 8 - i) for i in range(1, 8)]
+    combinations = np.arange(1, 14)
     timings = {}
 
     for comb in tqdm(combinations):
-        timings[(comb[0], comb[1])] = []
+        timings[(comb)] = []
         for n_boots in tqdm(n_boots_list, ):
             start_time = time.time()
-            _ = run_prog_bootstrap(comb[0], comb[1], n_boots)
+            _ = run_prog_bootstrap(comb, n_boots)
             elapsed_time = time.time() - start_time
-            timings[(comb[0], comb[1])].append((n_boots, elapsed_time))
+            timings[(comb)].append((n_boots, elapsed_time))
 
     return timings
 
@@ -29,15 +31,15 @@ def plot_performance(timings):
     fig, ax = plt.subplots(figsize=(10, 6))
 
     colors = ['r', 'g', 'b', 'm', 'c', 'y', 'k']  # Define colors for different n_jobs values
+    colors = colourmap.fromlist(np.arange(1, 14), scheme='hex')[0]
     markers = ['o', '^', 's', 'd', 'x', 'v', 'h']  # Define markers for different n_jobs values
 
-    for (n_jobs, n_jobs_dist), results in timings.items():
+    for n_jobs, results in timings.items():
         x, y = zip(*results)
-        label = f"n_jobs={n_jobs}, n_jobs_dist={n_jobs_dist}"
+        label = f"n_jobs={n_jobs}"
         # Ensure indexing within range of available colors and markers
         idx = min(n_jobs - 1, len(colors) - 1)
-        idy = min(n_jobs_dist - 1, len(markers) - 1)
-        ax.plot(x, y, label=label, color=colors[idx], marker=markers[idy], linestyle='-')
+        ax.plot(x, y, label=label, color=colors[idx], marker='o', linestyle='-')
 
     ax.set_xlabel('n_boots')
     ax.set_ylabel('Time (s)')
@@ -46,16 +48,13 @@ def plot_performance(timings):
     plt.grid(True)
     plt.show()
 
-# Define the n_boots_list
-n_boots_list = [0, 1, 10, 50, 100]
 
+# Define the n_boots_list
+n_boots_list = [0, 10, 50, 100]
 # Compute performance
 timings = compute_performance(n_boots_list)
-
 # Plot performance
 plot_performance(timings)
-
-
 
 
 
@@ -65,28 +64,17 @@ from distfit import distfit
 
 X = np.random.normal(163, 10, 10000)
 
+start_time = time.time()
 
-def run_prog_bootstrap(n_jobs: int, n_jobs_dist: int):
-    dfit = distfit(distr='popular', n_boots=50, n_jobs=n_jobs, n_jobs_dist=n_jobs_dist, verbose='warning')
-    results = dfit.fit_transform(X)
-    return results
+# dfit = distfit(distr='full', n_boots=50, n_jobs=-1, verbose='info')
+dfit = distfit(distr='popular', n_jobs=20, n_boots=50, verbose='info')
+dfit.fit_transform(X)
 
-def run_prog_raw(n_jobs_dist: int):
-    dfit = distfit(distr='popular', n_jobs_dist=n_jobs_dist)
-    results = dfit.fit_transform(X)
-    return results
-
-
-# %timeit run_prog_bootstrap(n_jobs=7, n_jobs_dist=1)
-
-# %timeit run_prog_raw(n_jobs_dist=1)
-# %timeit run_prog_raw(n_jobs_dist=8)
-
-# start_time = time.time()
-# dfit = distfit(distr='popular', n_boots=50, n_jobs=7, n_jobs_dist=1, verbose='info')
-# dfit.fit_transform(X)
-# elapsed_time = time.time() - start_time
-# print(elapsed_time)
+elapsed_time = time.time() - start_time
+print(elapsed_time)
+# n_jobs=-1 > 79.834397315979
+# n_jobs=1 >  64 sec
+# n_jobs=2 >  58 sec
 
 # %% Issue 45
 # https://github.com/erdogant/distfit/issues/45
