@@ -67,7 +67,7 @@ pip install distfit
 
 ##### Install from github source (beta version)
 ```bash
- install git+https://github.com/erdogant/distfit
+pip install git+https://github.com/erdogant/distfit
 ```  
 
 ##### Check version
