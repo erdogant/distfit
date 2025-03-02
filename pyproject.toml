@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "distfit"
+dynamic = ["version"]
+authors = [{ name = "Erdogan Taskesen", email = "erdogant@gmail.com" },]
+description = "distfit is a Python library for probability density fitting."
+readme = "README.md"
+requires-python = ">=3"
+license = { file = "LICENSE" }
+keywords = ["distribution-fitting", "pdf", "cdf", "sse", "probability density", "hypothesis testing", "qqplot", "density functions", "fitting-curve", "probability statistics"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    'packaging',
+    'matplotlib>=3.5.2',
+    'numpy',
+    'pandas',
+    'statsmodels',
+    'scipy',
+    'pypickle',
+    'colourmap>=1.1.10',
+    'joblib',
+]
+
+[project.urls]
+Homepage = "https://erdogant.github.io/distfit"
+Download = "https://github.com/erdogant/distfit/archive/{version}.tar.gz"
+
+[tool.setuptools]
+packages = ["distfit"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = { attr = "distfit.__version__" }
