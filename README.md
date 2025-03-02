@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://erdogant.github.io/pca/">
+  <a href="https://erdogant.github.io/distfit/">
   <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="600" />
   </a>
 </p>
