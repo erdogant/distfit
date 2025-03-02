@@ -1,3 +1,34 @@
+#%% Check verbosity
+from distfit import distfit
+
+dfit = distfit(verbose='debug')
+dfit.check_verbosity()
+print('-----------------------------')
+dfit = distfit(verbose='info')
+dfit.check_verbosity()
+print('-----------------------------')
+dfit = distfit(verbose='warning')
+dfit.check_verbosity()
+print('-----------------------------')
+dfit = distfit(verbose='critical')
+dfit.check_verbosity()
+print('-----------------------------')
+
+
+from clustimage import Clustimage
+cl = Clustimage(verbose='warning')
+cl.check_verbosity()
+print('-----------------------------')
+from distfit import distfit
+dfit = distfit(verbose='info')
+dfit.check_verbosity()
+print('-----------------------------')
+from undouble import Undouble
+ud = Undouble(verbose='info')
+ud.check_verbosity()
+
+#%%
+
 import numpy as np
 import matplotlib.pyplot as plt
 from distfit import distfit
@@ -60,6 +91,7 @@ plot_performance(timings)
 
 # %% Parrellel computing
 import time
+import numpy as np
 from distfit import distfit
 
 X = np.random.normal(163, 10, 10000)
