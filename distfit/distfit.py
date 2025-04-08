@@ -23,13 +23,14 @@ import colourmap
 import warnings
 warnings.filterwarnings('ignore')
 
-NAME_WIDTH = max(len(__name__), 12)  # Ensuring a minimum width of 12
-logger = logging.getLogger('')
-[logger.removeHandler(handler) for handler in logger.handlers[:]]
+# Clear existing handlers
+root_logger = logging.getLogger()
+[root_logger.removeHandler(h) for h in root_logger.handlers[:]]
 logging.basicConfig(
-    format=f"%(asctime)s [%(name)-{NAME_WIDTH}s]> %(levelname)-8s> %(message)s",
+    format="%(asctime)s [%(name)s] > %(levelname)-8s > %(message)s",
     datefmt="%d-%m-%y %H:%M:%S",
     level=logging.INFO)
+
 logger = logging.getLogger(__name__)
 
 # %% Class dist
