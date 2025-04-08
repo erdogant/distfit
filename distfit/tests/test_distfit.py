@@ -153,7 +153,7 @@ class Test_DISTFIT(unittest.TestCase):
         results = dfit.fit_transform(X)
         dfit.predict(y)
         show_figures(dfit)
-        
+
         X = np.random.exponential(0.5, 10000)
         dfit = distfit(distr='expon', n_boots=None)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
@@ -161,14 +161,14 @@ class Test_DISTFIT(unittest.TestCase):
         dfit.plot(figsize=(15, 12), grid=False)
         dfit.predict(y)
         show_figures(dfit)
-        
+
         X = np.random.normal(0, 2, 10000)
         dfit = distfit(distr='norm', n_boots=None)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
         results = dfit.fit_transform(X)
         dfit.predict(y)
         show_figures(dfit)
-        
+
         dfit.plot(bar_properties={'color': '#808080', 'label': None},
                   pdf_properties={'color': 'r'},
                   emp_properties={'color': '#000000', 'linewidth': 3},
