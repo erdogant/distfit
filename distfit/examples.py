@@ -145,7 +145,7 @@ marg_dists = ['gennorm',
 
 dfit = distfit(distr=marg_dists)
 dfit.fit_transform(data)
-dfit.plot(bar_properties={'width':10})
+dfit.plot(bar_properties={'width': 15})
 
 # %% Issue xx
 
@@ -155,7 +155,7 @@ X = np.random.normal(0, 2, 10000)
 
 dfit = distfit()
 dfit.fit_transform(X)
-dfit.plot(bar_properties={'width':0.1})
+dfit.plot(bar_properties={'width': 0.2})
 
 
 # %% Import libraries
@@ -508,14 +508,11 @@ results = dfit.predict(y, multtest='holm')
 dfit.lineplot(X)
 
 # %% Import example
-
 from distfit import distfit
 dfit = distfit()
 df = dfit.import_example(data='gas_spot_price')
 dfit.lineplot(df, xlabel='Years', ylabel='Natural gas spot price', grid=True)
 plt.show()
-
-
 
 # %% CDF plot
 from distfit import distfit
