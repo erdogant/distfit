@@ -1,15 +1,25 @@
 from distfit.distfit import distfit
 from packaging import version
+import logging
 import matplotlib
+
+__author__ = 'Erdogan Tasksen'
+__email__ = 'erdogant@gmail.com'
+__version__ = '1.8.2'
+
+# Setup root logger
+_logger = logging.getLogger('distfit')
+_log_handler = logging.StreamHandler()
+_fmt = '[{asctime}] [{name}] {msg}'
+_formatter = logging.Formatter(fmt=_fmt, style='{', datefmt='%d-%m-%Y %H:%M:%S')
+_log_handler.setFormatter(_formatter)
+_log_handler.setLevel(logging.INFO)
+_logger.addHandler(_log_handler)
+_logger.propagate = False
 
 if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
     raise ImportError(
         'This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
-
-__author__ = 'Erdogan Tasksen'
-__email__ = 'erdogant@gmail.com'
-__version__ = '1.8.1'
-
 
 # module level doc-string
 __doc__ = """
