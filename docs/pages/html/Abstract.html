@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,20 +7,16 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Abstract &mdash; distfit distfit documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=daee824d"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=daee824d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,9 +35,6 @@
           <a href="index.html" class="icon icon-home">
             distfit
           </a>
-              <div class="version">
-                1.8.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -160,7 +155,8 @@
 <p>An approach to fit a probability distribution to data is a goodness of fit test. This compares the observed frequency (f) to the expected frequency from the model (f-hat) for any number of classes. In <code class="docutils literal notranslate"><span class="pre">distfit</span></code> we computed the goodness of fit test with the Sum of Squared Errors (or estimates) (SSE), also named Residual Sum of Squares (RSS).</p>
 <p>The <em>RSS</em> describes the deviation predicted from actual empirical values of data. Or in other words, the differences in the estimates. It is a measure of the discrepancy between the data and an estimation model. A small RSS indicates a close fit of the model to the data. RSS is computed by:</p>
 <figure class="align-default">
-<img alt="_images/RSS.svg" src="_images/RSS.svg" /></figure>
+<img alt="_images/RSS.svg" src="_images/RSS.svg" />
+</figure>
 <p>Where <strong>yi</strong> is the i-th value of the variable to be predicted, <strong>xi</strong> is the i-th value of the explanatory variable, and <strong>f(xi)</strong> is the predicted value of <strong>yi</strong> (also termed <strong>y-hat</strong>).</p>
 <p><code class="docutils literal notranslate"><span class="pre">distfit</span></code> is a python package for probability density fitting across 89 univariate distributions to non-censored data by RSS. The best fitted distribution is returned with the loc, scale, arg parameters which can then be used to compute the probability on new data-points.</p>
 </dd>

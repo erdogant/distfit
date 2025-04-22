@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,20 +7,16 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Parameter fitting &mdash; distfit distfit documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=daee824d"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=daee824d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,9 +35,6 @@
           <a href="index.html" class="icon icon-home">
             distfit
           </a>
-              <div class="version">
-                1.8.0
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -157,8 +152,8 @@
 <h1>Parameter fitting<a class="headerlink" href="#parameter-fitting" title="Link to this heading"></a></h1>
 <p>The <strong>performance</strong> of <code class="docutils literal notranslate"><span class="pre">distfit</span></code> can be examined by various aspects. In this section we will evaluate the detected parameters, and the goodness of fit of the detected probability density function (pdf).</p>
 <p>Lets evaluate the performance of <code class="docutils literal notranslate"><span class="pre">distfit</span></code> of the detected parameters when we draw random samples from a normal (Gaussian) distribution with <em>mu*=0 and *std*=2. We would expect to find *mu</em> and <em>std</em> very close to the input values.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">distfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">distfit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="c1"># Initialize model and specify distribution to be normal</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
 </pre></div>
@@ -186,7 +181,8 @@
 </pre></div>
 </div>
 <figure class="align-default" id="gaus-mu-0">
-<a class="reference internal image-reference" href="_images/gaus_mu_0.png"><img alt="_images/gaus_mu_0.png" src="_images/gaus_mu_0.png" style="width: 708.0px; height: 543.6px;" /></a>
+<a class="reference internal image-reference" href="_images/gaus_mu_0.png"><img alt="_images/gaus_mu_0.png" src="_images/gaus_mu_0.png" style="width: 708.0px; height: 543.6px;" />
+</a>
 </figure>
 </section>
 <section id="probability-density-function-fitting">
@@ -215,7 +211,8 @@
 </pre></div>
 </div>
 <figure class="align-default" id="gaus-mu-0-summary">
-<a class="reference internal image-reference" href="_images/gaus_mu_0_summary.png"><img alt="_images/gaus_mu_0_summary.png" src="_images/gaus_mu_0_summary.png" style="width: 720.0px; height: 425.6px;" /></a>
+<a class="reference internal image-reference" href="_images/gaus_mu_0_summary.png"><img alt="_images/gaus_mu_0_summary.png" src="_images/gaus_mu_0_summary.png" style="width: 720.0px; height: 425.6px;" />
+</a>
 </figure>
 <p>The model detected <code class="docutils literal notranslate"><span class="pre">beta</span></code> as the <strong>best</strong> PDF but a good RSS score is also detected for other distributions.</p>
 <p><strong>But why did the normal distribution not have the lowest Residual Sum of Squares despite we generated random normal data?</strong></p>
@@ -243,7 +240,7 @@
 </ol>
 </div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
-<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">distfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">distfit</span>
 
 <span class="c1"># Initialize with 100 permutations</span>
 <span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">n_boots</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -264,7 +261,8 @@
 </pre></div>
 </div>
 <figure class="align-default" id="summary-fit">
-<a class="reference internal image-reference" href="_images/summary_fit.png"><img alt="_images/summary_fit.png" src="_images/summary_fit.png" style="width: 748.8000000000001px; height: 425.6px;" /></a>
+<a class="reference internal image-reference" href="_images/summary_fit.png"><img alt="_images/summary_fit.png" src="_images/summary_fit.png" style="width: 748.8000000000001px; height: 425.6px;" />
+</a>
 </figure>
 <p>The plot contains on the left axes the goodness of fit test and on the right axes (orange line) the bootstrap result. The bootstrap score is a value between [0, 1] and depicts the fit-success ratio for the number of bootstraps and the PDF. In addition, the green and red dots depict whether there was a significant difference between the bootstrapped samples and the original data. The bootstrap test now excludes a few more PDFs that showed no stable results. The combined information demonstrates that the top 6 distributions are stable, whereas the t-distribution and the dweibull-distribution are not representative for the Emperical data.</p>
 </section>
@@ -330,11 +328,13 @@ Lets evaluate the effect of this parameter.</p>
 <p>Here we are going to combine the number of samples with the smoothing parameter.
 It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average <em>mu</em>. We see that all smooting windows jump up-and-down the mu=2. However, the more samples, the smaller the variation becomes. The smooting parameter seems to be only effective in very low sample sizes.</p>
 <figure class="align-default" id="perf-sampling-mu-smoothing-1">
-<a class="reference internal image-reference" href="_images/perf_sampling_mu_smoothing.png"><img alt="_images/perf_sampling_mu_smoothing.png" src="_images/perf_sampling_mu_smoothing.png" style="width: 715.2px; height: 488.0px;" /></a>
+<a class="reference internal image-reference" href="_images/perf_sampling_mu_smoothing.png"><img alt="_images/perf_sampling_mu_smoothing.png" src="_images/perf_sampling_mu_smoothing.png" style="width: 715.2px; height: 488.0px;" />
+</a>
 </figure>
 <p>Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples (blue line). As an example, from <em>7000</em> samples, the smooting window does <strong>not</strong> improve the fitting at all anymore. The conlusion is that smooting seems only be effective for samples sizes lower then approximately 5000 samples. Note that this number may be different across data sets.</p>
 <figure class="align-default" id="perf-sampling-mu-smoothing-2">
-<a class="reference internal image-reference" href="_images/normal_smooth_sample_sizes.png"><img alt="_images/normal_smooth_sample_sizes.png" src="_images/normal_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" /></a>
+<a class="reference internal image-reference" href="_images/normal_smooth_sample_sizes.png"><img alt="_images/normal_smooth_sample_sizes.png" src="_images/normal_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" />
+</a>
 </figure>
 </section>
 <section id="integer-fitting">
@@ -343,11 +343,11 @@ It is interesting to see that there is no clear contribution of the smoothing. T
 <p>Here, I will demonstrate the effect of fitting a uniform distribution on integer values.
 lets generate random integer values from a uniform distribution, and examine the RSS scores.
 We will iterate over sample sizes and smoothing windows to analyze the performance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">distfit</span> <span class="kn">import</span> <span class="n">distfit</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">distfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">distfit</span>
 
 <span class="c1"># Sample sizes</span>
 <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
@@ -384,7 +384,8 @@ We will iterate over sample sizes and smoothing windows to analyze the performan
 <p>The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples. Smooting does <strong>not</strong> improve the fitting anymore in case of more then <em>7000</em> samples. Note that this number may be different across data sets.</p>
 <p>From these results we can conclude that smooting seems only usefull for small(er) samples sizes.</p>
 <figure class="align-default" id="int-smooth-samples-sizes">
-<a class="reference internal image-reference" href="_images/int_smooth_sample_sizes.png"><img alt="_images/int_smooth_sample_sizes.png" src="_images/int_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" /></a>
+<a class="reference internal image-reference" href="_images/int_smooth_sample_sizes.png"><img alt="_images/int_smooth_sample_sizes.png" src="_images/int_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" />
+</a>
 </figure>
 <hr>
 <center>

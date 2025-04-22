@@ -104,7 +104,27 @@ Where **yi** is the ith value of the variable to be predicted, **xi** is the i-t
 
 Goodness-of-fit
 ---------------
-Besides *RSS*, there are various other approaches to determine the goodness-of-fit, such as the maximum likelihood estimation (mle), moment matching estimation (mme), quantile matching estimation (qme) or maximizing goodness-of-fit estimation (mge). ``distfit`` may be extended with more approaches in future versions.
+
+In distribution fitting, goodness-of-fit tests are essential to determine how well a theoretical probability distribution models the observed data. While visual inspection through plots can be helpful, statistical measures provide an objective way to quantify the agreement between empirical and theoretical distributions. This ensures that the chosen distribution is valid for downstream tasks such as simulation, risk assessment, or anomaly detection.
+A poor fit can lead to inaccurate conclusions, so selecting an appropriate scoring method is critical.
+
+The following scoring options are available to evaluate the goodness of fit:
+
++--------------------+-------------------------------------------------------------------------+
+| stats              | Description                                                             |
++====================+=========================================================================+
+| RSS                | Residual sum of squares between the observed values and estimated PDF.  |
++--------------------+-------------------------------------------------------------------------+
+| wasserstein        | Wasserstein distance (Earth Mover’s Distance) between distributions.    |
++--------------------+-------------------------------------------------------------------------+
+| ks                 | Kolmogorov–Smirnov statistic for comparing empirical CDFs.              |
++--------------------+-------------------------------------------------------------------------+
+| energy             | Energy distance based on pairwise distances between samples.            |
++--------------------+-------------------------------------------------------------------------+
+| goodness_of_fit    | General-purpose test from ``scipy.stats.goodness_of_fit`` including     |
+|                    | Cramér–von Mises and Anderson–Darling statistics.                       |
++--------------------+-------------------------------------------------------------------------+
+
 
 
 
