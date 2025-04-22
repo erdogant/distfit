@@ -117,6 +117,7 @@ class distfit:
                 * 'wasserstein'
                 * 'ks': Kolmogorov-Smirnov statistic
                 * 'energy'
+                * 'goodness_of_fit'
         bins : int, default: 'auto'
             Bin size to determine the empirical historgram.
                 * 'auto': Determine the bin size automatically.
@@ -206,6 +207,7 @@ class distfit:
         References
         ----------
             * https://erdogant.github.io/distfit
+            * https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.goodness_of_fit.html
 
         """
         # Set the logger
@@ -2202,7 +2204,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 # Calculate fitted PDF and error with fit in distribution
                 pdf = distribution.pdf(X, loc=loc, scale=scale, *arg)
                 # Compute score based on fit
-                score = _compute_fit_score(stats, y_obs, pdf)
+                score = _compute_fit_score(stats, y_obs, pdf, distribution)
                 # Get name of the distribution
                 distr_name = distribution.name if isinstance(distribution.name, str) else distribution.name()
                 # Fitted model
@@ -2257,7 +2259,7 @@ def _sort_dataframe(df, cmap='Set1'):
 
 
 # %% Compute fit score
-def _compute_fit_score(stats, y_obs, pdf):
+def _compute_fit_score(stats, y_obs, pdf, distribution):
     if stats=='RSS':
         score = np.sum(np.power(y_obs - pdf, 2.0))
         # score = (((y_obs - pdf) / sigmas)**2).sum()
@@ -2268,6 +2270,10 @@ def _compute_fit_score(stats, y_obs, pdf):
     elif stats=='ks':
         score = -np.log10(st.ks_2samp(y_obs, pdf)[1])
         # score = -np.log10(st.kstest(y_obs, pdf)[1])
+    elif stats == 'goodness_of_fit':
+        # 'auto' lets scipy pick the best test
+        result = st.goodness_of_fit(distribution, y_obs, statistic='ad', n_mc_samples=1000)
+        score = np.log10(result.pvalue)  # Use the log10 because followup functions will sort on lowest scores as beeing the best.
     else:
         raise Exception('[distfit] [%] statistic not implemented.', stats)
     return score
@@ -2522,7 +2528,7 @@ def transform_binom(hist, plot=True, weighted=True, f=1.5, stats='RSS'):
         p = fitparams[0]
         pdf = BinomPMF(nval)(Xdata, p)
         # Compute fit score
-        score = _compute_fit_score(stats, y_obs, pdf)
+        score = _compute_fit_score(stats, y_obs, pdf, BinomPMF)
         # Store
         pvals[nval - nmin] = p
         scores[nval - nmin] = score

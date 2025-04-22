@@ -1,3 +1,17 @@
+#%% Add functionality goodness of fit
+# https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.goodness_of_fit.html
+
+import time
+import numpy as np
+from distfit import distfit
+X = np.random.normal(163, 10, 10000)
+distr=['lognorm', 'pareto', 'norm', 't']
+dfit = distfit(distr=distr, stats='goodness_of_fit')
+dfit.fit_transform(X)
+dfit.plot()
+dfit.plot_summary()
+
+
 #%% Check verbosity
 from distfit import distfit
 
@@ -26,6 +40,8 @@ print('-----------------------------')
 from undouble import Undouble
 ud = Undouble(verbose='info')
 ud.check_verbosity()
+
+
 
 #%%
 

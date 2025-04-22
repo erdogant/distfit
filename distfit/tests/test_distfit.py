@@ -335,4 +335,15 @@ class Test_DISTFIT(unittest.TestCase):
         y = [0, 1, 10, 11, 12]
         results = dfit.predict(y)
         dfit.plot()
-        
+
+    def test_goodness_of_fit(self):
+        import numpy as np
+        from distfit import distfit
+        X = np.random.normal(163, 10, 10000)
+        stats = ['RSS', 'wasserstein', 'ks', 'energy', 'goodness_of_fit']
+        distr = ['lognorm', 'pareto', 'norm', 't']
+        for stat in stats:
+            dfit = distfit(distr=distr, stats=stat)
+            dfit.fit_transform(X)
+            dfit.plot()
+            dfit.plot_summary()
