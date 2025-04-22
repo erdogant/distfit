@@ -346,4 +346,4 @@ class Test_DISTFIT(unittest.TestCase):
             dfit = distfit(distr=distr, stats=stat)
             dfit.fit_transform(X)
             dfit.plot()
-            dfit.plot_summary()
+            dfit.plot_summary(title=stat)
