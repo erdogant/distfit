@@ -1949,8 +1949,10 @@ def _plot_pdf(x, y, label, pdf_properties, ax):
 
 def _plot_bar(binedges, histvals, bar_properties, ax):
     if bar_properties is not None:
-        bar_properties.setdefault('width', np.diff(binedges))
-        ax.bar(binedges[:-1], histvals[:-1], **bar_properties)
+        widths = np.diff(binedges)
+        widths = np.append(widths, widths[-1])  # Repeat last width
+        bar_properties.setdefault('width', widths)
+        ax.bar(binedges, histvals, **bar_properties)
 
 
 def _plot_emp(x, y, line_properties, ax):

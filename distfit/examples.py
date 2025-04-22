@@ -158,7 +158,6 @@ dfit.fit_transform(X)
 dfit.plot(bar_properties={'width':0.1})
 
 
-
 # %% Import libraries
 import time
 import numpy as np
@@ -545,6 +544,7 @@ dfit.plot_cdf()
 
 # %%
 from distfit import distfit
+from scipy.stats import binom
 # Set parameters for the test-case
 n = 8
 p = 0.5
