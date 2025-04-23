@@ -570,6 +570,9 @@ dfit = distfit(method='discrete')
 results = dfit.fit_transform(X)
 # Get the model and best fitted parameters.
 
+dfit.plot()
+dfit.plot_summary()
+
 y = [0, 1, 10, 11, 12]
 
 results = dfit.predict(y)
