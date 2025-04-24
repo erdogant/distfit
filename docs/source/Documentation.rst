@@ -37,7 +37,7 @@ Citing
 #########
 
 .. note::
-	Bibtex can be found at the right side at the `github page <https://github.com/erdogant/XXX/>`_.
+	Bibtex can be found at the right side at the `github page <https://github.com/erdogant/distfit/>`_.
 
 
 
