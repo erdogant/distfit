@@ -947,15 +947,15 @@ class distfit:
                  xlabel='x-axes',
                  ylabel='y-axes',
                  title='',
-                 fontsize=16,
+                 fontsize=20,
                  figsize=(25, 12),
                  xlim=None,
                  ylim=None,
                  fig=None,
                  ax=None,
                  grid=True,
-                 cii_properties={'alpha': 0.7, 'linewidth': 1},
-                 line_properties={'linestyle': '-', 'color': '#004481', 'marker': '.', 'linewidth': 1, 'markersize': 10},
+                 cii_properties={'alpha': 0.7, 'linewidth': 3},
+                 line_properties={'linestyle': '-', 'color': '#004481', 'marker': 'o', 'linewidth': 1.5, 'markersize': 6},
                  verbose=None):
         """Plot data and CII and/or predictions.
 
@@ -1052,29 +1052,7 @@ class distfit:
         plt.plot(labels, X, **line_properties)
 
         if hasattr(self, 'model'):
-            CII_min_alpha = self.model['CII_min_alpha']
-            CII_max_alpha = self.model['CII_max_alpha']
-
-            # Plot prediction results
-            if hasattr(self, 'results'):
-                Iloc = self.results['y_proba']<=self.alpha
-                minth = self.results['y'][np.logical_and(self.results['y_pred']=='down', Iloc)]
-                maxth = self.results['y'][np.logical_and(self.results['y_pred']=='up', Iloc)]
-
-                # Mark significant regions.
-                if len(maxth)>0:
-                    ax.fill_between(labels, 0, 1, where=X >= maxth.min(), color='green', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Up')
-                if len(minth)>0:
-                    ax.fill_between(labels, 0, 1, where=X <= minth.max(), color='#880808', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Down')
-
-            # Plot CII lines
-            if CII_min_alpha is not None:
-                ax.axhline(CII_min_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII uperbound (alpha=' + str(self.alpha) + ')')
-            if CII_max_alpha is not None:
-                ax.axhline(CII_max_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII lowerbound (alpha=' + str(self.alpha) + ')')
-
-            # Make title
-            title = self._make_title(title)
+            ax, title = _plot_confidence_intervals(self, X, labels, cii_properties, title, ax)
 
         # Limit axis
         if xlim is not None:
@@ -1083,12 +1061,20 @@ class distfit:
             ax.set_ylim(ylim[0], ylim[1])
 
         # Set figure properties
-        ax.set_title(title, fontsize=fontsize)
-        ax.tick_params(axis='both', which='major', labelsize=fontsize)
         ax.set_xlabel(xlabel, fontsize=fontsize)
         ax.set_ylabel(ylabel, fontsize=fontsize)
-        ax.grid(grid)
-        ax.legend(loc='upper left')
+        ax.set_title(title, fontsize=fontsize + 4)
+        ax.set_title(title, fontsize=fontsize)
+
+        ax.tick_params(axis='both', which='major', labelsize=fontsize)
+        if hasattr(self, 'model'):
+            ax.grid(axis='x', visible=grid)     # Only vertical grid lines
+            ax.grid(axis='y', visible=False)    # Disable horizontal grid lines
+        else:
+            ax.grid(visible=grid)    # Disable horizontal grid lines
+        ax.legend(loc='upper left', fontsize=fontsize)
+        fig.tight_layout()
+
 
         # Return
         return fig, ax
@@ -1648,6 +1634,7 @@ class distfit:
             * 'gas_spot_price'
             * 'tips'
             * 'occupancy'
+            * 'predictive_maintenance'
 
         Returns
         -------
@@ -1656,7 +1643,7 @@ class distfit:
 
         """
         df = None
-        logger.info('Downloading and processing [%s] from github source.' %(data))
+        logger.info(f'Downloading and processing {data} from github source.')
 
         if data=='gas_spot_price':
             df = pd.read_csv(r'https://erdogant.github.io/datasets/Henry_Hub_Natural_Gas_Spot_Price.zip')
@@ -1669,10 +1656,38 @@ class distfit:
             df = pd.read_csv(r'https://erdogant.github.io/datasets/tips.zip')
         elif data=='occupancy':
             df = pd.read_csv(r'https://erdogant.github.io/datasets/UCI_Occupancy_Detection.zip')
+        elif data=='predictive_maintenance':
+            df = pd.read_csv(r'https://erdogant.github.io/datasets/predictive_maintenance_ai4i2020.zip')
         else:
             logger.error('[%s] is not a valid data set that can be returned.' %(data))
 
         return df
+
+#%% Plot confidence intervals
+def _plot_confidence_intervals(self, X, labels, cii_properties, title, ax):
+    CII_min_alpha = self.model['CII_min_alpha']
+    CII_max_alpha = self.model['CII_max_alpha']
+
+    # Plot prediction results
+    if hasattr(self, 'results'):
+        Iloc = self.results['y_proba']<=self.alpha
+        minth = self.results['y'][np.logical_and(self.results['y_pred']=='down', Iloc)]
+        maxth = self.results['y'][np.logical_and(self.results['y_pred']=='up', Iloc)]
+
+        # Mark significant regions.
+        if len(maxth)>0:
+            ax.fill_between(labels, 0, 1, where=X >= maxth.min(), color='green', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Up')
+        if len(minth)>0:
+            ax.fill_between(labels, 0, 1, where=X <= minth.max(), color='#880808', alpha=0.5, transform=ax.get_xaxis_transform(), label='Significantly Down')
+
+    # Plot CII lines
+    if CII_min_alpha is not None:
+        ax.axhline(CII_min_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII uperbound (alpha=' + str(self.alpha) + ')')
+    if CII_max_alpha is not None:
+        ax.axhline(CII_max_alpha, color=cii_properties['color'], lw=cii_properties['linewidth'], alpha=cii_properties['alpha'], label='CII lowerbound (alpha=' + str(self.alpha) + ')')
+    title = self._make_title(title)
+    return ax, title
+
 
 # %% Plot projection
 def _plot_projection(self, X, labels, line_properties, ax):
