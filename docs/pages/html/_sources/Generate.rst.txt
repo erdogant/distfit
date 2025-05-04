@@ -1,7 +1,7 @@
-Generate samples
-'''''''''''''''''
+Generate Synthetic data 
+''''''''''''''''''''''''
 
-With the fitted model it allows to generate samples which can be easily done with the ``generate`` function.
+With the fitted model it allows to generate synthetic data which can be easily done with the ``generate`` function.
 
 Lets see how generating samples works:
 
