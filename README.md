@@ -16,13 +16,24 @@
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
 <div>
-
 <a href="https://erdogant.github.io/distfit/"><img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="350" align="left" /></a>
 ``distfit`` is a Python package for probability density fitting of univariate distributions for random variables.
 The distfit library can determine the best fit for over 90 theoretical distributions. The goodness-of-fit test is used to score for the best fit and after finding the best-fitted theoretical distribution, the loc, scale, and arg parameters are returned.
 It can be used for parametric, non-parametric, and discrete distributions.**⭐️ Star it if you like it ⭐️**
-
 </div>
+
+---
+
+### Key Features
+
+| Feature | Description |
+|--------|-------------|
+| [**Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Parametric.html) | Fit distributions on empirical data X. |
+| [**Non-Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Quantile.html) | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). |
+| [**Discrete Fitting**](https://erdogant.github.io/distfit/pages/html/Discrete.html) | Fit distributions on empirical data X using binomial distribution. |
+| [**predict**](https://erdogant.github.io/distfit/pages/html/Functions.html#module-distfit.distfit.distfit.predict) | Compute probabilities for response variables y. |
+| [**Generate Synthetic Data**](https://erdogant.github.io/distfit/pages/html/Generate.html) |  Generate synthetic data. |
+| [**Plots**](https://erdogant.github.io/distfit/pages/html/Plots.html) | Varoius plotting functionalities. |
 
 ---
 
@@ -32,9 +43,9 @@ It can be used for parametric, non-parametric, and discrete distributions.**⭐�
 - **Documentation:** [Website](https://erdogant.github.io/distfit)
 - **Bug Reports and Feature Requests:** [GitHub Issues](https://github.com/erdogant/distfit/issues)
 
-# 
+---
 
-
+### Background
 
 * For the parametric approach, The distfit library can determine the best fit across 89 theoretical distributions.
   To score the fit, one of the scoring statistics for the good-of-fitness test can be used used, such as RSS/SSE, Wasserstein,
@@ -48,6 +59,7 @@ It can be used for parametric, non-parametric, and discrete distributions.**⭐�
 * In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
   The best fit is then derived using the binomial distribution.
 
+---
 
 ### Installation
 
@@ -56,34 +68,23 @@ It can be used for parametric, non-parametric, and discrete distributions.**⭐�
 pip install distfit
 ```
 
-##### Install from github source (beta version)
+##### Install from Github source
 ```bash
 pip install git+https://github.com/erdogant/distfit
 ```  
 
-##### Check version
+##### Imort Library
 ```python
 import distfit
 print(distfit.__version__)
-```
 
-##### The following functions are available after installation:
-
-```python
 # Import library
 from distfit import distfit
-
-dfit = distfit()        # Initialize 
-dfit.fit_transform(X)   # Fit distributions on empirical data X
-dfit.predict(y)         # Predict the probability of the resonse variables
-dfit.plot()             # Plot the best fitted distribution (y is included if prediction is made)
 ```
 
 <hr>
 
 ### Examples
-
-# 
 
 ##### [Example: Quick start to find best fit for your input data](https://erdogant.github.io/distfit/pages/html/Examples.html#)
 
@@ -233,7 +234,7 @@ dfit.fit_transform(X)
 <hr>
 
 ### Contributors
-Setting up and maintaining distfit has been possible thanks to users and contributors. Thanks:
+Setting up and maintaining bnlearn has been possible thanks to users and contributors. Thanks to:
 
 <p align="left">
   <a href="https://github.com/erdogant/distfit/graphs/contributors">
@@ -241,11 +242,9 @@ Setting up and maintaining distfit has been possible thanks to users and contrib
   </a>
 </p>
 
-
-### Citation
-Please cite ``distfit`` in your publications if this is useful for your research. See column right for citation information.
-
 ### Maintainer
 * Erdogan Taskesen, github: [erdogant](https://github.com/erdogant)
 * Contributions are welcome.
-* If you wish to buy me a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a> for this work, it is very appreciated :)
+* Yes! This library is entirely **free** but it runs on coffee! :) Feel free to support with a <a href="https://erdogant.github.io/donate/?currency=USD&amount=5">Coffee</a>.
+
+<a href="https://www.buymeacoffee.com/erdogant"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=erdogant&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
