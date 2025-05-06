@@ -19,11 +19,11 @@
 
 <a href="https://erdogant.github.io/distfit/"><img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="350" align="left" /></a>
 ``distfit`` is a Python package for probability density fitting of univariate distributions for random variables.
-The distfit library can determine the best fit across 89 theoretical distributions. To score for the best fit, various goodness-of-fit tests can be used. After finding the best-fitted theoretical distribution, the loc, scale, and arg parameters are returned.
-It can be used for parametric, non-parametric, and discrete distributions. 
+The distfit library can determine the best fit for over 90 theoretical distributions. The goodness-of-fit test is used to score for the best fit and after finding the best-fitted theoretical distribution, the loc, scale, and arg parameters are returned.
+It can be used for parametric, non-parametric, and discrete distributions.**⭐️ Star it if you like it ⭐️**
 
 </div>
-**⭐️ Star it if you like it ⭐️**
+
 ---
 
 ### Resources and Links
