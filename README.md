@@ -1,9 +1,3 @@
-<p align="center">
-  <a href="https://erdogant.github.io/distfit/">
-  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="600" />
-  </a>
-</p>
-
 [![Python](https://img.shields.io/pypi/pyversions/distfit)](https://img.shields.io/pypi/pyversions/distfit)
 [![Pypi](https://img.shields.io/pypi/v/distfit)](https://pypi.org/project/distfit/)
 [![Docs](https://img.shields.io/badge/Sphinx-Docs-Green)](https://erdogant.github.io/distfit/)
@@ -21,26 +15,28 @@
 <!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
 <!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
+<div>
+
+<a href="https://erdogant.github.io/distfit/"><img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="300" align="left" /></a>
+``distfit`` is a Python package for probability density fitting of univariate distributions for random variables.
+The distfit library can determine the best fit across 89 theoretical distributions. To score for the best fit, various goodness-of-fit tests can be used. After finding the best-fitted theoretical distribution, the loc, scale, and arg parameters are returned.
+It can be used for parametric, non-parametric, and discrete distributions. Navigate to [API documentations](https://erdogant.github.io/distfit/) for more detailed information. **⭐️ Star it if you like it ⭐️**
+
+</div>
+
+---
+
+### Resources and Links
+- **Example Notebooks:** [Examples](https://erdogant.github.io/distfit/pages/html/Documentation.html)
+- **Blog Posts:** [Medium](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog), [Medium 2](https://towardsdatascience.com/outlier-detection-using-distribution-fitting-in-univariate-data-sets-ac8b7a14d40e), [Medium 3](https://towardsdatascience.com/step-by-step-guide-to-generate-synthetic-data-by-sampling-from-univariate-distributions-6b0be4221cb1)
+- **Documentation:** [Website](https://erdogant.github.io/distfit)
+- **Bug Reports and Feature Requests:** [GitHub Issues](https://github.com/erdogant/distfit/issues)
+
 # 
-### Blogs
-#### [1. How to Find the Best Theoretical Distribution for Your Data](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
-
-#### [2. Outlier Detection Using Distribution Fitting in Univariate Datasets](https://towardsdatascience.com/outlier-detection-using-distribution-fitting-in-univariate-data-sets-ac8b7a14d40e)
-
-#### [3. Step-by-Step Guide to Generate Synthetic Data by Sampling From Univariate Distributions](https://towardsdatascience.com/step-by-step-guide-to-generate-synthetic-data-by-sampling-from-univariate-distributions-6b0be4221cb1)
 
 
 
-# 
-
-### [Documentation pages](https://erdogant.github.io/distfit/)
-
-# 
-
-``distfit`` is a python package for probability density fitting of univariate distributions for random variables.
-With the random variable as an input, distfit can find the best fit for parametric, non-parametric, and discrete distributions.
-
-* For the parametric approach, the distfit library can determine the best fit across 89 theoretical distributions.
+* For the parametric approach, The distfit library can determine the best fit across 89 theoretical distributions.
   To score the fit, one of the scoring statistics for the good-of-fitness test can be used used, such as RSS/SSE, Wasserstein,
   Kolmogorov-Smirnov (KS), or Energy. After finding the best-fitted theoretical distribution, the loc, scale,
   and arg parameters are returned, such as mean and standard deviation for normal distribution.
@@ -51,11 +47,6 @@ With the random variable as an input, distfit can find the best fit for parametr
 
 * In case the dataset contains discrete values, the distift library contains the option for discrete fitting.
   The best fit is then derived using the binomial distribution.
-
-# 
-**⭐️ Star this repo if you like it ⭐️**
-# 
-
 
 
 ### Installation
