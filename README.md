@@ -39,7 +39,7 @@ It can be used for parametric, non-parametric, and discrete distributions.**‚≠êÔ
 
 ### Resources and Links
 - **Example Notebooks:** [Examples](https://erdogant.github.io/distfit/pages/html/Documentation.html)
-- **Blog Posts:** [Medium](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog), [Medium 2](https://towardsdatascience.com/outlier-detection-using-distribution-fitting-in-univariate-data-sets-ac8b7a14d40e), [Medium 3](https://towardsdatascience.com/step-by-step-guide-to-generate-synthetic-data-by-sampling-from-univariate-distributions-6b0be4221cb1)
+- **Blog Posts:** [Medium](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
 - **Documentation:** [Website](https://erdogant.github.io/distfit)
 - **Bug Reports and Feature Requests:** [GitHub Issues](https://github.com/erdogant/distfit/issues)
 
