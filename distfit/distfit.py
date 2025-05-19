@@ -1374,13 +1374,17 @@ class distfit:
             return None, None
 
     # Save model
-    def save(self, filepath, overwrite=True):
+    def save(self, filepath, overwrite=True, allow_external=False):
         """Save learned model in pickle file.
 
         Parameters
         ----------
         filepath : str
             Pathname to store pickle files.
+        overwrite : bool, optional (default=False)
+            Whether to overwrite the file if it already exists.
+        allow_external : bool, optional (default=False)
+            Allow saving outside predefined safe directories (explicit opt-in). The safe paths are: user and temp directories.
         verbose : int, optional
             Show message. A higher number gives more informatie. The default is 3.
 
@@ -1410,7 +1414,7 @@ class distfit:
                 if arg=='y_pred': out.update({arg: self.y_pred})
                 if arg=='results': out.update({arg: self.results})
 
-        status = pypickle.save(filepath, out, overwrite=overwrite)
+        status = pypickle.save(filepath, out, overwrite=overwrite, allow_external=allow_external)
         logger.info('Saving %s' %(status))
 
     # Load model.
