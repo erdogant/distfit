@@ -970,7 +970,7 @@ dfit.plot()
 dfit.plot_summary()
 
 # Save
-dfit.save(filepath='c:\\temp\\model.pkl', overwrite=True)
+dfit.save(filepath='c:\\temp\\model.pkl', overwrite=True, allow_external=True)
 # Load
 dfit.load(filepath='c:\\temp\\model.pkl')
 
