@@ -31,8 +31,8 @@ It can be used for parametric, non-parametric, and discrete distributions. ‚≠êÔ∏
 | [**Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Parametric.html) | Fit distributions on empirical data X. |
 | [**Non-Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Quantile.html) | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). |
 | [**Discrete Fitting**](https://erdogant.github.io/distfit/pages/html/Discrete.html) | Fit distributions on empirical data X using binomial distribution. |
-| [**predict**](https://erdogant.github.io/distfit/pages/html/Functions.html#module-distfit.distfit.distfit.predict) | Compute probabilities for response variables y. |
-| [**Generate Synthetic Data**](https://erdogant.github.io/distfit/pages/html/Generate.html) |  Generate synthetic data. |
+| [**Predict**](https://erdogant.github.io/distfit/pages/html/Functions.html#module-distfit.distfit.distfit.predict) | Compute probabilities for response variables y. |
+| [**Synthetic Data**](https://erdogant.github.io/distfit/pages/html/Generate.html) |  Generate synthetic data. |
 | [**Plots**](https://erdogant.github.io/distfit/pages/html/Plots.html) | Varoius plotting functionalities. |
 
 ---
