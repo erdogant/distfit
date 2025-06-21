@@ -35,8 +35,7 @@ from pca import pca
 cl = pca(verbose='warning')
 cl.check_verbosity()
 print('-----------------------------')
-from distfit import distfit
-dfit = distfit(verbose='info')
+
 dfit.check_verbosity()
 print('-----------------------------')
 
