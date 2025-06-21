@@ -27,6 +27,22 @@ print('-----------------------------')
 dfit = distfit(verbose='critical')
 dfit.check_verbosity()
 print('-----------------------------')
+dfit = distfit(verbose='debug')
+dfit.check_verbosity()
+
+
+from pca import pca
+cl = pca(verbose='warning')
+cl.check_verbosity()
+print('-----------------------------')
+from distfit import distfit
+dfit = distfit(verbose='info')
+dfit.check_verbosity()
+print('-----------------------------')
+
+from undouble import Undouble
+ud = Undouble(verbose='info')
+ud.check_verbosity()
 
 
 from clustimage import Clustimage

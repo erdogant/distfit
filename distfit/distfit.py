@@ -23,6 +23,8 @@ import colourmap
 import warnings
 warnings.filterwarnings('ignore')
 logger = logging.getLogger(__name__)
+if not logger.hasHandlers():
+    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
 # %% Class dist
 class distfit:
@@ -90,9 +92,9 @@ class distfit:
                  mhist: str = 'numpy',
                  cmap: str = 'Set1',
                  random_state: int = None,
-                 verbose: [str, int] = 'info',
                  multtest=None,
                  n_jobs: int = 1,
+                 verbose: [str, int] = 'info',
                  ):
         """Initialize distfit with user-defined parameters.
 
@@ -149,13 +151,14 @@ class distfit:
             Number of cpu cores that are used for the computations.
             Note that the use of multiple cores occasionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
             -1: Use all cores
-        verbose : [str, int], default is 'info' or 20
-            Set the verbose messages using string or integer values.
-                * 0, 60, None, 'silent', 'off', 'no']: No message.
-                * 10, 'debug': Messages from debug level and higher.
-                * 20, 'info': Messages from info level and higher.
-                * 30, 'warning': Messages from warning level and higher.
-                * 50, 'critical': Messages from critical level and higher.
+        verbose : str or int, optional, default='info' (20)
+            Logging verbosity level. Possible values:
+            - 0, 60, None, 'silent', 'off', 'no' : no messages.
+            - 10, 'debug' : debug level and above.
+            - 20, 'info' : info level and above.
+            - 30, 'warning' : warning level and above.
+            - 50, 'critical' : critical level and above.
+
 
         Returns
         -------
@@ -206,12 +209,13 @@ class distfit:
 
         References
         ----------
+            * erdogant.medium.com
             * https://erdogant.github.io/distfit
             * https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.goodness_of_fit.html
 
         """
         # Set the logger
-        set_logger(verbose=verbose)
+        verbose = set_logger(verbose=verbose)
 
         if (alpha is None): alpha=1
         self.method = method
@@ -2785,7 +2789,7 @@ def scale_data(y):
     # return ynorm
     
 # %%
-def set_logger(verbose: [str, int] = 'info'):
+def set_logger(verbose: [str, int] = 'info', return_status: bool = False):
     """Set the logger for verbosity messages.
 
     Parameters
@@ -2819,17 +2823,22 @@ def set_logger(verbose: [str, int] = 'info'):
         verbose=60
     # Convert str to levels
     if isinstance(verbose, str):
-        levels = {'silent': 60,
-                  'off': 60,
-                  'no': 60,
-                  'debug': 10,
-                  'info': 20,
-                  'warning': 30,
-                  'critical': 50}
+        levels = {
+            'silent': logging.CRITICAL + 10,
+            'off': logging.CRITICAL + 10,
+            'no': logging.CRITICAL + 10,
+            'debug': logging.DEBUG,
+            'info': logging.INFO,
+            'warning': logging.WARNING,
+            'error': logging.ERROR,
+            'critical': logging.CRITICAL,
+        }
         verbose = levels[verbose]
 
     # Show examples
     logger.setLevel(verbose)
+    if return_status:
+        return verbose
 
 
 # %%
