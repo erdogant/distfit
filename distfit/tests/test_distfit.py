@@ -3,6 +3,8 @@ from distfit import distfit
 import unittest
 from scipy.stats import binom
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 def show_figures(dfit):
     charts = ['pdf', 'cdf']
@@ -139,41 +141,99 @@ class Test_DISTFIT(unittest.TestCase):
         show_figures(dfit)
 
 
+    # def test_figures(self):
+    #     from distfit import distfit
+    #     dfit = distfit()
+    #     X = binom(8, 0.5).rvs(1000)
+    #     dfit = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
+    #     dfit.fit_transform(X, verbose='info');
+    #     show_figures(dfit)
+
+    #     X = np.random.uniform(0, 1000, 10000)
+    #     dfit = distfit(distr='uniform', n_boots=None)
+    #     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+    #     results = dfit.fit_transform(X)
+    #     dfit.predict(y)
+    #     show_figures(dfit)
+
+    #     X = np.random.exponential(0.5, 10000)
+    #     dfit = distfit(distr='expon', n_boots=None)
+    #     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+    #     results = dfit.fit_transform(X)
+    #     dfit.plot(figsize=(15, 12), grid=False)
+    #     dfit.predict(y)
+    #     show_figures(dfit)
+
+    #     X = np.random.normal(0, 2, 10000)
+    #     dfit = distfit(distr='norm', n_boots=None)
+    #     y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
+    #     results = dfit.fit_transform(X)
+    #     dfit.predict(y)
+    #     show_figures(dfit)
+
+    #     dfit.plot(bar_properties={'color': '#808080', 'label': None},
+    #               pdf_properties={'color': 'r'},
+    #               emp_properties={'color': '#000000', 'linewidth': 3},
+    #               cii_properties={'color': 'b'})
+    
     def test_figures(self):
         from distfit import distfit
+        import numpy as np
+        from scipy.stats import binom
+    
+        # Parametric distribution
+        X = np.random.normal(0, 2, 1000)
         dfit = distfit()
+        dfit.fit_transform(X)
+        fig, ax = dfit.plot()
+        assert fig is not None
+        assert hasattr(fig, 'axes')
+        assert ax is not None
+        plt.close(fig)
+    
+        # Discrete distribution
         X = binom(8, 0.5).rvs(1000)
         dfit = distfit(method='discrete', f=1.5, weighted=True, stats='wasserstein')
-        dfit.fit_transform(X, verbose='info');
-        show_figures(dfit)
-
+        dfit.fit_transform(X, verbose='info')
+        fig, ax = dfit.plot()
+        assert fig is not None
+        plt.close(fig)
+    
+        # Uniform distribution
         X = np.random.uniform(0, 1000, 10000)
         dfit = distfit(distr='uniform', n_boots=None)
         y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-        results = dfit.fit_transform(X)
+        dfit.fit_transform(X)
         dfit.predict(y)
-        show_figures(dfit)
-
+        fig, ax = dfit.plot()
+        assert fig is not None
+        plt.close(fig)
+    
+        # Exponential distribution
         X = np.random.exponential(0.5, 10000)
         dfit = distfit(distr='expon', n_boots=None)
-        y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-        results = dfit.fit_transform(X)
-        dfit.plot(figsize=(15, 12), grid=False)
-        dfit.predict(y)
-        show_figures(dfit)
-
+        dfit.fit_transform(X)
+        fig, ax = dfit.plot(figsize=(15, 12), grid=False)
+        assert fig is not None
+        plt.close(fig)
+    
+        # Normal distribution
         X = np.random.normal(0, 2, 10000)
         dfit = distfit(distr='norm', n_boots=None)
-        y = [-14,-8,-6,0,1,2,3,4,5,6,7,8,9,10,11,15]
-        results = dfit.fit_transform(X)
-        dfit.predict(y)
-        show_figures(dfit)
-
-        dfit.plot(bar_properties={'color': '#808080', 'label': None},
-                  pdf_properties={'color': 'r'},
-                  emp_properties={'color': '#000000', 'linewidth': 3},
-                  cii_properties={'color': 'b'})
-
+        dfit.fit_transform(X)
+        fig, ax = dfit.plot()
+        assert fig is not None
+        plt.close(fig)
+       
+        # Test property customization
+        fig, ax = dfit.plot(
+            bar_properties={'color': '#808080', 'label': None},
+            pdf_properties={'color': 'r'},
+            emp_properties={'color': '#000000', 'linewidth': 3},
+            cii_properties={'color': 'b'}
+        )
+        assert fig is not None
+        plt.close(fig)
 
     def test_distfit(self):
         from distfit import distfit

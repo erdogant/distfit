@@ -1,8 +1,9 @@
 sphinx_rtd_theme
 rst2pdf
-spyder-kernels==2.2.1
 sphinx
 pytest
-# git+git://github.com/SuperKogito/sphinxcontrib-pdfembed
 irelease
 sphinxcontrib-fulltoc
+
+# git+git://github.com/SuperKogito/sphinxcontrib-pdfembed
+# spyder-kernels==3.x.x
