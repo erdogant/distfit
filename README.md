@@ -39,7 +39,8 @@ It can be used for parametric, non-parametric, and discrete distributions. ‚≠êÔ∏
 
 ### Resources and Links
 - **Example Notebooks:** [Examples](https://erdogant.github.io/distfit/pages/html/Documentation.html)
-- **Blog Posts:** [Medium](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
+- **Medium Blogs** [Medium](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blogs)
+- **Gumroad Blogs with podcast:** [GumRoad](https://erdogant.github.io/distfit/pages/html/Documentation.html#gumroad-products-with-podcasts)
 - **Documentation:** [Website](https://erdogant.github.io/distfit)
 - **Bug Reports and Feature Requests:** [GitHub Issues](https://github.com/erdogant/distfit/issues)
 
