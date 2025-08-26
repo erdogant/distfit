@@ -26,7 +26,7 @@ It can be used for parametric, non-parametric, and discrete distributions. ‚≠êÔ∏
 
 ### Key Features
 
-| Feature | Description | Documentation | Medium | Gumroad + Podcast|
+| Feature | Description | Docs | Medium | Gumroad+Podcast|
 |---------|-------------|---------------|--------|---------|
 | **Parametric Fitting** | Fit distributions on empirical data X. | [Link](https://erdogant.github.io/distfit/pages/html/Parametric.html) | [Link](https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) | [Link](https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) |
 | **Non-Parametric Fitting** | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). | [Link](https://erdogant.github.io/distfit/pages/html/Quantile.html) | - | - |
