@@ -4,18 +4,27 @@ Sponsor
 .. include:: sponsor.rst
 
 
-Medium Blog
-############
+
+Medium Blogs
+#############
 
 .. note::
-	`How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
+	#. `Subscribe to Medium blogs <https://erdogant.medium.com/subscribe>`_
+	#. `How to Find the Best Theoretical Distribution for Your Data. <https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d>`_
+	#. `The Starters Guide To Learn Generating Synthetic Data: Sampling From Univariate Distributions. <https://medium.com/data-science-collective/the-starters-guide-to-learn-generating-synthetic-data-sampling-from-univariate-distributions-5a5df316cba3>`_
+	#. `Outlier Detection Using Distribution Fitting in Univariate Datasets. <https://medium.com/data-science-collective/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6>`_
 
-.. note::
-	`Outlier Detection Using Distribution Fitting in Univariate Datasets. <https://towardsdatascience.com/outlier-detection-using-distribution-fitting-in-univariate-data-sets-ac8b7a14d40e>`_
 
-.. note::
-	`Step-by-Step Guide to Generate Synthetic Data by Sampling From Univariate Distributions. <https://towardsdatascience.com/step-by-step-guide-to-generate-synthetic-data-by-sampling-from-univariate-distributions-6b0be4221cb1>`_
+Gumroad Products with Podcasts
+################################
 
+.. tip::
+	#. `Gumroad products <https://erdogant.gumroad.com>`_
+	#. `How to Find the Best Theoretical Distribution for Your Data. <https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d>`_
+	#. `The Starters Guide To Learn Generating Synthetic Data: Sampling From Univariate Distributions. <https://erdogant.gumroad.com/l/the-starters-guide-to-learn-generating-synthetic-data-sampling-from-univariate-distributions-5a5df316cba3>`_
+	#. `Outlier Detection Using Distribution Fitting in Univariate Datasets. <https://erdogant.gumroad.com/l/https://medium.com/data-science-collective/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6>`_
+	
+	
 
 Github
 ############
