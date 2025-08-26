@@ -4,20 +4,16 @@ distfit's documentation!
 |python| |pypi| |docs| |stars| |LOC| |downloads_month| |downloads_total| |license| |forks| |open issues| |project status| |medium| |colab| |DOI| |repo-size| |donate|
 
 
-.. note::
-	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://towardsdatascience.com/how-to-find-the-best-theoretical-distribution-for-your-data-a26e5673b4bd>`_
-
-
-.. |logo| image:: ../figs/logo.png
-
-.. table::
+.. image:: ../figs/logo.png
+   :width: 250px
    :align: center
 
-   +----------+
-   | |logo|   |
-   +----------+
+
 
 -----------------------------------
+
+.. note::
+	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d>`_
 
 
 
