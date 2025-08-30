@@ -10,7 +10,7 @@ __version__ = '1.8.7'
 # Setup root logger
 _logger = logging.getLogger('distfit')
 _log_handler = logging.StreamHandler()
-_fmt = '[{asctime}] [{name}] [{levelname}] {msg}'
+_fmt = '[{asctime}] [{name}] [{levelname}] {message}'
 _formatter = logging.Formatter(fmt=_fmt, style='{', datefmt='%d-%m-%Y %H:%M:%S')
 _log_handler.setFormatter(_formatter)
 _log_handler.setLevel(logging.DEBUG)
