@@ -9,12 +9,16 @@ authors = [{ name = "Erdogan Taskesen", email = "erdogant@gmail.com" },]
 description = "distfit is a Python library for probability density fitting."
 readme = "README.md"
 requires-python = ">=3"
-license = { file = "LICENSE" }
+license = "MIT"
 keywords = ["distribution-fitting", "pdf", "cdf", "sse", "probability density", "hypothesis testing", "qqplot", "density functions", "fitting-curve", "probability statistics"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: Unix",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
 ]
 dependencies = [
     'packaging',
