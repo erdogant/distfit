@@ -237,8 +237,12 @@ dfit.fit_transform(X)
 
 <hr>
 
+### Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=erdogant/distfit&type=Date)](https://www.star-history.com/#erdogant/distfit&Date)
+
 ### Contributors
-Setting up and maintaining bnlearn has been possible thanks to users and contributors. Thanks to:
+Thank the contributors!
 
 <p align="left">
   <a href="https://github.com/erdogant/distfit/graphs/contributors">
