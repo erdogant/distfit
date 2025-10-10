@@ -12,8 +12,6 @@
 [![Medium](https://img.shields.io/badge/Medium-Blog-black)](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://erdogant.github.io/distfit/pages/html/Documentation.html#colab-notebook)
 [![Donate](https://img.shields.io/badge/Support%20this%20project-grey.svg?logo=github%20sponsors)](https://erdogant.github.io/distfit/pages/html/Documentation.html#)
-<!---[![BuyMeCoffee](https://img.shields.io/badge/buymea-coffee-yellow.svg)](https://www.buymeacoffee.com/erdogant)-->
-<!---[![Coffee](https://img.shields.io/badge/coffee-black-grey.svg)](https://erdogant.github.io/donate/?currency=USD&amount=5)-->
 
 <div>
 <a href="https://erdogant.github.io/distfit/"><img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="250" align="left" /></a>
@@ -26,17 +24,15 @@ It can be used for parametric, non-parametric, and discrete distributions. ‚≠êÔ∏
 
 ### Key Features
 
-| Feature | Description | Docs | Medium | Gumroad+Podcast|
-|---------|-------------|---------------|--------|---------|
-| **Parametric Fitting** | Fit distributions on empirical data X. | [Link](https://erdogant.github.io/distfit/pages/html/Parametric.html) | [Link](https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) | [Link](https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) |
-| **Non-Parametric Fitting** | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). | [Link](https://erdogant.github.io/distfit/pages/html/Quantile.html) | - | - |
-| **Discrete Fitting** | Fit distributions on empirical data X using binomial distribution. | [Link](https://erdogant.github.io/distfit/pages/html/Discrete.html) | - | - |
-| **Predict** | Compute probabilities for response variables y. | [Link](https://erdogant.github.io/distfit/pages/html/Functions.html#module-distfit.distfit.distfit.predict) | - | - |
-| **Outlier Detection** | Detect anomalies using fitted distributions. | [Link](https://erdogant.github.io/distfit/pages/html/Generate.html) | [Link](https://medium.com/data-science-collective/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6) | [Link](https://erdogant.gumroad.com/l/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6) |
-| **Synthetic Data** | Generate synthetic data. | [Link](https://erdogant.github.io/distfit/pages/html/Generate.html) | [Link](https://medium.com/data-science-collective/the-starters-guide-to-learn-generating-synthetic-data-sampling-from-univariate-distributions-5a5df316cba3) | [Link](https://erdogant.gumroad.com/l/the-starters-guide-to-learn-generating-synthetic-data-sampling-from-univariate-distributions-5a5df316cba3) |
-| **Plots** | Various plotting functionalities. | [Link](https://erdogant.github.io/distfit/pages/html/Plots.html) | - | - |
-
-
+| Feature | Description | Medium | Gumroad+Podcast |
+|---------|-------------|--------|-----------------|
+| [**Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Parametric.html) | Fit distributions on empirical data X. | [Link](https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) | [Link](https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) |
+| [**Non-Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Quantile.html) | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). | - | - |
+| [**Discrete Fitting**](https://erdogant.github.io/distfit/pages/html/Discrete.html) | Fit distributions on empirical data X using binomial distribution. | - | - |
+| [**Predict**](https://erdogant.github.io/distfit/pages/html/Functions.html#module-distfit.distfit.distfit.predict) | Compute probabilities for response variables y. | - | - |
+| [**Outlier Detection**](https://erdogant.github.io/distfit/pages/html/Generate.html) | Detect anomalies using fitted distributions. | [Link](https://medium.com/data-science-collective/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6) | [Link](https://erdogant.gumroad.com/l/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6) |
+| [**Synthetic Data**](https://erdogant.github.io/distfit/pages/html/Generate.html) | Generate synthetic data. | [Link](https://medium.com/data-science-collective/the-starters-guide-to-learn-generating-synthetic-data-sampling-from-univariate-distributions-5a5df316cba3) | [Link](https://erdogant.gumroad.com/l/the-starters-guide-to-learn-generating-synthetic-data-sampling-from-univariate-distributions-5a5df316cba3) |
+| [**Plots**](https://erdogant.github.io/distfit/pages/html/Plots.html) | Various plotting functionalities. | - | - |
 
 ---
 
@@ -237,8 +233,12 @@ dfit.fit_transform(X)
 
 <hr>
 
+### Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=erdogant/distfit&type=Date)](https://www.star-history.com/#erdogant/distfit&Date)
+
 ### Contributors
-Setting up and maintaining bnlearn has been possible thanks to users and contributors. Thanks to:
+Thank the contributors!
 
 <p align="left">
   <a href="https://github.com/erdogant/distfit/graphs/contributors">
