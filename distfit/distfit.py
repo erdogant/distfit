@@ -23,8 +23,6 @@ import colourmap
 import warnings
 warnings.filterwarnings('ignore')
 logger = logging.getLogger(__name__)
-if not logger.hasHandlers():
-    logging.basicConfig(level=logging.INFO, format='[{asctime}] [{name}] [{levelname}] {message}', style='{', datefmt='%d-%m-%Y %H:%M:%S')
 
 # %% Class dist
 class distfit:
