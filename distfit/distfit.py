@@ -2243,6 +2243,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 return (i, distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass, start_time)
 
         except Exception as e:
+            logger.info("Failed to fit distribution '{}': {}", distribution, e, exc_info=e)
             return None
 
     # Parallelize the loop over distributions
