@@ -21,7 +21,7 @@ import logging
 import colourmap
 
 import warnings
-warnings.filterwarnings('ignore')
+
 logger = logging.getLogger(__name__)
 
 # %% Class dist
@@ -2213,6 +2213,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
             # Fit the distribution. However, this can result in an error. I need the try-except.
             # Ignore warnings from data that can't be fit
             with warnings.catch_warnings():
+                warnings.filterwarnings("ignore")
                 # fit dist to data
                 params = distribution.fit(data)
                 logger.debug(params)
