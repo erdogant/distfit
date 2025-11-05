@@ -21,10 +21,8 @@ import logging
 import colourmap
 
 import warnings
-warnings.filterwarnings('ignore')
+
 logger = logging.getLogger(__name__)
-if not logger.hasHandlers():
-    logging.basicConfig(level=logging.INFO, format='[{asctime}] [{name}] [{levelname}] {message}', style='{', datefmt='%d-%m-%Y %H:%M:%S')
 
 # %% Class dist
 class distfit:
@@ -2215,6 +2213,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
             # Fit the distribution. However, this can result in an error. I need the try-except.
             # Ignore warnings from data that can't be fit
             with warnings.catch_warnings():
+                warnings.filterwarnings("ignore")
                 # fit dist to data
                 params = distribution.fit(data)
                 logger.debug(params)
@@ -2244,6 +2243,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 return (i, distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass, start_time)
 
         except Exception as e:
+            logger.info("Failed to fit distribution '%s': %s", distribution, e, exc_info=e)
             return None
 
     # Parallelize the loop over distributions
