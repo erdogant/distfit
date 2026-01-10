@@ -2885,7 +2885,7 @@ if __name__ == "__main__":
     
     # --- X ---
     if args.X is None:
-        X = np.random.normal(163, 10, 1000)
+        X = np.random.normal(163, 10, 5000)
     else:
         X = np.asarray(ast.literal_eval(args.X), dtype=float)
         if X.ndim != 1 or X.size == 0:
