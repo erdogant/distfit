@@ -4,7 +4,7 @@
 import time
 import numpy as np
 from distfit import distfit
-X = np.random.normal(163, 10, 10000)
+X = np.random.normal(163, 10, 1000)
 distr=['lognorm', 'pareto', 'norm', 't']
 dfit = distfit(distr=distr, stats='goodness_of_fit')
 dfit.fit_transform(X)

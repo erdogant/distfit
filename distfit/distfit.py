@@ -2,6 +2,7 @@
 
 
 # %% Libraries
+import argparse
 import time
 import pypickle
 import numpy as np
@@ -2860,4 +2861,57 @@ def check_version():
     import matplotlib
     if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
         logger.error('This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
+
+
+# %%
+# =============================================================================
+# MAIN
+# =============================================================================
+
+if __name__ == "__main__":
+    from distfit import distfit
+    import ast
+
+    parser = argparse.ArgumentParser(description="Distfit – Probability Distribution Fitting")
+    parser.add_argument("--X", type=str, help="Input list or array vector with data")
+    parser.add_argument("--method", type=str, default="parametric", choices=["parametric", "quantile"], help="Distribution fitting method")
+    parser.add_argument("--distr", type=str, default="popular", help="Distribution name (e.g. norm, expon, gamma, beta, poisson)")
+    parser.add_argument("--stats", type=str, default="RSS", choices=["RSS", "ks", "wasserstein", "energy"], help="Goodness-of-fit scoring metric")
+    parser.add_argument("--n_boots", type=int, default=None, help="Number of bootstrap samples (0 disables bootstrapping)")
+    parser.add_argument("--alpha", type=float, default=0.05, help="Significance level for goodness-of-fit tests")
+    parser.add_argument("--n_jobs", type=int, default=1, help="Number of jobs to start")
+    parser.add_argument("--verbose",  default="info", help="Enable verbose output")
+    args = parser.parse_args()
+    
+    # --- X ---
+    if args.X is None:
+        X = np.random.normal(163, 10, 1000)
+    else:
+        X = np.asarray(ast.literal_eval(args.X), dtype=float)
+        if X.ndim != 1 or X.size == 0:
+            raise ValueError("--X must be a non-empty 1D numeric array")
+
+    # Declare
+    n_boots = None if args.n_boots in (None, 0) else int(args.n_boots)
+    alpha = float(args.alpha)
+    n_jobs = int(args.n_jobs)
+    # --- verbose ---
+    verbose = args.verbose.lower()
+    if verbose not in {"debug", "info", "warning", "error"}:
+        raise ValueError("--verbose must be one of: debug, info, warning, error")
+        
+    dfit = distfit(
+        method=args.method,
+        distr=args.distr,
+        stats=args.stats,
+        n_boots=n_boots,
+        alpha=alpha,
+        n_jobs=n_jobs,
+        verbose=verbose,
+    )
+    
+    results = dfit.fit_transform(X)
+    # dfit.plot()
+    # dfit.plot_summary()
+    print(results)
 
