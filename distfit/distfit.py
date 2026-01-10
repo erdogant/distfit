@@ -1318,10 +1318,15 @@ class distfit:
                 ax.scatter(xcoord, score, color=color_axes_left)
 
                 # Round to a specific number of decimal places
-                yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
-                yticks = [0] + yticks
-                yticks = np.round(yticks, decimals=4)
+                yticks = np.linspace(np.min(df['score']), np.max(df['score']), num=len(ax.get_yticks()))
+                yticks = np.round(yticks, 4)
+                ax.set_yticks(np.linspace(0, 1, len(yticks)))  # fixed locator (scaled axis)
                 ax.set_yticklabels(yticks, fontsize=fontsize)
+
+                # yticks = list(np.linspace(start=np.min(df['score']), stop=np.max(df['score']), num=len(ax.get_yticks()) - 2))
+                # yticks = [0] + yticks
+                # yticks = np.round(yticks, decimals=4)
+                # ax.set_yticklabels(yticks, fontsize=fontsize)
             else:
                 ax.scatter(xcoord, df['score'], color=color_axes_left)
                 score = df['score']
