@@ -8,15 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Parameter fitting &mdash; distfit distfit documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=daee824d"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -182,7 +182,7 @@
 </pre></div>
 </div>
 <figure class="align-default" id="gaus-mu-0">
-<a class="reference internal image-reference" href="_images/gaus_mu_0.png"><img alt="_images/gaus_mu_0.png" src="_images/gaus_mu_0.png" style="width: 708.0px; height: 543.6px;" />
+<a class="reference internal image-reference" href="_images/gaus_mu_0.png"><img alt="_images/gaus_mu_0.png" height="544" src="_images/gaus_mu_0.png" width="708" />
 </a>
 </figure>
 </section>
@@ -212,7 +212,7 @@
 </pre></div>
 </div>
 <figure class="align-default" id="gaus-mu-0-summary">
-<a class="reference internal image-reference" href="_images/gaus_mu_0_summary.png"><img alt="_images/gaus_mu_0_summary.png" src="_images/gaus_mu_0_summary.png" style="width: 720.0px; height: 425.6px;" />
+<a class="reference internal image-reference" href="_images/gaus_mu_0_summary.png"><img alt="_images/gaus_mu_0_summary.png" height="426" src="_images/gaus_mu_0_summary.png" width="720" />
 </a>
 </figure>
 <p>The model detected <code class="docutils literal notranslate"><span class="pre">beta</span></code> as the <strong>best</strong> PDF but a good RSS score is also detected for other distributions.</p>
@@ -262,7 +262,7 @@
 </pre></div>
 </div>
 <figure class="align-default" id="summary-fit">
-<a class="reference internal image-reference" href="_images/summary_fit.png"><img alt="_images/summary_fit.png" src="_images/summary_fit.png" style="width: 748.8000000000001px; height: 425.6px;" />
+<a class="reference internal image-reference" href="_images/summary_fit.png"><img alt="_images/summary_fit.png" height="426" src="_images/summary_fit.png" width="749" />
 </a>
 </figure>
 <p>The plot contains on the left axes the goodness of fit test and on the right axes (orange line) the bootstrap result. The bootstrap score is a value between [0, 1] and depicts the fit-success ratio for the number of bootstraps and the PDF. In addition, the green and red dots depict whether there was a significant difference between the bootstrapped samples and the original data. The bootstrap test now excludes a few more PDFs that showed no stable results. The combined information demonstrates that the top 6 distributions are stable, whereas the t-distribution and the dweibull-distribution are not representative for the Emperical data.</p>
@@ -291,8 +291,8 @@
 <table class="docutils align-center" id="id1">
 <caption><span class="caption-text">Sampling example</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_images/perf_sampling.png"><img alt="fig1" src="_images/perf_sampling.png" style="width: 359.1px; height: 238.5px;" /></a></p></td>
-<td><p><a class="reference internal" href="_images/perf_sampling_std.png"><img alt="fig2" src="_images/perf_sampling_std.png" style="width: 360.90000000000003px; height: 235.8px;" /></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/perf_sampling.png"><img alt="fig1" height="238" src="_images/perf_sampling.png" width="359" /></a></p></td>
+<td><p><a class="reference internal" href="_images/perf_sampling_std.png"><img alt="fig2" height="236" src="_images/perf_sampling_std.png" width="361" /></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -321,20 +321,20 @@ Lets evaluate the effect of this parameter.</p>
 <table class="docutils align-center" id="id2">
 <caption><span class="caption-text">Comparison smoothing parameter</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_images/gaus_mu_0_100samples.png"><img alt="logo1" src="_images/gaus_mu_0_100samples.png" style="width: 365.4px; height: 315.59999999999997px;" /></a></p></td>
-<td><p><a class="reference internal" href="_images/gaus_mu_0_100samples_smooth10.png"><img alt="logo2" src="_images/gaus_mu_0_100samples_smooth10.png" style="width: 369.0px; height: 315.59999999999997px;" /></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/gaus_mu_0_100samples.png"><img alt="logo1" height="316" src="_images/gaus_mu_0_100samples.png" width="365" /></a></p></td>
+<td><p><a class="reference internal" href="_images/gaus_mu_0_100samples_smooth10.png"><img alt="logo2" height="316" src="_images/gaus_mu_0_100samples_smooth10.png" width="369" /></a></p></td>
 </tr>
 </tbody>
 </table>
 <p>Here we are going to combine the number of samples with the smoothing parameter.
 It is interesting to see that there is no clear contribution of the smoothing. The legends depicts the smoothing window with the average <em>mu</em>. We see that all smooting windows jump up-and-down the mu=2. However, the more samples, the smaller the variation becomes. The smooting parameter seems to be only effective in very low sample sizes.</p>
 <figure class="align-default" id="perf-sampling-mu-smoothing-1">
-<a class="reference internal image-reference" href="_images/perf_sampling_mu_smoothing.png"><img alt="_images/perf_sampling_mu_smoothing.png" src="_images/perf_sampling_mu_smoothing.png" style="width: 715.2px; height: 488.0px;" />
+<a class="reference internal image-reference" href="_images/perf_sampling_mu_smoothing.png"><img alt="_images/perf_sampling_mu_smoothing.png" height="488" src="_images/perf_sampling_mu_smoothing.png" width="715" />
 </a>
 </figure>
 <p>Lets analyze the RSS score acorss the varying sample sizes and smooting windows. The figure below depicts number of samples on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples (blue line). As an example, from <em>7000</em> samples, the smooting window does <strong>not</strong> improve the fitting at all anymore. The conlusion is that smooting seems only be effective for samples sizes lower then approximately 5000 samples. Note that this number may be different across data sets.</p>
 <figure class="align-default" id="perf-sampling-mu-smoothing-2">
-<a class="reference internal image-reference" href="_images/normal_smooth_sample_sizes.png"><img alt="_images/normal_smooth_sample_sizes.png" src="_images/normal_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" />
+<a class="reference internal image-reference" href="_images/normal_smooth_sample_sizes.png"><img alt="_images/normal_smooth_sample_sizes.png" height="491" src="_images/normal_smooth_sample_sizes.png" width="726" />
 </a>
 </figure>
 </section>
@@ -385,7 +385,7 @@ We will iterate over sample sizes and smoothing windows to analyze the performan
 <p>The code above results in the underneath figure, where we have varying sample sizes on the x-axis, and the RSS score on the y-axis. The lower the RSS score (towards zero) the better the fit. What we clearly see is that orange is jumping up-and-down. This is smooting window=2. Tip: do not use this. Interesting to see is that <strong>not</strong> smooting shows the best fit by an increasing number of samples. Smooting does <strong>not</strong> improve the fitting anymore in case of more then <em>7000</em> samples. Note that this number may be different across data sets.</p>
 <p>From these results we can conclude that smooting seems only usefull for small(er) samples sizes.</p>
 <figure class="align-default" id="int-smooth-samples-sizes">
-<a class="reference internal image-reference" href="_images/int_smooth_sample_sizes.png"><img alt="_images/int_smooth_sample_sizes.png" src="_images/int_smooth_sample_sizes.png" style="width: 725.6px; height: 491.20000000000005px;" />
+<a class="reference internal image-reference" href="_images/int_smooth_sample_sizes.png"><img alt="_images/int_smooth_sample_sizes.png" height="491" src="_images/int_smooth_sample_sizes.png" width="726" />
 </a>
 </figure>
 <hr>
