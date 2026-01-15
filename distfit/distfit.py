@@ -92,6 +92,7 @@ class distfit:
                  cmap: str = 'Set1',
                  random_state: int = None,
                  multtest=None,
+                 multivariate = False,
                  n_jobs: int = 1,
                  verbose: [str, int] = 'info',
                  ):
@@ -250,6 +251,7 @@ class distfit:
         self.weighted = weighted  # Only for discrete
         self.mhist = mhist
         self.cmap = cmap
+        self.multivariate = multivariate
         self.random_state = random_state
         self.verbose = verbose
 
@@ -450,31 +452,45 @@ class distfit:
         if n_boots is not None: self.n_boots=n_boots
         # Clean readily fitted models to ensure correct results.
         self._clean()
-        # Fit model to get list of distributions to check
-        self.fit()
-        # Transform X based on functions
-        self.transform(X)
-        # Store
-        results = _store(self.alpha,
-                         self.stats,
-                         self.bins,
-                         self.bound,
-                         self.distr,
-                         self.histdata,
-                         self.method,
-                         self.model,
-                         self.multtest,
-                         self.n_perm,
-                         self.size,
-                         self.smooth,
-                         self.summary,
-                         self.weighted,
-                         self.f,
-                         self.n_boots,
-                         self.random_state,
-                         )
-        # Return
-        return results
+
+        # Multivariate distribution fitting
+        if self.multivariate:
+            from multidistfit import Multidistfit
+            # Fit multivariate model
+            mdfit = Multidistfit(self)
+            # Transform X based on functions
+            mdfit.fit_transform(X)
+            # Store model
+            self.model = mdfit
+            return mdfit
+        else:
+            # fit model to get list of distributions to check
+            self.fit()
+            # Transform X based on functions
+            self.transform(X)
+    
+            # Store
+            results = _store(self.alpha,
+                             self.stats,
+                             self.bins,
+                             self.bound,
+                             self.distr,
+                             self.histdata,
+                             self.method,
+                             self.model,
+                             self.multtest,
+                             self.n_perm,
+                             self.size,
+                             self.smooth,
+                             self.summary,
+                             self.weighted,
+                             self.f,
+                             self.n_boots,
+                             self.random_state,
+                             self.multivariate,
+                             )
+            # Return
+            return results
 
     def _clean(self):
         """Clean readily fitted models to ensure correct results."""
@@ -635,14 +651,17 @@ class distfit:
         if not hasattr(self, 'model') and not isinstance(self.distr, str): raise Exception('[distfit] Error in creating Synthetic data: A fitted model or input parameter "distr" is required. Tip: First fit on your data using dfit.fit_transform(X) or specify one distribution.')
         X = None
 
-        if hasattr(self, 'model'):
+        if hasattr(self, 'model') and self.multivariate:
+            X = self.model.generate(n=n, random_state=random_state)
+            return X
+        elif hasattr(self, 'model') and not self.multivariate:
             if (self.method=='parametric') or (self.method=='discrete'):
-                logger.info('Create Synthetic data for %s %s distributed samples with fitted params %s.' %(n, self.model['name'], str(self.model['params'])))
+                logger.info(f"Create Synthetic data for {n} {self.model['name']} distributed samples with fitted params {str(self.model['params'])}.")
                 model = self.model['model']
             else:
                 logger.warning('Nothing to generate. Method should be of type: "parametric" or "discrete"')
         elif isinstance(self.distr, str):
-            logger.info('Create Synthetic data for [%s] distribution where parameters needs to be estimated first from a distribution (default: Uniform).' %(self.distr))
+            logger.info(f'Create Synthetic data for the [{self.distr}] distribution. Parameters needs to be estimated from a distribution (default: Uniform).')
             model = eval('st.' + self.distr)
             # Set default parameters for the distribution of interest by fitting it to a normal distribution.
             X = st.uniform.rvs(size=1000)
@@ -709,16 +728,216 @@ class distfit:
             # binedges = np.append(binedges, 10**-6)
 
         return (binedges, histvals)
+    
+    def evaluate_pdf(self, X):
+        """ Evaluate joint PDF using Gaussian copula.
 
-    # Plot
-    def plot(self,
+        Parameters
+        ----------
+        X : array-like
+            Set of values belonging to the data
+
+        Returns
+        -------
+        Dictionary with score and the copula density.
+            {'score': score, 'copula_density': p}
+
+        """
+        if not self.multivariate: 
+            logger.warning('This function requires multivariate PDF.')
+            return None
+
+        return self.model.evaluate_pdf(X)
+
+    def predict_outliers(self, X):
+        """Predict outliers for multivariate PDF.
+
+        Parameters
+        ----------
+        X : array-like
+            Set of values belonging to the data
+
+        Returns
+        -------
+        bool Array: array([True, False,...])
+            Boolean array the mark the outliers.
+
+        """
+        if not self.multivariate: 
+            logger.warning('This function requires multivariate PDF.')
+            return None
+
+        return self.model.predict_outliers(X)
+
+    def plot(self, *args, **kwargs):
+        """Make plot of fitted distribution.
+        
+           This method creates visualizations of the fitted distribution based on the 
+           specified chart type and plotting parameters. It automatically handles both
+           univariate and multivariate cases.
+        
+           Parameters
+           ----------
+           chart : str, default: 'pdf'
+               Type of chart to display:
+               - 'pdf': Probability density function
+               - 'cdf': Cumulative density function
+           n_top : int, optional, default: 1
+               Number of top distributions to show in plots
+           title : str, optional, default: ''
+               Plot title
+           emp_properties : dict, optional, default: {'color': '#000000', 'linewidth': 3, 'linestyle': '-'}
+               Properties for empirical data visualization
+           pdf_properties : dict, optional, default: {'color': '#880808', 'linewidth': 3, 'linestyle': '-'}
+               Properties for theoretical distribution curves
+           bar_properties : dict, optional, default: {'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'}
+               Properties for histogram bars
+           cii_properties : dict, optional, default: {'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}
+               Properties for confidence interval indicators
+           fontsize : int, optional, default: 16
+               Font size for axis labels and tick marks
+           xlabel : str, optional, default: 'Values'
+               X-axis label
+           ylabel : str, optional, default: 'Frequency'
+               Y-axis label
+           figsize : tuple, optional, default: (20, 15)
+               Figure dimensions (width, height)
+           xlim : tuple, optional, default: None
+               X-axis limits (min, max)
+           ylim : tuple, optional, default: None
+               Y-axis limits (min, max)
+           fig : matplotlib.figure.Figure, optional, default: None
+               Matplotlib figure object
+           ax : matplotlib.axes.Axes, optional, default: None
+               Matplotlib axes object
+           grid : bool, optional, default: True
+               Whether to display grid lines
+           cmap : str, optional, default: None
+               Colormap for multiple CDF plots
+           verbose : [str, int], optional, default: 'info'
+               Verbosity level for logging messages
+
+        Returns
+        -------
+        tuple (fig, ax)
+       
+        Examples
+        --------
+        >>> BASIC PLOT
+        >>>
+        >>> from distfit import distfit
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>>
+        >>> # Create dataset
+        >>> X = np.random.normal(0, 2, 10000)
+        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>>
+        >>> # Initialize
+        >>> dfit = distfit(alpha=0.01)
+        >>> dfit.fit_transform(X)
+        >>> dfit.predict(y)
+        >>>
+        >>> # Plot seperately
+        >>> fig, ax = dfit.plot(chart='pdf')
+        >>> fig, ax = dfit.plot(chart='cdf')
+        >>>
+
+        Examples
+        --------
+        >>> ADVANCED PLOTS
+        >>>
+        >>> # Change or remove properties of the chart.
+        >>> dfit.plot(chart='pdf', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>> dfit.plot(chart='cdf', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>>
+        >>> # Create subplot
+        >>> fig, ax = plt.subplots(1,2, figsize=(25, 10))
+        >>> dfit.plot(chart='pdf', ax=ax[0])
+        >>> dfit.plot(chart='cdf', ax=ax[1])
+        >>>
+        >>> # Change or remove properties of the chart.
+        >>> fig, ax = dfit.plot(chart='pdf', pdf_properties={'color': 'r', 'linewidth': 3}, cii_properties={'color': 'r', 'linewidth': 3}, bar_properties={'color': '#1e3f5a'})
+        >>> dfit.plot(chart='cdf', n_top=10, pdf_properties={'color': 'r'}, cii_properties=None, bar_properties=None, ax=ax)
+        >>>
+
+        """
+        if self.multivariate:
+            fig, ax = self.plot_multivariate(*args, plot_type='plot', **kwargs)
+        else:
+            fig, ax = self.plot_univariate(*args, **kwargs)
+        
+        return fig, ax
+
+    # Plot Multivariate
+    def plot_multivariate(self, *args, plot_type='plot', **kwargs):
+        if not self.multivariate: 
+            logger.warning('This function requires multivariate PDF.')
+            return None, None
+
+        from multidistfit import plot_uniformity, plot_dependence
+        figsize = kwargs.get('figsize', None)
+
+        # Create subplots with 3 columns
+        n_models = len(self.model.marginals)
+        # n_cols = 2
+        # n_rows = (int(np.ceil(n_models/n_cols)))
+
+        # Calculate grid dimensions
+        d = len(self.model.marginals)
+        n_pairs = d * (d - 1) // 2
+        n_cols = min(2, n_pairs)
+        n_rows = (n_pairs + n_cols - 1) // n_cols
+        if figsize is None: figsize = (15 * n_cols, 10 * n_rows)
+
+
+        if plot_type=='dependence':
+            fig, ax = plot_dependence(self.model.U, figsize=figsize, **kwargs)
+            return fig, ax
+
+        
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
+        if n_models == 1:
+            # Make it a list for consistent handling
+            axes = [axes]
+        elif n_rows == 1:
+            # Convert array to list for single row
+            axes = axes.tolist()
+        else:
+            # Flatten for multiple rows
+            axes = axes.flatten()
+        
+        # Plot each marginal model
+        for i, (key, model) in enumerate(self.model.marginals.items()):
+            if i < len(axes):
+                ax = axes[i]
+                if plot_type=='plot':
+                    model.plot(*args, **kwargs, ax=ax)
+                elif plot_type=='qqplot':
+                    X = args[0][:, i]
+                    model.qqplot(X, **kwargs, ax=ax)
+                elif plot_type=='uniformity':
+                    U = self.model.U[:, i]
+                    plot_uniformity(U, ax=ax, title=self.model.marginals[i].model['name'], **kwargs)
+
+        # Hide empty subplots
+        for i in range(n_models, len(axes)):
+            axes[i].set_visible(False)
+        
+        plt.tight_layout()
+        # Return
+        return fig, ax
+
+
+    # Plot Univariate
+    def plot_univariate(self,
              chart='pdf',
              n_top=1,
              title='',
-             emp_properties={'color': '#000000', 'linewidth': 3, 'linestyle': '-'},
-             pdf_properties={'color': '#880808', 'linewidth': 3, 'linestyle': '-'},
-             bar_properties={'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'},
-             cii_properties={'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'},
+             emp_properties = {},
+             pdf_properties = {},
+             bar_properties = {},
+             cii_properties = {},
              fontsize=16,
              xlabel='Values',
              ylabel='Frequency',
@@ -730,40 +949,49 @@ class distfit:
              grid=True,
              cmap=None,
              verbose=None):
-        """Make plot.
+
+        if verbose is not None: set_logger(verbose)
+        if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
+        properties = _get_properties(pdf_properties, emp_properties, bar_properties, cii_properties)
+
+        logger.info('Create %s plot for the %s method.' %(chart, self.method))
+        if chart.lower()=='pdf' and self.method=='parametric':
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+        elif chart.lower()=='pdf' and self.method=='discrete':
+            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+        elif chart.lower()=='pdf' and (self.method=='quantile') or (self.method=='percentile'):
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+        elif chart.lower()=='cdf' and (self.method=='parametric' or self.method=='discrete'):
+            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], cdf_properties=properties['pdf'], cii_properties=properties['cii'], cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+        else:
+            logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
+            fig, ax = None, None
+
+        # Return
+        return fig, ax
+
+
+    # QQ plot
+    def qqplot(self, X, *args, **kwargs):
+        """Plot QQplot results.
 
         Parameters
         ----------
-        chart: str, default: 'pdf'
-            Chart to plot.
-                * 'pdf': Probability density function.
-                * 'cdf': Cumulative density function.
+        X : array-like
+            The Null distribution or background data is build from X.
+        line : str, default: '45'
+            Options for the reference line to which the data is compared.
+                * '45' - 45-degree line
+                * 's' - standardized line, the expected order statistics are scaled by the standard deviation of the given sample and have the mean added to them.
+                * 'r' - A regression line is fit
+                * 'q' - A line is fit through the quartiles.
+                * 'None' - by default no reference line is added to the plot.
         n_top : int, optional
             Show the top number of results. The default is 1.
         title : String, optional (default: '')
             Title of the plot.
-        emp_properties : dict
-            The line properties of the emperical line.
-                * None: Do not plot.
-                * {'color': '#000000', 'linewidth': 3, 'linestyle': '-'}
-        pdf_properties : dict
-            The line properties of the PDF or the CDF.
-                * None: Do not plot.
-                * {'color': '#880808', 'linewidth': 3, 'linestyle': '-'}
-        bar_properties : dict
-            bar properties of the histogram.
-                * None: Do not plot.
-                * {'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'edge'}
-        cii_properties : dict
-            bar properties of the histogram.
-                * None: Do not plot.
-                * {'color': '#C41E3A', 'linewidth': 3, 'linestyle': 'dashed', 'marker': 'x', 'size': 20, 'color_sign_multipletest': 'g', 'color_sign': 'g', 'color_general': 'r'}
         fontsize : int, (default: 18)
             Fontsize for the axis and ticks.
-        xlabel : String, (default: 'value')
-            Label for the x-axis.
-        ylabel : String, (default: 'Frequency')
-            Label for the y-axis.
         figsize : tuple, optional (default: (10,8))
             The figure size.
         xlim : Float, optional (default: None)
@@ -772,8 +1000,8 @@ class distfit:
             Limit figure in y-axis.
         fig : Figure, optional (default: None)
             Matplotlib figure (Note - ignored when method is `discrete`)
-        ax : Axes, optional (default: None)
-            Matplotlib Axes object (Note - ignored when method is `discrete`)
+        ax : AxesSubplot, optional (default: None)
+            Matplotlib Axes object. If given, this subplot is used to plot in instead of a new figure being created.
         grid : Bool, optional (default: True)
             Show the grid on the figure.
         cmap : String, optional (default: None)
@@ -795,57 +1023,33 @@ class distfit:
         --------
         >>> from distfit import distfit
         >>> import numpy as np
-        >>> import matplotlib.pyplot as plt
         >>>
         >>> # Create dataset
-        >>> X = np.random.normal(0, 2, 10000)
-        >>> y = [-8,-6,0,1,2,3,4,5,6]
+        >>> X = np.random.normal(0, 2, 1000)
         >>>
         >>> # Initialize
-        >>> dfit = distfit(alpha=0.01)
+        >>> dfit = distfit()
+        >>>
+        >>> # Fit
         >>> dfit.fit_transform(X)
-        >>> dfit.predict(y)
         >>>
-        >>> # Plot seperately
-        >>> fig, ax = dfit.plot(chart='pdf')
-        >>> fig, ax = dfit.plot(chart='cdf')
+        >>> # Make qq-plot
+        >>> dfit.qqplot(X)
         >>>
-        >>> # Change or remove properties of the chart.
-        >>> dfit.plot(chart='pdf', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
-        >>> dfit.plot(chart='cdf', pdf_properties={'color': 'r'}, cii_properties={'color': 'g'}, emp_properties=None, bar_properties=None)
+        >>> # Make qq-plot for top 10 best fitted models.
+        >>> dfit.qqplot(X, n_top=10)
         >>>
-        >>> # Create subplot
-        >>> fig, ax = plt.subplots(1,2, figsize=(25, 10))
-        >>> dfit.plot(chart='pdf', ax=ax[0])
-        >>> dfit.plot(chart='cdf', ax=ax[1])
-        >>>
-        >>> # Change or remove properties of the chart.
-        >>> fig, ax = dfit.plot(chart='pdf', pdf_properties={'color': 'r', 'linewidth': 3}, cii_properties={'color': 'r', 'linewidth': 3}, bar_properties={'color': '#1e3f5a'})
-        >>> dfit.plot(chart='cdf', n_top=10, pdf_properties={'color': 'r'}, cii_properties=None, bar_properties=None, ax=ax)
 
         """
-        if verbose is not None: set_logger(verbose)
-        if not hasattr(self, 'model'): raise Exception('[distfit] Error in plot: For plotting, A model is required. Try fitting first on your data using fit_transform(X)')
-        properties = _get_properties(pdf_properties, emp_properties, bar_properties, cii_properties)
-
-        logger.info('Create %s plot for the %s method.' %(chart, self.method))
-        if chart.lower()=='pdf' and self.method=='parametric':
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
-        elif chart.lower()=='pdf' and self.method=='discrete':
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
-        elif chart.lower()=='pdf' and (self.method=='quantile') or (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
-        elif chart.lower()=='cdf' and (self.method=='parametric' or self.method=='discrete'):
-            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, grid=grid, emp_properties=properties['emp'], cdf_properties=properties['pdf'], cii_properties=properties['cii'], cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+        if self.multivariate:
+            fig, ax = self.plot_multivariate(X, *args, plot_type='qqplot', **kwargs)
         else:
-            logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
-            fig, ax = None, None
-
-        # Return
+            fig, ax = self.qqplot_univariate(X, *args, **kwargs)
+        
         return fig, ax
 
     # QQ plot
-    def qqplot(self,
+    def qqplot_univariate(self,
                X,
                line='45',
                n_top=1,
@@ -1399,6 +1603,31 @@ class distfit:
             logger.info('This function can only be used when method="parametric"')
             return None, None
 
+
+    def plot_uniformity(self, *args, **kwargs):
+        if not self.multivariate:
+            logger.warning('This function requires multivariate PDF.')
+            return None, None
+        
+        properties = kwargs.get('properties', {})
+        default = {'color': '#607B8B', 'linewidth': 1, 'edgecolor': '#5A5A5A', 'align': 'center'}
+        kwargs['properties'] = {**default, **properties}
+        
+        fig, ax = self.plot_multivariate(self.model.U, *args, **kwargs, plot_type='uniformity')
+        return fig, ax
+
+    def plot_dependence(self, *args, **kwargs):
+        if not self.multivariate:
+            logger.warning('This function requires multivariate PDF.')
+            return None, None
+
+        properties = kwargs.get('properties', {})
+        default = {"s": 18, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}
+        kwargs['properties'] = {**default, **properties}
+
+        fig, ax = self.plot_multivariate(self.model.U, *args, **kwargs, plot_type='dependence')
+        return fig, ax
+
     # Save model
     def save(self, filepath, overwrite=True, allow_external=False):
         """Save learned model in pickle file.
@@ -1665,6 +1894,8 @@ class distfit:
             * 'tips'
             * 'occupancy'
             * 'predictive_maintenance'
+            * 'multi_normal'
+            * 'multi_t'
 
         Returns
         -------
@@ -1688,6 +1919,12 @@ class distfit:
             df = pd.read_csv(r'https://erdogant.github.io/datasets/UCI_Occupancy_Detection.zip')
         elif data=='predictive_maintenance':
             df = pd.read_csv(r'https://erdogant.github.io/datasets/predictive_maintenance_ai4i2020.zip')
+        elif data=='multi_normal':
+            from multidistfit import make_example_dataset
+            df = make_example_dataset(n=2000)
+        elif data=='multi_t':
+            from multidistfit import make_heavy_tail_dataset
+            df = make_heavy_tail_dataset(n=2000)
         else:
             logger.error('[%s] is not a valid data set that can be returned.' %(data))
 
@@ -2203,7 +2440,7 @@ def _format_data(data):
     return data
 
 
-def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f, n_boots, random_state):
+def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, n_perm, size, smooth, summary, weighted, f, n_boots, random_state, multivariate):
     out = {}
     out['model'] = model
     out['summary'] = summary
@@ -2222,6 +2459,7 @@ def _store(alpha, stats, bins, bound, distr, histdata, method, model, multtest, 
     out['f'] = f
     out['n_boots'] = n_boots
     out['random_state'] = random_state
+    out['multivariate'] = multivariate
     # Return
     return out
 

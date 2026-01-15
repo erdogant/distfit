@@ -1,4 +1,5 @@
 from distfit.distfit import distfit
+from distfit.multidistfit import Multidistfit
 from packaging import version
 import logging
 import matplotlib

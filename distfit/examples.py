@@ -1,3 +1,110 @@
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from scipy.stats import multivariate_normal
+
+# # Mean and covariance
+# muXY = np.array([100, 200])
+# sigmaXY = np.array([
+#     [15**2, 5**2],
+#     [5**2, 20**2]
+# ])
+
+# # Generate samples
+# xy = np.random.multivariate_normal(muXY, sigmaXY, size=10_000)
+
+
+# plt.figure()
+# plt.hist2d(xy[:, 0], xy[:, 1], bins=50)
+# plt.colorbar(label="Counts")
+# plt.xlabel("x")
+# plt.ylabel("y")
+# plt.title("Bivariate Histogram")
+# plt.show()
+
+# xybar = np.mean(xy, axis=0)
+# xycovar = np.cov(xy, rowvar=False)
+
+# xsteps = np.arange(xy[:, 0].min(), xy[:, 0].max(), 1)
+# ysteps = np.arange(xy[:, 1].min(), xy[:, 1].max(), 1)
+
+# X, Y = np.meshgrid(xsteps, ysteps)
+
+# pos = np.column_stack([X.ravel(), Y.ravel()])
+
+# rv = multivariate_normal(mean=xybar, cov=xycovar)
+# F = rv.pdf(pos)
+# F = F.reshape(len(ysteps), len(xsteps))
+
+# from mpl_toolkits.mplot3d import Axes3D
+
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection="3d")
+
+# ax.plot_surface(X, Y, F, cmap="viridis")
+# ax.set_xlabel("x")
+# ax.set_ylabel("y")
+# ax.set_zlabel("Probability Density")
+
+# # Color scaling (caxis equivalent)
+# ax.set_zlim(F.min() - 0.5 * (F.max() - F.min()), F.max())
+
+# plt.title("Fitted Bivariate Gaussian PDF")
+# plt.show()
+
+
+# plt.figure()
+# plt.contourf(X, Y, F, levels=30)
+# plt.colorbar(label="Probability Density")
+# plt.xlabel("x")
+# plt.ylabel("y")
+# plt.title("Bivariate Gaussian PDF (Contour)")
+# plt.show()
+
+# %%
+
+# Import library
+from distfit import distfit
+
+# Initialize with multivariate=True and other custom parameters.
+dfit = distfit(multivariate=True)
+
+X = dfit.import_example(data='multi_normal')
+
+# Fit model
+dfit.fit_transform(X)
+
+# Correlation
+print(dfit.model.corr)
+
+# Evaluate multivariate PDF
+results = dfit.evaluate_pdf(X)
+print(results['score']) # lower is better/worse? and for model comparison?
+print(results['copula_density']) # describe this better
+
+# Create syntethic data using fitted distribution.
+Xnew = dfit.generate(n=10)
+
+# Predict outliers
+bool_outliers = dfit.predict_outliers(X)
+
+
+fig, ax = dfit.plot_uniformity()
+fig, ax = dfit.plot_dependence()
+fig, ax = dfit.plot(chart='pdf')
+fig, ax = dfit.plot(chart='cdf')
+fig, ax = dfit.qqplot(X)
+
+
+# %%
+from distfit import distfit
+# from distfit_multi import plot_all_diagnostics
+# from distfit_multi import plot_multidistfit_2d_overview
+import numpy as np
+
+
+plot_multidistfit_2d_overview(X, marginals, corr)
+plot_all_diagnostics(X, marginals, corr)
+
 #%% Add functionality goodness of fit
 # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.goodness_of_fit.html
 
@@ -247,13 +354,27 @@ from distfit import distfit
 import numpy as np
 
 dfit = distfit(todf=True, distr='t')
-cost = np.random.normal(0, 2, 10000)
-result = dfit.fit_transform(cost, n_boots=100)
-dfit.plot(chart='pdf')
+cost = np.random.normal(0, 2, 1000)
+result = dfit.fit_transform(cost, n_boots=10)
+# dfit.plot(chart='pdf')
+# dfit.plot(chart='cdf')
+dfit.qqplot(cost)
 
 # %%
 
-
+from distfit import distfit
+import numpy as np
+import matplotlib.pyplot as plt
+# Create dataset
+X = np.random.normal(0, 2, 10000)
+y = [-8,-6,0,1,2,3,4,5,6]
+# Initialize
+dfit = distfit(alpha=0.01)
+dfit.fit_transform(X)
+dfit.predict(y)
+# Plot seperately
+fig, ax = dfit.plot(chart='pdf')
+fig, ax = dfit.plot(chart='cdf')
 
 # %%
 import numpy as np
