@@ -146,6 +146,24 @@ class distfit:
             Colormap when plotting multiple the CDF. The used colors are stored in dfit.summary['colors'].
         random_state : int, optional
             Random state.
+        multtest : str, default: 'fdr_bh'
+            Multiple test correction.
+                * None
+                * 'bonferroni'
+                * 'sidak'
+                * 'holm-sidak'
+                * 'holm'
+                * 'simes-hochberg'
+                * 'hommel'
+                * 'fdr_bh'
+                * 'fdr_by'
+                * 'fdr_tsbh'
+                * 'fdr_tsbky'
+        multivariate: Bool, (default: False)
+            Multivariate distribution fitting is based on input data X where the columns are modelled as joint distributions.
+            In case there are multiple columns and multivariate=False, then all data in the array is vectorized and an univariate analysis is performed.
+                True: Multivariate distribution fitting
+                False: Univariate distribution fitting
         n_jobs : int, optional (default: 1)
             Number of cpu cores that are used for the computations.
             Note that the use of multiple cores occasionally causes a RuntimeWarning: invalid value encountered in log. The results can then be unriable. It is better to set n_jobs=1.
