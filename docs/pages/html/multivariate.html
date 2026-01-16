@@ -64,7 +64,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Generate Synthetic data</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Generate.html">Generate Synthetic Data (Generation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Generate.html">Synthetic Data (Univariate)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Generate.html#synthetic-data-multivariate">Synthetic Data (Multivariate)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul>
@@ -87,30 +88,31 @@
 <p class="caption" role="heading"><span class="caption-text">Multivariate</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Multivariate Parameter Fitting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-features">Core Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#marginal-distribution-fitting">Marginal Distribution Fitting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copula-dependence-modeling">Copula Dependence Modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joint-density-evaluation">Joint Density Evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#quick-example-for-multivariate-fitting">Quick Example for Multivariate Fitting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interpretation-output">Interpretation output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plots">Plots</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#copula-gaussian-density">Copula Gaussian Density</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#copula-gaussian-density-pairplot">Copula Gaussian Density Pairplot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#copula-uniform-density">Copula Uniform Density</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#copula-uniform-density-pairplot">Copula Uniform Density Pairplot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#joint-density-plot">Joint Density Plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pdf-plot">PDF Plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cdf-plot">CDF Plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#qq-plot-multivariate">QQ Plot (Multivariate)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#core-concepts">Core Concepts</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#marginal-distribution-fitting">Marginal Distribution Fitting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#copula-dependence-modeling">Copula Dependence Modeling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#joint-density-evaluation">Joint Density Evaluation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#outlier-detection">Outlier Detection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#generate-synthetic-data">Generate Synthetic Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#model-comparison">Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#plots">Plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#copula-gaussian-density">Copula Gaussian Density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copula-gaussian-density-pairplot">Copula Gaussian Density Pairplot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copula-uniform-density">Copula Uniform Density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copula-uniform-density-pairplot">Copula Uniform Density Pairplot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joint-density-plot">Joint Density Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pdf-plot">PDF Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cdf-plot">CDF Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#qq-plot-multivariate">QQ Plot (Multivariate)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#caveats-and-considerations">Caveats and Considerations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#outlier-detection">Outlier Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#generate-synthetic-data">Generate Synthetic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#model-comparison">Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#connected-variables">Connected variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#caveats-and-considerations">Caveats and Considerations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
@@ -189,8 +191,8 @@ Rather than assuming a single multivariate parametric distribution, <code class=
 <li><p>Dependence modeling via a Gaussian copula</p></li>
 </ul>
 <p>This separation allows flexible modeling of heterogeneous marginals while still capturing multivariate structure.</p>
-<section id="key-features">
-<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<section id="core-features">
+<h2>Core Features<a class="headerlink" href="#core-features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Multivariate distribution fitting with automatic marginal estimation</p></li>
 <li><p>Gaussian copula–based dependence modeling</p></li>
@@ -199,6 +201,39 @@ Rather than assuming a single multivariate parametric distribution, <code class=
 <li><p>Synthetic data generation preserving marginals and dependence</p></li>
 <li><p>Extensive visualization tools for copula diagnostics</p></li>
 </ul>
+</section>
+<section id="marginal-distribution-fitting">
+<h2>Marginal Distribution Fitting<a class="headerlink" href="#marginal-distribution-fitting" title="Link to this heading"></a></h2>
+<p>Each variable is fitted independently using univariate distributions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span>
+    <span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mle&#39;</span><span class="p">,</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="copula-dependence-modeling">
+<h2>Copula Dependence Modeling<a class="headerlink" href="#copula-dependence-modeling" title="Link to this heading"></a></h2>
+<p>Dependence is modeled using a Gaussian copula, where <span class="math notranslate nohighlight">\(\Sigma\)</span> is the estimated correlation matrix.</p>
+<div class="math notranslate nohighlight">
+\[C(u_1, \dots, u_d) =
+\Phi_\Sigma\left(\Phi^{-1}(u_1), \dots, \Phi^{-1}(u_d)\right)\]</div>
+</section>
+<section id="joint-density-evaluation">
+<h2>Joint Density Evaluation<a class="headerlink" href="#joint-density-evaluation" title="Link to this heading"></a></h2>
+<p>The joint density is computed as:</p>
+<div class="math notranslate nohighlight">
+\[f(\mathbf{x}) =
+c(\mathbf{u}) \prod_{i=1}^{d} f_i(x_i)\]</div>
+<p>with copula density:</p>
+<div class="math notranslate nohighlight">
+\[c(\mathbf{u}) =
+\frac{\phi_\Sigma(\mathbf{z})}
+     {\prod_{i=1}^{d} \phi(z_i)},
+\quad z_i = \Phi^{-1}(u_i)\]</div>
 </section>
 <section id="quick-example-for-multivariate-fitting">
 <h2>Quick Example for Multivariate Fitting<a class="headerlink" href="#quick-example-for-multivariate-fitting" title="Link to this heading"></a></h2>
@@ -249,10 +284,11 @@ Mean log joint density, where higher values indicate a better model fit when com
 </li>
 </ul>
 </section>
+</section>
 <section id="plots">
-<h2>Plots<a class="headerlink" href="#plots" title="Link to this heading"></a></h2>
+<h1>Plots<a class="headerlink" href="#plots" title="Link to this heading"></a></h1>
 <section id="copula-gaussian-density">
-<h3>Copula Gaussian Density<a class="headerlink" href="#copula-gaussian-density" title="Link to this heading"></a></h3>
+<h2>Copula Gaussian Density<a class="headerlink" href="#copula-gaussian-density" title="Link to this heading"></a></h2>
 <p>This visualization shows the data transformed to <strong>Gaussian copula space</strong>, where <span class="math notranslate nohighlight">\(F_i\)</span> are fitted marginal CDFs and <span class="math notranslate nohighlight">\(\Phi^{-1}\)</span> is the inverse standard normal CDF.</p>
 <div class="math notranslate nohighlight">
 \[U_i = F_i(X_i), \quad Z_i = \Phi^{-1}(U_i)\]</div>
@@ -273,7 +309,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="copula-gaussian-density-pairplot">
-<h3>Copula Gaussian Density Pairplot<a class="headerlink" href="#copula-gaussian-density-pairplot" title="Link to this heading"></a></h3>
+<h2>Copula Gaussian Density Pairplot<a class="headerlink" href="#copula-gaussian-density-pairplot" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt><strong>Interpretation</strong></dt><dd><ul class="simple">
 <li><p>Diagonal panels show marginal distributions in Gaussian space</p></li>
@@ -292,7 +328,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="copula-uniform-density">
-<h3>Copula Uniform Density<a class="headerlink" href="#copula-uniform-density" title="Link to this heading"></a></h3>
+<h2>Copula Uniform Density<a class="headerlink" href="#copula-uniform-density" title="Link to this heading"></a></h2>
 <p>This visualization shows the data in <strong>copula (uniform) space</strong>.</p>
 <div class="math notranslate nohighlight">
 \[U_i = F_i(X_i)\]</div>
@@ -318,7 +354,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="copula-uniform-density-pairplot">
-<h3>Copula Uniform Density Pairplot<a class="headerlink" href="#copula-uniform-density-pairplot" title="Link to this heading"></a></h3>
+<h2>Copula Uniform Density Pairplot<a class="headerlink" href="#copula-uniform-density-pairplot" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt><strong>Interpretation</strong></dt><dd><ul class="simple">
 <li><p>Diagonal panels test PIT uniformity</p></li>
@@ -336,7 +372,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="joint-density-plot">
-<h3>Joint Density Plot<a class="headerlink" href="#joint-density-plot" title="Link to this heading"></a></h3>
+<h2>Joint Density Plot<a class="headerlink" href="#joint-density-plot" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt><strong>Interpretation</strong></dt><dd><ul class="simple">
 <li><p>Displays bivariate slices of the joint density</p></li>
@@ -354,7 +390,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="pdf-plot">
-<h3>PDF Plot<a class="headerlink" href="#pdf-plot" title="Link to this heading"></a></h3>
+<h2>PDF Plot<a class="headerlink" href="#pdf-plot" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt><strong>Interpretation</strong></dt><dd><ul class="simple">
 <li><p>Shows fitted marginal probability density functions</p></li>
@@ -371,7 +407,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="cdf-plot">
-<h3>CDF Plot<a class="headerlink" href="#cdf-plot" title="Link to this heading"></a></h3>
+<h2>CDF Plot<a class="headerlink" href="#cdf-plot" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt><strong>Interpretation</strong></dt><dd><ul class="simple">
 <li><p>Shows fitted marginal cumulative distribution functions</p></li>
@@ -388,7 +424,7 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 <section id="qq-plot-multivariate">
-<h3>QQ Plot (Multivariate)<a class="headerlink" href="#qq-plot-multivariate" title="Link to this heading"></a></h3>
+<h2>QQ Plot (Multivariate)<a class="headerlink" href="#qq-plot-multivariate" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt><strong>Interpretation</strong></dt><dd><ul class="simple">
 <li><p>Compares empirical quantiles to fitted marginals</p></li>
@@ -406,51 +442,45 @@ Mean log joint density, where higher values indicate a better model fit when com
 </figure>
 </section>
 </section>
-<section id="core-concepts">
-<h2>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading"></a></h2>
-<section id="marginal-distribution-fitting">
-<h3>Marginal Distribution Fitting<a class="headerlink" href="#marginal-distribution-fitting" title="Link to this heading"></a></h3>
-<p>Each variable is fitted independently using univariate distributions.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span>
-    <span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mle&#39;</span><span class="p">,</span>
-    <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="copula-dependence-modeling">
-<h3>Copula Dependence Modeling<a class="headerlink" href="#copula-dependence-modeling" title="Link to this heading"></a></h3>
-<p>Dependence is modeled using a Gaussian copula, where <span class="math notranslate nohighlight">\(\Sigma\)</span> is the estimated correlation matrix.</p>
-<div class="math notranslate nohighlight">
-\[C(u_1, \dots, u_d) =
-\Phi_\Sigma\left(\Phi^{-1}(u_1), \dots, \Phi^{-1}(u_d)\right)\]</div>
-</section>
-<section id="joint-density-evaluation">
-<h3>Joint Density Evaluation<a class="headerlink" href="#joint-density-evaluation" title="Link to this heading"></a></h3>
-<p>The joint density is computed as:</p>
-<div class="math notranslate nohighlight">
-\[f(\mathbf{x}) =
-c(\mathbf{u}) \prod_{i=1}^{d} f_i(x_i)\]</div>
-<p>with copula density:</p>
-<div class="math notranslate nohighlight">
-\[c(\mathbf{u}) =
-\frac{\phi_\Sigma(\mathbf{z})}
-     {\prod_{i=1}^{d} \phi(z_i)},
-\quad z_i = \Phi^{-1}(u_i)\]</div>
-</section>
 <section id="outlier-detection">
-<h3>Outlier Detection<a class="headerlink" href="#outlier-detection" title="Link to this heading"></a></h3>
-<p>Outliers are defined as observations with low joint log-density:
+<h1>Outlier Detection<a class="headerlink" href="#outlier-detection" title="Link to this heading"></a></h1>
+<p>Outliers are defined as observations with low joint log-density.
 This detects observations unlikely under the <strong>full multivariate model</strong>, even if they are not marginal outliers.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">outliers</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict_outliers</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>It is expected that outliers have lower likelihood. We can expect that as shown in the code-block.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="c1"># Fit model on multivariate normal random data</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the copula density</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">evaluate_pdf</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="s2">&quot;copula_density&quot;</span><span class="p">]</span>
+
+<span class="c1"># Get outliers</span>
+<span class="n">outliers</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict_outliers</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Outliers have lower likelihood</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pdf</span><span class="p">[</span><span class="n">outliers</span><span class="p">]))</span>
+<span class="c1"># 0.0014758104978686533</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pdf</span><span class="p">[</span><span class="o">~</span><span class="n">outliers</span><span class="p">]))</span>
+<span class="c1"># 0.10025029900211244</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pdf</span><span class="p">[</span><span class="n">outliers</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pdf</span><span class="p">[</span><span class="o">~</span><span class="n">outliers</span><span class="p">]))</span>
+<span class="c1"># True</span>
+</pre></div>
+</div>
 </section>
 <section id="generate-synthetic-data">
-<h3>Generate Synthetic Data<a class="headerlink" href="#generate-synthetic-data" title="Link to this heading"></a></h3>
+<h1>Generate Synthetic Data<a class="headerlink" href="#generate-synthetic-data" title="Link to this heading"></a></h1>
 <p>Generate multivariate synthetic data based on the multidistribution fit.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate synthetic samples</span>
 <span class="n">Xnew</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -469,7 +499,7 @@ This detects observations unlikely under the <strong>full multivariate model</st
 </div>
 </section>
 <section id="model-comparison">
-<h3>Model Comparison<a class="headerlink" href="#model-comparison" title="Link to this heading"></a></h3>
+<h1>Model Comparison<a class="headerlink" href="#model-comparison" title="Link to this heading"></a></h1>
 <p>Use the mean log-density score for comparison.
 Higher scores indicate better fit (for the same data).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">res1</span> <span class="o">=</span> <span class="n">model1</span><span class="o">.</span><span class="n">evaluate_pdf</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -479,9 +509,45 @@ Higher scores indicate better fit (for the same data).</p>
 </pre></div>
 </div>
 </section>
+<section id="connected-variables">
+<h1>Connected variables<a class="headerlink" href="#connected-variables" title="Link to this heading"></a></h1>
+<p>In a Gaussian copula model, all dependencies between variables are encoded in the
+<strong>correlation matrix</strong> stored in <code class="docutils literal notranslate"><span class="pre">dfit.model.corr</span></code>. Each entry
+<code class="docutils literal notranslate"><span class="pre">corr[i,</span> <span class="pre">j]</span></code> represents the linear dependence between variable <em>i</em> and <em>j</em> in
+Gaussian copula space.</p>
+<dl class="simple">
+<dt>This correlation matrix induces a graph structure where:</dt><dd><ul class="simple">
+<li><p><strong>Nodes</strong> correspond to variables (columns of <code class="docutils literal notranslate"><span class="pre">X</span></code>)</p></li>
+<li><p><strong>Edges</strong> exist when two variables have a non-zero (or sufficiently large) correlation</p></li>
+</ul>
+</dd>
+</dl>
+<p>By analysing this graph, we can identify <strong>connected components</strong>: groups of variables
+that are mutually dependent (directly or indirectly). Variables belonging to different
+components are statistically independent under the copula model.</p>
+<dl class="simple">
+<dt>Identifying connected variables helps to:</dt><dd><ul class="simple">
+<li><p>Interpret the dependency structure learned by the model</p></li>
+<li><p>Detect independent sub-copulas in high-dimensional data</p></li>
+<li><p>Explain block-diagonal or near block-diagonal correlation matrices</p></li>
+<li><p>Simplify diagnostics and model validation</p></li>
+</ul>
+</dd>
+</dl>
+<p>The example below extracts connected components directly from
+<code class="docutils literal notranslate"><span class="pre">dfit.model.corr</span></code> using a depth-first search (DFS). A small threshold can be used to avoid spurious connections caused by numerical noise.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">corr</span><span class="p">)</span>
+
+<span class="p">[[</span><span class="mf">1.</span>         <span class="mf">0.57622997</span><span class="p">]</span>
+<span class="p">[</span><span class="mf">0.57622997</span> <span class="mf">1.</span>        <span class="p">]]</span>
+
+<span class="c1"># Connected variables for the first variable</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">corr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.8</span>
+</pre></div>
+</div>
 </section>
 <section id="caveats-and-considerations">
-<h2>Caveats and Considerations<a class="headerlink" href="#caveats-and-considerations" title="Link to this heading"></a></h2>
+<h1>Caveats and Considerations<a class="headerlink" href="#caveats-and-considerations" title="Link to this heading"></a></h1>
 <ul class="simple">
 <li><p>Gaussian copula assumes elliptical dependence</p></li>
 <li><p>Tail dependence may be underestimated</p></li>
@@ -489,6 +555,21 @@ Higher scores indicate better fit (for the same data).</p>
 <li><p>Density values are relative likelihoods, not probabilities</p></li>
 <li><p>Covariance regularization is applied for numerical stability</p></li>
 </ul>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<p>The Gaussian copula relies on the multivariate normal distribution <a class="footnote-reference brackets" href="#mvn1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#mvn2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="mvn1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Multivariate normal distribution,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">https://en.wikipedia.org/wiki/Multivariate_normal_distribution</a></p>
+</aside>
+<aside class="footnote brackets" id="mvn2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Estimate a multivariate distribution,
+<a class="reference external" href="https://openturns.github.io/openturns/latest/auto_data_analysis/distribution_fitting/plot_estimate_multivariate_distribution.html">https://openturns.github.io/openturns/latest/auto_data_analysis/distribution_fitting/plot_estimate_multivariate_distribution.html</a></p>
+</aside>
+</aside>
 <hr>
 <center>
         <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>

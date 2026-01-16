@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generate Synthetic Data (Generation) &mdash; distfit distfit documentation</title>
+  <title>Synthetic Data (Univariate) &mdash; distfit distfit documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
@@ -63,7 +63,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Generate Synthetic data</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Generate Synthetic Data (Generation)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Synthetic Data (Univariate)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#synthetic-data-multivariate">Synthetic Data (Multivariate)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul>
@@ -86,6 +87,12 @@
 <p class="caption" role="heading"><span class="caption-text">Multivariate</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="multivariate.html">Multivariate Parameter Fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html#plots">Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html#outlier-detection">Outlier Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html#generate-synthetic-data">Generate Synthetic Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html#model-comparison">Model Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html#connected-variables">Connected variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html#caveats-and-considerations">Caveats and Considerations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul>
@@ -143,7 +150,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Generate Synthetic Data (Generation)</li>
+      <li class="breadcrumb-item active">Synthetic Data (Univariate)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/Generate.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -153,8 +160,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="generate-synthetic-data-generation">
-<span id="generate-synthetic-data-generation-unique"></span><h1>Generate Synthetic Data (Generation)<a class="headerlink" href="#generate-synthetic-data-generation" title="Link to this heading"></a></h1>
+  <section id="synthetic-data-univariate">
+<span id="generate-synthetic-data-generation-unique"></span><h1>Synthetic Data (Univariate)<a class="headerlink" href="#synthetic-data-univariate" title="Link to this heading"></a></h1>
 <p>With the fitted model it allows to generate synthetic data which can be easily done with the <code class="docutils literal notranslate"><span class="pre">generate</span></code> function.</p>
 <p>Lets see how generating samples works:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import library</span>
@@ -171,6 +178,39 @@
 
 <span class="c1"># The fitted distribution can now be used to generate new samples.</span>
 <span class="n">Xgenerate</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="synthetic-data-multivariate">
+<h1>Synthetic Data (Multivariate)<a class="headerlink" href="#synthetic-data-multivariate" title="Link to this heading"></a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import library</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">distfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">distfit</span>
+
+<span class="c1"># Generate random normal distributed data</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+
+
+<span class="c1"># Initialize model</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Fit distribution on data X</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># The fitted distribution can now be used to generate new samples.</span>
+<span class="n">Xgenerate</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+
+<span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.34065007</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.71402875</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">1.02143281</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11668787</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">1.34764167</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7042604</span> <span class="p">],</span>
+       <span class="o">...</span><span class="p">,</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.52385614</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62469689</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">0.43946412</span><span class="p">,</span>  <span class="mf">0.19682527</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.22849301</span><span class="p">,</span>  <span class="mf">0.11507201</span><span class="p">]],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 <hr>
