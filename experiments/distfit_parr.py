@@ -2240,7 +2240,8 @@ def _fit_distribution(data, X, y_obs, distribution, stats, max_name_len, n_boots
 
 # %% Compute score for each distribution
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None):
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
+    # df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'], dtype=object)
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
     # Estimate distribution parameters

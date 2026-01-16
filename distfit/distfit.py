@@ -1933,17 +1933,39 @@ class distfit:
             return None
 
         if n_top is None: n_top = self.summary.shape[0]
-        self.summary['bootstrap_score'] = 0
+        self.summary = self.summary.copy()
+        self.summary['bootstrap_score'] = 0.0
         self.summary['bootstrap_pass'] = None
+
         logger.info('Bootstrap for %d distributions with n_boots=%d' %(n_top, n_boots))
         max_name_len = np.max(list(map(len, self.summary['name'][0:n_top].values)))
+
         for i in range(n_top):
+            # Get distributoin
             distr = self.summary['name'].iloc[i]
-            bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), self.summary['model'].iloc[i], X, n_boots=n_boots, alpha=alpha, random_state=self.random_state, n_jobs=self.n_jobs)
+            # Distribution fit
+            fitted_model = self.summary['model'].iloc[i]
+            try:
+                with warnings.catch_warnings():
+                    # A few PDF give a warning which is a known statistical issue. Therefore I supress it here.
+                    warnings.filterwarnings("ignore")
+                    bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), 
+                                                                 fitted_model,
+                                                                 X,
+                                                                 n_boots=n_boots,
+                                                                 alpha=alpha,
+                                                                 random_state=self.random_state,
+                                                                 n_jobs=self.n_jobs,
+                                                                 )
+            except Exception as e:
+                logger.warning(f"Bootstrap failed for {distr}: {e}")
+                bootstrap_score = 0.0
+                bootstrap_pass = False
+
             # Store results
             logger.info('Bootstrap: [%s%s] > Score: %.2g > Pass 95%% CII KS-test: %s' %(distr, ' ' * (max_name_len - len(distr)), bootstrap_score, bootstrap_pass))
-            self.summary['bootstrap_score'].iloc[i] = bootstrap_score
-            self.summary['bootstrap_pass'].iloc[i] = bootstrap_pass
+            self.summary.loc[i, 'bootstrap_score'] = bootstrap_score
+            self.summary.loc[i, 'bootstrap_pass'] = bootstrap_pass
 
         # Sort on best model
         df_summary, model = _sort_dataframe(self.summary, cmap=self.cmap)
@@ -2089,7 +2111,7 @@ def _bootstrap(distribution, distribution_fit, X, n_boots=100, alpha=0.05, rando
     # 2. Use the resampled data to fit again the distribution.
     # 3. Compare the resampled data vs. fitted PDF.
 
-    bootstrap_score, bootstrap_pass = 0, None
+    bootstrap_score, bootstrap_pass = 0.0, None
 
     try:
         if (n_boots is not None) and (n_boots>=10):
@@ -2220,7 +2242,7 @@ def _predict_quantile(self, y):
 
     # Compute multiple testing to correct for Pvalues
     # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
-    Praw[np.isin(y_pred, ['down', 'up'])] = 0
+    Praw[np.isin(y_pred, ['down', 'up'])] = 0.0
 
     # Store
     self.y_proba = Praw  # THIS WILL BE REMOVED IN NEWER VERSIONS
@@ -2268,7 +2290,7 @@ def _predict_percentile(self, y):
         teststat[i] = getstat
         logger.debug("[%.0f] - p-value = %f" %(y[i], getstat))
 
-    Praw[np.isin(y_pred, ['down', 'up'])] = 0
+    Praw[np.isin(y_pred, ['down', 'up'])] = 0.0
 
     # Compute multiple testing to correct for Pvalues
     # y_proba = _do_multtest(Praw, self.multtest, verbose=verbose)
@@ -2391,7 +2413,23 @@ def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
             ax.scatter(results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
 # %% Plot
-def _plot_quantile(self, title='', xlabel='Density', ylabel='Frequency', figsize=(20, 15), fontsize=16, xlim=None, ylim=None, fig=None, ax=None, grid=True, emp_properties={}, bar_properties={}, cii_properties={}):
+def _plot_quantile(self, 
+                   title='', 
+                   xlabel='Density', 
+                   ylabel='Frequency', 
+                   figsize=(20, 15), 
+                   fontsize=16, 
+                   xlim=None, 
+                   ylim=None, 
+                   fig=None, 
+                   ax=None, 
+                   grid=True, 
+                   legend=True, 
+                   emp_properties={}, 
+                   bar_properties={}, 
+                   cii_properties={},
+                   ):
+
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
     if not hasattr(self, 'results'): self.results=None
 
@@ -2549,7 +2587,7 @@ def calc_figsize(d):
 
 # %% Compute score for each distribution - in parallel when n_jobs_dist != 1
 def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1', n_boots=None, random_state=None, n_jobs=1, n_jobs_dist=1):
-    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'])
+    df = pd.DataFrame(index=range(0, len(DISTRIBUTIONS)), columns=['name', 'score', 'loc', 'scale', 'arg', 'params', 'model', 'bootstrap_score', 'bootstrap_pass'], dtype=object)
     max_name_len = np.max(list(map(lambda x: len(x.name) if isinstance(x.name, str) else len(x.name()), DISTRIBUTIONS)))
 
     def fit_distribution(i, distribution):
@@ -2559,6 +2597,15 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
             # Ignore warnings from data that can't be fit
             with warnings.catch_warnings():
                 warnings.filterwarnings("ignore")
+
+                # Make a copy to prevent overwriting original data with the clipped one for beta
+                data_fit = X
+
+                # beta fails when data contains 0 or 1
+                if distribution.name == "beta":
+                    eps = 1e-6
+                    data_fit = np.clip(X, eps, 1 - eps)
+                
                 # fit dist to data
                 params = distribution.fit(data)
                 logger.debug(params)
