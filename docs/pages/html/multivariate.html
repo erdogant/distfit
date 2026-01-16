@@ -204,7 +204,7 @@ Rather than assuming a single multivariate parametric distribution, <code class=
 </section>
 <section id="marginal-distribution-fitting">
 <h2>Marginal Distribution Fitting<a class="headerlink" href="#marginal-distribution-fitting" title="Link to this heading"></a></h2>
-<p>Each variable is fitted independently using univariate distributions.</p>
+<p>Each variable is fitted independently using univariate distributions. You need to set <code class="docutils literal notranslate"><span class="pre">multivariate=True</span></code> and you can also set all other parameters as desired.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span>
     <span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span>
