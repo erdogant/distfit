@@ -28,6 +28,7 @@ It can be used for parametric, non-parametric, and discrete distributions. ‚≠êÔ∏
 |---------|-------------|--------|-----------------|
 | [**Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Parametric.html) | Fit distributions on empirical data X. | [Link](https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) | [Link](https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) |
 | [**Non-Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Quantile.html) | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). | - | - |
+| [**Multivariate Fitting**](https://erdogant.github.io/distfit/pages/html/Multivariate.html) | Fit multivariate distributions on empirical data X that contains multiple columns. | - | - |
 | [**Discrete Fitting**](https://erdogant.github.io/distfit/pages/html/Discrete.html) | Fit distributions on empirical data X using binomial distribution. | - | - |
 | [**Predict**](https://erdogant.github.io/distfit/pages/html/Functions.html#module-distfit.distfit.distfit.predict) | Compute probabilities for response variables y. | - | - |
 | [**Outlier Detection**](https://erdogant.github.io/distfit/pages/html/Generate.html) | Detect anomalies using fitted distributions. | [Link](https://medium.com/data-science-collective/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6) | [Link](https://erdogant.gumroad.com/l/outlier-detection-using-distribution-fitting-in-univariate-datasets-4b16517a91e6) |
@@ -117,6 +118,15 @@ from distfit import distfit
   </a>
 </p>
 
+
+# 
+
+##### [Example: Plot summary of the tested distributions](https://erdogant.github.io/distfit/pages/html/Examples.html#plot-rss)
+The ``distfit`` library provides multivariate distribution fitting that enables modeling **complex dependencies between multiple variables** using **copula-based methods**.
+
+```python
+
+```
 
 # 
 
