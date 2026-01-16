@@ -455,7 +455,8 @@ class distfit:
 
         # Multivariate distribution fitting
         if self.multivariate:
-            from multidistfit import Multidistfit
+            # Lazy import
+            from distfit.multidistfit import Multidistfit
             # Fit multivariate model
             mdfit = Multidistfit(self)
             # Transform X based on functions
@@ -889,7 +890,7 @@ class distfit:
 
     # Plot Multivariate
     def plot_multivariate(self, *args, plot_type='plot', **kwargs):
-        from multidistfit import _plot_copula
+        from distfit.multidistfit import _plot_copula
 
         if not self.multivariate:
             logger.warning('This function requires multivariate PDF.')
@@ -1626,7 +1627,7 @@ class distfit:
 
 
     def plot_copulaDensity(self, plot_type='uniform', bins=30, figsize=None, color='#607B8B', linewidth=1, edgecolor='#5A5A5A', align='center', alpha=0.8, legend=False, pairplot=True):
-        from multidistfit import pairplot_copula_uniform, pairplot_copula_gaussian
+        from distfit.multidistfit import pairplot_copula_uniform, pairplot_copula_gaussian
         logger.info('Plot the copula uniformity.')
         fig, ax = None, None
         if not self.multivariate:
@@ -1655,7 +1656,7 @@ class distfit:
 
     def plot_uniform_copula(self, plot_type='uniform', figsize=None, properties={"s": 35, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}, verbose='info'):
         # Import library
-        from multidistfit import _plot_dependence_copula
+        from distfit.multidistfit import _plot_dependence_copula
         logger.info('Plot the dependence.')
         if not self.multivariate:
             logger.warning('This function requires multivariate PDF.')
@@ -1673,7 +1674,7 @@ class distfit:
 
     def plot_gaussian_copula(self, figsize=None, properties={"s": 50, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}):
         # Import library
-        from multidistfit import _plot_dependence_copula
+        from distfit.multidistfit import _plot_dependence_copula
         logger.info('Creating the gaussian copula plot.')
         if not self.multivariate:
             logger.warning('This function requires multivariate PDF.')
@@ -1692,7 +1693,7 @@ class distfit:
     def plot_jointDensity(self, X, gridsize=40, figsize=None):
         # Import library
         logger.info('Creating the joint density distribution plot.')
-        from multidistfit import _plot_joint_pairplot
+        from distfit.multidistfit import _plot_joint_pairplot
         if not self.multivariate:
             logger.warning('This function requires multivariate PDF.')
             return None, None
@@ -1994,10 +1995,10 @@ class distfit:
         elif data=='predictive_maintenance':
             df = pd.read_csv(r'https://erdogant.github.io/datasets/predictive_maintenance_ai4i2020.zip')
         elif data=='multi_normal':
-            from multidistfit import make_example_dataset
+            from distfit.multidistfit import make_example_dataset
             df = make_example_dataset(n=2000)
         elif data=='multi_t':
-            from multidistfit import make_heavy_tail_dataset
+            from distfit.multidistfit import make_heavy_tail_dataset
             df = make_heavy_tail_dataset(n=2000)
         else:
             logger.error('[%s] is not a valid data set that can be returned.' %(data))

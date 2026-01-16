@@ -1,9 +1,11 @@
-from distfit import distfit
+from distfit.distfit import distfit
+from scatterd import scatterd
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 from scipy.stats import norm, multivariate_normal
 import scipy.stats as st
-from scatterd import scatterd
 from scipy.interpolate import griddata
 
 import logging
