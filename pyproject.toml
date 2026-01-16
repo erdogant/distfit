@@ -29,6 +29,7 @@ dependencies = [
     'scipy',
     'pypickle>=1.1.4',
     'colourmap>=1.1.10',
+    'scatterd',
     'joblib',
 ]
 
