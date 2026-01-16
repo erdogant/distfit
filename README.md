@@ -125,8 +125,46 @@ from distfit import distfit
 The ``distfit`` library provides multivariate distribution fitting that enables modeling **complex dependencies between multiple variables** using **copula-based methods**.
 
 ```python
+  from distfit import distfit
+  
+  # Initialize with multivariate mode
+  dfit = distfit(multivariate=True)
+  
+  # Load example data
+  X = dfit.import_example(data='multi_normal')
+  # X = dfit.import_example(data='multi_t')
+  
+  # Fit model
+  dfit.fit_transform(X)
+  
+  # Access estimated correlation matrix (Gaussian copula)
+  print(dfit.model.corr)
+  
+  # Evaluate joint density
+  results = dfit.evaluate_pdf(X)
+  print(results['score'])
+  print(results['copula_density'])
+  
+  # Generate synthetic samples
+  Xnew = dfit.generate(n=10)
+  
+  # Detect multivariate outliers
+  bool_outliers = dfit.predict_outliers(X)
 
 ```
+
+<p align="left">
+  <a href="https://erdogant.github.io/distfit/pages/html/multivariate.html">
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/copulaDensity_uniformB.png" width="800" />
+  </a>
+</p
+
+<p align="left">
+  <a href="https://erdogant.github.io/distfit/pages/html/multivariate.html">
+  <img src="https://github.com/erdogant/distfit/blob/master/docs/figs/jointDensity.png" width="800" />
+  </a>
+</p
+
 
 # 
 
