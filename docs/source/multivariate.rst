@@ -23,7 +23,7 @@ Core Features
 Marginal Distribution Fitting
 ====================================
 
-Each variable is fitted independently using univariate distributions.
+Each variable is fitted independently using univariate distributions. You need to set ``multivariate=True`` and you can also set all other parameters as desired.
 
 .. code-block:: python
 
