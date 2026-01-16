@@ -6,7 +6,7 @@ import matplotlib
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '1.8.9'
+__version__ = '2.0.0'
 
 # Setup root logger
 _logger = logging.getLogger('distfit')

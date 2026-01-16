@@ -69,6 +69,7 @@ from distfit import distfit
 dfit = distfit(multivariate=True)
 
 X = dfit.import_example(data='multi_normal')
+# X = dfit.import_example(data='multi_t')
 
 # Fit model
 dfit.fit_transform(X)
@@ -87,13 +88,15 @@ Xnew = dfit.generate(n=10)
 # Predict outliers
 bool_outliers = dfit.predict_outliers(X)
 
-
-fig, ax = dfit.plot_uniformity()
-fig, ax = dfit.plot_dependence()
+# Make plots
+fig, ax = dfit.plot_copulaDensity(plot_type='gaussian', pairplot=True)
+fig, ax = dfit.plot_copulaDensity(plot_type='gaussian', pairplot=False)
+fig, ax = dfit.plot_copulaDensity(plot_type='uniform', pairplot=False)
+fig, ax = dfit.plot_copulaDensity(plot_type='uniform', pairplot=True)
+fig, ax = dfit.plot_jointDensity(X)
 fig, ax = dfit.plot(chart='pdf')
 fig, ax = dfit.plot(chart='cdf')
 fig, ax = dfit.qqplot(X)
-
 
 # %%
 from distfit import distfit
