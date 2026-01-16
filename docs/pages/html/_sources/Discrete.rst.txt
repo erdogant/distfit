@@ -1,5 +1,5 @@
-Discrete
-##########
+Discrete Distributions
+######################
 
 The method **discrete** computes the best fit using the *binomial* distribution when using discrete integer data.
 The questions can be summarized as following: given a list of nonnegative integers, can we fit a probability distribution for a discrete distribution, and compare the quality of the fit?
@@ -9,7 +9,7 @@ As far as discrete distributions go, the PMF for one list of integers is of the 
 Note that if the best fit is obtained for n=1, then it is a Bernoulli distribution. In addition, for sufficiently large n, a binomial distribution and a Gaussian will appear similar according to B(k, p, n) =  G(x=k, mu=p*n, sigma=sqrt(p*(1-p)*n)).
 With ``distfit`` you can also easily fit a Gaussian distribution if desired.
 
-Binomial distribution
+Binomial Distribution (Discrete)
 ******************************************************
 
 In order to find the optimal integer n value, you need to vary n, fit p for each n, and pick the n, p combination with the best fit.
@@ -20,7 +20,7 @@ It turns out that it is difficult to fit a binomial distribution unless you have
 Typically, with 500 samples, you get a fit that looks OK by eye, but which does not recover the actual n and p values correctly, although the product n*p is quite accurate. In those cases, the SSE curve has a broad minimum, which is a giveaway that there are several reasonable fits.
 
 
-Generate random discrete data
+Generate Random Discrete Data
 ******************************************************
 
 Lets see how the fitting works. For this example, I will generate some random numbers:
@@ -42,7 +42,7 @@ Lets see how the fitting works. For this example, I will generate some random nu
     #  5 4 8 3 4 3 5 4 3 5 5 2 5 6 7 4 5 5 5 4 4 3 4 5 6 2...]
 
 
-Fit model
+Fit Discrete Model
 ******************************************************
 
 Initialize distfit for discrete distribution for which the binomial distribution is used. Now we want to fit data *X*, and determine whether we can retrieve best *n* and *p*.

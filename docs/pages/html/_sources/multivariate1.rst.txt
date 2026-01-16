@@ -1,0 +1,418 @@
+Multivariate Parameter Fitting -alt
+'''''''''''''''''''''''''''''''''''''''
+
+The ``distfit`` library provides a multivariate distribution fitting extension that allows you to fit complex dependencies between multiple variables using copula-based modeling.
+
+Key Features -alt
+=================
+
+* Multivariate distribution fitting with automatic marginal distribution estimation
+* Copula-based dependence modeling using Gaussian copulas
+* Joint probability density evaluation for model comparison
+* Outlier detection based on joint likelihood
+* Synthetic data generation from fitted distributions
+* Comprehensive visualization tools for copula analysis
+
+
+Quick Example for Multivariate Fitting -alt
+============================================
+
+.. code-block:: python
+
+   # Import library
+   from distfit import distfit
+
+   # Initialize with multivariate=True and other custom parameters.
+   dfit = distfit(multivariate=True)
+
+   # Load example data
+   X = dfit.import_example(data='multi_normal')
+   # X = dfit.import_example(data='multi_t')
+
+   # Fit model
+   dfit.fit_transform(X)
+
+   # Access correlation matrix
+   print(dfit.model.corr)
+
+   # Evaluate multivariate PDF
+   results = dfit.evaluate_pdf(X)
+   print(results['score'])  # Lower is better/worse? and for model comparison?
+   print(results['copula_density'])  # describe this better
+
+   # Create synthetic data using fitted distribution.
+   Xnew = dfit.generate(n=10)
+
+   # Predict outliers
+   bool_outliers = dfit.predict_outliers(X)
+
+
+
+Copula Gaussian Density -alt
+----------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+
+   fig, ax = dfit.plot_copulaDensity(plot_type='gaussian', pairplot=False)
+
+
+.. _multiFig2:
+
+.. figure:: ../figs/copulaDensity_gaussian.png
+    :scale: 80%
+
+
+Copula Gaussian Density Pairplot -alt
+--------------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.plot_copulaDensity(plot_type='gaussian', pairplot=True)
+
+.. _multiFig3:
+
+.. figure:: ../figs/copulaDensity_gaussian_pairplot.png
+    :scale: 80%
+
+
+
+Copula Uniform Density -alt
+----------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.plot_copulaDensity(plot_type='uniform', pairplot=False)
+
+.. _multiFig4A:
+
+.. figure:: ../figs/copulaDensity_uniform.png
+    :scale: 80%
+
+.. _multiFig4B:
+
+.. figure:: ../figs/copulaDensity_uniformB.png
+    :scale: 80%
+
+
+Copula Uniform Density Pairplot -alt
+-------------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.plot_copulaDensity(plot_type='uniform', pairplot=True)
+
+.. _multiFig5:
+
+.. figure:: ../figs/copulaDensity_uniform_pair.png
+    :scale: 80%
+    
+
+
+Joint Density Plot -alt
+----------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.plot_jointDensity(X)
+
+.. _multiFig6:
+
+.. figure:: ../figs/jointDensity.png
+    :scale: 80%
+
+
+PDF plot -alt
+----------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.plot(chart='pdf')
+
+.. _multiFig7:
+
+.. figure:: ../figs/multi_PDF.png
+    :scale: 80%
+    
+    
+CDF plot -alt
+----------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.plot(chart='pdf')
+
+.. _multiFig8:
+
+.. figure:: ../figs/multi_CDF.png
+    :scale: 80%
+
+
+QQ plot (Multivariate -alt)
+-----------------------------------
+EXPLAIN THE FIGURE HERE
+
+.. code-block:: python
+    
+   # Make plots
+   fig, ax = dfit.qqplot(X)
+
+.. _multiFig9:
+
+.. figure:: ../figs/multi_QQ.png
+    :scale: 80%
+
+
+
+
+
+
+
+Core Concepts -alt
+===================
+
+Marginal Distribution Fitting -alt
+-----------------------------------
+
+Each variable is fitted with a univariate distribution independently. The choice of distribution and fitting method can be customized through the ``distfit`` parameters.
+
+.. code-block:: python
+
+   # Example of custom marginal fitting parameters
+   dfit = distfit(
+       multivariate=True,
+       distr='norm',  # or other distributions
+       method='mle',  # maximum likelihood estimation
+       bins=50,       # number of bins for histogram-based methods
+       alpha=0.05     # significance level for statistical tests
+   )
+
+Copula Dependence Modeling -alt
+-------------------------------
+
+The dependence structure between variables is modeled using a Gaussian copula, which captures the correlation structure while maintaining marginal distributions.
+
+.. math::
+
+   P(U_1 \leq u_1, U_2 \leq u_2, ..., U_d \leq u_d) = C(u_1, u_2, ..., u_d)
+
+Where :math:`C` is the copula function and :math:`U_i = F_i(X_i)` are the uniform transformed variables.
+
+Joint Density Evaluation -alt
+-----------------------------
+
+The joint probability density is computed as:
+
+.. math::
+
+   f(x_1, x_2, ..., x_d) = c(u_1, u_2, ..., u_d) \prod_{i=1}^{d} f_i(x_i)
+
+Where:
+* :math:`c` is the copula density function
+* :math:`f_i` are the marginal probability density functions
+* :math:`u_i = F_i(x_i)` are the uniform transformed variables
+
+Parameters and Methods
+======================
+
+distfit Parameters (Multivariate Mode)
+---------------------------------------
+
+.. code-block:: python
+
+   dfit = distfit(
+       multivariate=True,        # Enable multivariate mode
+       method='mle',             # Estimation method for marginals
+       distr='norm',             # Distribution family for marginals
+       bins=50,                  # Number of bins for histogram-based methods
+       alpha=0.05,               # Significance level for statistical tests
+       n_boots=1000,             # Number of bootstrap samples
+       multtest='bonferroni',    # Multiple testing correction method
+       smooth=True,              # Enable smoothing in density estimation
+       n_perm=1000,              # Number of permutations for permutation tests
+       stats=['ks', 'ad'],       # Statistical tests to perform
+       todf=False,               # Convert to t-distribution if needed
+       f='pdf',                  # Function to evaluate ('pdf', 'cdf', etc.)
+       weighted=False,           # Enable weighted fitting
+       mhist=50,                 # Number of bins for histogram
+       random_state=42,          # Random seed for reproducibility
+       verbose=True              # Enable verbose output
+   )
+
+Key Methods
+===========
+
+fit_transform(X)
+----------------
+
+Fit the multivariate distribution to the data.
+
+**Parameters:**
+
+* ``X`` (array-like, shape (n_samples, n_features)): Input data to fit
+
+**Returns:**
+
+* None (modifies instance attributes)
+
+**Process:**
+
+1. Regularizes covariance matrix to prevent numerical issues
+2. Fits univariate marginal distributions for each feature
+3. Transforms data to uniform space using fitted marginals
+4. Estimates dependence structure via empirical correlation
+5. Computes joint probability density
+
+generate(n=1000, random_state=None)
+-----------------------------------
+
+Generate synthetic multivariate data based on the fitted distribution.
+
+**Parameters:**
+
+* ``n`` (int): Number of samples to generate (default: 1000)
+* ``random_state`` (int or None): Random seed for reproducibility
+
+**Returns:**
+
+* ``X`` (numpy array): Generated synthetic data with shape (n, n_features)
+
+evaluate_pdf(X)
+----------------
+
+Evaluate the joint probability density of samples.
+
+**Parameters:**
+
+* ``X`` (array-like, shape (n_samples, n_features)): Input data to evaluate
+
+**Returns:**
+
+* ``dict`` containing:
+  * ``'copula_density'`` (ndarray): Joint density values for each sample
+  * ``'score'`` (float): Mean log joint density (used for model comparison)
+
+predict_outliers(X)
+--------------------
+
+Identify multivariate outliers based on low joint likelihood.
+
+**Parameters:**
+
+* ``X`` (array-like, shape (n_samples, n_features)): Input data to analyze
+
+**Returns:**
+
+* ``outliers`` (ndarray): Boolean array indicating outliers
+
+Visualization Methods
+=====================
+
+plot_copulaDensity(legend=False, pairplot=True, plot_type='gaussian')
+---------------------------------------------------------------------
+
+Plot copula density visualization in either Gaussian or uniform space.
+
+**Parameters:**
+
+* ``legend`` (bool): Show legend (default: False)
+* ``pairplot`` (bool): Enable pairplot mode (default: True)
+* ``plot_type`` (str): 'gaussian' or 'uniform' (default: 'gaussian')
+
+plot_jointDensity(X)
+--------------------
+
+Plot joint density visualization.
+
+**Parameters:**
+
+* ``X`` (array-like, shape (n_samples, n_features)): Input data
+
+plot(chart='pdf')
+------------------
+
+Plot probability density function or cumulative distribution function.
+
+**Parameters:**
+
+* ``chart`` (str): 'pdf' or 'cdf' (default: 'pdf')
+
+qqplot(X)
+----------
+
+Create quantile-quantile plot for diagnostic checking.
+
+**Parameters:**
+
+* ``X`` (array-like, shape (n_samples, n_features)): Input data
+
+Advanced Features
+=================
+
+Outlier Detection -alt
+----------------------
+
+The outlier detection method identifies samples with low joint likelihood that may not be apparent in univariate distributions:
+
+.. code-block:: python
+
+   # Detect outliers using joint density
+   outliers = dfit.predict_outliers(X)
+
+   # Access outlier scores for analysis
+   scores = dfit.evaluate_pdf(X)['score']
+   outlier_threshold = np.percentile(scores, 1)  # 1st percentile threshold
+
+Synthetic Data Generation
+-------------------------
+
+Generate new synthetic data preserving the fitted multivariate distribution:
+
+.. code-block:: python
+
+   # Generate 1000 samples
+   X_synthetic = dfit.generate(n=1000)
+
+   # Generate with specific random seed for reproducibility
+   X_synthetic = dfit.generate(n=1000, random_state=42)
+
+Model Comparison -alt
+---------------------
+
+Use the ``score`` returned by ``evaluate_pdf`` for model comparison:
+
+.. code-block:: python
+
+   # Compare different models
+   results1 = model1.evaluate_pdf(X)
+   results2 = model2.evaluate_pdf(X)
+
+   # Lower score indicates better fit
+   print(f"Model 1 score: {results1['score']}")
+   print(f"Model 2 score: {results2['score']}")
+
+Caveats and Considerations -alt
+===============================
+
+* **Computational Complexity**: Multivariate fitting scales with the number of variables
+* **Curse of Dimensionality**: Performance degrades significantly with high-dimensional data
+* **Numerical Stability**: Regularization is applied to prevent numerical issues in covariance estimation
+* **Dependence Structure**: Gaussian copula assumes elliptical dependence structure
+* **Marginal Assumptions**: Each marginal distribution is fitted independently
+
+
+
+
+.. include:: add_bottom.add

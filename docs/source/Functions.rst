@@ -1,7 +1,7 @@
 Initialization
 ###########################
 
-.. automodule:: distfit.distfit.distfit
+.. autoclass:: distfit.distfit.distfit
     :members:
     :undoc-members:
 
@@ -12,9 +12,8 @@ Initialization
 Detect best Fit
 ###########################
 
-.. automodule:: distfit.distfit.distfit.fit_transform
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.fit_transform
+    :noindex:
 
 
 -----------------------------------
@@ -23,20 +22,18 @@ Detect best Fit
 Predict
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.predict
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.predict
+    :noindex:
 
 
 -----------------------------------
 
 
-Generate Synthetic data
+Generate Synthetic Data (Generation - API)
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.generate
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.generate
+    :noindex:
 
 
 -----------------------------------
@@ -46,9 +43,8 @@ Generate Synthetic data
 Compute Density
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.density
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.density
+    :noindex:
 
 
 -----------------------------------
@@ -58,9 +54,8 @@ Compute Density
 Bootstrapping
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.bootstrap
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.bootstrap
+    :noindex:
 
 
 -----------------------------------
@@ -70,9 +65,8 @@ Bootstrapping
 Get Distributions
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.get_distributions
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.get_distributions
+    :noindex:
 
 
 
@@ -82,9 +76,8 @@ Get Distributions
 Plot PDF/CDF
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.plot
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.plot
+    :noindex:
 
 
 -----------------------------------
@@ -93,9 +86,8 @@ Plot PDF/CDF
 QQ-plot
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.qqplot
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.qqplot
+    :noindex:
 
 
 -----------------------------------
@@ -104,9 +96,8 @@ QQ-plot
 Plot Summary
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.plot_summary
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.plot_summary
+    :noindex:
 
 
 -----------------------------------
@@ -116,9 +107,8 @@ Plot Summary
 Save
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.save
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.save
+    :noindex:
 
 
 -----------------------------------
@@ -128,9 +118,8 @@ Save
 Load
 ################################################################
 
-.. automodule:: distfit.distfit.distfit.load
-    :members:
-    :undoc-members:
+.. automethod:: distfit.distfit.distfit.load
+    :noindex:
 
 
 

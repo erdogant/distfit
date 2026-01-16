@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generate Synthetic data &mdash; distfit distfit documentation</title>
+  <title>Generate Synthetic Data (Generation) &mdash; distfit distfit documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
@@ -20,8 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Parameter fitting" href="Performance.html" />
-    <link rel="prev" title="Discrete" href="Discrete.html" /> 
+    <link rel="next" title="Basic plot" href="Plots.html" />
+    <link rel="prev" title="Discrete Distributions" href="Discrete.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,20 +59,11 @@
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete Distributions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Generate Synthetic data</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Generate Synthetic data</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#bootstrapping">Bootstrapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Generate Synthetic Data (Generation)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul>
@@ -82,6 +73,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Plots.html#change-chart-properties">Change chart properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Plots.html#qq-plot">QQ plot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Plots.html#line-plots">Line plots</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Univariate</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html">Univariate Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#bootstrapping-univariate">Bootstrapping (Univariate)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#varying-sample-sizes">Varying sample sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#smoothing">Smoothing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#integer-fitting">Integer fitting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Multivariate</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html">Multivariate Parameter Fitting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul>
@@ -93,23 +97,23 @@
 <li class="toctree-l1"><a class="reference internal" href="Examples.html">Quick start to find best fitting distribution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-one-specific-distribution">Fit for one specific distribution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-multiple-distributions">Fit for multiple distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Examples.html#make-predictions">Make predictions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#make-predictions-continuous">Make predictions (continuous)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Examples.html#parallel-computing">Parallel Computing</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.bootstrap">Bootstrapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#detect-best-fit">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#generate-synthetic-data-generation-api">Generate Synthetic Data (Generation - API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#compute-density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#bootstrapping">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#get-distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#plot-pdf-cdf">Plot PDF/CDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#qq-plot">QQ-plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#plot-summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#load">Load</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
@@ -139,7 +143,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Generate Synthetic data</li>
+      <li class="breadcrumb-item active">Generate Synthetic Data (Generation)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/Generate.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -149,8 +153,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="generate-synthetic-data">
-<h1>Generate Synthetic data<a class="headerlink" href="#generate-synthetic-data" title="Link to this heading"></a></h1>
+  <section id="generate-synthetic-data-generation">
+<span id="generate-synthetic-data-generation-unique"></span><h1>Generate Synthetic Data (Generation)<a class="headerlink" href="#generate-synthetic-data-generation" title="Link to this heading"></a></h1>
 <p>With the fitted model it allows to generate synthetic data which can be easily done with the <code class="docutils literal notranslate"><span class="pre">generate</span></code> function.</p>
 <p>Lets see how generating samples works:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import library</span>
@@ -182,8 +186,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Discrete.html" class="btn btn-neutral float-left" title="Discrete" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Performance.html" class="btn btn-neutral float-right" title="Parameter fitting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Discrete.html" class="btn btn-neutral float-left" title="Discrete Distributions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Plots.html" class="btn btn-neutral float-right" title="Basic plot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

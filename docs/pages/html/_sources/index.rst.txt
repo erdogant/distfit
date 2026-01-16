@@ -87,17 +87,27 @@ Contents
 
   Generate
 
-.. toctree::
-  :maxdepth: 3
-  :caption: Performance
 
-  Performance
+
+
 
 .. toctree::
   :maxdepth: 3
   :caption: Plots
 
   Plots
+
+.. toctree::
+  :maxdepth: 2
+  :caption: Univariate
+
+  Univariate
+
+.. toctree::
+  :maxdepth: 2
+  :caption: Multivariate
+
+  multivariate
 
 .. toctree::
   :maxdepth: 3

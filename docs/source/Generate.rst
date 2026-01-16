@@ -1,5 +1,7 @@
-Generate Synthetic data 
-''''''''''''''''''''''''
+.. _generate-synthetic-data-generation-unique:
+
+Generate Synthetic Data (Generation)
+''''''''''''''''''''''''''''''''''''''
 
 With the fitted model it allows to generate synthetic data which can be easily done with the ``generate`` function.
 

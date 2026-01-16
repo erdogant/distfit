@@ -139,8 +139,8 @@ Suppose you want to test multiple distributions:
 	dfit.plot()
 
 
-Make predictions
-######################
+Make predictions (continuous)
+#############################
 
 
 The ``predict`` function will compute the probability of samples in the fitted *PDF*. 
@@ -148,8 +148,8 @@ Note that, due to multiple testing approaches, it can occur that samples can be 
 outside the confidence interval but not marked as significant. See section Algorithm -> Multiple testing for more information.
 
 
-Generate random data
-*************************
+Generate random data (continuous)
+*********************************
 
 .. code:: python
 

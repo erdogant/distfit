@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multivariate Parameter Fitting -alt &mdash; distfit distfit documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=e0179649" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=daee824d"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            distfit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+    
+              <p class="caption" role="heading"><span class="caption-text">Background</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Abstract.html">Abstract</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html#uninstalling">Uninstalling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete Distributions</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Generate Synthetic data</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Generate.html">Generate Synthetic Data (Generation)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plots</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html">Basic plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#plot-all-fitted-distributions">Plot all fitted distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#combine-plots">Combine plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#change-chart-properties">Change chart properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#qq-plot">QQ plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plots.html#line-plots">Line plots</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Univariate</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html">Univariate Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#bootstrapping-univariate">Bootstrapping (Univariate)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#varying-sample-sizes">Varying sample sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#smoothing">Smoothing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#integer-fitting">Integer fitting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Multivariate</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html">Multivariate Parameter Fitting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html">Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Save%20and%20Load.html#loading">Loading</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Quick start to find best fitting distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-one-specific-distribution">Fit for one specific distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#fit-for-multiple-distributions">Fit for multiple distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#make-predictions-continuous">Make predictions (continuous)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html#parallel-computing">Parallel Computing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#detect-best-fit">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#generate-synthetic-data-generation-api">Generate Synthetic Data (Generation - API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#compute-density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#bootstrapping">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#get-distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#plot-pdf-cdf">Plot PDF/CDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#qq-plot">QQ-plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#plot-summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#load">Load</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#medium-blogs">Medium Blogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#gumroad-products-with-podcasts">Gumroad Products with Podcasts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#github">Github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#colab-notebook">Colab Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#citing">Citing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Coding%20quality.html">Coding quality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distfit.distfit.html">API References</a></li>
+</ul>
+
+    <a href= "genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">distfit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multivariate Parameter Fitting -alt</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/multivariate1.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="multivariate-parameter-fitting-alt">
+<h1>Multivariate Parameter Fitting -alt<a class="headerlink" href="#multivariate-parameter-fitting-alt" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">distfit</span></code> library provides a multivariate distribution fitting extension that allows you to fit complex dependencies between multiple variables using copula-based modeling.</p>
+<section id="key-features-alt">
+<h2>Key Features -alt<a class="headerlink" href="#key-features-alt" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Multivariate distribution fitting with automatic marginal distribution estimation</p></li>
+<li><p>Copula-based dependence modeling using Gaussian copulas</p></li>
+<li><p>Joint probability density evaluation for model comparison</p></li>
+<li><p>Outlier detection based on joint likelihood</p></li>
+<li><p>Synthetic data generation from fitted distributions</p></li>
+<li><p>Comprehensive visualization tools for copula analysis</p></li>
+</ul>
+</section>
+<section id="quick-example-for-multivariate-fitting-alt">
+<h2>Quick Example for Multivariate Fitting -alt<a class="headerlink" href="#quick-example-for-multivariate-fitting-alt" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">distfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">distfit</span>
+
+<span class="c1"># Initialize with multivariate=True and other custom parameters.</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Load example data</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;multi_normal&#39;</span><span class="p">)</span>
+<span class="c1"># X = dfit.import_example(data=&#39;multi_t&#39;)</span>
+
+<span class="c1"># Fit model</span>
+<span class="n">dfit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Access correlation matrix</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dfit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">corr</span><span class="p">)</span>
+
+<span class="c1"># Evaluate multivariate PDF</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">evaluate_pdf</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">])</span>  <span class="c1"># Lower is better/worse? and for model comparison?</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;copula_density&#39;</span><span class="p">])</span>  <span class="c1"># describe this better</span>
+
+<span class="c1"># Create synthetic data using fitted distribution.</span>
+<span class="n">Xnew</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Predict outliers</span>
+<span class="n">bool_outliers</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict_outliers</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="copula-gaussian-density-alt">
+<h3>Copula Gaussian Density -alt<a class="headerlink" href="#copula-gaussian-density-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot_copulaDensity</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">pairplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig2">
+<a class="reference internal image-reference" href="_images/copulaDensity_gaussian.png"><img alt="_images/copulaDensity_gaussian.png" height="2480" src="_images/copulaDensity_gaussian.png" width="2983" />
+</a>
+</figure>
+</section>
+<section id="copula-gaussian-density-pairplot-alt">
+<h3>Copula Gaussian Density Pairplot -alt<a class="headerlink" href="#copula-gaussian-density-pairplot-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot_copulaDensity</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">pairplot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig3">
+<a class="reference internal image-reference" href="_images/copulaDensity_gaussian_pairplot.png"><img alt="_images/copulaDensity_gaussian_pairplot.png" height="3402" src="_images/copulaDensity_gaussian_pairplot.png" width="2983" />
+</a>
+</figure>
+</section>
+<section id="copula-uniform-density-alt">
+<h3>Copula Uniform Density -alt<a class="headerlink" href="#copula-uniform-density-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot_copulaDensity</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span> <span class="n">pairplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig4a">
+<a class="reference internal image-reference" href="_images/copulaDensity_uniform.png"><img alt="_images/copulaDensity_uniform.png" height="2346" src="_images/copulaDensity_uniform.png" width="2983" />
+</a>
+</figure>
+<figure class="align-default" id="multifig4b">
+<a class="reference internal image-reference" href="_images/copulaDensity_uniformB.png"><img alt="_images/copulaDensity_uniformB.png" height="2480" src="_images/copulaDensity_uniformB.png" width="2983" />
+</a>
+</figure>
+</section>
+<section id="copula-uniform-density-pairplot-alt">
+<h3>Copula Uniform Density Pairplot -alt<a class="headerlink" href="#copula-uniform-density-pairplot-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot_copulaDensity</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span> <span class="n">pairplot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig5">
+<a class="reference internal image-reference" href="_images/copulaDensity_uniform_pair.png"><img alt="_images/copulaDensity_uniform_pair.png" height="3402" src="_images/copulaDensity_uniform_pair.png" width="2983" />
+</a>
+</figure>
+</section>
+<section id="joint-density-plot-alt">
+<h3>Joint Density Plot -alt<a class="headerlink" href="#joint-density-plot-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot_jointDensity</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig6">
+<a class="reference internal image-reference" href="_images/jointDensity.png"><img alt="_images/jointDensity.png" height="2094" src="_images/jointDensity.png" width="2363" />
+</a>
+</figure>
+</section>
+<section id="pdf-plot-alt">
+<h3>PDF plot -alt<a class="headerlink" href="#pdf-plot-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig7">
+<a class="reference internal image-reference" href="_images/multi_PDF.png"><img alt="_images/multi_PDF.png" height="2342" src="_images/multi_PDF.png" width="2983" />
+</a>
+</figure>
+</section>
+<section id="cdf-plot-alt">
+<h3>CDF plot -alt<a class="headerlink" href="#cdf-plot-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">chart</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig8">
+<a class="reference internal image-reference" href="_images/multi_CDF.png"><img alt="_images/multi_CDF.png" height="2342" src="_images/multi_CDF.png" width="2983" />
+</a>
+</figure>
+</section>
+<section id="qq-plot-multivariate-alt">
+<h3>QQ plot (Multivariate -alt)<a class="headerlink" href="#qq-plot-multivariate-alt" title="Link to this heading"></a></h3>
+<p>EXPLAIN THE FIGURE HERE</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="multifig9">
+<a class="reference internal image-reference" href="_images/multi_QQ.png"><img alt="_images/multi_QQ.png" height="2342" src="_images/multi_QQ.png" width="2983" />
+</a>
+</figure>
+</section>
+</section>
+<section id="core-concepts-alt">
+<h2>Core Concepts -alt<a class="headerlink" href="#core-concepts-alt" title="Link to this heading"></a></h2>
+<section id="marginal-distribution-fitting-alt">
+<h3>Marginal Distribution Fitting -alt<a class="headerlink" href="#marginal-distribution-fitting-alt" title="Link to this heading"></a></h3>
+<p>Each variable is fitted with a univariate distribution independently. The choice of distribution and fitting method can be customized through the <code class="docutils literal notranslate"><span class="pre">distfit</span></code> parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of custom marginal fitting parameters</span>
+<span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span>
+    <span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span>  <span class="c1"># or other distributions</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mle&#39;</span><span class="p">,</span>  <span class="c1"># maximum likelihood estimation</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>       <span class="c1"># number of bins for histogram-based methods</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span>     <span class="c1"># significance level for statistical tests</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="copula-dependence-modeling-alt">
+<h3>Copula Dependence Modeling -alt<a class="headerlink" href="#copula-dependence-modeling-alt" title="Link to this heading"></a></h3>
+<p>The dependence structure between variables is modeled using a Gaussian copula, which captures the correlation structure while maintaining marginal distributions.</p>
+<div class="math notranslate nohighlight">
+\[P(U_1 \leq u_1, U_2 \leq u_2, ..., U_d \leq u_d) = C(u_1, u_2, ..., u_d)\]</div>
+<p>Where <span class="math notranslate nohighlight">\(C\)</span> is the copula function and <span class="math notranslate nohighlight">\(U_i = F_i(X_i)\)</span> are the uniform transformed variables.</p>
+</section>
+<section id="joint-density-evaluation-alt">
+<h3>Joint Density Evaluation -alt<a class="headerlink" href="#joint-density-evaluation-alt" title="Link to this heading"></a></h3>
+<p>The joint probability density is computed as:</p>
+<div class="math notranslate nohighlight">
+\[f(x_1, x_2, ..., x_d) = c(u_1, u_2, ..., u_d) \prod_{i=1}^{d} f_i(x_i)\]</div>
+<p>Where:
+* <span class="math notranslate nohighlight">\(c\)</span> is the copula density function
+* <span class="math notranslate nohighlight">\(f_i\)</span> are the marginal probability density functions
+* <span class="math notranslate nohighlight">\(u_i = F_i(x_i)\)</span> are the uniform transformed variables</p>
+</section>
+</section>
+<section id="parameters-and-methods">
+<h2>Parameters and Methods<a class="headerlink" href="#parameters-and-methods" title="Link to this heading"></a></h2>
+<section id="distfit-parameters-multivariate-mode">
+<h3>distfit Parameters (Multivariate Mode)<a class="headerlink" href="#distfit-parameters-multivariate-mode" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dfit</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span>
+    <span class="n">multivariate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>        <span class="c1"># Enable multivariate mode</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mle&#39;</span><span class="p">,</span>             <span class="c1"># Estimation method for marginals</span>
+    <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;norm&#39;</span><span class="p">,</span>             <span class="c1"># Distribution family for marginals</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>                  <span class="c1"># Number of bins for histogram-based methods</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>               <span class="c1"># Significance level for statistical tests</span>
+    <span class="n">n_boots</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>             <span class="c1"># Number of bootstrap samples</span>
+    <span class="n">multtest</span><span class="o">=</span><span class="s1">&#39;bonferroni&#39;</span><span class="p">,</span>    <span class="c1"># Multiple testing correction method</span>
+    <span class="n">smooth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>              <span class="c1"># Enable smoothing in density estimation</span>
+    <span class="n">n_perm</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>              <span class="c1"># Number of permutations for permutation tests</span>
+    <span class="n">stats</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ks&#39;</span><span class="p">,</span> <span class="s1">&#39;ad&#39;</span><span class="p">],</span>       <span class="c1"># Statistical tests to perform</span>
+    <span class="n">todf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>               <span class="c1"># Convert to t-distribution if needed</span>
+    <span class="n">f</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span>                  <span class="c1"># Function to evaluate (&#39;pdf&#39;, &#39;cdf&#39;, etc.)</span>
+    <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>           <span class="c1"># Enable weighted fitting</span>
+    <span class="n">mhist</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>                 <span class="c1"># Number of bins for histogram</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>          <span class="c1"># Random seed for reproducibility</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>              <span class="c1"># Enable verbose output</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="key-methods">
+<h2>Key Methods<a class="headerlink" href="#key-methods" title="Link to this heading"></a></h2>
+<section id="fit-transform-x">
+<h3>fit_transform(X)<a class="headerlink" href="#fit-transform-x" title="Link to this heading"></a></h3>
+<p>Fit the multivariate distribution to the data.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> (array-like, shape (n_samples, n_features)): Input data to fit</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p>None (modifies instance attributes)</p></li>
+</ul>
+<p><strong>Process:</strong></p>
+<ol class="arabic simple">
+<li><p>Regularizes covariance matrix to prevent numerical issues</p></li>
+<li><p>Fits univariate marginal distributions for each feature</p></li>
+<li><p>Transforms data to uniform space using fitted marginals</p></li>
+<li><p>Estimates dependence structure via empirical correlation</p></li>
+<li><p>Computes joint probability density</p></li>
+</ol>
+</section>
+<section id="generate-n-1000-random-state-none">
+<h3>generate(n=1000, random_state=None)<a class="headerlink" href="#generate-n-1000-random-state-none" title="Link to this heading"></a></h3>
+<p>Generate synthetic multivariate data based on the fitted distribution.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n</span></code> (int): Number of samples to generate (default: 1000)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code> (int or None): Random seed for reproducibility</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> (numpy array): Generated synthetic data with shape (n, n_features)</p></li>
+</ul>
+</section>
+<section id="evaluate-pdf-x">
+<h3>evaluate_pdf(X)<a class="headerlink" href="#evaluate-pdf-x" title="Link to this heading"></a></h3>
+<p>Evaluate the joint probability density of samples.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> (array-like, shape (n_samples, n_features)): Input data to evaluate</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> containing:
+* <code class="docutils literal notranslate"><span class="pre">'copula_density'</span></code> (ndarray): Joint density values for each sample
+* <code class="docutils literal notranslate"><span class="pre">'score'</span></code> (float): Mean log joint density (used for model comparison)</p></li>
+</ul>
+</section>
+<section id="predict-outliers-x">
+<h3>predict_outliers(X)<a class="headerlink" href="#predict-outliers-x" title="Link to this heading"></a></h3>
+<p>Identify multivariate outliers based on low joint likelihood.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> (array-like, shape (n_samples, n_features)): Input data to analyze</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">outliers</span></code> (ndarray): Boolean array indicating outliers</p></li>
+</ul>
+</section>
+</section>
+<section id="visualization-methods">
+<h2>Visualization Methods<a class="headerlink" href="#visualization-methods" title="Link to this heading"></a></h2>
+<section id="plot-copuladensity-legend-false-pairplot-true-plot-type-gaussian">
+<h3>plot_copulaDensity(legend=False, pairplot=True, plot_type=’gaussian’)<a class="headerlink" href="#plot-copuladensity-legend-false-pairplot-true-plot-type-gaussian" title="Link to this heading"></a></h3>
+<p>Plot copula density visualization in either Gaussian or uniform space.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">legend</span></code> (bool): Show legend (default: False)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pairplot</span></code> (bool): Enable pairplot mode (default: True)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_type</span></code> (str): ‘gaussian’ or ‘uniform’ (default: ‘gaussian’)</p></li>
+</ul>
+</section>
+<section id="plot-jointdensity-x">
+<h3>plot_jointDensity(X)<a class="headerlink" href="#plot-jointdensity-x" title="Link to this heading"></a></h3>
+<p>Plot joint density visualization.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> (array-like, shape (n_samples, n_features)): Input data</p></li>
+</ul>
+</section>
+<section id="plot-chart-pdf">
+<h3>plot(chart=’pdf’)<a class="headerlink" href="#plot-chart-pdf" title="Link to this heading"></a></h3>
+<p>Plot probability density function or cumulative distribution function.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chart</span></code> (str): ‘pdf’ or ‘cdf’ (default: ‘pdf’)</p></li>
+</ul>
+</section>
+<section id="qqplot-x">
+<h3>qqplot(X)<a class="headerlink" href="#qqplot-x" title="Link to this heading"></a></h3>
+<p>Create quantile-quantile plot for diagnostic checking.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code> (array-like, shape (n_samples, n_features)): Input data</p></li>
+</ul>
+</section>
+</section>
+<section id="advanced-features">
+<h2>Advanced Features<a class="headerlink" href="#advanced-features" title="Link to this heading"></a></h2>
+<section id="outlier-detection-alt">
+<h3>Outlier Detection -alt<a class="headerlink" href="#outlier-detection-alt" title="Link to this heading"></a></h3>
+<p>The outlier detection method identifies samples with low joint likelihood that may not be apparent in univariate distributions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Detect outliers using joint density</span>
+<span class="n">outliers</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">predict_outliers</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Access outlier scores for analysis</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">evaluate_pdf</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span>
+<span class="n">outlier_threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 1st percentile threshold</span>
+</pre></div>
+</div>
+</section>
+<section id="synthetic-data-generation">
+<h3>Synthetic Data Generation<a class="headerlink" href="#synthetic-data-generation" title="Link to this heading"></a></h3>
+<p>Generate new synthetic data preserving the fitted multivariate distribution:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate 1000 samples</span>
+<span class="n">X_synthetic</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># Generate with specific random seed for reproducibility</span>
+<span class="n">X_synthetic</span> <span class="o">=</span> <span class="n">dfit</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="model-comparison-alt">
+<h3>Model Comparison -alt<a class="headerlink" href="#model-comparison-alt" title="Link to this heading"></a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">score</span></code> returned by <code class="docutils literal notranslate"><span class="pre">evaluate_pdf</span></code> for model comparison:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare different models</span>
+<span class="n">results1</span> <span class="o">=</span> <span class="n">model1</span><span class="o">.</span><span class="n">evaluate_pdf</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">results2</span> <span class="o">=</span> <span class="n">model2</span><span class="o">.</span><span class="n">evaluate_pdf</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Lower score indicates better fit</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model 1 score: </span><span class="si">{</span><span class="n">results1</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model 2 score: </span><span class="si">{</span><span class="n">results2</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="caveats-and-considerations-alt">
+<h2>Caveats and Considerations -alt<a class="headerlink" href="#caveats-and-considerations-alt" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Computational Complexity</strong>: Multivariate fitting scales with the number of variables</p></li>
+<li><p><strong>Curse of Dimensionality</strong>: Performance degrades significantly with high-dimensional data</p></li>
+<li><p><strong>Numerical Stability</strong>: Regularization is applied to prevent numerical issues in covariance estimation</p></li>
+<li><p><strong>Dependence Structure</strong>: Gaussian copula assumes elliptical dependence structure</p></li>
+<li><p><strong>Marginal Assumptions</strong>: Each marginal distribution is fitted independently</p></li>
+</ul>
+<hr>
+<center>
+        <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+        <!-- Show an image ad -->
+        <!-- <div data-ea-publisher="erdogantgithubio" data-ea-type="image"></div> -->
+        <div data-ea-publisher="erdogantgithubio" data-ea-type="image" data-ea-style="stickybox"></div>
+</center>
+<hr></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Erdogan Taskesen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -59,20 +59,11 @@
 <li class="toctree-l1"><a class="reference internal" href="Parametric.html">Parametric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quantile.html">Quantiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Percentile.html">Percentiles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Discrete.html">Discrete Distributions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Generate Synthetic data</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Generate.html">Generate Synthetic data</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Performance</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html">Parameter fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#bootstrapping">Bootstrapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#varying-sample-sizes">Varying sample sizes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#smoothing">Smoothing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Performance.html#integer-fitting">Integer fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Generate.html">Generate Synthetic Data (Generation)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Plots</span></p>
 <ul>
@@ -82,6 +73,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Plots.html#change-chart-properties">Change chart properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Plots.html#qq-plot">QQ plot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Plots.html#line-plots">Line plots</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Univariate</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html">Univariate Parameter fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#probability-density-function-fitting">Probability Density Function fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#bootstrapping-univariate">Bootstrapping (Univariate)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#varying-sample-sizes">Varying sample sizes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#smoothing">Smoothing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Univariate.html#integer-fitting">Integer fitting</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Multivariate</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="multivariate.html">Multivariate Parameter Fitting</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Save and Load</span></p>
 <ul>
@@ -99,8 +103,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#fit-for-one-specific-distribution">Fit for one specific distribution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#fit-for-multiple-distributions">Fit for multiple distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#make-predictions">Make predictions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">Generate random data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#make-predictions-continuous">Make predictions (continuous)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#generate-random-data-continuous">Generate random data (continuous)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fit-all-distribution">Fit all distribution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plot-predictions">Plot predictions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#examine-results">Examine results</a></li>
@@ -112,17 +116,17 @@
 <p class="caption" role="heading"><span class="caption-text">Functions</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Functions.html">Initialization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.fit_transform">Detect best Fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.predict">Predict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.generate">Generate Synthetic data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.density">Compute Density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.bootstrap">Bootstrapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.get_distributions">Get Distributions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot">Plot PDF/CDF</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.qqplot">QQ-plot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.plot_summary">Plot Summary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.save">Save</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Functions.html#module-distfit.distfit.distfit.load">Load</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#detect-best-fit">Detect best Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#predict">Predict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#generate-synthetic-data-generation-api">Generate Synthetic Data (Generation - API)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#compute-density">Compute Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#bootstrapping">Bootstrapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#get-distributions">Get Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#plot-pdf-cdf">Plot PDF/CDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#qq-plot">QQ-plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#plot-summary">Plot Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#save">Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Functions.html#load">Load</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
@@ -211,8 +215,8 @@
 <span class="n">dfit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<table class="docutils align-center" id="id2">
-<caption><span class="caption-text">Distribution fit</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<table class="docutils align-center" id="id1">
+<caption><span class="caption-text">Distribution fit</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_images/example_fig1a.png"><img alt="fig1a" height="634" src="_images/example_fig1a.png" width="821" /></a></p></td>
 </tr>
@@ -226,8 +230,8 @@
 <span class="n">dfit</span><span class="o">.</span><span class="n">plot_summary</span><span class="p">()</span>
 </pre></div>
 </div>
-<table class="docutils align-center" id="id3">
-<caption><span class="caption-text">Summary of fitted theoretical Distributions</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<table class="docutils align-center" id="id2">
+<caption><span class="caption-text">Summary of fitted theoretical Distributions</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_images/fig1_summary.png"><img alt="fig1summary" height="319" src="_images/fig1_summary.png" width="533" /></a></p></td>
 </tr>
@@ -278,13 +282,13 @@
 </pre></div>
 </div>
 </section>
-<section id="make-predictions">
-<h1>Make predictions<a class="headerlink" href="#make-predictions" title="Link to this heading"></a></h1>
+<section id="make-predictions-continuous">
+<h1>Make predictions (continuous)<a class="headerlink" href="#make-predictions-continuous" title="Link to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">predict</span></code> function will compute the probability of samples in the fitted <em>PDF</em>.
 Note that, due to multiple testing approaches, it can occur that samples can be located
 outside the confidence interval but not marked as significant. See section Algorithm -&gt; Multiple testing for more information.</p>
-<section id="id1">
-<h2>Generate random data<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="generate-random-data-continuous">
+<h2>Generate random data (continuous)<a class="headerlink" href="#generate-random-data-continuous" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example data</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
@@ -400,8 +404,8 @@ Note that dataframe <code class="docutils literal notranslate"><span class="pre"
 </tr>
 </tbody>
 </table>
-<table class="docutils align-center" id="id4">
-<caption><span class="caption-text">Plot distribution with predictions</span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
+<table class="docutils align-center" id="id3">
+<caption><span class="caption-text">Plot distribution with predictions</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_images/example_fig1b.png"><img alt="fig1b" height="368" src="_images/example_fig1b.png" width="430" /></a></p></td>
 </tr>
@@ -522,8 +526,8 @@ Core allocation is automatically managed during initialization, so you only need
 <span class="nb">print</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span>
 </pre></div>
 </div>
-<table class="docutils align-center" id="id5">
-<caption><span class="caption-text">Parallel Computing</span><a class="headerlink" href="#id5" title="Link to this table"></a></caption>
+<table class="docutils align-center" id="id4">
+<caption><span class="caption-text">Parallel Computing</span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_images/performance_parralel_jobs.png"><img alt="fig_parallel_computing" height="388" src="_images/performance_parralel_jobs.png" width="612" /></a></p></td>
 </tr>
