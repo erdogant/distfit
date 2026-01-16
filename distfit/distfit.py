@@ -650,7 +650,7 @@ class distfit:
         if random_state is not None: self.random_state = random_state
         if not hasattr(self, 'model') and not isinstance(self.distr, str): raise Exception('[distfit] Error in creating Synthetic data: A fitted model or input parameter "distr" is required. Tip: First fit on your data using dfit.fit_transform(X) or specify one distribution.')
         X = None
-        
+
         # Generate data based model type and univariate/multivariate
         if hasattr(self, 'model') and self.multivariate:
             # Multivariate

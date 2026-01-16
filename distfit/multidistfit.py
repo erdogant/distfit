@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class Multidistfit:
     def __init__(self, model):
         """Multivariate distribution fitting.
-        
+
         X (n × d)
          ↓
         fit_marginals()
@@ -108,37 +108,37 @@ class Multidistfit:
         Z = rng.multivariate_normal(mean=np.zeros(d), cov=self.corr, size=n)
         U = norm.cdf(Z)
         X = np.zeros_like(U)
-    
+
         for i, model in self.marginals.items():
             X[:, i] = model.model['model'].ppf(U[:, i])
-    
+
         return X
 
     def predict_outliers(self, X):
         """
         Identify outliers based on low joint likelihood under the fitted copula model.
-    
+
         Samples are flagged as outliers if their joint log-density falls below
         a specified percentile threshold of the empirical log-density distribution.
         This method detects multivariate outliers, including dependency violations
         that are not visible in marginal distributions.
-    
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             Input data for which outliers should be detected. Each row represents one multivariate observation.
-    
+
         Returns
         -------
         outliers : ndarray of shape (n_samples,)
             Boolean array where ``True`` indicates that the corresponding sample is classified as an outlier based on low joint likelihood.
-    
+
         Notes
         -----
         - The joint density is evaluated using the fitted marginal distributions and the copula-based dependence structure.
         - The returned values are based on *relative* likelihoods; the density values themselves are not probabilities.
         - Percentile-based thresholding is scale-free and robust to dimensionality.
-    
+
         See Also
         --------
         evaluate_pdf : Evaluate the joint probability density of samples.
@@ -153,28 +153,28 @@ class Multidistfit:
     def evaluate_pdf(self, X):
         """
         Evaluate the joint density of samples using a Gaussian copula model.
-    
+
         This method computes the joint probability density by combining marginal probability density functions with a Gaussian copula
         that captures the dependence structure between variables.
-    
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             Input data for which the joint density is evaluated. Each row represents one multivariate observation.
-    
+
         Returns
         -------
         out : dict
             Dictionary containing:
-    
+
             - ``'copula_density'`` : ndarray of shape (n_samples,)
                 Joint density values evaluated at each sample. These values
                 represent relative likelihoods and are not probabilities.
-    
+
             - ``'score'`` : float
                 Mean log joint density across all samples. This can be used
                 for model comparison or goodness-of-fit assessment.
-    
+
         Notes
         -----
         - Marginal distributions are evaluated independently and transformed
@@ -185,26 +185,26 @@ class Multidistfit:
           multivariate normal density and the product of univariate normal densities.
         - The resulting joint density is invariant to monotonic transformations
           of the marginals.
-    
+
         See Also
         --------
         predict_outliers : Detect multivariate outliers using joint log-density.
         """
         X = np.atleast_2d(X)
         d = X.shape[1]
-    
+
         # Marginal CDFs and PDFs
         U = np.zeros_like(X)
         log_pdf = np.zeros(len(X))
-    
+
         for i, m in enumerate(self.marginals):
             dist = self.marginals[m].model['model']
             U[:, i] = dist.cdf(X[:, i])
             log_pdf += np.log(dist.pdf(X[:, i]))
-    
+
         # Convert to Gaussian space
         Z = norm.ppf(U)
-    
+
         # Copula density
         mvn = multivariate_normal(mean=np.zeros(d), cov=self.corr)
         log_copula = (mvn.logpdf(Z) - np.sum(norm.logpdf(Z), axis=1))
@@ -213,7 +213,7 @@ class Multidistfit:
         # Score for model comparison
         score = np.mean(np.log(p))
         out = {'score': score, 'copula_density': p}
-        return out 
+        return out
 
 # %%
 # =============================================================================
@@ -311,7 +311,7 @@ def _plot_copula(
     ax=None,
     ):
     if ax is None: fig, ax = plt.subplots(figsize=figsize)
-    
+
     # Default bar styling
     default = {"color": "#607B8B", "edgecolor": "#5A5A5A", "linewidth": 1, "alpha": 0.85, "align": "center"}
     properties = {**default, **properties}
@@ -322,10 +322,10 @@ def _plot_copula(
     histvals, binedges = np.histogram(U, bins=bins, range=(0, 1), density=True)
     bin_centers = 0.5 * (binedges[:-1] + binedges[1:])
     bin_width = binedges[1] - binedges[0]  # Calculate the width of each bin
-    
+
     # Plot histogram using bars
     ax.bar(bin_centers, histvals, width=bin_width, **properties)
-    
+
     # Uniform reference line
     ax.hlines(
         1,
@@ -336,7 +336,7 @@ def _plot_copula(
         linewidth=2,
         label="Uniform(0,1)",
     )
-    
+
     # Styling
     ax.set_xlim(0, 1)
     ax.set_title(f"PIT Uniformity for {title}", fontsize=18)
@@ -366,7 +366,7 @@ def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={},
     properties = {**default, **properties}
     if properties is not None and properties.get('legend', None) is not None:
         properties.pop('legend')
-    
+
 
     d = X.shape[1]
     n_pairs = d * (d - 1) // 2
@@ -382,20 +382,20 @@ def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={},
     if n_pairs == 1:
         axes = np.array([axes])
     axes = axes.flatten()
-    
+
     # Plot each pair
     pair_idx = 0
     for i in range(d):
         for j in range(i + 1, d):
             ax = axes[pair_idx]
-            
+
             # Scatter plot
             scatterd(X[:, i], X[:, j], ax=ax, **properties, verbose=verbose)
-            
+
             # Reference box for uniform copula
             if plot_type=='uniform_copula':
                 ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], 'k--', linewidth=1, alpha=0.3)
-            
+
             # Styling
             ax.set_xlim(-0.05, 1.05)
             ax.set_ylim(-0.05, 1.05)
@@ -405,7 +405,7 @@ def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={},
             ax.grid(True, linestyle=":", alpha=0.4)
             ax.set_title(f"{title}", fontsize=18)
             pair_idx += 1
-    
+
     # Hide unused subplots
     for idx in range(pair_idx, len(axes)): axes[idx].axis('off')
     fig.tight_layout()
