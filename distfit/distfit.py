@@ -2647,7 +2647,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
     for result in results:
         if result is not None:
             i, distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass, start_time = result
-            df.values[i] = [distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass]
+            df.iloc[i] = distr_name, score, loc, scale, arg, params, distribution_fit, bootstrap_score, bootstrap_pass
 
             # Setup for the logger
             spaces_1 = ' ' * (max_name_len - len(distr_name))
