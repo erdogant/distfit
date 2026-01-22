@@ -60,6 +60,18 @@
 # plt.title("Bivariate Gaussian PDF (Contour)")
 # plt.show()
 
+from distfit import distfit
+import numpy as np
+
+X = np.random.normal(0, 2, 1000)
+y = [-8,-6,0,1,2,3,4,5,6]
+
+# Initialize model
+dfit = distfit()
+
+# Find best theoretical distribution for empirical data X
+dfit.fit_transform(X)
+
 # %%
 
 # Import library

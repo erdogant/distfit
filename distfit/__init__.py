@@ -6,7 +6,7 @@ import matplotlib
 
 __author__ = 'Erdogan Tasksen'
 __email__ = 'erdogant@gmail.com'
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 # Setup root logger
 _logger = logging.getLogger('distfit')
@@ -20,7 +20,7 @@ _logger.propagate = False
 
 if version.parse(matplotlib.__version__) < version.parse('3.5.2'):
     raise ImportError(
-        'This release requires matplotlib version >= 3.5.2. Try: pip install -U matplotlib')
+        'Matplotlib version >= 3.5.2 is required. Try: pip install -U matplotlib')
 
 # module level doc-string
 __doc__ = """
