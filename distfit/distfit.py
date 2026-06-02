@@ -1949,7 +1949,7 @@ class distfit:
                 with warnings.catch_warnings():
                     # A few PDF give a warning which is a known statistical issue. Therefore I supress it here.
                     warnings.filterwarnings("ignore")
-                    bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr), 
+                    bootstrap_score, bootstrap_pass = _bootstrap(eval('st.' + distr),
                                                                  fitted_model,
                                                                  X,
                                                                  n_boots=n_boots,
@@ -2329,11 +2329,27 @@ def _plot_pdf(x, y, label, pdf_properties, ax):
 
 
 def _plot_bar(binedges, histvals, bar_properties, ax):
-    if bar_properties is not None:
+    if bar_properties is None:
+        return
+    # Ensure binedges is an array
+    binedges = np.asarray(binedges)
+    # Handle edge cases: no bins or a single bin
+    if binedges.size == 0:
+        # Nothing to plot
+        return
+    if binedges.size == 1:
+        # Single bin: choose a reasonable width
+        widths = np.array([1.0])
+    else:
         widths = np.diff(binedges)
-        widths = np.append(widths, widths[-1])  # Repeat last width
-        bar_properties.setdefault('width', widths)
-        ax.bar(binedges, histvals, **bar_properties)
+        # If diff yields empty for some reason, fallback to width 1
+        if widths.size == 0:
+            widths = np.array([1.0])
+        else:
+            widths = np.append(widths, widths[-1])  # Repeat last width
+    bar_properties.setdefault('width', widths)
+    ax.bar(binedges, histvals, **bar_properties)
+
 
 
 def _plot_emp(x, y, line_properties, ax):
@@ -2413,20 +2429,20 @@ def _plot_cii_parametric(model, alpha, results, cii_properties, ax):
             ax.scatter(results['y'][idxOUT], np.zeros(len(idxOUT)), s=50, marker=cii_properties_custom['marker'], color=cii_properties_custom['color_general'], **cii_properties)
 
 # %% Plot
-def _plot_quantile(self, 
-                   title='', 
-                   xlabel='Density', 
-                   ylabel='Frequency', 
-                   figsize=(20, 15), 
-                   fontsize=16, 
-                   xlim=None, 
-                   ylim=None, 
-                   fig=None, 
-                   ax=None, 
-                   grid=True, 
-                   legend=True, 
-                   emp_properties={}, 
-                   bar_properties={}, 
+def _plot_quantile(self,
+                   title='',
+                   xlabel='Density',
+                   ylabel='Frequency',
+                   figsize=(20, 15),
+                   fontsize=16,
+                   xlim=None,
+                   ylim=None,
+                   fig=None,
+                   ax=None,
+                   grid=True,
+                   legend=True,
+                   emp_properties={},
+                   bar_properties={},
                    cii_properties={},
                    ):
 
@@ -2605,7 +2621,7 @@ def _compute_score_distribution(data, X, y_obs, DISTRIBUTIONS, stats, cmap='Set1
                 if distribution.name == "beta":
                     eps = 1e-6
                     data_fit = np.clip(X, eps, 1 - eps)
-                
+
                 # fit dist to data
                 params = distribution.fit(data)
                 logger.debug(params)
