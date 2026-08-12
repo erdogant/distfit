@@ -283,7 +283,7 @@ dfit.fit_transform(X)
 
 ### Star history
 
-[![Star History Chart](https://api.star-history.com/svg?repos=erdogant/distfit&type=Date)](https://www.star-history.com/#erdogant/distfit&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=erdogant/distfit&type=Date)](https://star-history.dera.page/#erdogant/distfit&Date)
 
 ### Contributors
 Thank the contributors!
