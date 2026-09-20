@@ -8,7 +8,7 @@
 [![Forks](https://img.shields.io/github/forks/erdogant/distfit.svg)](https://github.com/erdogant/distfit/network)
 [![Issues](https://img.shields.io/github/issues/erdogant/distfit.svg)](https://github.com/erdogant/distfit/issues)
 [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![DOI](https://zenodo.org/badge/231843440.svg)](https://zenodo.org/badge/latestdoi/231843440)
+[![DOI](https://img.shields.io/badge/DOI-Blog-black)](https://zenodo.org/badge/latestdoi/231843440)
 [![Medium](https://img.shields.io/badge/Medium-Blog-black)](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://erdogant.github.io/distfit/pages/html/Documentation.html#colab-notebook)
 [![Donate](https://img.shields.io/badge/Support%20this%20project-grey.svg?logo=github%20sponsors)](https://erdogant.github.io/distfit/pages/html/Documentation.html#)
@@ -17,7 +17,7 @@
 <a href="https://erdogant.github.io/distfit/"><img src="https://github.com/erdogant/distfit/blob/master/docs/figs/logo.png" width="250" align="left" /></a>
 distfit is a Python package for probability density fitting of univariate distributions for random variables.
 The distfit library can determine the best fit for over 90 theoretical distributions. The goodness-of-fit test is used to score for the best fit and after finding the best-fitted theoretical distribution, the loc, scale, and arg parameters are returned.
-It can be used for parametric, non-parametric, and discrete distributions. ⭐️Star it if you like it⭐️
+It can be used for parametric, non-parametric, and discrete distributions. <a href="https://erdogant.github.io/distfit/">Documentation can be found here</a>
 </div>
 
 ---
@@ -26,7 +26,7 @@ It can be used for parametric, non-parametric, and discrete distributions. ⭐�
 
 | Feature | Description | Medium | Gumroad+Podcast |
 |---------|-------------|--------|-----------------|
-| [**Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Parametric.html) | Fit distributions on empirical data X. | [Link](https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) | [Link](https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) |
+| [**Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Parametric.html) | Fit distributions on empirical data X. | [Link](https://erdogant.medium.com) | [Link](https://erdogant.gumroad.com/l/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d) |
 | [**Non-Parametric Fitting**](https://erdogant.github.io/distfit/pages/html/Quantile.html) | Fit distributions on empirical data X using non-parametric approaches (quantile, percentiles). | - | - |
 | [**Multivariate Fitting**](https://erdogant.github.io/distfit/pages/html/multivariate.html) | Fit multivariate distributions on empirical data X that contains multiple columns. | - | - |
 | [**Discrete Fitting**](https://erdogant.github.io/distfit/pages/html/Discrete.html) | Fit distributions on empirical data X using binomial distribution. | - | - |
