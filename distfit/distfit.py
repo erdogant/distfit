@@ -898,6 +898,7 @@ class distfit:
 
         # Get kwargs parameters
         figsize = kwargs.get('figsize', None)
+        dpi = kwargs.get('dpi', 100)
         n_models = len(self.model.marginals)
         n_cols = kwargs.get('n_cols')
         n_rows = kwargs.get('n_rows')
@@ -909,17 +910,21 @@ class distfit:
             properties.pop('legend')
 
 
-        # Calculate grid dimensions based on number of marginals, not pairs
-        if figsize is None or n_rows is None or n_cols is None:
+        # Calculate grid dimensions
+        if figsize is None:
             d = len(self.model.marginals)
-            n_cols = min(3, d)
-            n_rows = (d + n_cols - 1) // n_cols
-            if figsize is None:
-                figsize = (13 * n_cols, 10 * n_rows)
+            figsize, n_rows, n_cols = calc_figsize(d)
 
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
-        # Always produce a flat list of Axes, regardless of subplots shape
-        axes = np.array(axes).flatten().tolist()
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize, dpi=dpi)
+        if n_models == 1:
+            # Make it a list for consistent handling
+            axes = [axes]
+        elif n_rows == 1:
+            # Convert array to list for single row
+            axes = axes.tolist()
+        else:
+            # Flatten for multiple rows
+            axes = axes.flatten()
 
         # Plot each marginal model
         for i, (key, model) in enumerate(self.model.marginals.items()):
@@ -956,6 +961,7 @@ class distfit:
              xlabel='Density values',
              ylabel='Frequency',
              figsize=(20, 15),
+             dpi=100,
              xlim=None,
              ylim=None,
              fig=None,
@@ -971,13 +977,13 @@ class distfit:
 
         logger.info('Create %s plot for the %s method.' %(chart, self.method))
         if chart.lower()=='pdf' and self.method=='parametric':
-            fig, ax = _plot_parametric(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, legend=legend, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+            fig, ax = _plot_parametric(self, title=title, figsize=figsize, dpi=dpi, xlim=xlim, ylim=ylim, fig=fig, ax=ax, legend=legend, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], n_top=n_top, cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         elif chart.lower()=='pdf' and self.method=='discrete':
-            fig, ax = plot_binom(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, legend=legend, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+            fig, ax = plot_binom(self, title=title, figsize=figsize, dpi=dpi, xlim=xlim, ylim=ylim, legend=legend, grid=grid, emp_properties=properties['emp'], pdf_properties=properties['pdf'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         elif chart.lower()=='pdf' and (self.method=='quantile') or (self.method=='percentile'):
-            fig, ax = _plot_quantile(self, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, legend=legend, grid=grid, emp_properties=properties['emp'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+            fig, ax = _plot_quantile(self, title=title, figsize=figsize, dpi=dpi, xlim=xlim, ylim=ylim, fig=fig, ax=ax, legend=legend, grid=grid, emp_properties=properties['emp'], bar_properties=properties['bar'], cii_properties=properties['cii'], xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         elif chart.lower()=='cdf' and (self.method=='parametric' or self.method=='discrete'):
-            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, xlim=xlim, ylim=ylim, fig=fig, ax=ax, legend=legend, grid=grid, emp_properties=properties['emp'], cdf_properties=properties['pdf'], cii_properties=properties['cii'], cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
+            fig, ax = self.plot_cdf(n_top=n_top, title=title, figsize=figsize, dpi=dpi, xlim=xlim, ylim=ylim, fig=fig, ax=ax, legend=legend, grid=grid, emp_properties=properties['emp'], cdf_properties=properties['pdf'], cii_properties=properties['cii'], cmap=cmap, xlabel=xlabel, ylabel=ylabel, fontsize=fontsize)
         else:
             logger.warning('Nothing to plot. %s not yet implemented or possible for the %s approach.' %(chart, self.method))
             fig, ax = None, None
@@ -1071,6 +1077,7 @@ class distfit:
                title='QQ-plot',
                fontsize=16,
                figsize=(20, 15),
+               dpi=100,
                xlim=None,
                ylim=None,
                fig=None,
@@ -1154,7 +1161,7 @@ class distfit:
         markeredgewidth = 0.5
 
         # Q-Q plot of the quantiles of x versus the quantiles/ppf of a distribution.
-        if ax is None: fig, ax = plt.subplots(figsize=figsize)
+        if ax is None: fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
         # Plot n
         for i in range(0, n_top):
             sm.qqplot(X,
@@ -1190,6 +1197,7 @@ class distfit:
                  title='',
                  fontsize=20,
                  figsize=(25, 12),
+                 dpi=100,
                  xlim=None,
                  ylim=None,
                  fig=None,
@@ -1283,7 +1291,7 @@ class distfit:
         # Make data input checks
         if (labels is not None) and len(X)!=len(labels): raise Exception('Labels should be of the same size as X')
         if labels is None: labels = range(0, len(X))
-        if ax is None: fig, ax = plt.subplots(figsize=figsize)
+        if ax is None: fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
         # Create projection
         if projection and hasattr(self, 'model'):
@@ -1334,6 +1342,7 @@ class distfit:
                  n_top=1,
                  title='',
                  figsize=(20, 15),
+                 dpi=100,
                  xlabel='Density',
                  ylabel='Frequency',
                  fontsize=16,
@@ -1430,7 +1439,7 @@ class distfit:
         # Create figure
         if self.method=='parametric' or self.method=='discrete':
             # Create figure
-            if ax is None: fig, ax = plt.subplots(figsize=figsize)
+            if ax is None: fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
             # Plot Emperical CDF
             count, bins_count = self.histdata
@@ -1498,6 +1507,7 @@ class distfit:
                      grid=True,
                      ylim=[None, None],
                      figsize=(20, 10),
+                     dpi=100,
                      fig=None,
                      ax=None,
                      verbose=None):
@@ -1549,7 +1559,7 @@ class distfit:
 
             # Create plot
             if ax is None:
-                fig, ax = plt.subplots(figsize=figsize)
+                fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
             if ylim[1] is None:
                 if ylim[0] is None: ylim[0] = -0.1
@@ -1622,7 +1632,7 @@ class distfit:
             return None, None
 
 
-    def plot_copulaDensity(self, plot_type='uniform', bins=30, figsize=None, color='#607B8B', linewidth=1, edgecolor='#5A5A5A', align='center', alpha=0.8, legend=False, pairplot=True):
+    def plot_copulaDensity(self, plot_type='uniform', bins=30, figsize=None, dpi=100, color='#607B8B', linewidth=1, edgecolor='#5A5A5A', align='center', alpha=0.8, legend=False, pairplot=True):
         from distfit.multidistfit import pairplot_copula_uniform, pairplot_copula_gaussian
         logger.info('Plot the copula uniformity.')
         fig, ax = None, None
@@ -1633,24 +1643,24 @@ class distfit:
         # Set properties
         properties = {'color': color, 'linewidth': linewidth, 'edgecolor': edgecolor, 'align': align, 'alpha': alpha, 'legend': legend}
         if not figsize: figsize, n_rows, n_cols = calc_figsize(self.model.U.shape[1])
-        kwargs = {'n_cols': n_cols, 'n_rows': n_rows, 'figsize': figsize, 'properties': properties, 'legend': legend}
+        kwargs = {'n_cols': n_cols, 'n_rows': n_rows, 'figsize': figsize, 'dpi': dpi, 'properties': properties, 'legend': legend}
 
         # Make plot
         if pairplot and plot_type=='uniform':
-            fig, ax = pairplot_copula_uniform(self.model.U, bins=bins, figsize=figsize, properties=properties)
+            fig, ax = pairplot_copula_uniform(self.model.U, bins=bins, figsize=figsize, dpi=dpi, properties=properties)
         elif not pairplot and plot_type=='uniform':
             fig1, ax1 = self.plot_multivariate(self.model.U, plot_type=plot_type, **kwargs)
-            fig2, ax2 = self.plot_uniform_copula(figsize=figsize, plot_type=plot_type, verbose=self.verbose)
+            fig2, ax2 = self.plot_uniform_copula(figsize=figsize, dpi=dpi, plot_type=plot_type, verbose=self.verbose)
             fig, ax = [fig1, fig2], [ax1, ax2]
         elif not pairplot and plot_type=='gaussian':
             properties = {'c': properties.pop('color')} if 'color' in properties else {}
-            fig, ax = self.plot_gaussian_copula(figsize=figsize)
+            fig, ax = self.plot_gaussian_copula(figsize=figsize, dpi=dpi)
         elif pairplot and plot_type=='gaussian':
             properties = {'c': properties.pop('color')} if 'color' in properties else {}
-            fig, ax = pairplot_copula_gaussian(self.model.U, figsize=figsize)
+            fig, ax = pairplot_copula_gaussian(self.model.U, figsize=figsize, dpi=dpi)
         return fig, ax
 
-    def plot_uniform_copula(self, plot_type='uniform', figsize=None, properties={"s": 35, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}, verbose='info'):
+    def plot_uniform_copula(self, plot_type='uniform', figsize=None, dpi=100, properties={"s": 35, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}, verbose='info'):
         # Import library
         from distfit.multidistfit import _plot_dependence_copula
         logger.info('Plot the dependence.')
@@ -1664,11 +1674,11 @@ class distfit:
         if not figsize: figsize, _, _ = calc_figsize(self.model.U.shape[1])
 
         # Create plot
-        fig, ax = _plot_dependence_copula(self.model.U, figsize=figsize, plot_type=plot_type, properties=properties)
+        fig, ax = _plot_dependence_copula(self.model.U, figsize=figsize, dpi=dpi, plot_type=plot_type, properties=properties)
         # Return
         return fig, ax
 
-    def plot_gaussian_copula(self, figsize=None, properties={"s": 50, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}):
+    def plot_gaussian_copula(self, figsize=None, dpi=100, properties={"s": 50, "alpha": 0.8, "c": [0.290, 0.486, 0.619], "edgecolor": 'white'}):
         # Import library
         from distfit.multidistfit import _plot_dependence_copula
         logger.info('Creating the gaussian copula plot.')
@@ -1682,11 +1692,11 @@ class distfit:
         if not figsize: figsize, _, _ = calc_figsize(self.model.U.shape[1])
 
         # Create plot
-        fig, ax = _plot_dependence_copula(self.model.U, figsize=figsize, plot_type='gaussian', properties=properties)
+        fig, ax = _plot_dependence_copula(self.model.U, figsize=figsize, dpi=dpi, plot_type='gaussian', properties=properties)
         # Return
         return fig, ax
 
-    def plot_jointDensity(self, X, gridsize=40, figsize=None):
+    def plot_jointDensity(self, X, gridsize=40, figsize=None, dpi=100):
         # Import library
         logger.info('Creating the joint density distribution plot.')
         from distfit.multidistfit import _plot_joint_pairplot
@@ -1695,7 +1705,7 @@ class distfit:
             return None, None
 
         # Plot
-        fig, ax = _plot_joint_pairplot(X, self.model.joint_pdf, self.model.marginals, gridsize=gridsize, figsize=figsize)
+        fig, ax = _plot_joint_pairplot(X, self.model.joint_pdf, self.model.marginals, gridsize=gridsize, figsize=figsize, dpi=dpi)
         # Return
         return fig, ax
 
@@ -2430,6 +2440,7 @@ def _plot_quantile(self,
                    xlabel='Density',
                    ylabel='Frequency',
                    figsize=(20, 15),
+                   dpi=100,
                    fontsize=16,
                    xlim=None,
                    ylim=None,
@@ -2442,7 +2453,7 @@ def _plot_quantile(self,
                    cii_properties={},
                    ):
 
-    if ax is None: fig, ax = plt.subplots(figsize=figsize)
+    if ax is None: fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
     if not hasattr(self, 'results'): self.results=None
 
     # Plot histogram empirical data
@@ -2473,6 +2484,7 @@ def _plot_parametric(self,
                      n_top=1,
                      title='',
                      figsize=(20, 15),
+                     dpi=100,
                      xlabel='Density',
                      ylabel='Frequency',
                      fontsize=16,
@@ -2524,7 +2536,7 @@ def _plot_parametric(self,
     x = np.linspace(getmin, getmax, self.size)
     y = distribution.pdf(x, loc=loc, scale=scale, *arg)
 
-    if ax is None: fig, ax = plt.subplots(figsize=figsize)
+    if ax is None: fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     # Plot histogram empirical data
     _plot_bar(self.histdata[1], self.histdata[0], bar_properties, ax)
@@ -3026,6 +3038,7 @@ def plot_binom(self,
                ylabel='Frequency',
                title='',
                figsize=(20, 15),
+               dpi=100,
                xlim=None,
                ylim=None,
                grid=True,
@@ -3058,7 +3071,7 @@ def plot_binom(self,
     histf = BinomPMF(n_fit)(self.figdata['Xdata'], p_fit) * self.figdata['hist'].sum()
 
     # Init figure
-    fig, ax = plt.subplots(2, 1, figsize=figsize)
+    fig, ax = plt.subplots(2, 1, figsize=figsize, dpi=dpi)
 
     # plot bar
     if bar_properties is not None:

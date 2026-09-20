@@ -111,14 +111,14 @@ fig, ax = dfit.plot(chart='cdf')
 fig, ax = dfit.qqplot(X)
 
 # %%
-from distfit import distfit
+# from distfit import distfit
 # from distfit_multi import plot_all_diagnostics
 # from distfit_multi import plot_multidistfit_2d_overview
-import numpy as np
+# import numpy as np
 
 
-plot_multidistfit_2d_overview(X, marginals, corr)
-plot_all_diagnostics(X, marginals, corr)
+# plot_multidistfit_2d_overview(X, marginals, corr)
+# plot_all_diagnostics(X, marginals, corr)
 
 #%% Add functionality goodness of fit
 # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.goodness_of_fit.html
@@ -239,7 +239,6 @@ n_boots_list = [0, 10, 50, 100]
 timings = compute_performance(n_boots_list)
 # Plot performance
 plot_performance(timings)
-
 
 
 # %% Parrellel computing
@@ -381,7 +380,7 @@ from distfit import distfit
 import numpy as np
 import matplotlib.pyplot as plt
 # Create dataset
-X = np.random.normal(0, 2, 10000)
+X = np.random.normal(0, 2, 1000)
 y = [-8,-6,0,1,2,3,4,5,6]
 # Initialize
 dfit = distfit(alpha=0.01)

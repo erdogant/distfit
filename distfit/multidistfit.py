@@ -306,13 +306,14 @@ def _plot_copula(
     U,
     bins=30,
     figsize=(10, 6),
+    dpi=100,
     title="",
     properties=None,
     legend=True,
     fig=None,
     ax=None,
     ):
-    if ax is None: fig, ax = plt.subplots(figsize=figsize)
+    if ax is None: fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     # Default bar styling
     default = {"color": "#607B8B", "edgecolor": "#5A5A5A", "linewidth": 1, "alpha": 0.85, "align": "center"}
@@ -350,7 +351,7 @@ def _plot_copula(
     return fig, ax
 
 
-def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={}, title='', verbose='info'):
+def _plot_dependence_copula(U, plot_type='uniform', figsize=None, dpi=100, properties={}, title='', verbose='info'):
     if plot_type=='uniform':
         if title is None: title="Dependence (uniform) Copula Space"
         label = 'U'
@@ -379,7 +380,7 @@ def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={},
 
     # Auto-scale figure size
     if figsize is None: figsize = (5 * n_cols, 4 * n_rows)
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize, dpi=dpi)
 
     if n_pairs == 1:
         axes = np.array([axes])
@@ -392,7 +393,7 @@ def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={},
             ax = axes[pair_idx]
 
             # Scatter plot
-            scatterd(X[:, i], X[:, j], ax=ax, **properties, verbose=verbose)
+            scatterd(X[:, i], X[:, j], ax=ax, **properties, verbose='warning')
 
             # Reference box for uniform copula
             if plot_type=='uniform_copula':
@@ -447,7 +448,8 @@ def _plot_joint_pairplot(
     pdf_vals,
     marginals,
     gridsize=40,
-    figsize=None
+    figsize=None,
+    dpi=100
 ):
     """
     Pairplot-style grid of joint density slices.
@@ -456,7 +458,7 @@ def _plot_joint_pairplot(
     if figsize is None:
         figsize = (7 * d, 5 * d)
 
-    fig, axes = plt.subplots(d, d, figsize=figsize)
+    fig, axes = plt.subplots(d, d, figsize=figsize, dpi=dpi)
     contour_ref = None
 
     for i in range(d):
@@ -500,6 +502,7 @@ def pairplot_copula_uniform(
         s=10,
         color=[0.4, 0.4, 0.5],
         figsize=None,
+        dpi=100,
         properties=None,
         legend=True,
         fig=None,
@@ -517,8 +520,7 @@ def pairplot_copula_uniform(
     if properties is not None and properties.get('legend', None) is not None:
         properties.pop('legend')
 
-    fig, axes = plt.subplots(d, d, figsize=figsize)
-
+    fig, axes = plt.subplots(d, d, figsize=figsize, dpi=dpi)
     for i in range(d):
         for j in range(d):
             ax = axes[i, j]
@@ -535,7 +537,7 @@ def pairplot_copula_uniform(
                     ax=ax,
                 )
             else:
-                scatterd(U[:, j], U[:, i], s=s, c=color, alpha=0.4, ax=ax, legend=False)
+                scatterd(U[:, j], U[:, i], s=s, c=color, alpha=0.4, ax=ax, legend=False, verbose='warning')
                 ax.set_xlim(0, 1)
                 ax.set_ylim(0, 1)
 
@@ -558,6 +560,7 @@ def pairplot_copula_gaussian(
         s=10,
         color=[0.4, 0.4, 0.5],
         figsize=None,
+        dpi=100,
         properties=None,
         legend=True,
         fig=None,
@@ -578,11 +581,10 @@ def pairplot_copula_gaussian(
     if properties is not None and properties.get('legend', None) is not None:
         properties.pop('legend')
 
-    fig, axes = plt.subplots(d, d, figsize=figsize)
+    fig, axes = plt.subplots(d, d, figsize=figsize, dpi=dpi)
 
     # Global symmetric limits for Z-space
     zlim = np.nanmax(np.abs(Z)) * 1.05
-
     for i in range(d):
         for j in range(d):
             ax = axes[i, j]
@@ -612,7 +614,8 @@ def pairplot_copula_gaussian(
                     c=color,
                     alpha=0.4,
                     ax=ax,
-                    legend=False
+                    legend=False,
+                    verbose='warning'
                 )
 
                 ax.set_xlim(-zlim, zlim)
