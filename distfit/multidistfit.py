@@ -398,9 +398,10 @@ def _plot_dependence_copula(U, plot_type='uniform', figsize=None, properties={},
             if plot_type=='uniform_copula':
                 ax.plot([0, 1, 1, 0, 0], [0, 0, 1, 1, 0], 'k--', linewidth=1, alpha=0.3)
 
-            # Styling
-            ax.set_xlim(-0.05, 1.05)
-            ax.set_ylim(-0.05, 1.05)
+            # Styling — use fixed [0,1] bounds for uniform space; let data range govern Gaussian space
+            if plot_type == 'uniform':
+                ax.set_xlim(-0.05, 1.05)
+                ax.set_ylim(-0.05, 1.05)
             ax.set_xlabel(f"${label}_{{{i+1}}}$", fontsize=26)
             ax.set_ylabel(f"${label}_{{{j+1}}}$", fontsize=26)
             ax.set_aspect('equal')
