@@ -909,21 +909,17 @@ class distfit:
             properties.pop('legend')
 
 
-        # Calculate grid dimensions
-        if figsize is None:
+        # Calculate grid dimensions based on number of marginals, not pairs
+        if figsize is None or n_rows is None or n_cols is None:
             d = len(self.model.marginals)
-            figsize, n_rows, n_cols = calc_figsize(d)
+            n_cols = min(3, d)
+            n_rows = (d + n_cols - 1) // n_cols
+            if figsize is None:
+                figsize = (13 * n_cols, 10 * n_rows)
 
         fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
-        if n_models == 1:
-            # Make it a list for consistent handling
-            axes = [axes]
-        elif n_rows == 1:
-            # Convert array to list for single row
-            axes = axes.tolist()
-        else:
-            # Flatten for multiple rows
-            axes = axes.flatten()
+        # Always produce a flat list of Axes, regardless of subplots shape
+        axes = np.array(axes).flatten().tolist()
 
         # Plot each marginal model
         for i, (key, model) in enumerate(self.model.marginals.items()):
