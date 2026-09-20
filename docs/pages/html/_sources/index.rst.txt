@@ -13,7 +13,7 @@ distfit's documentation!
 -----------------------------------
 
 .. note::
-	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://medium.com/data-science-collective/how-to-find-the-best-theoretical-distribution-for-your-data-cb4b8e7ea80d>`_
+	`Medium Blog: How to Find the Best Theoretical Distribution for Your Data. <https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blogs>`_
 
 
 
@@ -62,14 +62,14 @@ Contents
 .. toctree::
    :maxdepth: 1
    :caption: Background
-   
+
    Abstract
 
 
 .. toctree::
    :maxdepth: 1
    :caption: Installation
-   
+
    Installation
 
 .. toctree::
@@ -132,7 +132,7 @@ Contents
 .. toctree::
   :maxdepth: 2
   :caption: Documentation
-  
+
   Documentation
   Coding quality
   distfit.distfit
