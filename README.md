@@ -8,7 +8,7 @@
 [![Forks](https://img.shields.io/github/forks/erdogant/distfit.svg)](https://github.com/erdogant/distfit/network)
 [![Issues](https://img.shields.io/github/issues/erdogant/distfit.svg)](https://github.com/erdogant/distfit/issues)
 [![Project Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![DOI](https://img.shields.io/badge/DOI-Blog-black)](https://zenodo.org/badge/latestdoi/231843440)
+[![DOI](https://img.shields.io/badge/DOI-zenodo-black)](https://zenodo.org/badge/latestdoi/231843440)
 [![Medium](https://img.shields.io/badge/Medium-Blog-black)](https://erdogant.github.io/distfit/pages/html/Documentation.html#medium-blog)
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://erdogant.github.io/distfit/pages/html/Documentation.html#colab-notebook)
 [![Donate](https://img.shields.io/badge/Support%20this%20project-grey.svg?logo=github%20sponsors)](https://erdogant.github.io/distfit/pages/html/Documentation.html#)
